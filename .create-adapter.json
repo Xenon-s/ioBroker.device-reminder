@@ -1,0 +1,32 @@
+{
+	"cli": true,
+	"adapterName": "device-reminder",
+	"title": "device-reminder",
+	"expert": "yes",
+	"features": [
+		"adapter"
+	],
+	"adminFeatures": [],
+	"type": "energy",
+	"startMode": "daemon",
+	"connectionType": "local",
+	"dataSource": "poll",
+	"connectionIndicator": "yes",
+	"language": "JavaScript",
+	"tools": [
+		"ESLint",
+		"type checking"
+	],
+	"indentation": "Tab",
+	"quotes": "double",
+	"es6class": "yes",
+	"authorName": "xenon-s",
+	"authorGithub": "xenon-s",
+	"authorEmail": "ente_s@hotmail.de",
+	"gitRemoteProtocol": "HTTPS",
+	"gitCommit": "yes",
+	"license": "MIT License",
+	"ci": "gh-actions",
+	"dependabot": "yes",
+	"creatorVersion": "1.29.1"
+}

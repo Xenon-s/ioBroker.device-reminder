@@ -1,0 +1,101 @@
+{
+	"common": {
+		"name": "device-reminder",
+		"version": "0.0.1",
+		"news": {
+			"0.0.1": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie",
+				"zh-cn": "首次出版"
+			}
+		},
+		"title": "device-reminder",
+		"titleLang": {
+			"en": "device-reminder",
+			"de": "Geräteerinnerung",
+			"ru": "устройство-напоминание",
+			"pt": "dispositivo-lembrete",
+			"nl": "apparaatherinnering",
+			"fr": "rappel d'appareil",
+			"it": "promemoria dispositivo",
+			"es": "recordatorio de dispositivo",
+			"pl": "urządzenie-przypomnienie",
+			"zh-cn": "设备提醒"
+		},
+		"desc": {
+			"en": "device-reminder",
+			"de": "Geräteerinnerung",
+			"ru": "устройство-напоминание",
+			"pt": "dispositivo-lembrete",
+			"nl": "apparaatherinnering",
+			"fr": "rappel d'appareil",
+			"it": "promemoria dispositivo",
+			"es": "recordatorio de dispositivo",
+			"pl": "urządzenie-przypomnienie",
+			"zh-cn": "设备提醒"
+		},
+		"authors": [
+			"xenon-s <ente_s@hotmail.de>"
+		],
+		"keywords": [
+			"ioBroker",
+			"template",
+			"Smart Home",
+			"home automation"
+		],
+		"license": "MIT",
+		"platform": "Javascript/Node.js",
+		"main": "main.js",
+		"icon": "device-reminder.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/xenon-s/ioBroker.device-reminder/master/admin/device-reminder.png",
+		"readme": "https://github.com/xenon-s/ioBroker.device-reminder/blob/master/README.md",
+		"loglevel": "info",
+		"mode": "daemon",
+		"type": "energy",
+		"compact": true,
+		"connectionType": "local",
+		"dataSource": "poll",
+		"materialize": true,
+		"dependencies": [
+			{
+				"js-controller": ">=2.0.0"
+			}
+		]
+	},
+	"native": {
+		"option1": true,
+		"option2": "42"
+	},
+	"objects": [],
+	"instanceObjects": [
+		{
+			"_id": "info",
+			"type": "channel",
+			"common": {
+				"name": "Information"
+			},
+			"native": {}
+		},
+		{
+			"_id": "info.connection",
+			"type": "state",
+			"common": {
+				"role": "indicator.connected",
+				"name": "Device or service connected",
+				"type": "boolean",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {}
+		}
+	]
+}
