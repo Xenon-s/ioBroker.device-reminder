@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.0.2-alpha.2",
+        "version": "0.0.2-alpha.3",
         "news": {
+            "0.0.2-alpha.3": {
+                "en": "update style.css",
+                "de": "aktualisiere style.css",
+                "ru": "обновить style.css",
+                "pt": "atualizar style.css",
+                "nl": "update style.css",
+                "fr": "mettre à jour style.css",
+                "it": "update style.css",
+                "es": "actualizar style.css",
+                "pl": "zaktualizuj style.css",
+                "zh-cn": "更新style.css"
+            },
             "0.0.2-alpha.2": {
                 "en": "fix URL",
                 "de": "URL korrigieren",

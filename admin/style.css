@@ -29,3 +29,37 @@ label > i[title] {
 }
 
 /* Add your styles here */
+
+
+/* Tabs menu */
+.m .tabs .tab a { color: rgba(13, 134, 231, 0.7); }
+.m .tabs .active { border-bottom: 2px solid #0d47a1; font-weight: bold;}
+.m .tabs .tab a.active, .m .tabs .tab a:hover { color:#0d47a1; }
+.m .tabs .tab a:hover { border-bottom: 2px solid #46a0e9 !important; }
+
+/* Table header */
+table.table-values th.header { background-color:#64BfF6; font-size:90%; text-align:center; line-height: 1em; padding:6px 2px;}
+
+/* Table header -- Optional column */
+table.table-values th.mOptional { color:#c9e7fa }
+
+/* format second column of option tables */
+table.table-values tr td:nth-child(2) input { font-weight:bold; }
+
+/* to be able to adjust column width accordingly */
+table.table-values { table-layout:fixed; }
+
+.m #dialog-select-member .modal-content .grid-main-wob-div {
+    height: calc(100% - 140px);
+    }
+
+.selectID {
+width: 200px;
+}
+
+.multiple-select-dropdown li span{
+    pointer-events: none;
+}
+.m label {
+    color: #2196f3;
+}
