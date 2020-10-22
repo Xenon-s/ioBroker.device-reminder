@@ -77,12 +77,8 @@ Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte ->
 	### __WORK IN PROGRESS__
 -->
 
-### 0.0.2-alpha.3 (2020-10-22)
+### 0.0.2-alpha.4 (2020-10-22)
 * (xenon-s) update style.css
-
-
-### 0.0.2-alpha.2 (2020-10-22)
-* (xenon-s) fix URL
 
 
 ### 0.0.1 (2020-10-20)
