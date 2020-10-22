@@ -77,6 +77,10 @@ Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte ->
 	### __WORK IN PROGRESS__
 -->
 
+### 0.0.2-alpha.5 (2020-10-22)
+* (xenon-s) update io-package.json
+
+
 ### 0.0.2-alpha.4 (2020-10-22)
 * (xenon-s) update style.css
 

@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.0.2-alpha.4",
+        "version": "0.0.2-alpha.5",
         "news": {
+            "0.0.2-alpha.5": {
+                "en": "update io-package.json",
+                "de": "Aktualisieren Sie io-package.json",
+                "ru": "обновить io-package.json",
+                "pt": "atualizar io-package.json",
+                "nl": "update io-package.json",
+                "fr": "mettre à jour io-package.json",
+                "it": "aggiornare io-package.json",
+                "es": "actualizar io-package.json",
+                "pl": "zaktualizuj io-package.json",
+                "zh-cn": "更新io-package.json"
+            },
             "0.0.2-alpha.4": {
                 "en": "update style.css",
                 "de": "aktualisiere style.css",
@@ -122,7 +134,6 @@
         "type": "energy",
         "compact": true,
         "connectionType": "local",
-        "dataSource": "poll",
         "materialize": true,
         "dependencies": [
             {
