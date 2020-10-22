@@ -2,92 +2,360 @@
 
 <head>
 
-	<!-- Load ioBroker scripts and styles-->
-	<link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
-	<link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+    <!-- Load ioBroker scripts and styles-->
+    <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+    <link rel="stylesheet" type="text/css" href="../../lib/css/fancytree/ui.fancytree.min.css" />
+    <link type="text/css" rel="stylesheet" href="../../lib/css/themes/jquery-ui/default/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="../../lib/css/iob/selectID.css" />
 
-	<script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../lib/js/jquery-ui-1.10.3.full.min.js"></script>
+    <script type="text/javascript" src="../../lib/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../../lib/js/jquery.fancytree-all.min.js"></script>
+    <script type="text/javascript" src="../../lib/js/selectID.js"></script>
+    <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+    <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="../../js/translate.js"></script>
+    <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+    <script type="text/javascript" src="words.js"></script>
 
-	<script type="text/javascript" src="../../js/translate.js"></script>
-	<script type="text/javascript" src="../../lib/js/materialize.js"></script>
-	<script type="text/javascript" src="../../js/adapter-settings.js"></script>
+    <!-- Load our own files -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
 
-	<!-- Load our own files -->
-	<link rel="stylesheet" type="text/css" href="style.css" />
-	<script type="text/javascript" src="words.js"></script>
+    <script type="text/javascript">
 
-	<script type="text/javascript">
-		// This will be called by the admin adapter when the settings page loads
-		function load(settings, onChange) {
-			// example: select elements with id=key and class=value and insert value
-			if (!settings) return;
-			$('.value').each(function () {
-				var $key = $(this);
-				var id = $key.attr('id');
-				if ($key.attr('type') === 'checkbox') {
-					// do not call onChange direct, because onChange could expect some arguments
-					$key.prop('checked', settings[id])
-						.on('change', () => onChange())
-						;
-				} else {
-					// do not call onChange direct, because onChange could expect some arguments
-					$key.val(settings[id])
-						.on('change', () => onChange())
-						.on('keyup', () => onChange())
-						;
-				}
-			});
-			onChange(false);
-			// reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
-			if (M) M.updateTextFields();
-		}
+        let selectId;
+        let alexaID = [];
+        let sayitID = [];
+        const alexa = [];
+        const sayit = [];
+        const firstName = []; // telegram firstname user
 
-		// This will be called by the admin adapter when the user presses the save button
-		function save(callback) {
-			// example: select elements with class=value and build settings object
-			var obj = {};
-			$('.value').each(function () {
-				var $this = $(this);
-				if ($this.attr('type') === 'checkbox') {
-					obj[$this.attr('id')] = $this.prop('checked');
-				} else {
-					obj[$this.attr('id')] = $this.val();
-				}
-			});
-			callback(obj);
-		}
-	</script>
 
+        /* Telegram Instanzen ermitteln */
+        socket.emit('getObjectView', 'system', 'instance', { startkey: 'system.adapter.', endkey: 'system.adapter.\u9999' }, (err, state) => {
+            if (err) {
+                console.error(err);
+            }
+            else {
+                const result = [];
+                const arrTemp = [];
+                $.each(state.rows, (indey, element) => {
+                    result.push(element.value);
+                });
+                $.each(result, (index, element) => {
+                    for (let i = 0; i < 10; i++) {
+                        if (element._id === `system.adapter.telegram.${i}`) {
+                            arrTemp.push(`telegram.${i}.communicate.users`);
+                        };
+                    };
+                });
+                if (arrTemp.length > 0) {
+                    readUser(arrTemp);
+                };
+            };
+        });
+
+
+        function readUser(arrTemp) {
+
+            // alexa auswahl erstellen
+            $.each(alexaID, (index, element) => {
+                if (element.alexaName !== "" && element.alexaName != null && element.alexaPath !== "" && element.alexaPath !== null && element.enabled !== null && element.enabled) {
+                    alexa.push(`${element.alexaPath}/${element.alexaName}`);
+                };
+            });
+            $('#alexaIds').attr("data-options", alexa.join(';'));
+
+            // sayit auswahl erstellen
+            $.each(sayitID, (index, element) => {
+                if (element.sayitName !== "" && element.sayitName != null && element.sayitPath !== "" && element.sayitPath !== null && element.enabled !== null && element.enabled) {
+                    sayit.push(`${element.sayitPath}/${element.sayitName}`);
+                };
+            });
+            $('#sayitIds').attr("data-options", sayit.join(';'));
+
+            // // timer auswahl erstellen
+            // $.each(timerID, (index, element) => {
+            //     if (element.timerName !== "" && element.timerName != null && element.timer !== "" && element.timer !== null && element.enabled !== null && element.enabled && element.timer >0) {
+            //         timer.push(`${element.timer}/${element.timer}`);
+            //     };    
+            // });
+            // $('#timerIds').attr("data-options", timer.join(';'));
+
+
+            // telegram auswahl erstellen
+            for (const i in arrTemp) {
+                socket.emit('getState', arrTemp[i], (err, state) => {
+                    if (state !== null || state !== undefined) {
+                        if (state.val !== ``) {
+                            $.each(JSON.parse(state.val), (index, element) => {
+                                if (element.firstName !== undefined) {
+                                    firstName.push(`${element.firstName}/${element.firstName}`);
+                                } else if (element.userName !== undefined) {
+                                    firstName.push(`${element.userName}/${element.userName}`);
+                                } else {
+                                    firstName.push(``);
+                                };
+                            });
+                            $('#telegramIds').attr("data-options", firstName.join(';'));
+                        };
+                    };
+                });
+            };
+        };
+
+        // This will be called by the admin adapter when the settings page loads
+        function load(settings, onChange) {
+            if (!settings) return;
+
+            device = settings.device || []; // devices native anlegen
+            telegramID = settings.telegramID || []; // telegram ID native anlegen
+            alexaID = settings.alexaID || []; // alexaID native anlegen
+            sayitID = settings.sayitID || []; // sayit ID native anlegen
+
+            readUser()
+            $('.value').each(function () {
+                const $key = $(this);
+                const id = $key.attr('id');
+                if ($key.attr('type') === 'checkbox') {
+                    // do not call onChange direct, because onChange could expect some arguments
+                    $key.prop('checked', settings[id])
+                        .on('change', () => onChange())
+                        ;
+                }
+                else {
+                    // do not call onChange direct, because onChange could expect some arguments
+                    $key.val(settings[id])
+                        .on('change', () => onChange())
+                        .on('keyup', () => onChange())
+                        ;
+                };
+            });
+
+            onChange(false);
+            // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
+            if (M) M.updateTextFields();
+            values2table('device', device, onChange); //device
+            values2table('alexaID', alexaID, onChange); //alexa
+            values2table('sayitID', sayitID, onChange); //sayit
+            values2table('telegramID', telegramID, onChange); // telegram
+        };
+
+        // Load End
+        //#################################################################################################################
+        // Save Start
+
+        // This will be called by the admin adapter when the user presses the save button
+        function save(callback) {
+            // example: select elements with class=value and build settings object
+            const obj = {};
+            $('.value').each(function () {
+                const $this = $(this);
+                if ($this.attr('type') === 'checkbox') {
+                    obj[$this.attr('id')] = $this.prop('checked');
+                } else {
+                    obj[$this.attr('id')] = $this.val();
+                }
+            });
+            obj.device = table2values('device');
+            obj.alexaID = table2values('alexaID');
+            obj.sayitID = table2values('sayitID');
+            obj.telegramID = table2values('telegramID');
+            callback(obj);
+        };
+    </script>
 </head>
 
 <body>
+    <div class="m adapter-container">
+        <div class="row">
+            <!-- Tabs: Menu -->
+            <div class="col s12"
+                style="padding-left:0;padding-right:0; margin-top: 0px; margin-bottom: 1px; background-color:#174475; box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);">
+                <ul class="tabs blue lighten-4">
+                    <li class="tab col s3"><a href="#tab-devices" class="translate">Devices</a></li>
+                    <li class="tab col s3"><a href="#tab-config" class="translate">Config</a></li>
+                </ul>
+            </div>
 
-	<div class="m adapter-container">
+            <!-- Tab id "devices" -->
+            <div id="tab-devices" class="col s12">
+                <div class="row">
+                    <div class="col s12" id="device">
+                        <div class="row">
+                            <div class="input-field col s3">
+                                <img src="icon.png">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s2 m1 l1 left">
+                                <a class="btn-floating waves-effect waves-light blue table-button-add"><i
+                                        class="material-icons">add</i></a>
+                            </div>
+                        </div>
+                        <div class="table-values-div">
+                            <table class="table-values">
+                                <thead>
+                                    <tr>
+                                        <th data-name="enabled" data-type="checkbox" class="header translate"
+                                            style="width: 40px" data-default="true">active</th>
+                                        <th data-name="deviceName" data-type="text" class="header translate">device name
+                                        </th>
+                                        <th data-name="deviceType" data-type="select" style="width: 150px"
+                                            class="header translate" data-default="no device"
+                                            data-options="Waschmaschine;Trockner;Geschirrspueler;Wasserkocher;Computer;Test">
+                                            device type</th>
+                                        <th data-name="pathConsumption" data-type="OID" class="header translate">
+                                            path<br>consumption</th>
+                                        <th data-name="pathSwitch" data-type="OID" class="header translate">
+                                            path<br>switch on/off</th>
+                                        <th data-name="startText" data-type="text" class="header translate">Starttext
+                                        </th>
+                                        <th data-name="endText" data-type="text" class="header translate">Endtext</th>
+                                        <th data-name="idTelegram" data-type="select multiple"
+                                            class="header selectID translate" id="telegramIds">
+                                            Telegram<br>Username</th>
+                                        <th data-name="idAlexa" data-type="select multiple"
+                                            class="header selectID translate" id="alexaIds" data-options="">alexa
+                                            devices
+                                        </th>
+                                        <th data-name="idsayit" data-type="select multiple"
+                                            class="header selectID translate" id="sayitIds" data-options="">sayit
+                                            instance
+                                        </th>
+                                        <!-- <th data-name="idWhatsapp" data-type="text" class="header translate">
+                                            Whatsapp<br>ID</th> -->
+                                        <th data-name="autoOff" data-type="checkbox" class="header translate"
+                                            style="width: 40px" data-default="false">auto<br>off</th>
+                                        <th data-name="idTimer" data-type="number"
+                                            class="header translate" data-default="0">timeout<br>in minutes
+                                        </th>
+                                        <th data-buttons="delete" class="header translate">delete</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-		<div class="row">
-			<div class="col s12 m4 l2">
-				<img src="device-reminder.png" class="logo">
-			</div>
-		</div>
+            <!-- Tab with id "config" -->
+            <div id="tab-config" class="col s12">
+                <div class="row">
+                    <div class="col s12" id="alexaID">
+                        <div class="row">
+                            <div class="input-field col s3">
+                                <img src="icon.png">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s2 m1 l1 left">
+                                <a class="btn-floating waves-effect waves-light blue table-button-add"><i
+                                        class="material-icons">add</i></a>
+                            </div>
+                        </div>
+                        <div class="table-values-div">
+                            <table class="table-values">
+                                <thead>
+                                    <tr>
+                                        <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                        <th data-name="enabled" style="width: 40px" data-type="checkbox"
+                                            data-default="true" class="header translate">active</th>
+                                        <th data-name="alexaName" data-type="text" class="header translate">alexa name
+                                        </th>
+                                        <th data-name="alexaPath" data-type="OID" class="header translate">alexa path
+                                            <br>"announcement"/"speak"</th>
+                                        <th data-name="alexaTimeMinHour" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="0"
+                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                            time <br>active hour</th>
+                                        <th data-name="alexaTimeMinMin" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="00" data-options="00;15;30;45">time
+                                            <br>active min</th>
+                                        <th data-name="alexaTimeMaxHour" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="23"
+                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                            time <br>inactive hour</th>
+                                        <th data-name="alexaTimeMaxMin" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="59" data-options="00;15;30;45;59">
+                                            time
+                                            <br>inactive min</th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate">delete
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <p></p>
+                    </div>
+                    <div class="col s12" id="sayitID">
+                        <div class="row">
+                            <div class="col s2 m1 l1 left">
+                                <a class="btn-floating waves-effect waves-light blue table-button-add"><i
+                                        class="material-icons">add</i></a>
+                            </div>
+                        </div>
+                        <div class="table-values-div">
+                            <table class="table-values">
+                                <thead>
+                                    <tr>
+                                        <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                        <th data-name="enabled" style="width: 40px" data-type="checkbox"
+                                            data-default="true" class="header translate">active</th>
+                                        <th data-name="sayitName" data-type="text" class="header translate">sayit name
+                                        </th>
+                                        <th data-name="sayitPath" data-type="OID" class="header translate">sayit path
+                                            <br>"../text"</th>
+                                        <th data-name="sayitVol" data-type="number" class="header translate"
+                                            data-default="50">sayit volume <br> 0-100</th>
+                                        <th data-name="sayitTimeMinHour" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="0"
+                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                            time <br>active hour</th>
+                                        <th data-name="sayitTimeMinMin" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="00" data-options="00;15;30;45">time
+                                            <br>active min</th>
+                                        <th data-name="sayitTimeMaxHour" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="23"
+                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                            time <br>inactive hour</th>
+                                        <th data-name="sayitTimeMaxMin" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="59" data-options="00;15;30;45;59">
+                                            time
+                                            <br>inactive min</th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate">delete
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-		<!-- Put your content here -->
-
-		<!-- For example columns with settings: -->
-		<div class="row">
-			<div class="col s6 input-field">
-				<input type="checkbox" class="value" id="option1" />
-				<label for="option1" class="translate">option1</label>
-			</div>
-
-			<div class="col s6 input-field">
-				<input type="text" class="value" id="option2" />
-				<label for="option2" class="translate">option2</label>
-			</div>
-		</div>
-
-	</div>
-
+    <div class="m material-dialogs">
+        <div id="dialog-select-member" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <div class="row">
+                    <div class="col s12 title"></div>
+                </div>
+                <div class="row">
+                    <div class="col s12 dialog-content"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn btn-set"><i
+                        class="large material-icons left">check</i><span class="translate">Select</span></a>
+                <a class="modal-action modal-close waves-effect waves-green btn btn-close"><i
+                        class="large material-icons left ">close</i><span class="translate">Cancel</span></a>
+            </div>
+        </div>
+    </div>
+    </div>
 </body>
 
 </html>
