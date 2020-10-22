@@ -1,19 +1,19 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.0.2-alpha.6",
+        "version": "0.0.2-alpha.7",
         "news": {
-            "0.0.2-alpha.6": {
-                "en": "update style.css",
-                "de": "aktualisiere style.css",
-                "ru": "обновить style.css",
-                "pt": "atualizar style.css",
-                "nl": "update style.css",
-                "fr": "mettre à jour style.css",
-                "it": "update style.css",
-                "es": "actualizar style.css",
-                "pl": "zaktualizuj style.css",
-                "zh-cn": "更新style.css"
+            "0.0.2-alpha.7": {
+                "en": "fix",
+                "de": "Fix",
+                "ru": "исправить",
+                "pt": "consertar",
+                "nl": "repareren",
+                "fr": "réparer",
+                "it": "aggiustare",
+                "es": "reparar",
+                "pl": "naprawić",
+                "zh-cn": "固定"
             },
             "0.0.2-alpha.5": {
                 "en": "update io-package.json",
@@ -146,6 +146,7 @@
         "type": "energy",
         "compact": true,
         "dataSource": "push",
+        "connectionType": "local",
         "materialize": true,
         "dependencies": [
             {
@@ -158,27 +159,5 @@
         "option2": "42"
     },
     "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
-    ]
+    "instanceObjects": []
 }
