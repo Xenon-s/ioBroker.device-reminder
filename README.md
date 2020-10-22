@@ -1,95 +1,97 @@
-![Logo](admin/device-reminder.png)
-# ioBroker.device-reminder
+![Logo](admin/icon.png)
+# ioBroker.device-reminder (V 0.0.1 Alpha)
 
-[![NPM version](http://img.shields.io/npm/v/iobroker.device-reminder.svg)](https://www.npmjs.com/package/iobroker.device-reminder)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.device-reminder.svg)](https://www.npmjs.com/package/iobroker.device-reminder)
-![Number of Installations (latest)](http://iobroker.live/badges/device-reminder-installed.svg)
-![Number of Installations (stable)](http://iobroker.live/badges/device-reminder-stable.svg)
-[![Dependency Status](https://img.shields.io/david/xenon-s/iobroker.device-reminder.svg)](https://david-dm.org/xenon-s/iobroker.device-reminder)
-[![Known Vulnerabilities](https://snyk.io/test/github/xenon-s/ioBroker.device-reminder/badge.svg)](https://snyk.io/test/github/xenon-s/ioBroker.device-reminder)
+# Adapter zur Überwachung von Gerätezuständen
+Dieser Adapter kann anhand von Messsteckdosen erkennen, ob ein Gerät eingeschaltet, in Betrieb oder ausgeschaltet wurde und darauf reagieren. Derzeit können Nachrichten per Telegram (Mehrfachauswahl pro Gerät möglich) oder Alexa (Mehrfachauswahl pro Gerät möglich) automatisiert ausgegeben werden. Es ist ebenfalls möglich, die Steckdose nach Beendigung des Vorgangs automatisch abzuschalten. (voheriges Projekt, aus dem dieser Adapter entstanden ist: https://github.com/Xenon-s/js.device-reminder)
 
-[![NPM](https://nodei.co/npm/iobroker.device-reminder.png?downloads=true)](https://nodei.co/npm/iobroker.device-reminder/)
+# Was sollte beachtet werden?
+Der refresh Intervall vom "Live-Verbrauchswert (heißt bei den meisten Geräten **"_energy"**)" sollte nicht mehr als 10 Sekunden betragen, da es sonst zu sehr stark verzögerten Meldungen kommen kann.
+<br>Befehl in der Tasmota Konsole : TelePeriod 10 <br>
 
-**Tests:** ![Test and Release](https://github.com/xenon-s/ioBroker.device-reminder/workflows/Test%20and%20Release/badge.svg)
+# Welche Geräte können zur Zeit überwacht werden?
+- Waschmaschine,
+- Trockner,
+- Geschirrspüler,
+- Wasserkocher,
+- Computer,
+<br>
+- weitere werden folgen ...<br>
 
-## device-reminder adapter for ioBroker
+# Was ist pro Gerät möglich?
+- Benachrichtigung beim Gerätestart
+- Benachrichtigung beim Vorgangsende des jeweiligen Gerätestart 
+- Telegram-Benachrichtigung (mehrere IDs sind möglich) 
+- Alexa-Benachrichtigung (mehrere IDs sind möglich) 
+- *WhatsApp-Benachrichtung derzeit NICHT möglich, da der Whatsapp-Adapter noch nicht ins offizielle Repo aufgenommen wurde*
+- Geräte bei Bedarf abschalten, wenn Vorgang beendet erkannt wurde<br>
 
-Describe your project here
+# Anleitung
+## Alexa erstellen
+Wenn man Alexa intregrieren möchte muss man diese **zwingend zuerst** auf der Config Seite der device-reminder Instanz anlegen.
 
-## Developer manual
-This section is intended for the developer. It can be deleted later
+![configAlexa.png](admin/configAlexa.png)
+Zuerst muss über das + ein neuer Eintrag erzeugt werden. 
+- **active**: Ist standardmäßig aktiviert. Hier kann man eine Alexa vorrübergehend deaktivieren.
+- **alexa name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
+- **alexa"announcement"/"speak"**: Hier muss **zwingend** der Datenpunkt ausgewählt werden, welcher eure Alexa sprechen lässt. Um den Datenpunkt auszuwählen, einfach auf die Schaltfläche mit den drei kleinen weißen Punkten klicken.
 
-### Getting started
+Mit den 4 letzten Feldern kann ein Zeitraum erstellt werden, in dem eure Alexa Sprachausgaben tätigen darf. Standardmäßig ist der Zeitraum von 00:00 Uhr - 23:59 Uhr aktiv.
+- **"time active hour"**: Startzeit in Stunden
+- **"time active min"**: Startzeit in Minuten
+- **"time inactive hour"**: Endzeit in Stunden
+- **"time inactive min"**: Endzeit in Minuten
+<p></p>
+Habt ihr eure Alexa(s) angelegt, muss auf "Speichern und Schliessen" geklickt werden. Danach erscheint eure Alexa auf der "Devices Seite" und kann per Klick dem jeweiligen Gerät zugeordnet werden.
+<p></p>
 
-You are almost done, only a few steps left:
-1. Create a new repository on GitHub with the name `ioBroker.device-reminder`
+## Device anlegen und konfigurieren
+![devices.png](admin/devices.png)
+Auch hier muss zuerst über das + ein neuer Eintrag erstellt werden. 
+- **active**: Ist standardmäßig aktiviert. Hier kann man ein Device vorrübergehend deaktivieren, so dass es keine Benachrichtigungen mehr sendet
+- **device name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
+- **device type**: hier muss ausgewählt werden, um welches Gerät es sich handelt, damit die Berechnungen im Adapter korrekt ausgeführt werden können
+- **path consumption**: Per Klick auf die Schaltfläche mit den drei weißen Punkten öffnet sich eure Objektverwaltung. Es muss der Datenpunkt ausgewählt werden, welcher den aktuellen Live-Verbrauch anzeigt.
+- **path switch on/off**: Per Klick auf die Schaltfläche mit den drei weißen Punkten öffnet sich eure Objektverwaltung. Es muss der Datenpunkt ausgewählt werden, welcher eure Steckdose an/aus schaltet. Der Datenpunkt muss ausgewählt werden, auch wenn ihr das Gerät nicht automatisch abschalten wollt.
+- **Starttext**: Benachrichtigung die gesendet werden soll, wenn das Gerät gestartet wird (auch Sonderzeichen sind möglich)
+- **Endtext**: Benachrichtigung die gesendet werden soll, wenn das Gerät seinen Vorgang beendet hat (auch Sonderzeichen sind möglich)
+- **Telegram username**: Hier werden alle verfügbaren Telegram User angezeigt und können per Klick dem Gerät zugeordnet werden. 
 
-1. Push all files to the GitHub repo. The creator has already set up the local repository for you:  
-	```bash
-	git push origin master
-	```
-1. Add a new secret under https://github.com/xenon-s/ioBroker.device-reminder/settings/secrets. It must be named `AUTO_MERGE_TOKEN` and contain a personal access token with push access to the repository, e.g. yours. You can create a new token under https://github.com/settings/tokens.
+    **Sollten keine Namen angezeigt werden:**
+    Prüfen, ob der Eintrag unter "telegram.X.communicate.users" (das X steht für die jeweilige Instanz, zb 0) folgende Struktur enthält: "{"ID IN ZAHLEN":{"firstName":"User1"}}", wenn nicht kann diese einfach angepasst werden. Der Adapter sucht sowohl nach **firstName**, als auch nach **userName**.
 
-1. Head over to [main.js](main.js) and start programming!
+- **Alexa devices**: alle zuvor erstellen Alexas werden hier aufgelistet und können per Klick hinzugefügt werden.
+- **SayIt ID**: derzeit noch nicht implementiert
+- **auto off**: Wenn angewählt, schaltet sich die Steckdose nach Beendigung des Vorgangs automatisch ab
 
-### Best Practices
-We've collected some [best practices](https://github.com/ioBroker/ioBroker.repositories#development-and-coding-best-practices) regarding ioBroker development and coding in general. If you're new to ioBroker or Node.js, you should
-check them out. If you're already experienced, you should also take a look at them - you might learn something new :)
+Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte -> device-reminder nun für jedes neu angelegte Device ein Ordner erstellt, in dem nochmal der aktuelle Zustand und Verbrauch (wird aus dem patch consumption geholt) angezeigt wird.
 
-### Scripts in `package.json`
-Several npm scripts are predefined for your convenience. You can run them using `npm run <scriptname>`
-| Script name | Description                                              |
-|-------------|----------------------------------------------------------|
-| `test:js`   | Executes the tests you defined in `*.test.js` files.     |
-| `test:package`    | Ensures your `package.json` and `io-package.json` are valid. |
-| `test` | Performs a minimal test run on package files and your tests. |
-| `lint` | Runs `ESLint` to check your code for formatting errors and potential bugs. |
+# Unterstützung
+**Falls euch meine Arbeit gefällt :** <br>
 
-### Writing tests
-When done right, testing code is invaluable, because it gives you the 
-confidence to change your code while knowing exactly if and when 
-something breaks. A good read on the topic of test-driven development 
-is https://hackernoon.com/introduction-to-test-driven-development-tdd-61a13bc92d92. 
-Although writing tests before the code might seem strange at first, but it has very 
-clear upsides.
+[![paypal](https://www.paypalobjects.com/en_US/DK/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3EYML5A4EMJCW&source=url) 
 
-The template provides you with basic tests for the adapter startup and package files.
-It is recommended that you add your own tests into the mix.
-
-### Publishing the adapter
-Since you have chosen GitHub Actions as your CI service, you can 
-enable automatic releases on npm whenever you push a new git tag that matches the form 
-`v<major>.<minor>.<patch>`. The necessary steps are described in `.github/workflows/test-and-release.yml`.
-
-To get your adapter released in ioBroker, please refer to the documentation 
-of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#requirements-for-adapter-to-get-added-to-the-latest-repository).
-
-### Test the adapter manually on a local ioBroker installation
-In order to install the adapter locally without publishing, the following steps are recommended:
-1. Create a tarball from your dev directory:  
-	```bash
-	npm pack
-	```
-1. Upload the resulting file to your ioBroker host
-1. Install it locally (The paths are different on Windows):
-	```bash
-	cd /opt/iobroker
-	npm i /path/to/tarball.tgz
-	```
-
-For later updates, the above procedure is not necessary. Just do the following:
-1. Overwrite the changed files in the adapter directory (`/opt/iobroker/node_modules/iobroker.device-reminder`)
-1. Execute `iobroker upload device-reminder` on the ioBroker host
 
 ## Changelog
+<!--
+	Placeholder for the next version (at the beginning of the line):
+	### __WORK IN PROGRESS__
+-->
 
-### 0.0.1
-* (xenon-s) initial release
+### 0.0.2-alpha.1 (2020-10-22)
+* (xenon-s) fix URL
+
+
+### 0.0.1 (2020-10-20)
+* (xenon-s) initial commit
+
+
+
 
 ## License
+
 MIT License
 
-Copyright (c) 2020 xenon-s <ente_s@hotmail.de>
+Copyright (c) 2020 xenon-s
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
