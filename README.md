@@ -73,8 +73,8 @@ Auch hier muss zuerst über das + ein neuer Eintrag erstellt werden.
     **Sollten keine Namen angezeigt werden:**
     Prüfen, ob der Eintrag unter "telegram.X.communicate.users" (das X steht für die jeweilige Instanz, zb 0) folgende Struktur enthält: "{"ID IN ZAHLEN":{"firstName":"User1"}}", wenn nicht kann diese einfach angepasst werden. Der Adapter sucht sowohl nach **firstName**, als auch nach **userName**.
 
-- **Alexa devices**: alle zuvor erstellen Alexas werden hier aufgelistet und können per Klick hinzugefügt werden.
-- **SayIt ID**: derzeit noch nicht implementiert
+- **Alexa devices**: alle zuvor erstellen Alexas werden hier aufgelistet und können per Klick hinzugefügt werden
+- **SayIt ID**: alle zuvor erstellen sayit devices werden hier aufgelistet und können per Klick hinzugefügt werden
 - **auto off**: Wenn angewählt, schaltet sich die Steckdose nach Beendigung des Vorgangs automatisch ab
 - **timer**: Hier kann optional ein timeout in **Minuten** eingegeben werden. Nach Ablauf des timeouts wird die Steckdose, *wenn auto off denn altiviert ist*, abgeschaltet. Die Ende Benachrichtigung des Gerätes bleibt von einem timeout jedoch unberührt!
 
@@ -91,10 +91,11 @@ Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte ->
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### 0.1.1-0 (2020-10-23)
+* (xenon-s) readme "sayit" hinzugefügt
 
 ### 0.1.0 (2020-10-23)
 * (xenon-s) beta release
-
 
 ### 0.0.1 (2020-10-20)
 * (xenon-s) initial commit

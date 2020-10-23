@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.1.0",
+        "version": "0.1.1-0",
         "news": {
+            "0.1.1-0": {
+                "en": "readme \"sayit\" hinzugefügt",
+                "de": "readme \"sayit\" hinzugefügt",
+                "ru": "readme \"sayit\" hinzugefügt",
+                "pt": "leia-me \"sayit\" hinzugefügt",
+                "nl": "lees mij \"sayit\" hinzugefügt",
+                "fr": "readme \"sayit\" hinzugefügt",
+                "it": "readme \"sayit\" hinzugefügt",
+                "es": "léame \"sayit\" hinzugefügt",
+                "pl": "readme \"sayit\" hinzugefügt",
+                "zh-cn": "自述文件“ sayit”hinzugefügt"
+            },
             "0.1.0": {
                 "en": "beta release",
                 "de": "Beta-Version",
