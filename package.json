@@ -1,38 +1,26 @@
 {
-  "_from": "https://github.com/Xenon-s/ioBroker.device-reminder/tarball/f6befbed4d3f282dc0a565d7676b4104bbb915b1",
-  "_id": "iobroker.device-reminder@0.0.2-alpha.7",
-  "_inBundle": false,
-  "_integrity": "sha512-spx+MgtXN28LIkTMlZ4S7mBPqLYkdjoYFokYDs+yw8auf7ANnPcH2oxZVSh/sy+SnJhl3EjhLtPt/JKgZ94A0w==",
-  "_location": "/iobroker.device-reminder",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "remote",
-    "raw": "https://github.com/Xenon-s/ioBroker.device-reminder/tarball/f6befbed4d3f282dc0a565d7676b4104bbb915b1",
-    "rawSpec": "https://github.com/Xenon-s/ioBroker.device-reminder/tarball/f6befbed4d3f282dc0a565d7676b4104bbb915b1",
-    "saveSpec": "https://github.com/Xenon-s/ioBroker.device-reminder/tarball/f6befbed4d3f282dc0a565d7676b4104bbb915b1",
-    "fetchSpec": "https://github.com/Xenon-s/ioBroker.device-reminder/tarball/f6befbed4d3f282dc0a565d7676b4104bbb915b1"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://github.com/Xenon-s/ioBroker.device-reminder/tarball/f6befbed4d3f282dc0a565d7676b4104bbb915b1",
-  "_shasum": "f38d1375ed513bed83ea1669ce4f90bece07132e",
-  "_spec": "https://github.com/Xenon-s/ioBroker.device-reminder/tarball/f6befbed4d3f282dc0a565d7676b4104bbb915b1",
-  "_where": "/opt/iobroker",
+  "name": "iobroker.device-reminder",
+  "version": "0.1.1-beta.0",
+  "description": "device-reminder",
   "author": {
     "name": "xenon-s",
     "email": "ente_s@hotmail.de"
   },
-  "bugs": {
-    "url": "https://github.com/xenon-s/ioBroker.device-reminder/issues"
+  "homepage": "https://github.com/xenon-s/ioBroker.device-reminder",
+  "license": "MIT",
+  "keywords": [
+    "ioBroker",
+    "template",
+    "Smart Home",
+    "home automation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xenon-s/ioBroker.device-reminder"
   },
-  "bundleDependencies": false,
   "dependencies": {
     "@iobroker/adapter-core": "^2.4.0"
   },
-  "deprecated": false,
-  "description": "device-reminder",
   "devDependencies": {
     "@alcalzone/release-script": "^1.8.1",
     "@iobroker/testing": "^2.3.0",
@@ -54,28 +42,18 @@
     "sinon": "^9.2.0",
     "sinon-chai": "^3.5.0"
   },
-  "homepage": "https://github.com/xenon-s/ioBroker.device-reminder",
-  "keywords": [
-    "ioBroker",
-    "template",
-    "Smart Home",
-    "home automation"
-  ],
-  "license": "MIT",
   "main": "main.js",
-  "name": "iobroker.device-reminder",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/xenon-s/ioBroker.device-reminder.git"
-  },
   "scripts": {
-    "lint": "eslint",
-    "release": "release-script",
-    "test": "npm run test:js && npm run test:package",
-    "test:integration": "mocha test/integration --exit",
     "test:js": "mocha --config test/mocharc.custom.json \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
     "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit"
+    "test:unit": "mocha test/unit --exit",
+    "test:integration": "mocha test/integration --exit",
+    "test": "npm run test:js && npm run test:package",
+    "lint": "eslint",
+    "release": "release-script"
   },
-  "version": "0.1.1-0"
+  "bugs": {
+    "url": "https://github.com/xenon-s/ioBroker.device-reminder/issues"
+  },
+  "readmeFilename": "README.md"
 }

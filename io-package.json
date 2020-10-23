@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.1.1-0",
+        "version": "0.1.1-beta.0",
         "news": {
+            "0.1.1-beta.0": {
+                "en": "fix package.json",
+                "de": "fix package.json",
+                "ru": "исправить package.json",
+                "pt": "corrigir package.json",
+                "nl": "fix package.json",
+                "fr": "réparer package.json",
+                "it": "correggere package.json",
+                "es": "arreglar package.json",
+                "pl": "fix package.json",
+                "zh-cn": "修复package.json"
+            },
             "0.1.1-0": {
                 "en": "readme \"sayit\" hinzugefügt",
                 "de": "readme \"sayit\" hinzugefügt",
