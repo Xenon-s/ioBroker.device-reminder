@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.1.1",
+        "version": "0.1.2",
         "news": {
+            "0.1.2": {
+                "en": "fix bug in index_m.html: User werden nicht immer richtig angezeigt",
+                "de": "Fehler in index_m.html beheben: Benutzer wird nicht immer richtig eingestellt",
+                "ru": "исправить ошибку в index_m.html: Пользователь werden nicht immer richtig angezeigt",
+                "pt": "corrigir bug em index_m.html: Usuário werden nicht immer richtig angezeigt",
+                "nl": "bug in index_m.html repareren: de gebruiker werd niet in de richting van een andere gericht",
+                "fr": "correction d'un bug dans index_m.html: utilisateur werden nicht immer richtig angezeigt",
+                "it": "fix bug in index_m.html: User werden nicht immer richtig angezeigt",
+                "es": "corregir error en index_m.html: Usuario werden nicht immer richtig angezeigt",
+                "pl": "napraw błąd w index_m.html: User werden nicht immer richtig angezeigt",
+                "zh-cn": "修复index_m.html中的错误：用户werden nicht immer richtig angezeigt"
+            },
             "0.1.1": {
                 "en": "fix bug in index_m.html: User werden nicht immer richtig angezeigt",
                 "de": "Fehler in index_m.html beheben: Benutzer wird nicht immer richtig eingestellt",

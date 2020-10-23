@@ -78,26 +78,28 @@
 
         };
 
-        function readUserTelegram(arrTemp)
-        // telegram auswahl erstellen
-        for (const i in arrTemp) {
-            socket.emit('getState', arrTemp[i], (err, state) => {
-                if (state !== null || state !== undefined) {
-                    if (state.val !== ``) {
-                        $.each(JSON.parse(state.val), (index, element) => {
-                            if (element.firstName !== undefined) {
-                                firstName.push(`${element.firstName}/${element.firstName}`);
-                            } else if (element.userName !== undefined) {
-                                firstName.push(`${element.userName}/${element.userName}`);
-                            } else {
-                                firstName.push(``);
-                            };
-                        });
-                        $('#telegramIds').attr("data-options", firstName.join(';'));
+        function readUserTelegram(arrTemp) {
+            // telegram auswahl erstellen
+            for (const i in arrTemp) {
+                socket.emit('getState', arrTemp[i], (err, state) => {
+                    if (state !== null || state !== undefined) {
+                        if (state.val !== ``) {
+                            $.each(JSON.parse(state.val), (index, element) => {
+                                if (element.firstName !== undefined) {
+                                    firstName.push(`${element.firstName}/${element.firstName}`);
+                                } else if (element.userName !== undefined) {
+                                    firstName.push(`${element.userName}/${element.userName}`);
+                                } else {
+                                    firstName.push(``);
+                                };
+                            });
+                            $('#telegramIds').attr("data-options", firstName.join(';'));
+                        };
                     };
-                };
-            });
+                });
+            };
         };
+
 
         // This will be called by the admin adapter when the settings page loads
         function load(settings, onChange) {

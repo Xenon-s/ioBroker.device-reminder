@@ -92,14 +92,11 @@ Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte ->
 	### __WORK IN PROGRESS__
 -->
 
-### 0.1.1 (2020-10-23)
+### 0.1.2 (2020-10-23)
 * (xenon-s) fix bug in index_m.html: User werden nicht immer richtig angezeigt
 
 ### 0.1.1-beta.0 (2020-10-23)
 * (xenon-s) fix package.json
-
-### 0.1.1-0 (2020-10-23)
-* (xenon-s) readme "sayit" hinzugefügt
 
 ### 0.1.0 (2020-10-23)
 * (xenon-s) beta release
