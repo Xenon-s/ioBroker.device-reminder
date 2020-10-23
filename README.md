@@ -1,5 +1,5 @@
 ﻿![Logo](admin/icon.png)
-# ioBroker.device-reminder (V 0.0.1 Alpha)
+# ioBroker.device-reminder !!!BETA RELEASE!!!
 
 # Adapter zur Überwachung von Gerätezuständen
 Dieser Adapter kann anhand von Messsteckdosen erkennen, ob ein Gerät eingeschaltet, in Betrieb oder ausgeschaltet wurde und darauf reagieren. Derzeit können Nachrichten per Telegram (Mehrfachauswahl pro Gerät möglich) oder Alexa (Mehrfachauswahl pro Gerät möglich) automatisiert ausgegeben werden. Es ist ebenfalls möglich, die Steckdose nach Beendigung des Vorgangs automatisch abzuschalten. (voheriges Projekt, aus dem dieser Adapter entstanden ist: https://github.com/Xenon-s/js.device-reminder)
@@ -92,8 +92,8 @@ Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte ->
 	### __WORK IN PROGRESS__
 -->
 
-### 0.0.2-alpha.8 (2020-10-23)
-* (xenon-s) fix
+### 0.1.0 (2020-10-23)
+* (xenon-s) beta release
 
 
 ### 0.0.1 (2020-10-20)

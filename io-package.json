@@ -1,69 +1,21 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.0.2-alpha.8",
+        "version": "0.1.0",
         "news": {
-            "0.0.2-alpha.8": {
-                "en": "fix",
-                "de": "Fix",
-                "ru": "исправить",
-                "pt": "consertar",
-                "nl": "repareren",
-                "fr": "réparer",
-                "it": "aggiustare",
-                "es": "reparar",
-                "pl": "naprawić",
-                "zh-cn": "固定"
+            "0.1.0": {
+                "en": "beta release",
+                "de": "Beta-Version",
+                "ru": "бета-версия",
+                "pt": "lançamento beta",
+                "nl": "bètaversie",
+                "fr": "version bêta",
+                "it": "versione beta",
+                "es": "lanzamiento beta",
+                "pl": "wydanie beta",
+                "zh-cn": "测试版"
             },
-            "0.0.2-alpha.7": {
-                "en": "fix",
-                "de": "Fix",
-                "ru": "исправить",
-                "pt": "consertar",
-                "nl": "repareren",
-                "fr": "réparer",
-                "it": "aggiustare",
-                "es": "reparar",
-                "pl": "naprawić",
-                "zh-cn": "固定"
-            },
-            "0.0.2-alpha.5": {
-                "en": "update io-package.json",
-                "de": "Aktualisieren Sie io-package.json",
-                "ru": "обновить io-package.json",
-                "pt": "atualizar io-package.json",
-                "nl": "update io-package.json",
-                "fr": "mettre à jour io-package.json",
-                "it": "aggiornare io-package.json",
-                "es": "actualizar io-package.json",
-                "pl": "zaktualizuj io-package.json",
-                "zh-cn": "更新io-package.json"
-            },
-            "0.0.2-alpha.4": {
-                "en": "update style.css",
-                "de": "aktualisiere style.css",
-                "ru": "обновить style.css",
-                "pt": "atualizar style.css",
-                "nl": "update style.css",
-                "fr": "mettre à jour style.css",
-                "it": "update style.css",
-                "es": "actualizar style.css",
-                "pl": "zaktualizuj style.css",
-                "zh-cn": "更新style.css"
-            },
-            "0.0.2-alpha.3": {
-                "en": "update style.css",
-                "de": "aktualisiere style.css",
-                "ru": "обновить style.css",
-                "pt": "atualizar style.css",
-                "nl": "update style.css",
-                "fr": "mettre à jour style.css",
-                "it": "update style.css",
-                "es": "actualizar style.css",
-                "pl": "zaktualizuj style.css",
-                "zh-cn": "更新style.css"
-            },
-            "0.0.2-alpha.2": {
+            "0.0.1-alpha.1": {
                 "en": "fix URL",
                 "de": "URL korrigieren",
                 "ru": "исправить URL",
@@ -75,19 +27,7 @@
                 "pl": "napraw adres URL",
                 "zh-cn": "修正网址"
             },
-            "0.0.2-alpha.1": {
-                "en": "fix URL",
-                "de": "URL korrigieren",
-                "ru": "исправить URL",
-                "pt": "corrigir URL",
-                "nl": "URL repareren",
-                "fr": "corriger l'URL",
-                "it": "correggere l'URL",
-                "es": "arreglar URL",
-                "pl": "napraw adres URL",
-                "zh-cn": "修正网址"
-            },
-            "0.0.2-alpha.0": {
+            "0.0.1-alpha.0": {
                 "en": "fix URL",
                 "de": "URL korrigieren",
                 "ru": "исправить URL",
