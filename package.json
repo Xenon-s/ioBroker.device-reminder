@@ -1,6 +1,6 @@
 {
   "name": "iobroker.device-reminder",
-  "version": "0.1.1-beta.0",
+  "version": "0.1.1",
   "description": "device-reminder",
   "author": {
     "name": "xenon-s",

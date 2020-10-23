@@ -91,6 +91,10 @@ Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte ->
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+
+### 0.1.1 (2020-10-23)
+* (xenon-s) fix bug in index_m.html: User werden nicht immer richtig angezeigt
+
 ### 0.1.1-beta.0 (2020-10-23)
 * (xenon-s) fix package.json
 

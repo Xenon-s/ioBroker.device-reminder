@@ -52,13 +52,13 @@
                     };
                 });
                 if (arrTemp.length > 0) {
-                    readUser(arrTemp);
+                    readUserTelegram(arrTemp);
                 };
             };
         });
 
 
-        function readUser(arrTemp) {
+        function readUser() {
 
             // alexa auswahl erstellen
             $.each(alexaID, (index, element) => {
@@ -76,34 +76,27 @@
             });
             $('#sayitIds').attr("data-options", sayit.join(';'));
 
-            // // timer auswahl erstellen
-            // $.each(timerID, (index, element) => {
-            //     if (element.timerName !== "" && element.timerName != null && element.timer !== "" && element.timer !== null && element.enabled !== null && element.enabled && element.timer >0) {
-            //         timer.push(`${element.timer}/${element.timer}`);
-            //     };    
-            // });
-            // $('#timerIds').attr("data-options", timer.join(';'));
+        };
 
-
-            // telegram auswahl erstellen
-            for (const i in arrTemp) {
-                socket.emit('getState', arrTemp[i], (err, state) => {
-                    if (state !== null || state !== undefined) {
-                        if (state.val !== ``) {
-                            $.each(JSON.parse(state.val), (index, element) => {
-                                if (element.firstName !== undefined) {
-                                    firstName.push(`${element.firstName}/${element.firstName}`);
-                                } else if (element.userName !== undefined) {
-                                    firstName.push(`${element.userName}/${element.userName}`);
-                                } else {
-                                    firstName.push(``);
-                                };
-                            });
-                            $('#telegramIds').attr("data-options", firstName.join(';'));
-                        };
+        function readUserTelegram(arrTemp)
+        // telegram auswahl erstellen
+        for (const i in arrTemp) {
+            socket.emit('getState', arrTemp[i], (err, state) => {
+                if (state !== null || state !== undefined) {
+                    if (state.val !== ``) {
+                        $.each(JSON.parse(state.val), (index, element) => {
+                            if (element.firstName !== undefined) {
+                                firstName.push(`${element.firstName}/${element.firstName}`);
+                            } else if (element.userName !== undefined) {
+                                firstName.push(`${element.userName}/${element.userName}`);
+                            } else {
+                                firstName.push(``);
+                            };
+                        });
+                        $('#telegramIds').attr("data-options", firstName.join(';'));
                     };
-                });
-            };
+                };
+            });
         };
 
         // This will be called by the admin adapter when the settings page loads
@@ -229,8 +222,8 @@
                                             Whatsapp<br>ID</th> -->
                                         <th data-name="autoOff" data-type="checkbox" class="header translate"
                                             style="width: 40px" data-default="false">auto<br>off</th>
-                                        <th data-name="idTimer" data-type="number"
-                                            class="header translate" data-default="0">timeout<br>in minutes
+                                        <th data-name="idTimer" data-type="number" class="header translate"
+                                            data-default="0">timeout<br>in minutes
                                         </th>
                                         <th data-buttons="delete" class="header translate">delete</th>
                                     </tr>
