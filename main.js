@@ -7,7 +7,6 @@
 
 /* 
 - wenn maschine vorher abgeschaltet wird, berechnung abbrechen
-- timeout einbringen 
 */
 
 // The adapter-core module gives you access to the core ioBroker functions
@@ -80,6 +79,7 @@ class Template extends utils.Adapter {
                     const obj = element;
                     if (obj.enabled && obj.deviceName !== `` && obj.pathConsumption !== `` && obj.pathSwitch !== ``) {
                         arrObj[id] = await this.funcCreateObject(obj);
+                        await this.stateIni();
                         this.log.debug(`objFinal ${JSON.stringify(arrObj)}`);
                         this.subscribeForeignStates(id);
                         this.log.debug(`subscribe ${JSON.stringify(id)}`);
@@ -174,6 +174,20 @@ class Template extends utils.Adapter {
             return arrTemp;
         };
     };
+
+    async stateIni() {
+        for (const i in arrObj) {
+            let result = await this.getForeignStateAsync(arrObj[i].switchPower);
+            let objSwitch = result.val;
+            this.log.debug(`state objSwitch ${JSON.stringify(objSwitch)}`);
+            if (objSwitch) {
+                await this.setStateAsync(arrObj[i].pfadZustand, "standby", true);
+            } else {
+                await this.setStateAsync(arrObj[i].pfadZustand, "ausgeschaltet", true);
+            } await this.setStateAsync(arrObj[i].gesamtZeit, "00:00:00", true);
+        };
+    };
+
 
 
     /**
@@ -414,8 +428,10 @@ class Template extends utils.Adapter {
         try {
             // Here you must clear all timeouts or intervals that may still be active
             for (const i in arrObj) {
-                clearTimeout(arrObj[i].timeout);
-                this.log.debug(`timeout ${arrObj[i].deviceName}: was deleted, state: ${arrObj[i].timeout}`);
+                if (arrObj[i].timeout) {
+                    clearTimeout(arrObj[i].timeout);
+                    this.log.debug(`timeout ${arrObj[i].geraeteName}: was deleted`);
+                };
             };
             callback();
         } catch (e) {
@@ -503,7 +519,7 @@ class Template extends utils.Adapter {
                         clearTimeout(obj.timeout);
                         obj.timeout = null;
                     };
-                    obj.timeout = setTimeout(async() => {  //timeout starten
+                    obj.timeout = setTimeout(async () => {  //timeout starten
                         await this.setForeignStateAsync(obj.switchPower, false); // Geraet ausschalten, falls angewaehlt    
                         await this.setStateAsync(obj.pfadZustand, `ausgeschaltet`, true); // Status in DP schreiben
                     }, obj.timeoutInMS);

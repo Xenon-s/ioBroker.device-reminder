@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.0.2-alpha.7",
+        "version": "0.0.2-alpha.8",
         "news": {
+            "0.0.2-alpha.8": {
+                "en": "fix",
+                "de": "Fix",
+                "ru": "исправить",
+                "pt": "consertar",
+                "nl": "repareren",
+                "fr": "réparer",
+                "it": "aggiustare",
+                "es": "reparar",
+                "pl": "naprawić",
+                "zh-cn": "固定"
+            },
             "0.0.2-alpha.7": {
                 "en": "fix",
                 "de": "Fix",
