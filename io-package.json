@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.0.2-alpha.7",
+        "version": "0.0.2---all.0",
         "news": {
+            "0.0.2---all.0": {
+                "en": "update readme",
+                "de": "Readme aktualisieren",
+                "ru": "обновить ридми",
+                "pt": "atualizar leia-me",
+                "nl": "update readme",
+                "fr": "mettre à jour le fichier readme",
+                "it": "aggiornamento readme",
+                "es": "actualizar léame",
+                "pl": "zaktualizuj plik Readme",
+                "zh-cn": "更新自述文件"
+            },
             "0.0.2-alpha.7": {
                 "en": "fix",
                 "de": "Fix",
@@ -152,7 +164,8 @@
             {
                 "js-controller": ">=2.0.0"
             }
-        ]
+        ],
+        "installedFrom": "https://github.com/Xenon-s/ioBroker.device-reminder/tarball/f6befbed4d3f282dc0a565d7676b4104bbb915b1"
     },
     "native": {
         "option1": true,

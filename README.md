@@ -27,9 +27,9 @@ Der refresh Intervall vom "Live-Verbrauchswert (heißt bei den meisten Geräten 
 
 # Anleitung
 ## Alexa erstellen
-Wenn man Alexa intregrieren möchte muss man diese **zwingend zuerst** auf der Config Seite der device-reminder Instanz anlegen.
+Wenn man Alexa integrieren möchte muss man diese **zwingend zuerst** auf der Config Seite der device-reminder Instanz anlegen.
 
-![configAlexa.png](admin/configAlexa.png)
+![alexa.png](admin/alexa.png)
 Zuerst muss über das + ein neuer Eintrag erzeugt werden. 
 - **active**: Ist standardmäßig aktiviert. Hier kann man eine Alexa vorrübergehend deaktivieren.
 - **alexa name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
@@ -43,6 +43,20 @@ Mit den 4 letzten Feldern kann ein Zeitraum erstellt werden, in dem eure Alexa S
 <p></p>
 Habt ihr eure Alexa(s) angelegt, muss auf "Speichern und Schliessen" geklickt werden. Danach erscheint eure Alexa auf der "Devices Seite" und kann per Klick dem jeweiligen Gerät zugeordnet werden.
 <p></p>
+
+## SayIt device erstellen
+Wenn man sayIt (text-to-speech) integrieren möchte muss man **zwingend zuerst** ein device auf der Config Seite der device-reminder Instanz anlegen.
+
+![sayit.png](admin/sayit.png)
+Zuerst muss über das + ein neuer Eintrag erzeugt werden.
+- **active**: Ist standardmäßig aktiviert. Hier kann man ein SayIt-device vorrübergehend deaktivieren.
+- **sayit name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
+- **sayit path"../text"**: den Datenpunkt "text" im jeweiligen sayIt device Ordner auswählen. Hier wird die Textausgabe hingesendet.
+- **sayit volume 0-100**: *optional* hier kann man eine Lautstärke vorgeben (default: 50). Werte zwischen 0 und 100 sind möglich.
+- **"time active hour"**: Startzeit in Stunden
+- **"time active min"**: Startzeit in Minuten
+- **"time inactive hour"**: Endzeit in Stunden
+- **"time inactive min"**: Endzeit in Minuten
 
 ## Device anlegen und konfigurieren
 ![devices.png](admin/devices.png)
@@ -62,6 +76,7 @@ Auch hier muss zuerst über das + ein neuer Eintrag erstellt werden.
 - **Alexa devices**: alle zuvor erstellen Alexas werden hier aufgelistet und können per Klick hinzugefügt werden.
 - **SayIt ID**: derzeit noch nicht implementiert
 - **auto off**: Wenn angewählt, schaltet sich die Steckdose nach Beendigung des Vorgangs automatisch ab
+- **timer**: Hier kann optional ein timeout in **Minuten** eingegeben werden. Nach Ablauf des timeouts wird die Steckdose, *wenn auto off denn altiviert ist*, abgeschaltet. Die Ende Benachrichtigung des Gerätes bleibt von einem timeout jedoch unberührt!
 
 Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte -> device-reminder nun für jedes neu angelegte Device ein Ordner erstellt, in dem nochmal der aktuelle Zustand und Verbrauch (wird aus dem patch consumption geholt) angezeigt wird.
 
@@ -77,9 +92,8 @@ Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte ->
 	### __WORK IN PROGRESS__
 -->
 
-### 0.0.2-alpha.7 (2020-10-22)
-* (xenon-s) fix
-
+### 0.0.2---all.0 (2020-10-23)
+* (xenon-s) update readme
 
 ### 0.0.1 (2020-10-20)
 * (xenon-s) initial commit
