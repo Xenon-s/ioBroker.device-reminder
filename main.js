@@ -52,10 +52,10 @@ class Template extends utils.Adapter {
         sayitInput = this.config.sayitFinal;
         whatsappInput = this.config.whatsappFinal;
 
-        this.log.warn(`ARR INPUT devices ${JSON.stringify(objectInput)}`);
-        this.log.warn(`ARR INPUT alexa ${JSON.stringify(alexaInput)}`);
-        this.log.warn(`ARR INPUT sayit ${JSON.stringify(sayitInput)}`);
-        this.log.warn(`ARR INPUT whatsapp ${JSON.stringify(whatsappInput)}`);
+        this.log.debug(`ARR INPUT devices ${JSON.stringify(objectInput)}`);
+        this.log.debug(`ARR INPUT alexa ${JSON.stringify(alexaInput)}`);
+        this.log.debug(`ARR INPUT sayit ${JSON.stringify(sayitInput)}`);
+        this.log.debug(`ARR INPUT whatsapp ${JSON.stringify(whatsappInput)}`);
 
 
         // Input auf Plausibilität prüfen
@@ -75,7 +75,7 @@ class Template extends utils.Adapter {
             };
 
             for (const i in objectInput) {
-                this.log.warn(`element for each ${JSON.stringify(objectInput[i])}`)
+                this.log.debug(`element for each ${JSON.stringify(objectInput[i])}`)
                 const id = objectInput[i].pathConsumption;
                 const obj = objectInput[i];
                 this.log.debug(`obj in constructor "${JSON.stringify(obj)}"`);
@@ -116,7 +116,7 @@ class Template extends utils.Adapter {
 
     async stateIni(obj) {
         for (const i in obj) {
-            this.log.warn(`obj stateIni ${JSON.stringify(obj)}`);
+            this.log.debug(`obj stateIni ${JSON.stringify(obj)}`);
             if (obj[i].switchPower !== undefined && obj[i].switchPower !== null && obj[i].switchPower !== ``) {
                 const resultSwitch = await this.getForeignStateAsync(obj[i].switchPower);
                 const objSwitch = resultSwitch.val;
@@ -460,10 +460,12 @@ class Template extends utils.Adapter {
 
         switch (status) {
             case 0: {
-                if (this.getForeignStateAsync(obj.switchPower)) {
-                    await this.setForeignStateAsync(obj.switchPower, false); // Geraet ausschalten, falls angewaehlt
+                if (obj.switchPower != "") {
+                    if (this.getForeignStateAsync(obj.switchPower)) {
+                        await this.setForeignStateAsync(obj.switchPower, false); // Geraet ausschalten, falls angewaehlt
+                    };
+                    await this.setStateAsync(obj.pathStatus, `ausgeschaltet`, true); // Status in DP schreiben
                 };
-                await this.setStateAsync(obj.pathStatus, `ausgeschaltet`, true); // Status in DP schreiben
                 break;
             };
             case 1: {

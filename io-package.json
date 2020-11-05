@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "news": {
+            "0.2.1": {
+                "en": "readme angepasst",
+                "de": "readme besteht",
+                "ru": "readme angepasst",
+                "pt": "leia-me angepasst",
+                "nl": "readme angepasst",
+                "fr": "readme angepasst",
+                "it": "readme angepasst",
+                "es": "léame angepasst",
+                "pl": "readme angepasst",
+                "zh-cn": "自述"
+            },
             "0.2.0": {
                 "en": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
                 "de": "Update auf Version 0.2: index_m vollständig behandelt und whatsapp hinzugefügt",
