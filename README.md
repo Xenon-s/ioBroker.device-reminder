@@ -92,6 +92,9 @@ Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte ->
 	### __WORK IN PROGRESS__
 -->
 
+### 0.2.0 (2020-11-05)
+* (xenon-s) update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt
+
 ### 0.1.2 (2020-10-23)
 * (xenon-s) fix bug in index_m.html: User werden nicht immer richtig angezeigt
 

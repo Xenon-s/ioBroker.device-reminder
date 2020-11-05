@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.1.2",
+        "version": "0.2.0",
         "news": {
+            "0.2.0": {
+                "en": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+                "de": "Update auf Version 0.2: index_m vollständig behandelt und whatsapp hinzugefügt",
+                "ru": "обновить до версии 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+                "pt": "atualização auf Versão 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+                "nl": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+                "fr": "mise à jour auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+                "it": "aggiornamento alla versione 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+                "es": "actualización de auf versión 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+                "pl": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+                "zh-cn": "更新auf版本0.2：index_m komplettüberarbeitet和whatsapp提示"
+            },
             "0.1.2": {
                 "en": "fix bug in index_m.html: User werden nicht immer richtig angezeigt",
                 "de": "Fehler in index_m.html beheben: Benutzer wird nicht immer richtig eingestellt",
@@ -138,7 +150,7 @@
         "platform": "Javascript/Node.js",
         "main": "main.js",
         "icon": "icon.png",
-        "enabled": true,
+        "enabled": false,
         "extIcon": "https://raw.githubusercontent.com/xenon-s/ioBroker.device-reminder/master/admin/icon.png",
         "readme": "https://github.com/xenon-s/ioBroker.device-reminder/blob/master/README.md",
         "loglevel": "info",
@@ -155,8 +167,10 @@
         ]
     },
     "native": {
-        "option1": true,
-        "option2": "42"
+        "device_counter": 0,
+        "alexa_counter": 0,
+        "sayit_counter": 0,
+        "whatsapp_counter": 0
     },
     "objects": [],
     "instanceObjects": []
