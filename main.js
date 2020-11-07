@@ -488,7 +488,7 @@ class Template extends utils.Adapter {
     async setStatus(obj, status) {
         switch (status) {
             case 0: {
-                if (obj.switchPower != "" && await this.getForeignStateAsync(obj.switchPower && obj.autoOff)) {
+                if (obj.switchPower != "" && await this.getForeignStateAsync(obj.switchPower) && obj.autoOff) {
                     await this.setForeignStateAsync(obj.switchPower, false); // Geraet ausschalten, falls angewaehlt
                 };
                 await this.setStateAsync(obj.pathStatus, `ausgeschaltet`, true); // Status in DP schreiben;
