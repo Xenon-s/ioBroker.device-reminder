@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.3.0",
+        "version": "0.3.1",
         "news": {
+            "0.3.1": {
+                "en": "bugfix",
+                "de": "Bug-Fix",
+                "ru": "Исправлена ошибка",
+                "pt": "correção de bug",
+                "nl": "bugfix",
+                "fr": "correction d'un bug",
+                "it": "risoluzione del problema",
+                "es": "arreglo del fallo",
+                "pl": "naprawa błędów",
+                "zh-cn": "错误修正"
+            },
             "0.3.0": {
                 "en": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
                 "de": "Standby-Lösunglung, auch wenn die Steckdose nicht geschlossen werden soll soll\nEs ist nun möglich, Nachrichten aus einem eigenen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",

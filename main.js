@@ -326,7 +326,6 @@ class Template extends utils.Adapter {
             native: {},
         });
 
-
         // Objekt bauen (obj, ... , startVal, endVal, startCount, endCount)
         switch (obj.type) {
             case `Waschmaschine`: {
@@ -342,7 +341,7 @@ class Template extends utils.Adapter {
                 break;
             };
             case `Geschirrspueler`: {
-                const GS = new Geraet(obj, zustand, verbrauchAktuell, laufzeit, messageDP, 15, 2, 2, 150);
+                const GS = new Geraet(obj, zustand, verbrauchAktuell, laufzeit, messageDP, 15, 4, 2, 150);
                 objTemp = GS;
                 arrDevices.push(GS);
                 break;
@@ -489,7 +488,7 @@ class Template extends utils.Adapter {
     async setStatus(obj, status) {
         switch (status) {
             case 0: {
-                if (obj.switchPower != "" && await this.getForeignStateAsync(obj.switchPower)) {
+                if (obj.switchPower != "" && await this.getForeignStateAsync(obj.switchPower && obj.autoOff)) {
                     await this.setForeignStateAsync(obj.switchPower, false); // Geraet ausschalten, falls angewaehlt
                 };
                 await this.setStateAsync(obj.pathStatus, `ausgeschaltet`, true); // Status in DP schreiben;

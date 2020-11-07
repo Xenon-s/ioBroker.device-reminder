@@ -111,6 +111,9 @@ Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte ->
 	### __WORK IN PROGRESS__
 -->
 
+### 0.3.1 (2020-11-07)
+* (xenon-s) bugfix
+
 ### 0.3.0 (2020-11-07)
 * (xenon-s) standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll
 * (xenon-s) Es ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden
