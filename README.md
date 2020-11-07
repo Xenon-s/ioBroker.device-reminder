@@ -1,5 +1,7 @@
 ﻿![Logo](admin/icon.png)
-# ioBroker.device-reminder !!!BETA RELEASE!!! **ACHTUNG: Es ist zwingend erforderlich alle vorhandenen Instanzen zu löschen, sollte man von einer Version kleiner 0.2 kommen !!!**
+# ioBroker.device-reminder !!!BETA RELEASE!!! 
+
+**ACHTUNG: Es ist zwingend erforderlich alle vorhandenen Instanzen zu löschen, sollte man von einer Version kleiner 0.2 kommen !!!**
 
 # Adapter zur Überwachung von Gerätezuständen
 Dieser Adapter kann anhand von Messsteckdosen erkennen, ob ein Gerät eingeschaltet, in Betrieb oder ausgeschaltet wurde und darauf reagieren. Derzeit können Nachrichten per Telegram (Mehrfachauswahl pro Gerät möglich) oder Alexa (Mehrfachauswahl pro Gerät möglich) automatisiert ausgegeben werden. Es ist ebenfalls möglich, die Steckdose nach Beendigung des Vorgangs automatisch abzuschalten. (voheriges Projekt, aus dem dieser Adapter entstanden ist: https://github.com/Xenon-s/js.device-reminder)
@@ -14,6 +16,7 @@ Der refresh Intervall vom "Live-Verbrauchswert (heißt bei den meisten Geräten 
 - Geschirrspüler,
 - Wasserkocher,
 - Computer,
+- Mikrowelle
 <br>
 - weitere werden folgen ...<br>
 
@@ -40,8 +43,10 @@ Zuerst muss über das "+ add device" ein neuer Eintrag erzeugt werden. Dadurch w
 - **device type**: hier muss ausgewählt werden, um welches Gerät es sich handelt, damit die Berechnungen im Adapter korrekt ausgeführt werden können
 - **path consumption**: Per Klick auf die Schaltfläche mit den drei weißen Punkten öffnet sich eure Objektverwaltung. Es muss der Datenpunkt ausgewählt werden, welcher den aktuellen Live-Verbrauch anzeigt.
 - **path switch on/off**: Per Klick auf die Schaltfläche mit den drei weißen Punkten öffnet sich eure Objektverwaltung. Es muss der Datenpunkt ausgewählt werden, welcher eure Steckdose an/aus schaltet (keine Pflicht)
-- **Starttext**: Benachrichtigung die gesendet werden soll, wenn das Gerät gestartet wird (auch Sonderzeichen sind möglich)
-- **Endtext**: Benachrichtigung die gesendet werden soll, wenn das Gerät seinen Vorgang beendet hat (auch Sonderzeichen sind möglich)
+- **Starttext**: Benachrichtigung die gesendet werden soll, wenn das Gerät gestartet wird (auch Sonderzeichen sind möglich). 
+- **Endtext**: Benachrichtigung die gesendet werden soll, wenn das Gerät seinen Vorgang beendet hat (auch Sonderzeichen sind möglich). 
+
+Bei **Starttext** und **Endtext** kann man sich auch eine Nachricht aus einem externen Datenpunkt holen. Diese Nachricht wird mit 1 Sekunde Verzögerung aus dem Datenpunkt gelesen, nachdem sich der Status des Geräts geändert hat. Somit kann man sich per externem Script eine Nachricht erstellen lassen. Der Adapter erkennt automatisch, ob eine Nachricht aus einem Datenpunkt stammt oder ob diese manuell einfach nur eingegeben wurde. Um einen Datenpunkt auszuwählen, einfach auf die Schaltfläche mit den drei weißen Punkten klicken und dann den entsprechenden Datenpunkt auswählen. **Bitte beachten**: es kann nur entweder ein Datenpunkt **oder** eine händisch eingetragene Nachricht verwendet werden!
 
 ## Alexa erstellen
 Zuerst muss über das "+ add alexa device" ein neuer Eintrag erzeugt werden. Dadurch wird folgende Tabellenzeile erzeugt:
@@ -106,9 +111,13 @@ Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte ->
 	### __WORK IN PROGRESS__
 -->
 
+### 0.3.0 (2020-11-07)
+* (xenon-s) standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll
+* (xenon-s) Es ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden
+* (xenon-s) Gerät "Mikrowelle" hinzugefügt
+
 ### 0.2.1 (2020-11-05)
 * (xenon-s) readme angepasst
-
 
 ### 0.2.0 (2020-11-05)
 * (xenon-s) update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt

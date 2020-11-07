@@ -142,7 +142,7 @@
                 device.forEach(function (d) {
                     if (d.deviceName == ID)
                         curDevice = d;
-                        console.log(devices);
+                    console.log(devices);
                     console.log(curDevice);
                 });
 
@@ -173,7 +173,7 @@
                     { type: 'multiple', data: firstName, name: "idTelegram", value: curDevice.idTelegram },
                     { type: 'checkbox', name: "autoOff", value: curDevice.autoOff },
                     { type: 'timer', name: "idTimer", value: parseInt(curDevice.idTimer) },
-                    { type: 'id', name: "id", value: parseInt(deviceId)}
+                    { type: 'id', name: "id", value: parseInt(deviceId) }
                 ];
 
                 console.log(curDevice.id);
@@ -240,9 +240,12 @@
                 });
             };
 
-            let selectInstance = M.FormSelect.getInstance($('select'));
-            instances = M.FormSelect.init($('select'));
-            M.updateTextFields();
+            // if (curDevice != null) {
+                let selectInstance = M.FormSelect.getInstance($('select'));
+                instances = M.FormSelect.init($('select'));
+                M.updateTextFields();
+            // };
+
 
             if (settings != null && settings != undefined)
                 loadUser(settings, onChange);
@@ -461,7 +464,7 @@
                     for (const j in arr) {
                         if (obj[i].id == arr[j].id) {
                             console.log("objekt gefunden");
-                            if(obj[i].enabled) {
+                            if (obj[i].enabled) {
                                 objTemp[obj[i].id] = {
                                     name: arr[j].name,
                                     type: arr[j].type,
@@ -527,7 +530,8 @@
                                         <th class="header translate" data-name="autoOff" style="width: 40px">auto
                                             off</th>
                                         <th class="header translate" data-name="idTimer">timeout in min</th>
-                                        <th class="header translate" data-name="id" style="width: 0px; display: none;">id</th>
+                                        <th class="header translate" data-name="id" style="width: 0px; display: none;">
+                                            id</th>
                                         <!-- <th class="header translate">delete</th> -->
                                     </tr>
                                 </thead>
@@ -572,9 +576,9 @@
                                         *path<br>consumption</th>
                                     <th data-name="switch" data-type="OID" class="header translate">
                                         path<br>switch on/off</th>
-                                    <th data-name="startText" data-type="text" class="header translate">Starttext
+                                    <th data-name="startText" data-type="OID" class="header translate">Starttext
                                     </th>
-                                    <th data-name="endText" data-type="text" class="header translate">Endtext</th>
+                                    <th data-name="endText" data-type="OID" class="header translate">Endtext</th>
                                     <th data-buttons="delete" class="header translate">delete</th>
                                     <th data-name="id" style="width: 0px; display: none;" class="header translate">id
                                     </th>

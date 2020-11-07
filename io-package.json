@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.2.1",
+        "version": "0.3.0",
         "news": {
+            "0.3.0": {
+                "en": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
+                "de": "Standby-Lösunglung, auch wenn die Steckdose nicht geschlossen werden soll soll\nEs ist nun möglich, Nachrichten aus einem eigenen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
+                "ru": "Standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
+                "pt": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
+                "nl": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
+                "fr": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
+                "it": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
+                "es": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
+                "pl": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
+                "zh-cn": "待命Ermittlung，Stennedose nicht abgeschaltet werden soll\nEs ist nunmöglich，Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät“ Mikrowelle”hinzugefügt"
+            },
             "0.2.1": {
                 "en": "readme angepasst",
                 "de": "readme besteht",
