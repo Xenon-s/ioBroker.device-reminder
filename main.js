@@ -401,8 +401,10 @@ class Template extends utils.Adapter {
             this.log.debug("ermittlung standby")
             await this.calcStandby(obj, 10);
             this.log.debug(`ergebnis standby: ${obj.resultStandby}, Länge array standby: ${obj.arrStandby.length}`);
-            if (obj.resultStandby < 1 && obj.arrStandby.length >= 10) {
+            if (obj.resultStandby < 0.8 && obj.arrStandby.length >= 10) {
                 await this.setStatus(obj, status = 0);
+            } else if (obj.resultStandby >= 0.8 && obj.arrStandby.length >= 10) {
+                await this.setStatus(obj, status = 2);
             };
         } else {
             obj.arrStandby = [];
