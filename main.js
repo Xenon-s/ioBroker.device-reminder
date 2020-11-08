@@ -432,7 +432,7 @@ class Template extends utils.Adapter {
         } else if (obj.verbrauch < (obj.startCount / 2) && obj.arrStart.length != 0 && obj.started == false) { // Wert mind > obj.startCount/2 & arrStart nicht leer und nicht started, sonst `Abbruch`
             obj.arrStart = []; // array wieder leeren
             this.log.debug(`Startphase abgebrochen, array Start wieder geloescht`);
-            await this.setStatus(obj, status = 0);
+            await this.setStatus(obj, status = 2);
         };
         if (obj.started) { // wurde geraet started?
             await this.calcEnd(obj); // endeberechnung durchfuehren
@@ -448,23 +448,22 @@ class Template extends utils.Adapter {
         } else if (obj.resultEnd < obj.endValue && obj.resultEnd != null && obj.started && obj.arrAbbruch.length >= (obj.endCount / 2)) { // geraet muss mind. 1x ueber startValue gewesen sein, arrAbbruch muss voll sein und ergebis aus arrAbbruch unter endValue
             obj.started = false; // vorgang beendet
             /* auto off*/
-            if (obj.autoOff && obj.timer > 0) {
-                this.log.debug(`AUTO OFF TRUE`);
-                if (obj.timer && obj.timeout == null) {
+            if (obj.autoOff && obj.timeoutInMS > 0 && obj.timer) {
+                await this.setStatus(obj, status = 2);
+                if (obj.timeout == null) {
                     if (obj.timeout != null) {
                         clearTimeout(obj.timeout);
                         obj.timeout = null;
                     };
                     obj.timeout = setTimeout(async () => {  //timeout starten
-                        await this.setStatus(obj, status = 0);
+                        await this.setStatus(obj, status = 3);
                     }, obj.timeoutInMS);
                 } else {
                     this.log.debug(`auto off ohne timeout`);
-                    await this.setStatus(obj, status = 0);
+                    await this.setStatus(obj, status = 3);
                 };
-            } else {
-                this.log.debug(`gerät in standby`);
-                await this.setStatus(obj, status = 2);
+            } else if (obj.autoOff) {
+                await this.setStatus(obj, status = 3);
             };
             obj.endZeit = Date.now(); // ende Zeit loggen
             obj.arrStart = []; // array wieder leeren
@@ -486,11 +485,9 @@ class Template extends utils.Adapter {
     };
 
     async setStatus(obj, status) {
+        this.log.warn(`value status: ${status}`);
         switch (status) {
             case 0: {
-                if (obj.switchPower != "" && await this.getForeignStateAsync(obj.switchPower) && obj.autoOff) {
-                    await this.setForeignStateAsync(obj.switchPower, false); // Geraet ausschalten, falls angewaehlt
-                };
                 await this.setStateAsync(obj.pathStatus, `ausgeschaltet`, true); // Status in DP schreiben;
                 break;
             };
@@ -500,6 +497,17 @@ class Template extends utils.Adapter {
             };
             case 2: {
                 await this.setStateAsync(obj.pathStatus, `Standby`, true); // Status in DP schreiben
+                break;
+            };
+            case 3: {
+                if (obj.switchPower != "") { 
+                    let result = await this.getForeignStateAsync(obj.switchPower);
+                    result = result.val;
+                    if (result) {
+                        await this.setForeignStateAsync(obj.switchPower, false); // Geraet ausschalten, falls angewaehlt
+                        await this.setStateAsync(obj.pathStatus, `ausgeschaltet`, true); // Status in DP schreiben;
+                    };
+                };
                 break;
             };
             default:

@@ -111,6 +111,9 @@ Nachdem nun auf "Speichern und schliessen" geklickt wurde, wird unter Objekte ->
 	### __WORK IN PROGRESS__
 -->
 
+### 0.3.2 (2020-11-08)
+* (xenon-s) bug: auto Off funktionierte nicht mehr 
+
 ### 0.3.1 (2020-11-07)
 * (xenon-s) bugfix
 

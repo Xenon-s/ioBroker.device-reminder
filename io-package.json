@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.3.1",
+        "version": "0.3.2",
         "news": {
+            "0.3.2": {
+                "en": "bug: auto Off funktionierte nicht mehr",
+                "de": "Fehler: auto Off funktionierte nicht mehr",
+                "ru": "ошибка: автоматическое выключение функции nicht mehr",
+                "pt": "bug: auto Off funktionierte nicht mehr",
+                "nl": "bug: auto Off funktionierte nicht mehr",
+                "fr": "bug: arrêt automatique funktionierte nicht mehr",
+                "it": "bug: auto Off funktionierte nicht mehr",
+                "es": "error: auto apagado funktionierte nicht mehr",
+                "pl": "błąd: auto Off funktionierte nicht mehr",
+                "zh-cn": "错误：自动关闭funktionierte nicht mehr"
+            },
             "0.3.1": {
                 "en": "bugfix",
                 "de": "Bug-Fix",
