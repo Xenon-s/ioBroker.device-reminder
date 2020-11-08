@@ -371,7 +371,7 @@ class Template extends utils.Adapter {
                 break;
             };
             default:
-                this.log.debug(`Device name was not recognized! Please report this to the developer!`);
+                this.log.warn(`Device name was not recognized! Please report this to the developer!`);
                 break;
         };
 
@@ -487,7 +487,7 @@ class Template extends utils.Adapter {
     };
 
     async setStatus(obj, status) {
-        this.log.warn(`value status: ${status}`);
+        this.log.debug(`value status: ${status}`);
         switch (status) {
             case 0: {
                 await this.setStateAsync(obj.pathStatus, `ausgeschaltet`, true); // Status in DP schreiben;
