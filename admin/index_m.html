@@ -25,6 +25,9 @@
 
     <script type="text/javascript">
 
+        let counterTemp = 0;
+
+
         let device = [];
         let selectId;
         let alexaID = [];
@@ -32,21 +35,31 @@
         let deviceID = [];
         let whatsappID = [];
         let arrTelegramUser = [];
-        const alexa = [];
-        const sayit = [];
-        const devices = [];
-        const whatsapp = [];
+        let customTypeID = [];
+        let defaultTypeID = [];
+        let alexa = [];
+        let sayit = [];
+        let devices = [];
+        let whatsapp = [];
+        let deviceTypes = [];
         const firstName = []; // telegram firstname user
 
         let device_counter;
         let alexa_counter;
         let sayit_counter;
         let whatsapp_counter;
+        // let custom_device_counter;
 
         let alexaFinal = [];
         let sayitFinal = [];
         let whatsappFinal = [];
         let devicesFinal = [];
+        let customTypeIDFinal = [];
+        let defaultTypeIDFinal = [];
+
+        let curDevice = null
+
+        let varTrue = false;
 
 
         function getTelegramUser() {
@@ -86,7 +99,7 @@
                                 } else {
                                     firstName.push(`kein User gefunden`);
                                 };
-                                console.log(firstName);
+                                // console.log(firstName);
                             });
                             // $('#telegramIds').attr("data-options", firstName.join(';'));
                         };
@@ -97,9 +110,15 @@
 
         function readUser() {
 
+            alexa = [];
+            sayit = [];
+            devices = [];
+            whatsapp = [];
+            deviceTypes = [];
+
             // alexa auswahl erstellen
             $.each(alexaID, (index, element) => {
-                if (element.alexaName !== "" && element.name != null && element.path !== "" && element.path !== null) {
+                if (element.alexaName !== "" && element.name != undefined && element.path !== "" && element.path !== undefined) {
                     alexa.push({ name: element.name, id: element.id });
                 };
             });
@@ -107,7 +126,7 @@
 
             // sayit auswahl erstellen
             $.each(sayitID, (index, element) => {
-                if (element.name !== "" && element.name != null && element.path !== "" && element.path !== null) {
+                if (element.name !== "" && element.name != undefined && element.path !== "" && element.path !== undefined) {
                     sayit.push({ name: element.name, id: element.id });
                 };
             });
@@ -115,7 +134,7 @@
 
             // whatsapp auswahl erstellen
             $.each(whatsappID, (index, element) => {
-                if (element.name !== "" && element.name != null && element.path !== "" && element.path !== null) {
+                if (element.name !== "" && element.name != undefined && element.path !== "" && element.path !== undefined) {
                     whatsapp.push({ name: element.name, id: element.id });
                 };
             });
@@ -123,12 +142,24 @@
 
             // device auswahl erstellen
             $.each(deviceID, (index, element) => {
-                if (element.name !== "" && element.name != null && element.consumption !== "" && element.consumption != null) {
+                if (element.name !== "" && element.name != undefined && element.consumption !== "" && element.consumption != undefined) {
                     devices.push({ name: element.name, id: element.id });
                 };
             });
             // $('#deviceIds').attr("data-options", devices.join(';'));
 
+            // deviceType auswahl erstellen
+            $.each(defaultTypeID, (index, element) => {
+                if (element.name !== "" && element.name != undefined && element.startVal !== "" && element.startVal != undefined && element.endVal !== "" && element.endVal != undefined && element.startCount !== "" && element.startCount != undefined && element.endCount !== "" && element.endCount != undefined) {
+                    deviceTypes.push(`${element.name}`);
+                };
+            });
+            $.each(customTypeID, (index, element) => {
+                if (element.name !== "" && element.name != undefined && element.startVal !== "" && element.startVal != undefined && element.endVal !== "" && element.endVal != undefined && element.startCount !== "" && element.startCount != undefined && element.endCount !== "" && element.endCount != undefined) {
+                    deviceTypes.push(`${element.name}`);
+                };
+            });
+            $('#deviceTypeID').attr("data-options", deviceTypes.join(';'));
         };
 
         function createDynamicTable(settings, onChange, device) {
@@ -136,17 +167,13 @@
             for (const i in devices) {
                 let ID = devices[i].name;
                 let deviceId = devices[i].id;
-                let curDevice = null
+                curDevice = null
                 let data = {};
 
                 device.forEach(function (d) {
                     if (d.deviceName == ID)
                         curDevice = d;
-                    console.log(devices);
-                    console.log(curDevice);
                 });
-
-                console.log(deviceId);
 
                 if (curDevice == null) {
                     curDevice = {
@@ -161,8 +188,6 @@
                         id: -1
                     };
                 };
-                console.log(deviceId);
-                console.log(curDevice.id);
 
                 data = [
                     { type: 'checkbox', name: "enabled", value: curDevice.enabled },
@@ -176,12 +201,8 @@
                     { type: 'id', name: "id", value: parseInt(deviceId) }
                 ];
 
-                console.log(curDevice.id);
-                console.log(data);
-
                 let col = "<tr>";
                 data.forEach(d => {
-                    console.log(data);
                     let style = "";
                     if (d.name == "deviceName") {
                         style = 'style="font-weight:bold;"';
@@ -239,112 +260,36 @@
                     };
                 });
             };
-
-            // if (curDevice != null) {
+            if (curDevice != null) {
                 let selectInstance = M.FormSelect.getInstance($('select'));
                 instances = M.FormSelect.init($('select'));
                 M.updateTextFields();
-            // };
-
+            };
 
             if (settings != null && settings != undefined)
                 loadUser(settings, onChange);
 
         };
 
-        getTelegramUser();
-
-        function loadUser(settings, onChange) {
-            $('.value').each(function () {
-                const $key = $(this);
-                const id = $key.attr('id');
-                if ($key.attr('type') === 'checkbox') {
-                    // do not call onChange direct, because onChange could expect some arguments
-                    $key.prop('checked', settings[id])
-                        .on('change', () => onChange())
-                        ;
-                }
-                else {
-                    // do not call onChange direct, because onChange could expect some arguments
-                    $key.val(settings[id])
-                        .on('change', () => onChange())
-                        .on('keyup', () => onChange())
-                        ;
-                };
-            });
-        };
-
-        // This will be called by the admin adapter when the settings page loads
-        function load(settings, onChange) {
-            if (!settings) return;
-
-            deviceID = settings.deviceID || []; // device ID native anlegen
-            device = settings.device || []; // devices native anlegen
-            alexaID = settings.alexaID || []; // alexaID native anlegen 
-            sayitID = settings.sayitID || []; // sayit ID native anlegen
-            whatsappID = settings.whatsappID || []; // whatsapp ID native anlegen
-            device_final = settings.device_final || []; // output -> main.js
-
-            device_counter = settings.device_counter;
-            alexa_counter = settings.alexa_counter;
-            sayit_counter = settings.sayit_counter;
-            whatsapp_counter = settings.whatsapp_counter;
-
-            readUser(); // telegram user
-
-            setTimeout(function () {
-                createDynamicTable(settings, onChange, device); // create dynamic table "device"
-            }, 50);
-
-            loadUser(settings, onChange);
-
-            onChange(false);
-            // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
-            values2table('deviceID', deviceID, onChange); //deviceID
-            values2table('alexaID', alexaID, onChange); //alexa
-            values2table('sayitID', sayitID, onChange); //sayit
-            values2table('whatsappID', whatsappID, onChange); // whatsapp
-
-            if (M) M.updateTextFields();
-
-        };
-
-        // Load End
-        //#################################################################################################################
-        // Save Start
-
-        // This will be called by the admin adapter when the user presses the save button
-        function save(callback) {
-            // example: select elements with class=value and build settings object
-            const obj = {};
-            $('.value').each(function () {
-                const $this = $(this);
-                if ($this.attr('type') === 'checkbox') {
-                    obj[$this.attr('id')] = $this.prop('checked');
-                } else {
-                    obj[$this.attr('id')] = $this.val();
-                }
-            });
-
+        function createSettings() {
+            let obj = {};
+            obj.deviceID = null;
             obj.deviceID = table2values('deviceID');
             obj.alexaID = table2values('alexaID');
             obj.sayitID = table2values('sayitID');
             obj.telegramID = table2values('telegramID');
             obj.whatsappID = table2values('whatsappID');
+            obj.customTypeID = table2values('customTypeID');
+            obj.defaultTypeID = table2values('defaultTypeID');
 
-
-            obj.deviceID = createId(deviceID, device_counter, "device_counter");
-            obj.alexaID = createId(alexaID, alexa_counter, "alexa_counter");
-            obj.sayitID = createId(sayitID, sayit_counter, "sayit_counter");
-            // createId (telegramID);
-            obj.whatsappID = createId(whatsappID, whatsapp_counter, "whatsapp_counter");
-
+            obj.deviceID = createId(obj.deviceID, device_counter, "device_counter");
+            obj.alexaID = createId(obj.alexaID, alexa_counter, "alexa_counter");
+            obj.sayitID = createId(obj.sayitID, sayit_counter, "sayit_counter");
+            obj.whatsappID = createId(obj.whatsappID, whatsapp_counter, "whatsapp_counter");
 
             function createId(array, counter, counter_name) {
                 for (const i in array) {
                     if (array[i].id == "") {
-                        console.log(array[i].name);
-                        console.log(array[i].id);
                         array[i].id = counter;
                         counter++;
                     };
@@ -353,11 +298,7 @@
                 return array;
             };
 
-            let rows;
-            let i, j, cells, enabled, deviceName, idAlexa, idsayit, idWhatsapp, idTelegram, autoOff, idTimer, deviceGroups = [];
-
             let body = $('#dynamic-table-body');
-
             let geraete = [];
 
             body.children().each(function () {
@@ -390,11 +331,113 @@
                 geraete.push(data);
             });
             obj.device = geraete;
+            console.warn(obj);
+            return obj;
+        };
+
+        function loadUser(settings, onChange) {
+            $('.value').each(function () {
+                const $key = $(this);
+                const id = $key.attr('id');
+                if ($key.attr('type') === 'checkbox') {
+                    // do not call onChange direct, because onChange could expect some arguments
+                    $key.prop('checked', settings[id])
+                        .on('change', () => onChange())
+                        ;
+                }
+                else {
+                    // do not call onChange direct, because onChange could expect some arguments
+                    $key.val(settings[id])
+                        .on('change', () => onChange())
+                        .on('keyup', () => onChange())
+                        ;
+                };
+            });
+        };
+
+        getTelegramUser();
+
+        // This will be called by the admin adapter when the settings page loads
+        function load(settings, onChange) {
+            if (!settings) return;
+
+            deviceID = settings.deviceID || []; // device ID native anlegen
+            device = settings.device || []; // devices native anlegen
+            alexaID = settings.alexaID || []; // alexaID native anlegen 
+            sayitID = settings.sayitID || []; // sayit ID native anlegen
+            whatsappID = settings.whatsappID || []; // whatsapp ID native anlegen
+            customTypeID = settings.customTypeID || [];
+            defaultTypeID = settings.defaultTypeID || [];
+            device_final = settings.device_final || []; // output -> main.js
+
+            // counter ID
+            device_counter = settings.device_counter;
+            alexa_counter = settings.alexa_counter;
+            sayit_counter = settings.sayit_counter;
+            whatsapp_counter = settings.whatsapp_counter;
+            // custom_device_counter = settings.custom_device_counter;
+
+            readUser(); // telegram user
+
+            loadUser(settings, onChange);
+
+            onChange(false);
+
+
+            // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
+            setTimeout(function () {
+                values2table('deviceID', deviceID, onChange); //deviceID
+                values2table('alexaID', alexaID, onChange); //alexa
+                values2table('sayitID', sayitID, onChange); //sayit
+                values2table('whatsappID', whatsappID, onChange); // whatsapp
+                values2table('customTypeID', customTypeID, onChange); // custom devices
+                values2table('defaultTypeID', defaultTypeID, onChange); // custom devices
+
+                $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true);
+
+            }, 30);
+            setTimeout(function () {
+                $('.changeOnChangeEvent').off('change');
+                $('.changeOnChangeEvent').find('*').off('change');
+                $('.changeOnChangeEvent').find('*').on('change keyup', function () {
+
+                    $('.btn-save, .btn-save-close').addClass('disabled');
+                    $('#fill-dynamic-table, #fill-dynamic-table1').removeClass('disabled');
+
+                });
+
+                createDynamicTable(settings, onChange, device); // create dynamic table "device"
+                $('#dynamicTableLoading, #dynamicTableLoadingText').css('display', 'none'); // ladekringel
+            }, 2000);
+
+            if (M) M.updateTextFields();
+
+            if (varTrue == false) clickButton(onChange);
+
+        };
+
+        // Load End
+        //#################################################################################################################
+        // Save Start
+
+        // This will be called by the admin adapter when the user presses the save button
+        function save(callback) {
+            let obj = {};
+            obj = createSettings();
 
             // create messaging devices
             obj.alexaFinal = createArray(JSON.parse(JSON.stringify(obj.alexaID)), "alexa");
             obj.sayitFinal = createArray(JSON.parse(JSON.stringify(obj.sayitID)), "sayit");
             obj.whatsappFinal = createArray(JSON.parse(JSON.stringify(obj.whatsappID)), "whatsapp");
+            obj.customTypeIDFinal = createArray(JSON.parse(JSON.stringify(obj.customTypeID)), "typeID");
+            obj.defaultTypeIDFinal = createArray(JSON.parse(JSON.stringify(obj.defaultTypeID)), "typeID");
+
+
+            for (const i in obj.customTypeID) {
+                let bla;
+                bla = obj.customTypeID[i].id;
+                console.warn(bla);
+            };
 
             function createArray(obj, type) {
                 let objTemp = {};
@@ -422,11 +465,12 @@
                     switch (type) {
                         case "alexa": {
                             objTemp[obj[id].id] = {
+                                name: obj[id].name,
                                 path: obj[id].path,
                                 timeMin: timeMin,
                                 timeMax: timeMax
                             };
-                            console.log()
+                            // console.log()
                             break;
                         };
                         case "sayit": {
@@ -434,6 +478,7 @@
                                 obj[id].volume = 50;
                             };
                             objTemp[obj[id].id] = {
+                                name: obj[id].name,
                                 path: obj[id].path,
                                 timeMin: timeMin,
                                 timeMax: timeMax,
@@ -443,27 +488,33 @@
                         };
                         case "whatsapp": {
                             objTemp[obj[id].id] = {
+                                name: obj[id].name,
                                 path: obj[id].path,
                             };
                             break;
+                        };
+                        case "typeID": {
+                            objTemp[obj[id].id] = {
+                                name: obj[id].name,
+                                startVal: obj[id].startVal,
+                                endVal: obj[id].endVal,
+                                startCount: obj[id].startCount,
+                                endCount: obj[id].endCount
+                            };
                         };
                     };
                 };
                 return objTemp;
             };
 
-
             obj.devicesFinal = createDevicesFinal(JSON.parse(JSON.stringify(obj.device)), obj.deviceID);
 
             function createDevicesFinal(obj, arr) {
-                console.log("safe device");
-                console.log(obj);
-                console.log(arr);
                 let objTemp = {};
+
                 for (const i in obj) {
                     for (const j in arr) {
                         if (obj[i].id == arr[j].id) {
-                            console.log("objekt gefunden");
                             if (obj[i].enabled) {
                                 objTemp[obj[i].id] = {
                                     name: arr[j].name,
@@ -485,8 +536,20 @@
                 };
                 return objTemp;
             };
-
             callback(obj);
+        };
+
+        function clickButton(onChange) {
+
+            varTrue = true;
+
+            $('#fill-dynamic-table, #fill-dynamic-table1').on('click', () => {
+                $('#fill-dynamic-table, #fill-dynamic-table1').addClass('disabled');
+                $('#dynamicTableLoading, #dynamicTableLoadingText').css('display', ''); // ladekringel
+                settings = createSettings();
+                load(settings, onChange);
+                onChange(true);
+            });
         };
 
     </script>
@@ -499,8 +562,9 @@
             <div class="col s12"
                 style="padding-left:0;padding-right:0; margin-top: 0px; margin-bottom: 1px; background-color:#174475; box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);">
                 <ul class="tabs blue lighten-4">
-                    <li class="tab col s3"><a href="#tab-devices" class="translate">Devices</a></li>
                     <li class="tab col s3"><a href="#tab-config" class="translate">Config</a></li>
+                    <li class="tab col s3"><a href="#tab-devices" class="translate">Devices</a></li>
+                    <li class="tab col s3"><a href="#tab-type" class="translate">Type</a></li>
                 </ul>
             </div>
 
@@ -512,14 +576,34 @@
                             <div class="input-field col s3">
                                 <img src="icon.png">
                             </div>
+                            <div class="col s4">
+                                <div class="card">
+                                    <div class="card-panel blue lighten-5">
+                                        <span class="card-title">
+                                            After all settings are done, please click the following button. This will save your config</span>
+                                        <p><a id="fill-dynamic-table"
+                                                class="btn-save waves-effect waves-light btn disabled">Click
+                                                here to
+                                                refresh table</a></p>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col s4">
+                                <div class="card">
+                                    <div class="card-panel red lighten-5">
+                                        <span class="card-title">
+                                            Don't forget to click "Save and Close" button</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
+                        
                         <!-- dynamic table -->
                         <div class="card-panel blue lighten-5">
                             <table id="dynamicTable" class="table-values remove-last-column">
                                 <thead>
                                     <tr>
-                                        <!-- Define table head for columns. data-type and data-write is optional, for more information refer to function fillTable -->
                                         <th class="header translate" data-name="enabled" style="width: 40px">active
                                         </th>
                                         <th class="header translate" data-name="deviceName">device name</th>
@@ -532,189 +616,308 @@
                                         <th class="header translate" data-name="idTimer">timeout in min</th>
                                         <th class="header translate" data-name="id" style="width: 0px; display: none;">
                                             id</th>
-                                        <!-- <th class="header translate">delete</th> -->
                                     </tr>
                                 </thead>
                                 <tbody id="dynamic-table-body" class="table-values">
                                 </tbody>
                             </table>
+                            <div id="dynamicTableLoading" class="preloader-wrapper big active" style="margin: auto">
+                                <div class="spinner-layer spinner-blue-only">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dynamicTableLoadingText" style="margin: auto">
+                                Please wait while table is loading
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab with id "config" -->
+            <div id="tab-config" class="col s12">
+                <div class="row">
+                    <div class="col s12" id="deviceID">
+                        <div class="row">
+                            <div class="input-field col s3">
+                                <img src="icon.png">
+                            </div>
+                            <div class="col s4">
+                                <div class="card">
+                                    <div class="card-panel blue lighten-5">
+                                        <span class="card-title">
+                                            After all settings are done, please click the following button. This will save your config</span>
+                                        <p><a id="fill-dynamic-table1"
+                                                class="btn-save waves-effect waves-light btn disabled">Click
+                                                here to
+                                                safe config</a></p>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-panel blue lighten-5">
+                            <div class="row">
+                                <div class="col left">
+                                    <a class="btn-floating waves-effect waves-light blue table-button-add"><i
+                                            class="material-icons">add</i></a> <b>add device</b>
+                                </div>
+                            </div>
+                            <b>*Required fields</b>
+                            <table class="table-values changeOnChangeEvent remove-last-column">
+                                <thead>
+                                    <tr>
+                                        <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                        <th data-name="name" data-type="text" class="header translate">*device
+                                            name
+                                        </th>
+                                        <th id="deviceTypeID" data-name="type" style="width: 200px;" data-type="select" style="width: 150px"
+                                            class="header translate" data-default="no device" data-options="">
+                                            *device type</th>
+                                        <!-- <th id="deviceTypeID" data-name="type" data-type="select" style="width: 150px"
+                                            class="header translate" data-default="no device"
+                                            data-options="Waschmaschine;Trockner;Geschirrspueler;Wasserkocher;Computer;Mikrowelle;Custom1;Custom2;Custom3;Custom4;Custom5">
+                                            *device type</th> -->
+                                        <th data-name="consumption" data-type="OID" class="header translate">
+                                            *path<br>consumption/energy</th>
+                                        <th data-name="switch" data-type="OID" class="header translate">
+                                            path<br>switch on/off</th>
+                                        <th data-name="startText" data-type="OID" class="header translate">Starttext
+                                        </th>
+                                        <th data-name="endText" data-type="OID" class="header translate">Endtext</th>
+                                        <th data-buttons="delete" style="width: 80px;" class="header translate">delete</th>
+                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
+                                            id
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- alexa id  -->
+                    <div class="col s12" id="alexaID">
+                        <div class="card-panel blue lighten-5">
+                            <div class="row">
+                                <div class="col left">
+                                    <a class="btn-floating waves-effect waves-light blue table-button-add"><i
+                                            class="material-icons">add</i></a> <b>add alexa device</b>
+                                </div>
+                            </div>
+                            <b>*Required fields</b>
+                            <table class="table-values changeOnChangeEvent remove-last-column">
+                                <thead>
+                                    <tr>
+                                        <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                        <th data-name="name" data-type="text" class="header translate">*alexa
+                                            name
+                                        </th>
+                                        <th data-name="path" data-type="OID" class="header translate">*alexa
+                                            path
+                                            <br>"announcement"/"speak"</th>
+                                        <th data-name="timeMinHour" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="0"
+                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                            time <br>active hour</th>
+                                        <th data-name="timeMinMin" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="00" data-options="00;15;30;45">
+                                            time
+                                            <br>active min</th>
+                                        <th data-name="timeMaxHour" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="23"
+                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                            time <br>inactive hour</th>
+                                        <th data-name="timeMaxMin" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="59" data-options="00;15;30;45;59">
+                                            time
+                                            <br>inactive min</th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate">
+                                            delete
+                                        </th>
+                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
+                                            id
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- sayIt id -->
+                    <div class="col s12" id="sayitID">
+                        <div class="card-panel blue lighten-5">
+                            <div class="row">
+                                <div class="col left">
+                                    <a class="btn-floating waves-effect waves-light blue table-button-add"><i
+                                            class="material-icons">add</i></a> <b>add sayIt device</b>
+                                </div>
+                            </div>
+                            <b>*Required fields</b>
+                            <table class="table-values changeOnChangeEvent remove-last-column">
+                                <thead>
+                                    <tr>
+                                        <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                        <th data-name="name" data-type="text" class="header translate">*sayit name
+                                        </th>
+                                        <th data-name="path" data-type="OID" class="header translate">*sayit path
+                                            <br>"../text"</th>
+                                        <th data-name="volume" data-type="number" class="header translate"
+                                            data-default="50">sayit volume <br> 0-100</th>
+                                        <th data-name="timeMinHour" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="0"
+                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                            time <br>active hour</th>
+                                        <th data-name="timeMinMin" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="00" data-options="00;15;30;45">time
+                                            <br>active min</th>
+                                        <th data-name="timeMaxHour" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="23"
+                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                            time <br>inactive hour</th>
+                                        <th data-name="timeMaxMin" style="width: 80px" data-type="select"
+                                            class="header translate" data-default="59" data-options="00;15;30;45;59">
+                                            time
+                                            <br>inactive min</th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate">delete
+                                        </th>
+                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
+                                            id
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- whatsapp id  -->
+                    <div class="col s12" id="whatsappID">
+                        <div class="card-panel blue lighten-5">
+                            <div class="row">
+                                <div class="col left">
+                                    <a class="btn-floating waves-effect waves-light blue table-button-add"><i
+                                            class="material-icons">add</i></a> <b>add whatsapp user</b>
+                                </div>
+                            </div>
+                            <b>*Required fields</b>
+                            <table class="table-values changeOnChangeEvent remove-last-column">
+                                <thead>
+                                    <tr>
+                                        <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                        <th data-name="name" data-type="text" class="header translate">*whatsapp
+                                            name
+                                        </th>
+                                        <th data-name="path" data-type="OID" class="header translate">*whatsapp
+                                            path
+                                            <br>"sendMessage"</th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate">
+                                            delete
+                                        </th>
+                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
+                                            id
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab id "type" -->
+            <div id="tab-type" class="col s12">
+                <div class="row">
+                    <div class="col s12" id="device_type">
+                        <div class="row">
+                            <div class="input-field col s3">
+                                <img src="icon.png">
+                            </div>
+                            <div class="col s4">
+                                <div class="card">
+                                    <div class="card-panel red lighten-5">
+                                        <span class="card-title">
+                                            Änderungen der Werte können dazu führen, dass Geräte nicht mehr richtig
+                                            erkannt werden!</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- table "default " -->
+                        <div class="col s12" id="defaultTypeID">
+                            <div class="card-panel blue lighten-5">
+                                <div>
+                                    <h3>default devices</h3>
+                                </div>
+                                <table id="disableFirstField" class="table-values remove-last-column">
+                                    <thead>
+                                        <tr>
+                                            <th id="disableFirstField" class="header translate" data-type="text"
+                                                data-name="name">type name</th>
+                                            <th class="header translate" data-type="number" data-name="startVal">
+                                                Starting value</th>
+                                            <th class="header translate" data-type="number" data-name="endVal">Final
+                                                value</th>
+                                            <th class="header translate" data-type="number" data-name="startCount">
+                                                Number of values
+                                                ​​ "start"
+                                            </th>
+                                            <th class="header translate" data-type="number" data-name="endCount">Number
+                                                of values ​"end"
+                                            </th>
+                                            <th class="header translate" data-type="number" data-name="id"
+                                                style="width: 0px; display: none;">
+                                                id</th>
+                                        </tr>
+                                    </thead>
+                                    </tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- table "custom " -->
+                        <div class="col s12" id="customTypeID">
+                            <div class="card-panel blue lighten-5">
+                                <div>
+                                    <h3>custom devices</h3>
+                                </div>
+                                <table id="disableFirstField" class="table-values remove-last-column">
+                                    <thead>
+                                        <tr>
+                                            <th class="header translate" data-type="text" data-name="name">type name
+                                            </th>
+                                            <th class="header translate" data-type="number" data-name="startVal">
+                                                Starting value</th>
+                                            <th class="header translate" data-type="number" data-name="endVal">Final
+                                                value</th>
+                                            <th class="header translate" data-type="number" data-name="startCount">
+                                                Number of values
+                                                ​​ "start"</th>
+                                            <th class="header translate" data-type="number" data-name="endCount">Number
+                                                of values ​"end"
+                                            </th>
+                                            <th class="header translate" data-type="number" data-name="id"
+                                                style="width: 0px; display: none;">id</th>
+                                        </tr>
+                                    </thead>
+                                    </tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Tab with id "config" -->
-        <div id="tab-config" class="col s12">
-            <div class="row">
-                <div class="col s12" id="deviceID">
-                    <div class="row">
-                        <div class="input-field col s3">
-                            <img src="icon.png">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s2 m1 l1 left">
-                            <a class="btn-floating waves-effect waves-light blue table-button-add"><i
-                                    class="material-icons">add</i></a> <b>add device</b>
-                        </div>
-                    </div>
-                    <div class="card-panel blue lighten-5">
-                        <b>*Required fields</b>
-                        <table class="table-values remove-last-column">
-                            <thead>
-                                <tr>
-                                    <th data-name="_index" style="width: 40px" class="header translate">nr</th>
-                                    <th data-name="name" data-type="text" class="header translate">*device
-                                        name
-                                    </th>
-                                    <th data-name="type" data-type="select" style="width: 150px"
-                                        class="header translate" data-default="no device"
-                                        data-options="Waschmaschine;Trockner;Geschirrspueler;Wasserkocher;Computer;Mikrowelle;Test">
-                                        *device type</th>
-                                    <th data-name="consumption" data-type="OID" class="header translate">
-                                        *path<br>consumption</th>
-                                    <th data-name="switch" data-type="OID" class="header translate">
-                                        path<br>switch on/off</th>
-                                    <th data-name="startText" data-type="OID" class="header translate">Starttext
-                                    </th>
-                                    <th data-name="endText" data-type="OID" class="header translate">Endtext</th>
-                                    <th data-buttons="delete" class="header translate">delete</th>
-                                    <th data-name="id" style="width: 0px; display: none;" class="header translate">id
-                                    </th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- alexa id  -->
-                <div class="col s12" id="alexaID">
-                    <div class="row">
-                        <div class="col s2 m1 l1 left">
-                            <a class="btn-floating waves-effect waves-light blue table-button-add"><i
-                                    class="material-icons">add</i></a> <b>add alexa device</b>
-                        </div>
-                    </div>
-                    <div class="card-panel blue lighten-5">
-                        <b>*Required fields</b>
-                        <table class="table-values remove-last-column">
-                            <thead>
-                                <tr>
-                                    <th data-name="_index" style="width: 40px" class="header translate">nr</th>
-                                    <th data-name="name" data-type="text" class="header translate">*alexa
-                                        name
-                                    </th>
-                                    <th data-name="path" data-type="OID" class="header translate">*alexa
-                                        path
-                                        <br>"announcement"/"speak"</th>
-                                    <th data-name="timeMinHour" style="width: 80px" data-type="select"
-                                        class="header translate" data-default="0"
-                                        data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
-                                        time <br>active hour</th>
-                                    <th data-name="timeMinMin" style="width: 80px" data-type="select"
-                                        class="header translate" data-default="00" data-options="00;15;30;45">
-                                        time
-                                        <br>active min</th>
-                                    <th data-name="timeMaxHour" style="width: 80px" data-type="select"
-                                        class="header translate" data-default="23"
-                                        data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
-                                        time <br>inactive hour</th>
-                                    <th data-name="timeMaxMin" style="width: 80px" data-type="select"
-                                        class="header translate" data-default="59" data-options="00;15;30;45;59">
-                                        time
-                                        <br>inactive min</th>
-                                    <th data-buttons="delete" style="width: 80px" class="header translate">
-                                        delete
-                                    </th>
-                                    <th data-name="id" style="width: 0px; display: none;" class="header translate">id
-                                    </th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- sayIt id -->
-                <div class="col s12" id="sayitID">
-                    <div class="row">
-                        <div class="col s2 m1 l1 left">
-                            <a class="btn-floating waves-effect waves-light blue table-button-add"><i
-                                    class="material-icons">add</i></a> <b>add sayIt device</b>
-                        </div>
-                    </div>
-                    <div class="card-panel blue lighten-5">
-                        <b>*Required fields</b>
-                        <table class="table-values remove-last-column">
-                            <thead>
-                                <tr>
-                                    <th data-name="_index" style="width: 40px" class="header translate">nr</th>
-                                    <th data-name="name" data-type="text" class="header translate">*sayit name
-                                    </th>
-                                    <th data-name="path" data-type="OID" class="header translate">*sayit path
-                                        <br>"../text"</th>
-                                    <th data-name="volume" data-type="number" class="header translate"
-                                        data-default="50">sayit volume <br> 0-100</th>
-                                    <th data-name="timeMinHour" style="width: 80px" data-type="select"
-                                        class="header translate" data-default="0"
-                                        data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
-                                        time <br>active hour</th>
-                                    <th data-name="timeMinMin" style="width: 80px" data-type="select"
-                                        class="header translate" data-default="00" data-options="00;15;30;45">time
-                                        <br>active min</th>
-                                    <th data-name="timeMaxHour" style="width: 80px" data-type="select"
-                                        class="header translate" data-default="23"
-                                        data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
-                                        time <br>inactive hour</th>
-                                    <th data-name="timeMaxMin" style="width: 80px" data-type="select"
-                                        class="header translate" data-default="59" data-options="00;15;30;45;59">
-                                        time
-                                        <br>inactive min</th>
-                                    <th data-buttons="delete" style="width: 80px" class="header translate">delete
-                                    </th>
-                                    <th data-name="id" style="width: 0px; display: none;" class="header translate">id
-                                    </th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- whatsapp id  -->
-                <div class="col s12" id="whatsappID">
-                    <div class="row">
-                        <div class="col s2 m1 l1 left">
-                            <a class="btn-floating waves-effect waves-light blue table-button-add"><i
-                                    class="material-icons">add</i></a> <b>add whatsapp user</b>
-                        </div>
-                    </div>
-                    <div class="card-panel blue lighten-5">
-                        <b>*Required fields</b>
-                        <table class="table-values remove-last-column">
-                            <thead>
-                                <tr>
-                                    <th data-name="_index" style="width: 40px" class="header translate">nr</th>
-                                    <th data-name="name" data-type="text" class="header translate">*whatsapp
-                                        name
-                                    </th>
-                                    <th data-name="path" data-type="OID" class="header translate">*whatsapp
-                                        path
-                                        <br>"sendMessage"</th>
-                                    <th data-buttons="delete" style="width: 80px" class="header translate">
-                                        delete
-                                    </th>
-                                    <th data-name="id" style="width: 0px; display: none;" class="header translate">id
-                                    </th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-    </div>
     </div>
 
     <div class="m material-dialogs">
@@ -734,7 +937,6 @@
                         class="large material-icons left ">close</i><span class="translate">Cancel</span></a>
             </div>
         </div>
-    </div>
     </div>
 </body>
 

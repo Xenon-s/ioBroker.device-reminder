@@ -1,43 +1,19 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.3.2",
+        "version": "0.4.0",
         "news": {
-            "0.3.2": {
-                "en": "bug: auto Off funktionierte nicht mehr",
-                "de": "Fehler: auto Off funktionierte nicht mehr",
-                "ru": "ошибка: автоматическое выключение функции nicht mehr",
-                "pt": "bug: auto Off funktionierte nicht mehr",
-                "nl": "bug: auto Off funktionierte nicht mehr",
-                "fr": "bug: arrêt automatique funktionierte nicht mehr",
-                "it": "bug: auto Off funktionierte nicht mehr",
-                "es": "error: auto apagado funktionierte nicht mehr",
-                "pl": "błąd: auto Off funktionierte nicht mehr",
-                "zh-cn": "错误：自动关闭funktionierte nicht mehr"
-            },
-            "0.3.1": {
-                "en": "bugfix",
-                "de": "Bug-Fix",
-                "ru": "Исправлена ошибка",
-                "pt": "correção de bug",
-                "nl": "bugfix",
-                "fr": "correction d'un bug",
-                "it": "risoluzione del problema",
-                "es": "arreglo del fallo",
-                "pl": "naprawa błędów",
-                "zh-cn": "错误修正"
-            },
-            "0.3.0": {
-                "en": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
-                "de": "Standby-Lösunglung, auch wenn die Steckdose nicht geschlossen werden soll soll\nEs ist nun möglich, Nachrichten aus einem eigenen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
-                "ru": "Standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
-                "pt": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
-                "nl": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
-                "fr": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
-                "it": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
-                "es": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
-                "pl": "standby Ermittlung, auch wenn die Steckdose nicht abgeschaltet werden soll\nEs ist nun möglich, Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät \"Mikrowelle\" hinzugefügt",
-                "zh-cn": "待命Ermittlung，Stennedose nicht abgeschaltet werden soll\nEs ist nunmöglich，Nachrichten aus einem externen Datenpunkt zu holen und als Start / Endnachricht zu versenden\nGerät“ Mikrowelle”hinzugefügt"
+            "0.4.0": {
+                "en": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\nbugfix: telegram User werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
+                "de": "config Seite gehört, damit die von von sichtbaren vereinfacht wird\nein Abbruch eingezogen wird, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter wird\nBugfix: Telegramm Benutzer werden nicht immer richtig erkannt und falsch gesehen\neinstellbare Werte bei \"Type\" eingezogen\nreadme entfernen und entfernen",
+                "ru": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\nисправление: пользователь телеграммы werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
+                "pt": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\nbugfix: telegram User werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nleia-me erweitert und angepasst",
+                "nl": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\nbugfix: telegram De gebruiker kon niet worden bekeken of gewijzigd\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
+                "fr": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\ncorrection de bogue: télégramme utilisateur werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
+                "it": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\nbugfix: telegram User werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
+                "es": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\ncorrección de error: usuario de telegrama werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
+                "pl": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\npoprawka: telegram Użytkownik werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
+                "zh-cn": "设定Seiteüberarbeitet，离开Eingabe vonGerätendeutlich vereinfacht wird\neinen Abbrucheingefügt，damit erkannt wird，wenn einGerätvorzeitig amGeräteschalterausgeschaltet wird\n错误修正：电报用户werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei“ Type”eingefügt\n自述文件"
             },
             "0.2.1": {
                 "en": "readme angepasst",
@@ -212,13 +188,107 @@
             {
                 "js-controller": ">=2.0.0"
             }
-        ]
+        ],
+        "installedFrom": "https://github.com/Xenon-s/ioBroker.device-reminder/tarball/679deca8d9c77215c2ff9da76a4882da27ccbb5b"
     },
     "native": {
         "device_counter": 0,
         "alexa_counter": 0,
         "sayit_counter": 0,
-        "whatsapp_counter": 0
+        "whatsapp_counter": 0,
+        "custom_device_counter": 0,
+        "defaultTypeID": [
+            {
+                "name": "Waschmaschine",
+                "startVal": 30,
+                "endVal": 15,
+                "startCount": 5,
+                "endCount": 65,
+                "id": 1
+            },
+            {
+                "name": "Trockner",
+                "startVal": 120,
+                "endVal": 15,
+                "startCount": 5,
+                "endCount": 50,
+                "id": 2
+            },
+            {
+                "name": "Geschirrspueler",
+                "startVal": 15,
+                "endVal": 4,
+                "startCount": 3,
+                "endCount": 150,
+                "id": 3
+            },
+            {
+                "name": "Computer",
+                "startVal": 20,
+                "endVal": 5,
+                "startCount": 2,
+                "endCount": 3,
+                "id": 4
+            },
+            {
+                "name": "Wasserkocher",
+                "startVal": 15,
+                "endVal": 5,
+                "startCount": 2,
+                "endCount": 2,
+                "id": 5
+            },
+            {
+                "name": "Mikrowelle",
+                "startVal": 50,
+                "endVal": 20,
+                "startCount": 2,
+                "endCount": 1,
+                "id": 6
+            }
+        ],
+        "customTypeID": [
+            {
+                "name": "custom1",
+                "startVal": 55,
+                "endVal": 5,
+                "startCount": 5,
+                "endCount": 10,
+                "id": 21
+            },
+            {
+                "name": "custom2",
+                "startVal": 55,
+                "endVal": 5,
+                "startCount": 5,
+                "endCount": 10,
+                "id": 22
+            },
+            {
+                "name": "custom3",
+                "startVal": 55,
+                "endVal": 5,
+                "startCount": 5,
+                "endCount": 10,
+                "id": 23
+            },
+            {
+                "name": "custom4",
+                "startVal": 55,
+                "endVal": 5,
+                "startCount": 5,
+                "endCount": 10,
+                "id": 24
+            },
+            {
+                "name": "custom5",
+                "startVal": 55,
+                "endVal": 5,
+                "startCount": 5,
+                "endCount": 10,
+                "id": 25
+            }
+        ]
     },
     "objects": [],
     "instanceObjects": []
