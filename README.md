@@ -1,7 +1,7 @@
 ﻿![Logo](admin/icon.png)
 # ioBroker.device-reminder V 0.4 - beta
 
-**ACHTUNG**: Es ist zwingend erforderlich alle vorhandenen Instanzen zu löschen, sollte man von einer Version kleiner 0.4 kommen !!!**
+**ACHTUNG**: Es ist zwingend erforderlich alle vorhandenen Instanzen zu löschen, sollte man von einer Version kleiner 0.4 kommen !!!
 
 # Adapter zur Überwachung von Gerätezuständen
 Dieser Adapter kann anhand von Messsteckdosen erkennen, ob ein Gerät eingeschaltet, in Betrieb oder ausgeschaltet wurde und darauf reagieren. Derzeit können Nachrichten per Telegram (Mehrfachauswahl pro Gerät möglich) oder Alexa (Mehrfachauswahl pro Gerät möglich) automatisiert ausgegeben werden. Es ist ebenfalls möglich, die Steckdose nach Beendigung des Vorgangs automatisch abzuschalten. (voheriges Projekt, aus dem dieser Adapter entstanden ist: https://github.com/Xenon-s/js.device-reminder)
@@ -86,12 +86,10 @@ Zuerst muss über das "+ add whatsapp user" ein neuer Eintrag erzeugt werden. Da
 
 ## config speichern
 Wenn alle Geräte und Messenger eingefügt wurden, muss über den Save Button **click here to reload** auf der Seite gespeichert werden! Dadurch wird die Tabelle im Tab "**devices**" aktualisiert. Da es Probleme mit der Darstellung gab, wird die Tabelle mit einer kleinen Verzögerung generiert. <br>
-*Hinweis:* Wenn man an einem bereits vorhandenen device z.B. den Namen ändert und danach auf den **click here to reload** Button klickt, wird das device in der Tabelle neu erstellt und muss dementsprechend auch noch konfiguriert werden (alexa zuordnen, etc).
+*Hinweis:* Wenn man an einem bereits vorhandenen device z.B. den Namen ändert und danach auf den **click here to reload** Button klickt, wird das device in der Tabelle neu erstellt und muss dementsprechend auch noch konfiguriert werden (alexa zuordnen, etc).<br>
+
 ![save_device2.png](admin/save_device2.png)
 Der Button wird nur aktiv, wenn neue Geräte eingefügt oder bestehende geändert werden!
-
-![save_device1.png](admin/save_device.png)
-Sonst ist der Button wie auf dem Bild zu sehen ausgegraut
 
 ## Devices konfigurieren
 ![devices.png](admin/devices.png)
