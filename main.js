@@ -464,7 +464,7 @@ class Template extends utils.Adapter {
     };
 
     async monitoringConsumption(obj) {
-        const val = 3;
+        const val = 20;
         this.log.debug("ermittlung standby")
         await this.calcStart(obj, "standby", val);
         this.log.debug(`ergebnis standby: ${obj.resultStandby}, Länge array standby: ${obj.arrStandby.length}`);
