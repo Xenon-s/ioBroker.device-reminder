@@ -88,7 +88,7 @@ Zuerst muss über das "+ add whatsapp user" ein neuer Eintrag erzeugt werden. Da
 Wenn alle Geräte und Messenger eingefügt wurden, muss über den Save Button **click here to reload** auf der Seite gespeichert werden! Dadurch wird die Tabelle im Tab "**devices**" aktualisiert. Da es Probleme mit der Darstellung gab, wird die Tabelle mit einer kleinen Verzögerung generiert. <br>
 *Hinweis:* Wenn man an einem bereits vorhandenen device z.B. den Namen ändert und danach auf den **click here to reload** Button klickt, wird das device in der Tabelle neu erstellt und muss dementsprechend auch noch konfiguriert werden (alexa zuordnen, etc).<br>
 
-![save_device2.png](admin/save_device2.png)
+![save_device2.png](admin/save_device2.png) <br>
 Der Button wird nur aktiv, wenn neue Geräte eingefügt oder bestehende geändert werden!
 
 ## Devices konfigurieren
