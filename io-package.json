@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.4.2",
+        "version": "0.4.3",
         "news": {
+            "0.4.3": {
+                "en": "release npm",
+                "de": "Release npm",
+                "ru": "выпустить npm",
+                "pt": "liberar npm",
+                "nl": "laat npm vrij",
+                "fr": "libération npm",
+                "it": "rilascia npm",
+                "es": "liberar npm",
+                "pl": "zwolnij npm",
+                "zh-cn": "发布npm"
+            },
             "0.4.2": {
                 "en": "readme angepasst \nindex_m gefixt",
                 "de": "readme besteht\nindex_m gefixt",
@@ -190,7 +202,7 @@
         ],
         "keywords": [
             "ioBroker",
-            "template",
+            "device reminder",
             "Smart Home",
             "home automation"
         ],

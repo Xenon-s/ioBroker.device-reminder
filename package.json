@@ -1,6 +1,6 @@
 {
   "name": "iobroker.device-reminder",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "device-reminder",
   "author": {
     "name": "xenon-s",
@@ -10,7 +10,7 @@
   "license": "MIT",
   "keywords": [
     "ioBroker",
-    "template",
+    "device reminder",
     "Smart Home",
     "home automation"
   ],

@@ -1,5 +1,15 @@
 ﻿![Logo](admin/icon.png)
-# ioBroker.device-reminder V 0.4.2 - beta
+
+[![NPM version](http://img.shields.io/npm/v/iobroker.device-reminder.svg)](https://www.npmjs.com/package/iobroker.device-reminder)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.device-reminder.svg)](https://www.npmjs.com/package/iobroker.device-reminder)
+![Number of Installations (latest)](http://iobroker.live/badges/device-reminder-installed.svg)
+![Number of Installations (stable)](http://iobroker.live/badges/device-reminder-stable.svg)
+[![Dependency Status](https://img.shields.io/david/inventwo/iobroker.device-reminder.svg)](https://david-dm.org/inventwo/iobroker.device-reminder)
+
+[![NPM](https://nodei.co/npm/iobroker.device-reminder.png?downloads=true)](https://nodei.co/npm/iobroker.device-reminder/)
+**Tests:** ![Test and Release](https://github.com/xenon-s/iobroker.device-reminder/workflows/Test%20and%20Release/badge.svg)
+
+# ioBroker.device-reminder V 0.4.2
 
 **ACHTUNG**: Es ist zwingend erforderlich alle vorhandenen Instanzen zu löschen, sollte man von einer Version kleiner 0.4 kommen !!!
 
@@ -148,6 +158,9 @@ Zur Funktion einfach bei "**default devices**" hier drüber lesen.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+
+### 0.4.3 (2020-11-12)
+* (xenon-s) release npm
 
 ### 0.4.2 (2020-11-12)
 * (xenon-s) readme angepasst 
