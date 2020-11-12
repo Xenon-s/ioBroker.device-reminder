@@ -69,7 +69,7 @@ class Template extends utils.Adapter {
             if (alexaInput != "" && alexaInput != undefined) {
                 alexaInput = await this.checkInput(alexaInput, "alexa");
             };
-            if (sayitInput != "" && sayitInput.length != undefined) {
+            if (sayitInput != "" && sayitInput != undefined) {
                 sayitInput = await this.checkInput(sayitInput, "sayit");
             };
             if (whatsappInput != "" && whatsappInput != undefined) {

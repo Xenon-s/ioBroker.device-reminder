@@ -159,6 +159,9 @@ Zur Funktion einfach bei "**default devices**" hier drüber lesen.
 	### __WORK IN PROGRESS__
 -->
 
+### 0.4.4 (2020-11-12)
+* (xenon-s) bugfix main.js
+
 ### 0.4.3 (2020-11-12)
 * (xenon-s) release npm
 

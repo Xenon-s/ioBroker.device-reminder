@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.4.3",
+        "version": "0.4.4",
         "news": {
+            "0.4.4": {
+                "en": "bugfix main.js",
+                "de": "Bugfix main.js",
+                "ru": "исправление ошибок main.js",
+                "pt": "bugfix main.js",
+                "nl": "bugfix main.js",
+                "fr": "correction de bogue main.js",
+                "it": "bugfix main.js",
+                "es": "corrección de errores main.js",
+                "pl": "poprawka błędu main.js",
+                "zh-cn": "修正main.js"
+            },
             "0.4.3": {
                 "en": "release npm",
                 "de": "Release npm",
