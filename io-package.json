@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.4.5",
+        "version": "0.4.6",
         "news": {
+            "0.4.6": {
+                "en": "Bugfix index_m",
+                "de": "Bugfix index_m",
+                "ru": "Исправление ошибки index_m",
+                "pt": "Bugfix index_m",
+                "nl": "Bugfix index_m",
+                "fr": "Correction de bug index_m",
+                "it": "Bugfix index_m",
+                "es": "Corrección de errores index_m",
+                "pl": "Poprawka index_m",
+                "zh-cn": "错误修正index_m"
+            },
             "0.4.5": {
                 "en": "Fehler Adapterchecker behoben",
                 "de": "Fehler Adapterchecker Einstellungen",

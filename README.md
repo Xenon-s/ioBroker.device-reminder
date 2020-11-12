@@ -159,6 +159,9 @@ Zur Funktion einfach bei "**default devices**" hier drüber lesen.
 	### __WORK IN PROGRESS__
 -->
 
+### 0.4.6 (2020-11-12)
+* (xenon-s) Bugfix index_m
+
 ### 0.4.5 (2020-11-12)
 * (xenon-s) Fehler Adapterchecker behoben
 
