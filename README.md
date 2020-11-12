@@ -3,7 +3,7 @@
 [![NPM version](http://img.shields.io/npm/v/iobroker.device-reminder.svg)](https://www.npmjs.com/package/iobroker.device-reminder)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.device-reminder.svg)](https://www.npmjs.com/package/iobroker.device-reminder)
 ![Number of Installations (latest)](http://iobroker.live/badges/device-reminder-installed.svg)
-![Number of Installations (stable)](http://iobroker.live/badges/device-reminder-stable.svg)
+<!-- ![Number of Installations (stable)](http://iobroker.live/badges/device-reminder-stable.svg) -->
 [![Dependency Status](https://img.shields.io/david/xenon-s/iobroker.device-reminder.svg)](https://david-dm.org/xenon-s/iobroker.device-reminder)
 
 [![NPM](https://nodei.co/npm/iobroker.device-reminder.png?downloads=true)](https://nodei.co/npm/iobroker.device-reminder/)
