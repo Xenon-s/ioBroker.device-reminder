@@ -1,5 +1,5 @@
 ﻿![Logo](admin/icon.png)
-# ioBroker.device-reminder V 0.4 - beta
+# ioBroker.device-reminder V 0.4.2 - beta
 
 **ACHTUNG**: Es ist zwingend erforderlich alle vorhandenen Instanzen zu löschen, sollte man von einer Version kleiner 0.4 kommen !!!
 
@@ -41,7 +41,7 @@ Ihr solltet die Instanz zuerst stoppen, bevor ihr Änderungen vornehmt. Unter be
 Zuerst müssen alle gewünschten Devices, Alexas, etc in der Config angelegt werden, bevor sie genutzt werden können. Wenn alle Eingaben komplett abgeschlossen sind, muss zwingend auf **"click here to reload"** geklickt werden. Erst danach sind die Geräte wirklich angelegt und können im Tab "**DEVICES**" weiter konfiguriert werden.
 
 ## device anlegen
-Zuerst muss über das "+ add device" ein neuer Eintrag erzeugt werden. Dadurch wird folgende Tabellenzeile erzeugt:
+Zuerst muss über das **"+ add device"** ein neuer Eintrag erzeugt werden. Dadurch wird folgende Tabellenzeile erzeugt:
 ![addDevice.png](admin/addDevice.png)
 
 - **device name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
@@ -54,8 +54,8 @@ Zuerst muss über das "+ add device" ein neuer Eintrag erzeugt werden. Dadurch w
 Bei **Starttext** und **Endtext** kann man sich auch eine Nachricht aus einem externen Datenpunkt holen. Diese Nachricht wird mit 1 Sekunde Verzögerung aus dem Datenpunkt gelesen, nachdem sich der Status des Geräts geändert hat. Somit kann man sich per externem Script eine Nachricht erstellen lassen. Der Adapter erkennt automatisch, ob eine Nachricht aus einem Datenpunkt stammt oder ob diese manuell einfach nur eingegeben wurde. Um einen Datenpunkt auszuwählen, einfach auf die Schaltfläche mit den drei weißen Punkten klicken und dann den entsprechenden Datenpunkt auswählen. **Bitte beachten**: es kann nur entweder ein Datenpunkt **oder** eine händisch eingetragene Nachricht verwendet werden!
 
 ## Alexa erstellen
-Zuerst muss über das "+ add alexa device" ein neuer Eintrag erzeugt werden. Dadurch wird folgende Tabellenzeile erzeugt:
 ![addAlexa.png](admin/addAlexa.png)
+Zuerst muss über das **"+ add alexa device"** ein neuer Eintrag erzeugt werden. Dadurch wird folgende Tabellenzeile erzeugt:
 
 - **alexa name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
 - **alexa"announcement"/"speak"**: Hier muss **zwingend** der Datenpunkt ausgewählt werden, welcher eure Alexa sprechen lässt. Um den Datenpunkt auszuwählen, einfach auf die Schaltfläche mit den drei kleinen weißen Punkten klicken.
@@ -66,8 +66,8 @@ Mit den 4 letzten Feldern kann ein Zeitraum erstellt werden, in dem eure Alexa S
 - **"time inactive min"**: Endzeit in Minuten
 
 ## SayIt device erstellen
-Zuerst muss über das "+ add sayit device" ein neuer Eintrag erzeugt werden. Dadurch wird folgende Tabellenzeile erzeugt:
 ![addSayit.png](admin/addSayit.png)
+Zuerst muss über das **"+ add sayit device"** ein neuer Eintrag erzeugt werden. Dadurch wird folgende Tabellenzeile erzeugt:
 
 - **sayit name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
 - **sayit path"../text"**: den Datenpunkt "text" im jeweiligen sayIt device Ordner auswählen. Hier wird die Textausgabe hingesendet.
@@ -78,8 +78,8 @@ Zuerst muss über das "+ add sayit device" ein neuer Eintrag erzeugt werden. Dad
 - **"time inactive min"**: Endzeit in Minuten
 
 ## whatsapp user erstellen
-Zuerst muss über das "+ add whatsapp user" ein neuer Eintrag erzeugt werden. Dadurch wird folgende Tabellenzeile erzeugt:
 ![addWhatsapp.png](admin/addWhatsapp.png)
+Zuerst muss über das **"+ add whatsapp user"** ein neuer Eintrag erzeugt werden. Dadurch wird folgende Tabellenzeile erzeugt:
 
 - **whatsapp name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
 - **whatsapp path"sendMessage"**: den Datenpunkt "sendMessage" im jeweiligen whatsapp Ordner auswählen. Hier wird die Textausgabe hingesendet.
@@ -92,10 +92,8 @@ Wenn alle Geräte und Messenger eingefügt wurden, muss über den Save Button **
 Der Button wird nur aktiv, wenn neue Geräte eingefügt oder bestehende geändert werden!
 
 ## Devices konfigurieren
-![devices.png](admin/devices.png)
-
-Hier werden nun, nachdem man auf den Button "**click here to reload**" auf der Config Seite geklickt hatte, alle angelegten devices angezeigt und können weiter konfiguriert werden.
 ![configureDevices.png](admin/configureDevices.png)
+Hier werden nun, nachdem man auf den Button "**click here to reload**" auf der Config Seite geklickt hatte, alle angelegten devices angezeigt und können weiter konfiguriert werden.
 
 - **active**: Ist standardmäßig aktiviert. Hier kann man ein Device vorrübergehend deaktivieren, so dass es keine Benachrichtigungen mehr sendet
 - **device name**: wird automatisch angelegt
@@ -118,10 +116,8 @@ Nachdem nun auf "**Speichern und schliessen**" geklickt wurde, wird unter *Objek
 angezeigt wird.
 
 ## device type konfigurieren
-![type.png](admin/type.png)
-**Achtung**: Änderungen der Werte können dazu führen, dass Geräte nicht mehr Ordnungsgemäß erfasst werden und es so zu Falschmeldungen kommt. 
-
 ![default-devices.png](admin/default-devices.png)
+**Achtung**: Änderungen der Werte können dazu führen, dass Geräte nicht mehr Ordnungsgemäß erfasst werden und es so zu Falschmeldungen kommt. 
 
 In der ersten Tabelle werden die "default" Werte angezeigt. Diese Werte wurden über einen Zeitraum von mehreren Monaten ermittelt und sollten nicht angepasst werden. Ich erkläre die Bedeutung der einzelnen Werte trotzdem.
 - **starting value**: Startwert in Watt der überschritten werden muss, damit das Gerät als gestartet erkannt werden kann
@@ -152,6 +148,10 @@ Zur Funktion einfach bei "**default devices**" hier drüber lesen.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+
+### 0.4.2 (2020-11-12)
+* (xenon-s) readme angepasst 
+* (xenon-s) index_m gefixt
 
 ### 0.4.1 (2020-11-12)
 * (xenon-s) bugfix: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde

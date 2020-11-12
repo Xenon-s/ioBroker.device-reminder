@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.4.1",
+        "version": "0.4.2",
         "news": {
+            "0.4.2": {
+                "en": "readme angepasst \nindex_m gefixt",
+                "de": "readme besteht\nindex_m gefixt",
+                "ru": "readme angepasst\nindex_m gefixt",
+                "pt": "leia-me angepasst\nindex_m gefixt",
+                "nl": "readme angepasst\nindex_m gefixt",
+                "fr": "readme angepasst\nindex_m gefixt",
+                "it": "readme angepasst\nindex_m gefixt",
+                "es": "léame angepasst\nindex_m gefixt",
+                "pl": "readme angepasst\nindex_m gefixt",
+                "zh-cn": "自述\nindex_m gefixt"
+            },
             "0.4.1": {
                 "en": "bugfix: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
                 "de": "Bugfix: falscher Status wurde festgestellt, wenn Programmabbruch erkannt wurde",
