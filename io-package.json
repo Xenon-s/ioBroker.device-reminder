@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.4.0",
+        "version": "0.4.1",
         "news": {
+            "0.4.1": {
+                "en": "bugfix: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
+                "de": "Bugfix: falscher Status wurde festgestellt, wenn Programmabbruch erkannt wurde",
+                "ru": "исправление: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
+                "pt": "correção de bug: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
+                "nl": "bugfix: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
+                "fr": "correction de bogue: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
+                "it": "bugfix: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
+                "es": "corrección de errores: estado de falscher wurde angezeigt, wenn Programmabbruch erkannt wurde",
+                "pl": "poprawka: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
+                "zh-cn": "错误修正：falscher Status wurde angezeigt，wenn Programmabbruch erkannt wurde"
+            },
             "0.4.0": {
                 "en": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\nbugfix: telegram User werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
                 "de": "config Seite gehört, damit die von von sichtbaren vereinfacht wird\nein Abbruch eingezogen wird, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter wird\nBugfix: Telegramm Benutzer werden nicht immer richtig erkannt und falsch gesehen\neinstellbare Werte bei \"Type\" eingezogen\nreadme entfernen und entfernen",

@@ -153,6 +153,9 @@ Zur Funktion einfach bei "**default devices**" hier drüber lesen.
 	### __WORK IN PROGRESS__
 -->
 
+### 0.4.1 (2020-11-12)
+* (xenon-s) bugfix: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde
+
 ### 0.4.0 (2020-11-11)
 * (xenon-s) config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird
 * (xenon-s) einen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird

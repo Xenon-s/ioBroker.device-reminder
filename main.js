@@ -342,7 +342,7 @@ class Template extends utils.Adapter {
             startCount: null,
             endCount: null
         };
-        
+
         for (const i in devCusType) {
             if (devCusType[i].name == obj.type) {
                 objVal.startVal = devCusType[i].startVal
@@ -434,6 +434,7 @@ class Template extends utils.Adapter {
             if (obj.timeout != null) {
                 clearTimeout(obj.timeout);
                 obj.timeout = null;
+                this.log.debug(`timeout autoOff gelöscht`);
             };
             await this.setStatus(obj, status = 1);
             await this.time(obj);
@@ -441,9 +442,9 @@ class Template extends utils.Adapter {
             obj.started = false; // vorgang beendet
             this.log.debug("Vorgang beendet, Gerät fertig");
             this.log.debug(`${obj.autoOff},${obj.timeoutInMS},${obj.timer} `);
+            await this.setStatus(obj, status = 2);
 
             await this.autoOff(obj);
-
             obj.endZeit = Date.now(); // ende Zeit loggen
             obj.arrStart = []; // array wieder leeren
             obj.arrEnd = []; // array wieder leeren
@@ -465,25 +466,24 @@ class Template extends utils.Adapter {
 
     async monitoringConsumption(obj) {
         const val = 20;
-        this.log.debug("ermittlung standby")
         await this.calcStart(obj, "standby", val);
-        this.log.debug(`ergebnis standby: ${obj.resultStandby}, Länge array standby: ${obj.arrStandby.length}`);
+        this.log.debug(`ERGEBNIS standby: ${obj.resultStandby}, Länge array standby: ${obj.arrStandby.length}`);
         if (obj.resultStandby < 0.2 && obj.arrStandby.length >= val) { // verbrauch kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet
+            this.log.debug(`Gerät wurde von Hand ausgeschaltet`);
+            this.log.debug(`auto off == true?`);
+            await this.setStatus(obj, status = 0);
             if (obj.autoOff) { // auto Off aktiviert?
-                this.log.debug(`standby < 0.2, autoOff true`);
                 await this.autoOff(obj);
-            } else {    // auto Off == false
-                this.log.debug(`standby < 0.2, autoOff false`);
-                await this.setStatus(obj, status = 0);
             };
             obj.started = false;
             obj.endMessageSent = false;
             obj.startMessageSent = false;
             // clear all arrays
-            obj.arrStandby = [];
             obj.arrStart = [];
             obj.arrEnd = [];
         } else if (obj.resultStandby >= 0.2 && obj.arrStandby.length >= val && !obj.started) {
+            this.log.debug(`standby Berechnung abgebrochen`)
+            obj.arrStandby = [];
             await this.setStatus(obj, status = 2);
         };
     };
@@ -491,15 +491,15 @@ class Template extends utils.Adapter {
     async autoOff(obj) {
         /* auto off*/
         if (obj.autoOff) { // auto Off aktiv, timeout aktiv 
-            await this.setStatus(obj, status = 2);
             this.log.debug(`autoOff == true, timeout > 0ms, timer == true, timeout startet`);
             if (obj.timeout == null) {  // timeout <> null?
-                if (obj.timeout != null) {
-                    clearTimeout(obj.timeout);
-                    obj.timeout = null;
-                };
                 obj.timeout = setTimeout(async () => {  //timeout starten
-                    await this.setStatus(obj, status = 0);
+                    await this.setStatus(obj, status = 3);
+                    if (obj.timeout != null) {
+                        clearTimeout(obj.timeout);
+                        obj.timeout = null;
+                        this.log.debug(`autoOff fertig, timeout clear`);
+                    };
                 }, obj.timeoutInMS);
             };
         } else {
@@ -511,13 +511,6 @@ class Template extends utils.Adapter {
         this.log.debug(`value status: ${status}`);
         switch (status) {
             case 0: {
-                if (obj.autoOff && obj.switchPower != null) {
-                    let result = await this.getForeignStateAsync(obj.switchPower);
-                    result = result.val;
-                    if (result) {
-                        await this.setForeignStateAsync(obj.switchPower, false); // Geraet ausschalten, falls angewaehlt
-                    };
-                };
                 await this.setStateAsync(obj.pathStatus, `ausgeschaltet`, true); // Status in DP schreiben;
                 break;
             };
@@ -529,6 +522,17 @@ class Template extends utils.Adapter {
                 await this.setStateAsync(obj.pathStatus, `Standby`, true); // Status in DP schreiben
                 break;
             };
+            case 3: {
+                if (obj.autoOff && obj.switchPower != null) {
+                    let result = await this.getForeignStateAsync(obj.switchPower);
+                    result = result.val;
+                    if (result) {
+                        await this.setForeignStateAsync(obj.switchPower, false); // Geraet ausschalten, falls angewaehlt
+                    };
+                };
+                await this.setStatus(obj, status = 0);
+                break;
+            }
             default:
                 await this.setStateAsync(obj.pathStatus, `Initialisiere`, true); // Status in DP schreiben
                 break;
