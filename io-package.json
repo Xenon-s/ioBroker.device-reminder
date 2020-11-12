@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.4.4",
+        "version": "0.4.5",
         "news": {
+            "0.4.5": {
+                "en": "Fehler Adapterchecker behoben",
+                "de": "Fehler Adapterchecker Einstellungen",
+                "ru": "Fehler Adapterchecker behoben",
+                "pt": "Fehler Adapterchecker behoben",
+                "nl": "Fehler Adapterchecker behoben",
+                "fr": "Fehler Adapterchecker behoben",
+                "it": "Fehler Adapterchecker behoben",
+                "es": "Fehler Adapterchecker behoben",
+                "pl": "Fehler Adapterchecker behoben",
+                "zh-cn": "Fehler Adapterchecker贝宝"
+            },
             "0.4.4": {
                 "en": "bugfix main.js",
                 "de": "Bugfix main.js",
@@ -236,8 +248,7 @@
             {
                 "js-controller": ">=2.0.0"
             }
-        ],
-        "installedFrom": "https://github.com/Xenon-s/ioBroker.device-reminder/tarball/679deca8d9c77215c2ff9da76a4882da27ccbb5b"
+        ]
     },
     "native": {
         "device_counter": 0,
