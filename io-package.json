@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.4.6",
+        "version": "0.4.7",
         "news": {
+            "0.4.7": {
+                "en": "readme translated into english",
+                "de": "Readme ins Englische übersetzt",
+                "ru": "Readme переведен на английский",
+                "pt": "leia-me traduzido para o inglês",
+                "nl": "readme vertaald in het engels",
+                "fr": "readme traduit en anglais",
+                "it": "readme tradotto in inglese",
+                "es": "Léame traducido al inglés",
+                "pl": "readme przetłumaczone na angielski",
+                "zh-cn": "自述文件翻译成英文"
+            },
             "0.4.6": {
                 "en": "Bugfix index_m",
                 "de": "Bugfix index_m",
@@ -270,7 +282,7 @@
         "custom_device_counter": 0,
         "defaultTypeID": [
             {
-                "name": "Waschmaschine",
+                "name": "washing-machine",
                 "startVal": 30,
                 "endVal": 15,
                 "startCount": 5,
@@ -278,7 +290,7 @@
                 "id": 1
             },
             {
-                "name": "Trockner",
+                "name": "dryer",
                 "startVal": 120,
                 "endVal": 15,
                 "startCount": 5,
@@ -286,7 +298,7 @@
                 "id": 2
             },
             {
-                "name": "Geschirrspueler",
+                "name": "dishwasher",
                 "startVal": 15,
                 "endVal": 4,
                 "startCount": 3,
@@ -294,7 +306,7 @@
                 "id": 3
             },
             {
-                "name": "Computer",
+                "name": "computer",
                 "startVal": 20,
                 "endVal": 5,
                 "startCount": 2,
@@ -302,7 +314,7 @@
                 "id": 4
             },
             {
-                "name": "Wasserkocher",
+                "name": "electric-kettle",
                 "startVal": 15,
                 "endVal": 5,
                 "startCount": 2,
@@ -310,7 +322,7 @@
                 "id": 5
             },
             {
-                "name": "Mikrowelle",
+                "name": "microwave",
                 "startVal": 50,
                 "endVal": 20,
                 "startCount": 2,
