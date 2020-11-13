@@ -81,7 +81,7 @@ The last 4 fields can be used to create a period of time during which your Alexa
 <br>
 
 ## Create SayIt device
-[addSayit.png](admin/addSayit.png)
+![addSayit.png](admin/addSayit.png)
 First you have to create a new entry with the **"+ add sayit device "**. This creates the following table row:
 
 - **sayit name**: Freely selectable name, also special characters are possible
@@ -95,7 +95,7 @@ First you have to create a new entry with the **"+ add sayit device "**. This cr
 <br>
 
 ## create whatsapp user
-[addWhatsapp.png](admin/addWhatsapp.png)
+![addWhatsapp.png](admin/addWhatsapp.png)
 First you have to create a new entry with the **"+ add whatsapp user "**. This creates the following table line:
 
 - **whatsapp name**: Freely selectable name, also special characters are possible
