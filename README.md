@@ -134,6 +134,8 @@ After clicking on "**Save and close**", a folder is now created under *Objects -
 - the current state of the device
 - the current live consumption (fetched from the *path consumption/energy*) and
 - the message to the messengers
+- averageConsumption (Can be used as an aid to determine your own threshold values)
+- do not disturb (if activated, no messages are sent)
 is displayed.
 <br>
 <br>
@@ -175,8 +177,11 @@ To find out more about the function, simply read about it here at "**default dev
 	### __WORK IN PROGRESS__
 -->
 
+### 0.4.8 (2020-11-13)
+* (xenon-s) bugfix: Device status was partly recognized incorrectly
+
 ### 0.4.7 (2020-11-13)
-* (xenon-) readme translated into english
+* (xenon-s) readme translated into english
 
 ### 0.4.6 (2020-11-12)
 * (xenon-s) Bugfix index_m

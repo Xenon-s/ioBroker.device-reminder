@@ -135,6 +135,8 @@ Nachdem nun auf "**Speichern und schliessen**" geklickt wurde, wird unter *Objek
 - der aktuelle Zustand des devices
 - der aktuelle Live-Verbrauch (wird aus dem *path consumption/energy* geholt) und
 - die Nachricht an die Messenger
+- averageConsumption (Kann als Hilfe genutzt werden um die eigenen Schwellwerte zu ermitteln)
+- do not disturb (wenn aktiviert, werden keine Nachrichten versendet)
 angezeigt wird.
 <br>
 <br>

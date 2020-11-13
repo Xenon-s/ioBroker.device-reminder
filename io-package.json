@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.4.7",
+        "version": "0.4.8",
         "news": {
+            "0.4.8": {
+                "en": "bugfix: Device status was partly recognized incorrectly",
+                "de": "Bugfix: Gerätestatus wurde teilweise falsch erkannt",
+                "ru": "исправление: статус устройства частично распознавался неправильно",
+                "pt": "correção de bug: o status do dispositivo foi parcialmente reconhecido incorretamente",
+                "nl": "bugfix: apparaatstatus werd gedeeltelijk onjuist herkend",
+                "fr": "correction de bogue: l'état de l'appareil a été partiellement reconnu incorrectement",
+                "it": "bugfix: lo stato del dispositivo è stato parzialmente riconosciuto in modo errato",
+                "es": "corrección de errores: el estado del dispositivo se reconoció parcialmente incorrectamente",
+                "pl": "poprawka: stan urządzenia został częściowo rozpoznany nieprawidłowo",
+                "zh-cn": "错误修正：设备状态被部分错误地识别"
+            },
             "0.4.7": {
                 "en": "readme translated into english",
                 "de": "Readme ins Englische übersetzt",

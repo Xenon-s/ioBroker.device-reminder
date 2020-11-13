@@ -144,6 +144,9 @@ class Template extends utils.Adapter {
             await this.setStateAsync(obj[i].pathLiveConsumption, 0, true);
             await this.setStateAsync(obj[i].timeTotal, `00:00:00`, true);
             await this.setStateAsync(obj[i].messageDP, ``, true);
+            await this.setStateAsync(obj[i].averageConsumption, 0, true);
+            await this.setStateAsync(obj[i].doNotDisturb, false, true);
+            await this.setStateAsync(obj[i].autoOffDP, obj[i].autoOff, true);
         };
     };
 
@@ -168,10 +171,11 @@ class Template extends utils.Adapter {
              * @param {number} endCount
              * @param {string | string} statusDevice
              * @param {string | number} consumpLive
+             * @param {string | number} averageConsumption
              * @param {string | number} runtime
              * @param {string | string} messageDP
              */
-            constructor(obj, statusDevice, consumpLive, runtime, messageDP, startValue, endValue, startCount, endCount) {
+            constructor(obj, statusDevice, consumpLive, runtime, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal) {
                 // Attribute
                 // Vorgaben
                 // DPs
@@ -184,6 +188,9 @@ class Template extends utils.Adapter {
                 this.pathLiveConsumption = consumpLive;
                 this.timeTotal = runtime;
                 this.messageDP = messageDP;
+                this.averageConsumption = averageConsumption;
+                this.doNotDisturb = doNotDisturb;
+                this.autoOffDP = autoOffDP;
                 // boolean
                 this.startMessageSent = false;
                 this.endMessageSent = false;
@@ -191,16 +198,16 @@ class Template extends utils.Adapter {
                 // boolean Benutzervorgaben
                 this.autoOff = obj.autoOff;
                 // number
-                this.verbrauch = null;
-                this.resultStart = null;
-                this.resultEnd = null;
-                this.resultStandby = null;
+                this.verbrauch = 0;
+                this.resultStart = 0;
+                this.resultEnd = 0;
+                this.resultStandby = 0;
                 // Verbrauchswerte
-                this.startValue = startValue;
-                this.endValue = endValue;
+                this.startValue = objVal.startVal;
+                this.endValue = objVal.endVal;
                 // Zaehler Abbruchbedingungen
-                this.startCount = startCount;
-                this.endCount = endCount;
+                this.startCount = objVal.startCount;
+                this.endCount = objVal.endCount;
                 // timeout
                 this.timeoutMsg = null;
                 this.startZeit = 0;
@@ -280,15 +287,19 @@ class Template extends utils.Adapter {
          * @param {{ deviceName: string; deviceType: string; enabled: boolean; device.deviceIdName: string; pathConsumption: string; pathSwitch: string; startText: string; endText: string; idTelegram: string; idAlexa: string; idWhatsapp: string; idsayit: array; autoOff: boolean; }} obj
          */
         //DPs erstellen
-        const statusDevice = (`${obj.name}.Zustand`);
-        const consumpLive = (`${obj.name}.Verbrauch aktuell`);
-        const runtime = (`${obj.name}.Laufzeit`);
+        const statusDevice = (`${obj.name}.Status`);
+        const consumpLive = (`${obj.name}.live consumption`);
+        const runtime = (`${obj.name}.runtime`);
         const messageDP = (`${obj.name}.messageDP`);
+        const autoOffDP = (`${obj.name}.config.auto Off`);
+        const averageConsumption = (`${obj.name}.average consumption`);
+        const doNotDisturb = (`${obj.name}.config.do not disturb`);
 
+        //Only displaying data points
         await this.setObjectNotExistsAsync(statusDevice, {
             type: `state`,
             common: {
-                name: `Zustand ${obj.name}`,
+                name: `Status ${obj.name}`,
                 type: `string`,
                 role: `indicator`,
                 read: true,
@@ -299,7 +310,7 @@ class Template extends utils.Adapter {
         await this.setObjectNotExistsAsync(consumpLive, {
             type: `state`,
             common: {
-                name: `Verbrauch aktuell ${obj.name}`,
+                name: `live consumption ${obj.name}`,
                 type: `number`,
                 role: `indicator`,
                 unit: `W`,
@@ -311,7 +322,7 @@ class Template extends utils.Adapter {
         await this.setObjectNotExistsAsync(runtime, {
             type: `state`,
             common: {
-                name: `Laufzeit ${obj.name}`,
+                name: `runtime ${obj.name}`,
                 type: `string`,
                 role: `indicator`,
                 read: true,
@@ -327,6 +338,42 @@ class Template extends utils.Adapter {
                 role: `indicator`,
                 read: true,
                 write: false,
+            },
+            native: {},
+        });
+        await this.setObjectNotExistsAsync(averageConsumption, {
+            type: `state`,
+            common: {
+                name: `average consumption ${obj.name}`,
+                type: `number`,
+                role: `indicator`,
+                unit: `W`,
+                read: true,
+                write: false,
+            },
+            native: {},
+        });
+
+        //Adjustable data points
+        // await this.setObjectNotExistsAsync(autoOffDP, {
+        //     type: `state`,
+        //     common: {
+        //         name: `auto Off ${obj.name}`,
+        //         type: `boolean`,
+        //         role: `indicator`,
+        //         read: true,
+        //         write: true,
+        //     },
+        //     native: {},
+        // });
+        await this.setObjectNotExistsAsync(doNotDisturb, {
+            type: `state`,
+            common: {
+                name: `do not disturb ${obj.name}`,
+                type: `boolean`,
+                role: `indicator`,
+                read: true,
+                write: true,
             },
             native: {},
         });
@@ -362,14 +409,15 @@ class Template extends utils.Adapter {
                 };
             };
         };
+        this.log.debug(`RETURN ${JSON.stringify(objVal)}`);
 
-        const device = new Geraet(obj, statusDevice, consumpLive, runtime, messageDP, objVal.startVal, objVal.endVal, objVal.startCount, objVal.endCount);
+        const device = new Geraet(obj, statusDevice, consumpLive, runtime, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal);
         objTemp = device;
         arrDevices.push(device);
 
         this.log.debug(`RETURN ${JSON.stringify(objTemp)}`);
         this.log.debug(`arrDevices ${JSON.stringify(arrDevices)}`);
-        this.log.info(`Gerät ${JSON.stringify(objTemp.deviceName)} wurde erfolgreich angelegt`)
+        this.log.info(`Device ${JSON.stringify(objTemp.deviceName)} was successfully created`)
         return objTemp;
     };
 
@@ -389,15 +437,34 @@ class Template extends utils.Adapter {
         const obj = arrObj[id];
         const result = await this.getForeignStateAsync(obj.currentConsumption);
         obj.verbrauch = result.val;
+
         this.log.debug(`Verbrauchswert Live ${JSON.stringify(obj.verbrauch)} von ${JSON.stringify(obj.deviceName)}`);
         this.log.debug(`Wert Verbrauch START: ${JSON.stringify(obj.resultStart)}`);
 
+        // confirm data point
+        let dnd = await this.getStateAsync(obj.doNotDisturb);
+        dnd = dnd.val;
+        await this.setStateAsync(obj.doNotDisturb, dnd, true); // Status in DP schreiben;
+
         // device nicht gestartet, Zustand ermitteln wenn autoOff == false
-        await this.monitoringConsumption(obj)
+        if (obj.verbrauch <= 0.2) {
+            this.log.debug(`Verbrauch unter 0,2W`);
+            await this.monitoringConsumption(obj)
+        } else if (obj.verbrauch > 0.2 && !obj.started) {
+            if (obj.verbrauch < obj.startValue) {
+                await this.setStatus(obj, status = 2);
+            } else {
+                this.log.debug(`standby Berechnung abgebrochen`)
+                obj.arrStandby = [];
+                await this.setStatus(obj, status = 4);
+            };
+        };
 
         // device wurde gestartet
+        this.log.debug(` WERTE für START${obj.verbrauch}; ${obj.startValue}; ${obj.started}`)
         if (obj.verbrauch > obj.startValue && obj.started == false) {
             obj.startZeit = Date.now(); // Startzeit loggen
+            this.log.debug(`STARTWERBERECHNUNG`);
             this.calcStart(obj, "start", null); //Startwert berechnen und ueberpruefen
             if (obj.resultStart > obj.startValue && obj.resultStart != null && obj.arrStart.length >= obj.startCount && obj.started == false) {
                 obj.started = true; // Vorgang started
@@ -409,9 +476,12 @@ class Template extends utils.Adapter {
                         clearTimeout(obj.timeoutMsg);
                         obj.timeoutMsg = null;
                     };
-                    obj.timeoutMsg = setTimeout(async () => {  //timeout starten
-                        this.message(obj, "start");
-                    }, 1000);
+
+                    if (!dnd) {
+                        obj.timeoutMsg = setTimeout(async () => {  //timeout starten
+                            this.message(obj, "start");
+                        }, 1000);
+                    };
                 };
                 obj.startMessageSent = true; // startMessage wurde versendet
                 obj.endMessageSent = false; // Ende Benachrichtigung freigeben
@@ -422,11 +492,12 @@ class Template extends utils.Adapter {
         } else if (obj.verbrauch < (obj.startCount / 2) && obj.arrStart.length != 0 && obj.started == false) { // Wert mind > obj.startCount/2 & arrStart nicht leer und nicht started, sonst `Abbruch`
             obj.arrStart = []; // array wieder leeren
             this.log.debug(`Startphase abgebrochen, array Start wieder geloescht`);
-            await this.setStatus(obj, status = 2);
+            // await this.setStatus(obj, status = 2);
         };
 
         // device läuft, Live Verbrauch berechnen
         if (obj.started) { // wurde geraet started?
+            this.log.debug(`ENDWERTBERECHNUNG`);
             await this.calcStart(obj, "end", null); // endeberechnung durchfuehren
         };
         this.log.debug(`in Betrieb? Name: ${JSON.stringify(obj.deviceName)} Ergebnis ENDE: ${JSON.stringify(obj.resultEnd)} Wert ENDE: ${JSON.stringify(obj.endValue)} started: ${JSON.stringify(obj.started)} Arraylength: ${JSON.stringify(obj.arrEnd.length)} Zaehler Arr Ende: ${JSON.stringify(obj.endCount)} `);
@@ -453,10 +524,12 @@ class Template extends utils.Adapter {
                     clearTimeout(obj.timeoutMsg);
                     obj.timeoutMsg = null;
                 };
-                obj.timeoutMsg = setTimeout(async () => {  //timeout starten
-                    this.message(obj, "end");
-                    this.log.debug(`${obj.endMessageText}`);
-                }, 1000);
+                if (!dnd) {
+                    obj.timeoutMsg = setTimeout(async () => {  //timeout starten
+                        this.message(obj, "end");
+                        this.log.debug(`${obj.endMessageText}`);
+                    }, 1000);
+                };
             };
             obj.endMessageSent = true;
             obj.startMessageSent = false;
@@ -465,7 +538,7 @@ class Template extends utils.Adapter {
     };
 
     async monitoringConsumption(obj) {
-        const val = 20;
+        const val = 10;
         await this.calcStart(obj, "standby", val);
         this.log.debug(`ERGEBNIS standby: ${obj.resultStandby}, Länge array standby: ${obj.arrStandby.length}`);
         if (obj.resultStandby < 0.2 && obj.arrStandby.length >= val) { // verbrauch kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet
@@ -481,10 +554,6 @@ class Template extends utils.Adapter {
             // clear all arrays
             obj.arrStart = [];
             obj.arrEnd = [];
-        } else if (obj.resultStandby >= 0.2 && obj.arrStandby.length >= val && !obj.started) {
-            this.log.debug(`standby Berechnung abgebrochen`)
-            obj.arrStandby = [];
-            await this.setStatus(obj, status = 2);
         };
     };
 
@@ -511,15 +580,15 @@ class Template extends utils.Adapter {
         this.log.debug(`value status: ${status}`);
         switch (status) {
             case 0: {
-                await this.setStateAsync(obj.pathStatus, `ausgeschaltet`, true); // Status in DP schreiben;
+                await this.setStateAsync(obj.pathStatus, `switched off`, true); // Status in DP schreiben;
                 break;
             };
             case 1: {
-                await this.setStateAsync(obj.pathStatus, `in Betrieb`, true); // Status in DP schreiben
+                await this.setStateAsync(obj.pathStatus, `in action`, true); // Status in DP schreiben
                 break;
             };
             case 2: {
-                await this.setStateAsync(obj.pathStatus, `Standby`, true); // Status in DP schreiben
+                await this.setStateAsync(obj.pathStatus, `standby`, true); // Status in DP schreiben
                 break;
             };
             case 3: {
@@ -532,10 +601,15 @@ class Template extends utils.Adapter {
                 };
                 await this.setStatus(obj, status = 0);
                 break;
-            }
-            default:
-                await this.setStateAsync(obj.pathStatus, `Initialisiere`, true); // Status in DP schreiben
+            };
+            case 4: {
+                await this.setStateAsync(obj.pathStatus, `initialize`, true); // Status in DP schreiben
                 break;
+            };
+            default: {
+                await this.setStateAsync(obj.pathStatus, `unknown status`, true); // Status in DP schreiben
+                break;
+            };
         };
     };
 
@@ -546,6 +620,8 @@ class Template extends utils.Adapter {
                 obj.arrStart.push(obj.verbrauch);
                 obj.resultStart = await this.calculation(obj.resultStart, obj.arrStart);
                 this.log.debug(`ergebnisTemp start: ${obj.resultStart}`);
+                await this.setStateAsync(obj.averageConsumption, obj.resultStart, true);
+                break;
             };
             case "end": {
                 obj.arrEnd.push(obj.verbrauch);
@@ -554,6 +630,8 @@ class Template extends utils.Adapter {
                 if (obj.arrEnd.length > obj.endCount) {
                     obj.arrEnd.shift();
                 };
+                await this.setStateAsync(obj.averageConsumption, obj.resultEnd, true);
+                break;
             };
             case "standby": {
                 obj.arrStandby.push(obj.verbrauch);
@@ -562,6 +640,12 @@ class Template extends utils.Adapter {
                 if (obj.arrStandby.length > valCount) {
                     obj.arrStandby.shift();
                 };
+                await this.setStateAsync(obj.averageConsumption, obj.resultStandby, true);
+                break;
+            };
+            default: {
+                this.log.warn(`Calculation could not be completed. Input is wrong. Report this to the developer`);
+                break;
             };
         };
     };
