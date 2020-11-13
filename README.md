@@ -169,7 +169,7 @@ To find out more about the function, simply read about it here at "**default dev
 <br>
 <br>
 
-# Changelog
+## Changelog
 <!--
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
@@ -233,7 +233,7 @@ To find out more about the function, simply read about it here at "**default dev
 ### 0.0.1 (2020-10-20)
 * (xenon-s) initial commit
 
-# License
+## License
 
 MIT License
 
