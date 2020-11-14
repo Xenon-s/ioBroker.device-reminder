@@ -407,6 +407,7 @@
                 });
 
                 createDynamicTable(settings, onChange, device); // create dynamic table "device"
+                console.warn(settings);
                 $('#dynamicTableLoading, #dynamicTableLoadingText').css('display', 'none'); // ladekringel
             }, 2000);
 
@@ -596,7 +597,7 @@
 
                         <!-- dynamic table -->
                         <div class="card-panel blue lighten-5">
-                            <table id="dynamicTable" class="table-values remove-last-column">
+                            <table id="dynamicTable" class="table-values changeOnChangeEvent remove-last-column">
                                 <thead>
                                     <tr>
                                         <th class="header translate" data-name="enabled" style="width: 40px">active

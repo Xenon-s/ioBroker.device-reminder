@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.4.8",
+        "version": "0.4.9",
         "news": {
+            "0.4.9": {
+                "en": "Bugfix: switch off detection\nBugfix: index_m memory button was not displayed",
+                "de": "Bugfix: Erkennung ausschalten\nBugfix: Die Schaltfläche index_m memory wurde nicht angezeigt",
+                "ru": "Исправление: отключение обнаружения\nИсправление: кнопка памяти index_m не отображалась",
+                "pt": "Correção: desligue a detecção\nCorreção de bug: o botão de memória index_m não era exibido",
+                "nl": "Bugfix: detectie uitschakelen\nBugfix: index_m geheugenknop werd niet weergegeven",
+                "fr": "Correction de bug: désactiver la détection\nCorrection de bug: le bouton mémoire index_m n'était pas affiché",
+                "it": "Bugfix: disattiva il rilevamento\nBugfix: il pulsante di memoria index_m non veniva visualizzato",
+                "es": "Corrección de error: apagar la detección\nCorrección de error: el botón de memoria index_m no se mostraba",
+                "pl": "Poprawka: wyłącz wykrywanie\nPoprawka: przycisk pamięci index_m nie był wyświetlany",
+                "zh-cn": "错误修正：关闭检测\n错误修正：未显示index_m内存按钮"
+            },
             "0.4.8": {
                 "en": "bugfix: Device status was partly recognized incorrectly",
                 "de": "Bugfix: Gerätestatus wurde teilweise falsch erkannt",

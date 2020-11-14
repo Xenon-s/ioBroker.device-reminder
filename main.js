@@ -78,7 +78,8 @@ class Template extends utils.Adapter {
 
             for (const i in objectInput) {
                 this.log.debug(`element for each ${JSON.stringify(objectInput[i])}`)
-                const id = objectInput[i].pathConsumption;
+                let id = ``;
+                id = objectInput[i].pathConsumption
                 const obj = objectInput[i];
                 this.log.debug(`obj in constructor "${JSON.stringify(obj)}"`);
                 arrObj[id] = await this.funcCreateObject(obj);
@@ -447,15 +448,15 @@ class Template extends utils.Adapter {
         await this.setStateAsync(obj.doNotDisturb, dnd, true); // Status in DP schreiben;
 
         // device nicht gestartet, Zustand ermitteln wenn autoOff == false
-        if (obj.verbrauch <= 0.2) {
+        if (obj.verbrauch <= 0.1) {
             this.log.debug(`Verbrauch unter 0,2W`);
             await this.monitoringConsumption(obj)
-        } else if (obj.verbrauch > 0.2 && !obj.started) {
+        } else if (obj.verbrauch > 0.1 && !obj.started) {
+            this.log.debug(`standby Berechnung abgebrochen`)
+            obj.arrStandby = [];
             if (obj.verbrauch < obj.startValue) {
                 await this.setStatus(obj, status = 2);
             } else {
-                this.log.debug(`standby Berechnung abgebrochen`)
-                obj.arrStandby = [];
                 await this.setStatus(obj, status = 4);
             };
         };
@@ -538,7 +539,7 @@ class Template extends utils.Adapter {
     };
 
     async monitoringConsumption(obj) {
-        const val = 10;
+        const val = 20;
         await this.calcStart(obj, "standby", val);
         this.log.debug(`ERGEBNIS standby: ${obj.resultStandby}, Länge array standby: ${obj.arrStandby.length}`);
         if (obj.resultStandby < 0.2 && obj.arrStandby.length >= val) { // verbrauch kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet

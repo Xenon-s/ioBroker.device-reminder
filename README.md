@@ -177,6 +177,10 @@ To find out more about the function, simply read about it here at "**default dev
 	### __WORK IN PROGRESS__
 -->
 
+### 0.4.9 (2020-11-14)
+* (xenon-s) Bugfix: switch off detection
+* (xenon-s) Bugfix: index_m memory button was not displayed
+
 ### 0.4.8 (2020-11-13)
 * (xenon-s) bugfix: Device status was partly recognized incorrectly
 
