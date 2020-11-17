@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.4.9",
+        "version": "0.4.10",
         "news": {
+            "0.4.10": {
+                "en": "bugfix main.js",
+                "de": "Bugfix main.js",
+                "ru": "исправление ошибок main.js",
+                "pt": "bugfix main.js",
+                "nl": "bugfix main.js",
+                "fr": "correction de bogue main.js",
+                "it": "bugfix main.js",
+                "es": "corrección de errores main.js",
+                "pl": "poprawka błędu main.js",
+                "zh-cn": "修正main.js"
+            },
             "0.4.9": {
                 "en": "Bugfix: switch off detection\nBugfix: index_m memory button was not displayed",
                 "de": "Bugfix: Erkennung ausschalten\nBugfix: Die Schaltfläche index_m memory wurde nicht angezeigt",
@@ -230,18 +242,6 @@
                 "es": "arreglar URL",
                 "pl": "napraw adres URL",
                 "zh-cn": "修正网址"
-            },
-            "0.0.1": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
             }
         },
         "title": "device-reminder",

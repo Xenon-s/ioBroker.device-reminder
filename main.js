@@ -439,9 +439,6 @@ class Template extends utils.Adapter {
         const result = await this.getForeignStateAsync(obj.currentConsumption);
         obj.verbrauch = result.val;
 
-        this.log.debug(`Verbrauchswert Live ${JSON.stringify(obj.verbrauch)} von ${JSON.stringify(obj.deviceName)}`);
-        this.log.debug(`Wert Verbrauch START: ${JSON.stringify(obj.resultStart)}`);
-
         // confirm data point
         let dnd = await this.getStateAsync(obj.doNotDisturb);
         dnd = dnd.val;
@@ -449,9 +446,39 @@ class Template extends utils.Adapter {
 
         // device nicht gestartet, Zustand ermitteln wenn autoOff == false
         if (obj.verbrauch <= 0.1) {
+            this.log.debug(`length standby: ${obj.arrStandby.length}`);
+            const val = 20;
             this.log.debug(`Verbrauch unter 0,2W`);
-            await this.monitoringConsumption(obj)
-        } else if (obj.verbrauch > 0.1 && !obj.started) {
+            await this.calcStart(obj, "standby", val);
+            if (obj.resultStandby <= 0.1 && obj.arrStandby.length >= val && obj.started) { // verbrauch kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet und war in Betrieb
+                await this.setStatus(obj, status = 0);
+
+                if (obj.endMessage && !obj.endMessageSent && obj.startMessageSent) {  // Ende Benachrichtigung aktiv?
+                    if (obj.timeoutMsg != null) {
+                        clearTimeout(obj.timeoutMsg);
+                        obj.timeoutMsg = null;
+                    };
+                    if (!dnd) {
+                        obj.timeoutMsg = setTimeout(async () => {  //timeout starten
+                            this.message(obj, "end");
+                            this.log.debug(`${obj.endMessageText}`);
+                        }, 1000);
+                    };
+                };
+
+                if (obj.autoOff) { // auto Off aktiviert?
+                    await this.autoOff(obj);
+                };
+                obj.started = false;
+                obj.endMessageSent = false;
+                obj.startMessageSent = false;
+                // clear all arrays
+                obj.arrStart = [];
+                obj.arrEnd = [];
+            } else if (obj.resultStandby <= 0.1 && obj.arrStandby.length >= val && !obj.started) {
+                await this.setStatus(obj, status = 0);
+            };
+        } else if (obj.verbrauch > 0.5 && !obj.started) {
             this.log.debug(`standby Berechnung abgebrochen`)
             obj.arrStandby = [];
             if (obj.verbrauch < obj.startValue) {
@@ -472,6 +499,7 @@ class Template extends utils.Adapter {
                 this.log.debug(`Gerät gestartet, device läuft`);
                 // await this.setStateAsync(obj.pathStatus, `started`, true); // Status in DP schreiben
                 this.log.debug(`startMessage: ${obj.startMessage} startMessageSent ${obj.startMessageSent}`);
+
                 if (obj.startMessage && !obj.startMessageSent) { // Start Benachrichtigung aktiv?
                     if (obj.timeoutMsg != null) {
                         clearTimeout(obj.timeoutMsg);
@@ -484,6 +512,7 @@ class Template extends utils.Adapter {
                         }, 1000);
                     };
                 };
+
                 obj.startMessageSent = true; // startMessage wurde versendet
                 obj.endMessageSent = false; // Ende Benachrichtigung freigeben
             } else if (obj.resultStart < obj.startValue && obj.resultStart != null && obj.arrStart.length >= obj.startCount && obj.started == false) {
@@ -520,6 +549,7 @@ class Template extends utils.Adapter {
             obj.endZeit = Date.now(); // ende Zeit loggen
             obj.arrStart = []; // array wieder leeren
             obj.arrEnd = []; // array wieder leeren
+
             if (obj.endMessage && !obj.endMessageSent && obj.startMessageSent) {  // Ende Benachrichtigung aktiv?
                 if (obj.timeoutMsg != null) {
                     clearTimeout(obj.timeoutMsg);
@@ -532,36 +562,17 @@ class Template extends utils.Adapter {
                     }, 1000);
                 };
             };
+
             obj.endMessageSent = true;
             obj.startMessageSent = false;
         };
         await this.setStateAsync(obj.pathLiveConsumption, `${obj.verbrauch}`, true);
     };
 
-    async monitoringConsumption(obj) {
-        const val = 20;
-        await this.calcStart(obj, "standby", val);
-        this.log.debug(`ERGEBNIS standby: ${obj.resultStandby}, Länge array standby: ${obj.arrStandby.length}`);
-        if (obj.resultStandby < 0.2 && obj.arrStandby.length >= val) { // verbrauch kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet
-            this.log.debug(`Gerät wurde von Hand ausgeschaltet`);
-            this.log.debug(`auto off == true?`);
-            await this.setStatus(obj, status = 0);
-            if (obj.autoOff) { // auto Off aktiviert?
-                await this.autoOff(obj);
-            };
-            obj.started = false;
-            obj.endMessageSent = false;
-            obj.startMessageSent = false;
-            // clear all arrays
-            obj.arrStart = [];
-            obj.arrEnd = [];
-        };
-    };
-
     async autoOff(obj) {
         /* auto off*/
         if (obj.autoOff) { // auto Off aktiv, timeout aktiv 
-            this.log.debug(`autoOff == true, timeout > 0ms, timer == true, timeout startet`);
+            this.log.debug(`autoOff == true, timeout > 0ms (${obj.timeoutInMS}), timer == true, timeout startet`);
             if (obj.timeout == null) {  // timeout <> null?
                 obj.timeout = setTimeout(async () => {  //timeout starten
                     await this.setStatus(obj, status = 3);

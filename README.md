@@ -177,6 +177,9 @@ To find out more about the function, simply read about it here at "**default dev
 	### __WORK IN PROGRESS__
 -->
 
+### 0.4.10 (2020-11-17)
+* (xenon-s) bugfix main.js
+
 ### 0.4.9 (2020-11-14)
 * (xenon-s) Bugfix: switch off detection
 * (xenon-s) Bugfix: index_m save button was not displayed
