@@ -2,8 +2,8 @@
 name: Bug report
 about: Something is not working as it should
 title: ''
-labels: ''
-assignees: ''
+labels: 'bug'
+assignees: 'xenon-s'
 ---
 
 **Describe the bug**  
