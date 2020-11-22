@@ -1,15 +1,17 @@
 ![Logo](admin/icon.png)
+# ioBroker.device-reminder
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.device-reminder.svg)](https://www.npmjs.com/package/iobroker.device-reminder)
+<!-- ![Number of Installations (stable)](http://iobroker.live/badges/device-reminder-installed-stable.svg) -->
 [![Downloads](https://img.shields.io/npm/dm/iobroker.device-reminder.svg)](https://www.npmjs.com/package/iobroker.device-reminder)
-![Number of Installations (latest)](http://iobroker.live/badges/device-reminder-installed.svg)
-<!-- ![Number of Installations (stable)](http://iobroker.live/badges/device-reminder-stable.svg) -->
+<!-- ![Number of Installations (latest)](http://iobroker.live/badges/device-reminder-installed.svg) -->
 [![Dependency Status](https://img.shields.io/david/xenon-s/iobroker.device-reminder.svg)](https://david-dm.org/xenon-s/iobroker.device-reminder)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/xenon-s/iobroker.device-reminder/LICENSE)
+![Test and Release](https://github.com/xenon-s/iobroker.device-reminder/workflows/Test%20and%20Release/badge.svg)
+
+[![Paypal Donation](https://img.shields.io/badge/paypal-donate%20%7C%20spenden-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3EYML5A4EMJCW&source=url)
 
 [![NPM](https://nodei.co/npm/iobroker.device-reminder.png?downloads=true)](https://nodei.co/npm/iobroker.device-reminder/)
-**Tests:** ![Test and Release](https://github.com/xenon-s/iobroker.device-reminder/workflows/Test%20and%20Release/badge.svg)
-
-# ioBroker.device-reminder
 
 ## German readme needed? <br> [German readme](https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README_GER.md)
 <br>
@@ -60,8 +62,8 @@ First a new entry must be created using the **"+ add device "**. This creates th
 - **device type**: here you have to select which device it is, so that the calculations in the adapter can be executed correctly
 - **path consumption/energy**: Click on the button with the three white dots to open your object management. You have to select the datapoint that shows the **current live consumption**.
 - **path switch on/off**: Click on the button with the three white dots to open your object management. You have to select the data point that switches your **socket on/off** (not mandatory)
-- **Start text**: Notification to be sent when the device is started (special characters are also possible). 
-- **End text**: Notification to be sent when the device has finished its process (special characters are also possible)  
+- **Start text**: Notification to be sent when the device is started (special characters are also possible). There must be no "." at the end of the text !
+- **End text**: Notification to be sent when the device has finished its process (special characters are also possible). There must be no "." at the end of the text !
 With **start text** and **end text** you can also get a message from an external data point. This message is read from the data point with a 1 second delay after the status of the device has changed. So you can have a message created by an external script. The adapter automatically detects if a message comes from a data point or if it was simply entered manually. To select a data point, simply click on the button with the three white dots and then select the corresponding data point. **Please note**: only either a data point **or** a manually entered message can be used!
 <br>
 <br>
@@ -72,6 +74,7 @@ First a new entry must be created using the **"+ add alexa device "**. This crea
 
 - **alexa name**: Freely selectable name, also special characters are possible
 - **alexa "announcement"/"speak "**: Here you **must** select the datapoint that makes your Alexa speak. To select the datapoint, just click on the button with the three little white dots.
+- **volume 0-100**: *optional* here you can set a volume (default: 50). Values between 0 and 100 are possible.
 The last 4 fields can be used to create a period of time during which your Alexa is allowed to speak. By default, the time period from 00:00 - 23:59 is active.
 - **"time active hour "**: Start time in hours
 - **"time active min "**: Start time in minutes
@@ -86,7 +89,7 @@ First you have to create a new entry with the **"+ add sayit device "**. This cr
 
 - **sayit name**: Freely selectable name, also special characters are possible
 - **sayit path"../text "**: select the datapoint "text" in the respective sayIt device folder. The text output will be sent to this folder.
-- **sayit volume 0-100**: *optional* here you can set a volume (default: 50). Values between 0 and 100 are possible.
+- **volume 0-100**: *optional* here you can set a volume (default: 50). Values between 0 and 100 are possible.
 - **"time active hour "**: Start time in hours
 - **"time active min "**: Start time in minutes
 - "time inactive hour": End time in hours
@@ -131,6 +134,7 @@ After clicking on the button "**click here to reload**" on the Config page, all 
 
 After clicking on "**Save and close**", a folder is now created under *Objects -> device-reminder* for each newly created Device, in which 
 - the current runtime in hh:mm:ss  
+- the current runtime in milliseconds
 - the current state of the device
 - the current live consumption (fetched from the *path consumption/energy*) and
 - the message to the messengers
@@ -176,6 +180,11 @@ To find out more about the function, simply read about it here at "**default dev
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+
+### 0.5.0 (2020-11-22)
+* (xenon-s) bugfix: volume sayit
+* (xenon-s) add: volume alexa
+* (xenon-s) DP runtime in milliseconds
 
 ### 0.4.10 (2020-11-17)
 * (xenon-s) bugfix main.js

@@ -1,15 +1,17 @@
 ﻿![Logo](admin/icon.png)
+# ioBroker.device-reminder
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.device-reminder.svg)](https://www.npmjs.com/package/iobroker.device-reminder)
+<!-- ![Number of Installations (stable)](http://iobroker.live/badges/device-reminder-installed-stable.svg) -->
 [![Downloads](https://img.shields.io/npm/dm/iobroker.device-reminder.svg)](https://www.npmjs.com/package/iobroker.device-reminder)
-![Number of Installations (latest)](http://iobroker.live/badges/device-reminder-installed.svg)
-<!-- ![Number of Installations (stable)](http://iobroker.live/badges/device-reminder-stable.svg) -->
+<!-- ![Number of Installations (latest)](http://iobroker.live/badges/device-reminder-installed.svg) -->
 [![Dependency Status](https://img.shields.io/david/xenon-s/iobroker.device-reminder.svg)](https://david-dm.org/xenon-s/iobroker.device-reminder)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/xenon-s/iobroker.device-reminder/LICENSE)
+![Test and Release](https://github.com/xenon-s/iobroker.device-reminder/workflows/Test%20and%20Release/badge.svg)
+
+[![Paypal Donation](https://img.shields.io/badge/paypal-donate%20%7C%20spenden-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3EYML5A4EMJCW&source=url)
 
 [![NPM](https://nodei.co/npm/iobroker.device-reminder.png?downloads=true)](https://nodei.co/npm/iobroker.device-reminder/)
-**Tests:** ![Test and Release](https://github.com/xenon-s/iobroker.device-reminder/workflows/Test%20and%20Release/badge.svg)
-
-# ioBroker.device-reminder
 
 ## English readme needed? <br>[english readme](https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README.md)
 <br>
@@ -58,10 +60,10 @@ Zuerst muss über das **"+ add device"** ein neuer Eintrag erzeugt werden. Dadur
 
 - **device name**: Frei wählbarer Name
 - **device type**: hier muss ausgewählt werden, um welches Gerät es sich handelt, damit die Berechnungen im Adapter korrekt ausgeführt werden können
-- **path consumption/energy**: Per Klick auf die Schaltfläche mit den drei weißen Punkten öffnet sich eure Objektverwaltung. Es muss der Datenpunkt ausgewählt werden, welcher den **aktuellen Live-Verbrauch** anzeigt.
+- **path consumption/energy**: Per Klick auf die Schaltfläche mit den drei weißen Punkten öffnet sich eure Objektverwaltung. Es muss der Datenpunkt ausgewählt werden, welcher den **aktuellen Live-Verbrauch** anzeigt. 
 - **path switch on/off**: Per Klick auf die Schaltfläche mit den drei weißen Punkten öffnet sich eure Objektverwaltung. Es muss der Datenpunkt ausgewählt werden, welcher eure **Steckdose an/aus schaltet** (keine Pflicht)
-- **Starttext**: Benachrichtigung die gesendet werden soll, wenn das Gerät gestartet wird (auch Sonderzeichen sind möglich). 
-- **Endtext**: Benachrichtigung die gesendet werden soll, wenn das Gerät seinen Vorgang beendet hat (auch Sonderzeichen sind möglich). 
+- **Starttext**: Benachrichtigung die gesendet werden soll, wenn das Gerät gestartet wird (auch Sonderzeichen sind möglich). Es darf sich kein "." am Ende befinden!
+- **Endtext**: Benachrichtigung die gesendet werden soll, wenn das Gerät seinen Vorgang beendet hat (auch Sonderzeichen sind möglich). Es darf sich kein "." am Ende befinden!
 
 Bei **Starttext** und **Endtext** kann man sich auch eine Nachricht aus einem externen Datenpunkt holen. Diese Nachricht wird mit 1 Sekunde Verzögerung aus dem Datenpunkt gelesen, nachdem sich der Status des Geräts geändert hat. Somit kann man sich per externem Script eine Nachricht erstellen lassen. Der Adapter erkennt automatisch, ob eine Nachricht aus einem Datenpunkt stammt oder ob diese manuell einfach nur eingegeben wurde. Um einen Datenpunkt auszuwählen, einfach auf die Schaltfläche mit den drei weißen Punkten klicken und dann den entsprechenden Datenpunkt auswählen. **Bitte beachten**: es kann nur entweder ein Datenpunkt **oder** eine händisch eingetragene Nachricht verwendet werden!
 <br>
@@ -73,6 +75,7 @@ Zuerst muss über das **"+ add alexa device"** ein neuer Eintrag erzeugt werden.
 
 - **alexa name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
 - **alexa"announcement"/"speak"**: Hier muss **zwingend** der Datenpunkt ausgewählt werden, welcher eure Alexa sprechen lässt. Um den Datenpunkt auszuwählen, einfach auf die Schaltfläche mit den drei kleinen weißen Punkten klicken.
+- **volume 0-100**: *optional* hier kann man eine Lautstärke vorgeben (default: 50). Werte zwischen 0 und 100 sind möglich.
 Mit den 4 letzten Feldern kann ein Zeitraum erstellt werden, in dem eure Alexa Sprachausgaben tätigen darf. Standardmäßig ist der Zeitraum von 00:00 Uhr - 23:59 Uhr aktiv.
 - **"time active hour"**: Startzeit in Stunden
 - **"time active min"**: Startzeit in Minuten
@@ -87,7 +90,7 @@ Zuerst muss über das **"+ add sayit device"** ein neuer Eintrag erzeugt werden.
 
 - **sayit name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
 - **sayit path"../text"**: den Datenpunkt "text" im jeweiligen sayIt device Ordner auswählen. Hier wird die Textausgabe hingesendet.
-- **sayit volume 0-100**: *optional* hier kann man eine Lautstärke vorgeben (default: 50). Werte zwischen 0 und 100 sind möglich.
+- **volume 0-100**: *optional* hier kann man eine Lautstärke vorgeben (default: 50). Werte zwischen 0 und 100 sind möglich.
 - **"time active hour"**: Startzeit in Stunden
 - **"time active min"**: Startzeit in Minuten
 - **"time inactive hour"**: Endzeit in Stunden
@@ -132,6 +135,7 @@ Hier werden nun, nachdem man auf den Button "**click here to reload**" auf der C
 
 Nachdem nun auf "**Speichern und schliessen**" geklickt wurde, wird unter *Objekte -> device-reminder* nun für jedes neu angelegte Device ein Ordner erstellt, in dem 
 - die aktuelle Laufzeit in hh:mm:ss  
+- die aktuelle Laufzeit in Millisekunden
 - der aktuelle Zustand des devices
 - der aktuelle Live-Verbrauch (wird aus dem *path consumption/energy* geholt) und
 - die Nachricht an die Messenger

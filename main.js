@@ -176,7 +176,7 @@ class Template extends utils.Adapter {
              * @param {string | number} runtime
              * @param {string | string} messageDP
              */
-            constructor(obj, statusDevice, consumpLive, runtime, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal) {
+            constructor(obj, statusDevice, consumpLive, runtime, runtimeMS, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal) {
                 // Attribute
                 // Vorgaben
                 // DPs
@@ -188,6 +188,7 @@ class Template extends utils.Adapter {
                 this.pathStatus = statusDevice;
                 this.pathLiveConsumption = consumpLive;
                 this.timeTotal = runtime;
+                this.timeTotalMs = runtimeMS;
                 this.messageDP = messageDP;
                 this.averageConsumption = averageConsumption;
                 this.doNotDisturb = doNotDisturb;
@@ -291,6 +292,7 @@ class Template extends utils.Adapter {
         const statusDevice = (`${obj.name}.Status`);
         const consumpLive = (`${obj.name}.live consumption`);
         const runtime = (`${obj.name}.runtime`);
+        const runtimeMS = (`${obj.name}.runtime in ms`);
         const messageDP = (`${obj.name}.messageDP`);
         const autoOffDP = (`${obj.name}.config.auto Off`);
         const averageConsumption = (`${obj.name}.average consumption`);
@@ -325,6 +327,17 @@ class Template extends utils.Adapter {
             common: {
                 name: `runtime ${obj.name}`,
                 type: `string`,
+                role: `indicator`,
+                read: true,
+                write: false,
+            },
+            native: {},
+        });
+        await this.setObjectNotExistsAsync(runtimeMS, {
+            type: `state`,
+            common: {
+                name: `runtime in ms ${obj.name}`,
+                type: `number`,
                 role: `indicator`,
                 read: true,
                 write: false,
@@ -412,7 +425,7 @@ class Template extends utils.Adapter {
         };
         this.log.debug(`RETURN ${JSON.stringify(objVal)}`);
 
-        const device = new Geraet(obj, statusDevice, consumpLive, runtime, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal);
+        const device = new Geraet(obj, statusDevice, consumpLive, runtime, runtimeMS, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal);
         objTemp = device;
         arrDevices.push(device);
 
@@ -452,13 +465,13 @@ class Template extends utils.Adapter {
             await this.calcStart(obj, "standby", val);
             if (obj.resultStandby <= 0.1 && obj.arrStandby.length >= val && obj.started) { // verbrauch kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet und war in Betrieb
                 await this.setStatus(obj, status = 0);
-
                 if (obj.endMessage && !obj.endMessageSent && obj.startMessageSent) {  // Ende Benachrichtigung aktiv?
                     if (obj.timeoutMsg != null) {
                         clearTimeout(obj.timeoutMsg);
                         obj.timeoutMsg = null;
                     };
                     if (!dnd) {
+                        await this.setVolume(obj);
                         obj.timeoutMsg = setTimeout(async () => {  //timeout starten
                             this.message(obj, "end");
                             this.log.debug(`${obj.endMessageText}`);
@@ -499,7 +512,6 @@ class Template extends utils.Adapter {
                 this.log.debug(`Gerät gestartet, device läuft`);
                 // await this.setStateAsync(obj.pathStatus, `started`, true); // Status in DP schreiben
                 this.log.debug(`startMessage: ${obj.startMessage} startMessageSent ${obj.startMessageSent}`);
-
                 if (obj.startMessage && !obj.startMessageSent) { // Start Benachrichtigung aktiv?
                     if (obj.timeoutMsg != null) {
                         clearTimeout(obj.timeoutMsg);
@@ -507,6 +519,7 @@ class Template extends utils.Adapter {
                     };
 
                     if (!dnd) {
+                        await this.setVolume(obj);
                         obj.timeoutMsg = setTimeout(async () => {  //timeout starten
                             this.message(obj, "start");
                         }, 1000);
@@ -556,6 +569,7 @@ class Template extends utils.Adapter {
                     obj.timeoutMsg = null;
                 };
                 if (!dnd) {
+                    await this.setVolume(obj);
                     obj.timeoutMsg = setTimeout(async () => {  //timeout starten
                         this.message(obj, "end");
                         this.log.debug(`${obj.endMessageText}`);
@@ -677,10 +691,13 @@ class Template extends utils.Adapter {
         //Laufzeit berechnen
         let diff = 0;
         let time = `00:00:00`;
+        let timeMs = 0;
         const vergleichsZeit = Date.now();
         const startZeit = obj.startZeit;
         diff = (vergleichsZeit - startZeit);
         time = this.formatDate(Math.round(diff), `hh:mm:ss`);
+        timeMs = diff;
+        await this.setStateAsync(obj.timeTotalMs, timeMs, true); // Status in DP schreiben
         await this.setStateAsync(obj.timeTotal, time, true); // Status in DP schreiben
     };
 
@@ -740,14 +757,34 @@ class Template extends utils.Adapter {
                 timeMin = await this.str2time(sayitInput[obj.sayItID[i]].timeMin);
                 timeMax = await this.str2time(sayitInput[obj.sayItID[i]].timeMax);
                 if (time >= timeMin && time < timeMax) {
-                    let output = ``;
-                    output = `${sayitInput[obj.sayItID[i]].volume};${msg}`;
-                    await this.setForeignStateAsync(sayitInput[obj.sayItID[i]].path, output);
+                    // let output = ``;
+                    // output = `${sayitInput[obj.sayItID[i]].volume};${msg}`;
+                    await this.setForeignStateAsync(sayitInput[obj.sayItID[i]].path, msg);
                 };
             };
         };
         // trigger dp
         await this.setStateAsync(obj.messageDP, msg, true);
+    };
+
+    async setVolume(obj) {
+        let pathOld = ``;
+        let pathNew = ``;
+        let length = 0;
+        for (const i in obj.alexaID) {
+            pathOld = alexaInput[obj.alexaID[i]].path
+            length = pathOld.indexOf('announcement')
+            pathNew = pathOld.slice(0, length);
+            pathNew = String(pathNew) + 'speak-volume';
+            await this.setForeignStateAsync(pathNew, alexaInput[obj.alexaID[i]].volume);
+        };
+        for (const i in obj.sayItID) {
+            pathOld = sayitInput[obj.sayItID[i]].path
+            length = pathOld.indexOf('text')
+            pathNew = pathOld.slice(0, length);
+            pathNew = String(pathNew) + 'volume';
+            await this.setForeignStateAsync(pathNew, sayitInput[obj.sayItID[i]].volume);
+        };
     };
 
     async createObjMsg(objMsg) {

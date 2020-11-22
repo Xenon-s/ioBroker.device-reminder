@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.4.10",
+        "version": "0.5.0",
         "news": {
+            "0.5.0": {
+                "en": "bugfix: volume sayit\nadd: volume alexa\nDP runtime in milliseconds",
+                "de": "Bugfix: Volume Sayit\nhinzufügen: Volumen alexa\nDP-Laufzeit in Millisekunden",
+                "ru": "исправление: громкость сайит\nдобавить: volume alexa\nВремя выполнения DP в миллисекундах",
+                "pt": "bugfix: volume sayit\nadicionar: volume alexa\nTempo de execução DP em milissegundos",
+                "nl": "bugfix: volume sayit\ntoevoegen: volume alexa\nDP-runtime in milliseconden",
+                "fr": "correction de bogue: volume sayit\najouter: volume alexa\nDurée d'exécution DP en millisecondes",
+                "it": "bugfix: volume sayit\naggiungi: volume alexa\nRuntime DP in millisecondi",
+                "es": "corrección de errores: volumen sayit\nañadir: volumen alexa\nTiempo de ejecución de DP en milisegundos",
+                "pl": "poprawka: głośność sayit\ndodaj: objętość alexa\nDP runtime w milisekundach",
+                "zh-cn": "错误修正：音量sayit\n添加：卷Alexa\nDP运行时间（以毫秒为单位）"
+            },
             "0.4.10": {
                 "en": "bugfix main.js",
                 "de": "Bugfix main.js",
@@ -220,18 +232,6 @@
                 "zh-cn": "测试版"
             },
             "0.0.1-alpha.1": {
-                "en": "fix URL",
-                "de": "URL korrigieren",
-                "ru": "исправить URL",
-                "pt": "corrigir URL",
-                "nl": "URL repareren",
-                "fr": "corriger l'URL",
-                "it": "correggere l'URL",
-                "es": "arreglar URL",
-                "pl": "napraw adres URL",
-                "zh-cn": "修正网址"
-            },
-            "0.0.1-alpha.0": {
                 "en": "fix URL",
                 "de": "URL korrigieren",
                 "ru": "исправить URL",
