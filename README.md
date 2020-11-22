@@ -181,6 +181,9 @@ To find out more about the function, simply read about it here at "**default dev
 	### __WORK IN PROGRESS__
 -->
 
+### 0.5.1 (2020-11-22)
+* (xenon-s) bugfix: Alexa responds only to announcement
+
 ### 0.5.0 (2020-11-22)
 * (xenon-s) bugfix: volume sayit
 * (xenon-s) add: volume alexa

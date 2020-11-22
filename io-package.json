@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.5.0",
+        "version": "0.5.1",
         "news": {
+            "0.5.1": {
+                "en": "bugfix: Alexa responds only to announcement",
+                "de": "Bugfix: Alexa reagiert nur auf Ankündigung",
+                "ru": "исправление: Alexa реагирует только на объявление",
+                "pt": "correção de bug: Alexa responde apenas ao anúncio",
+                "nl": "bugfix: Alexa reageert alleen op aankondiging",
+                "fr": "bugfix: Alexa ne répond qu'à l'annonce",
+                "it": "bugfix: Alexa risponde solo all'annuncio",
+                "es": "corrección de errores: Alexa responde solo al anuncio",
+                "pl": "poprawka: Alexa odpowiada tylko na ogłoszenie",
+                "zh-cn": "错误修正：Alexa只回应公告"
+            },
             "0.5.0": {
                 "en": "bugfix: volume sayit\nadd: volume alexa\nDP runtime in milliseconds",
                 "de": "Bugfix: Volume Sayit\nhinzufügen: Volumen alexa\nDP-Laufzeit in Millisekunden",
@@ -230,18 +242,6 @@
                 "es": "lanzamiento beta",
                 "pl": "wydanie beta",
                 "zh-cn": "测试版"
-            },
-            "0.0.1-alpha.1": {
-                "en": "fix URL",
-                "de": "URL korrigieren",
-                "ru": "исправить URL",
-                "pt": "corrigir URL",
-                "nl": "URL repareren",
-                "fr": "corriger l'URL",
-                "it": "correggere l'URL",
-                "es": "arreglar URL",
-                "pl": "napraw adres URL",
-                "zh-cn": "修正网址"
             }
         },
         "title": "device-reminder",

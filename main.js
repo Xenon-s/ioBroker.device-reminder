@@ -261,6 +261,7 @@ class Template extends utils.Adapter {
 
                 if (obj.alexa.length >= 1) {
                     this.alexaID = obj.alexa;
+                    this.alexaVolOld = 0;
                     this.alexa = true;
                 } else {
                     this.alexa = false;
@@ -269,6 +270,7 @@ class Template extends utils.Adapter {
                 /*obj sayIt erstellen*/
                 if (obj.sayit.length >= 1) {
                     this.sayItID = obj.sayit;
+                    this.sayItVolOld = 0;
                     this.sayIt = true;
                 } else {
                     this.sayIt = false;
@@ -471,9 +473,12 @@ class Template extends utils.Adapter {
                         obj.timeoutMsg = null;
                     };
                     if (!dnd) {
-                        await this.setVolume(obj);
+                        await this.setVolume(obj, true, "alexa");
+                        await this.setVolume(obj, true, "sayit");
                         obj.timeoutMsg = setTimeout(async () => {  //timeout starten
                             this.message(obj, "end");
+                            await this.setVolume(obj, false, "alexa");
+                            await this.setVolume(obj, false, "sayit");
                             this.log.debug(`${obj.endMessageText}`);
                         }, 1000);
                     };
@@ -519,9 +524,12 @@ class Template extends utils.Adapter {
                     };
 
                     if (!dnd) {
-                        await this.setVolume(obj);
+                        await this.setVolume(obj, true, "alexa");
+                        await this.setVolume(obj, true, "sayit");
                         obj.timeoutMsg = setTimeout(async () => {  //timeout starten
                             this.message(obj, "start");
+                            await this.setVolume(obj, false, "alexa");
+                            await this.setVolume(obj, false, "sayit");
                         }, 1000);
                     };
                 };
@@ -569,9 +577,12 @@ class Template extends utils.Adapter {
                     obj.timeoutMsg = null;
                 };
                 if (!dnd) {
-                    await this.setVolume(obj);
+                    await this.setVolume(obj, true, "alexa");
+                    await this.setVolume(obj, true, "sayit");
                     obj.timeoutMsg = setTimeout(async () => {  //timeout starten
                         this.message(obj, "end");
+                        await this.setVolume(obj, false, "alexa");
+                        await this.setVolume(obj, false, "sayit");
                         this.log.debug(`${obj.endMessageText}`);
                     }, 1000);
                 };
@@ -757,8 +768,6 @@ class Template extends utils.Adapter {
                 timeMin = await this.str2time(sayitInput[obj.sayItID[i]].timeMin);
                 timeMax = await this.str2time(sayitInput[obj.sayItID[i]].timeMax);
                 if (time >= timeMin && time < timeMax) {
-                    // let output = ``;
-                    // output = `${sayitInput[obj.sayItID[i]].volume};${msg}`;
                     await this.setForeignStateAsync(sayitInput[obj.sayItID[i]].path, msg);
                 };
             };
@@ -767,23 +776,54 @@ class Template extends utils.Adapter {
         await this.setStateAsync(obj.messageDP, msg, true);
     };
 
-    async setVolume(obj) {
+    async setVolume(obj, action, type) {
+        switch (type) {
+            case "alexa": {
+                if (obj.alexa) {
+                    for (const i in obj.alexaID) {
+                        const strVol = '.speak-volume';
+                        this.volume(alexaInput[obj.alexaID[i]], action, strVol)
+                    };
+                };
+                break;
+            };
+            case "sayit": {
+                if (obj.sayIt) {
+                    for (const i in obj.sayItID) {
+                        const strVol = '.volume';
+                        this.volume(sayitInput[obj.sayItID[i]], action, strVol)
+                    };
+                };
+                break;
+            };
+            default: {
+                this.log.warn(`Volume could not be set. Input is wrong. Report this to the developer`);
+                break;
+            };
+        };
+    };
+
+    async volume(obj, action, strVol) {
         let pathOld = ``;
         let pathNew = ``;
         let length = 0;
-        for (const i in obj.alexaID) {
-            pathOld = alexaInput[obj.alexaID[i]].path
-            length = pathOld.indexOf('announcement')
-            pathNew = pathOld.slice(0, length);
-            pathNew = String(pathNew) + 'speak-volume';
-            await this.setForeignStateAsync(pathNew, alexaInput[obj.alexaID[i]].volume);
-        };
-        for (const i in obj.sayItID) {
-            pathOld = sayitInput[obj.sayItID[i]].path
-            length = pathOld.indexOf('text')
-            pathNew = pathOld.slice(0, length);
-            pathNew = String(pathNew) + 'volume';
-            await this.setForeignStateAsync(pathNew, sayitInput[obj.sayItID[i]].volume);
+        pathOld = obj.path;
+        length = pathOld.lastIndexOf('.');
+        pathNew = pathOld.slice(0, length);
+        pathNew = String(pathNew) + strVol;
+        if (action) {
+            let val = 0;
+            val = await this.getForeignStateAsync(pathNew);
+            obj.volOld = val.val;
+            await this.setForeignStateAsync(pathNew, obj.volume);
+        } else {
+            if (obj.timeout != null) {
+                clearTimeout(obj.timeout);
+                obj.timeout = null;
+            };
+            obj.timeout = setTimeout(async () => {  //timeout starten
+                await this.setForeignStateAsync(pathNew, obj.volOld);
+            }, 1000);
         };
     };
 
