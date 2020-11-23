@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.5.1",
+        "version": "0.5.2",
         "news": {
+            "0.5.2": {
+                "en": "bugfix: speak-volume Alexa has partially returned \"undefined\"",
+                "de": "Bugfix: Speak-Volume Alexa hat teilweise \"undefined\" zurückgegeben.",
+                "ru": "исправление: Alexa частично вернула \"undefined\"",
+                "pt": "correção de bug: speak-volume Alexa retornou parcialmente \"undefined\"",
+                "nl": "bugfix: speak-volume Alexa heeft gedeeltelijk \"undefined\" teruggegeven",
+                "fr": "bugfix: speak-volume Alexa a partiellement renvoyé \"undefined\"",
+                "it": "bugfix: speak-volume Alexa ha restituito parzialmente \"undefined\"",
+                "es": "corrección de error: el volumen de voz de Alexa ha devuelto parcialmente \"indefinido\"",
+                "pl": "poprawka: głośność mowy Alexa zwróciła częściowo „undefined”",
+                "zh-cn": "错误修正：语音量Alexa已部分返回“未定义”"
+            },
             "0.5.1": {
                 "en": "bugfix: Alexa responds only to announcement",
                 "de": "Bugfix: Alexa reagiert nur auf Ankündigung",
@@ -230,18 +242,6 @@
                 "es": "léame \"sayit\" hinzugefügt",
                 "pl": "readme \"sayit\" hinzugefügt",
                 "zh-cn": "自述文件“ sayit”hinzugefügt"
-            },
-            "0.1.0": {
-                "en": "beta release",
-                "de": "Beta-Version",
-                "ru": "бета-версия",
-                "pt": "lançamento beta",
-                "nl": "bètaversie",
-                "fr": "version bêta",
-                "it": "versione beta",
-                "es": "lanzamiento beta",
-                "pl": "wydanie beta",
-                "zh-cn": "测试版"
             }
         },
         "title": "device-reminder",

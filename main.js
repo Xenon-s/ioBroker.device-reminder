@@ -129,21 +129,28 @@ class Template extends utils.Adapter {
                 const objSwitch = resultSwitch.val;
                 switch (objSwitch) {
                     case true: {
-                        await this.setStateAsync(obj[i].pathStatus, `standby`, true);
+                        let consumpTmp = await this.getForeignStateAsync(obj[i].currentConsumption);
+                        consumpTmp = consumpTmp.val;
+                        if (consumpTmp <= 0.1) {
+                            await this.setStateAsync(obj[i].pathStatus, `switched off`, true);
+                        } else {
+                            await this.setStateAsync(obj[i].pathStatus, `standby`, true);
+                        };
                         break;
                     };
                     case false: {
-                        await this.setStateAsync(obj[i].pathStatus, `ausgeschaltet`, true);
+                        await this.setStateAsync(obj[i].pathStatus, `switched off`, true);
                         break;
                     };
                     default: {
-                        await this.setStateAsync(obj[i].pathStatus, `undefined`, true);
+                        await this.setStateAsync(obj[i].pathStatus, `unknown status`, true);
                         break;
                     };
                 };
             };
             await this.setStateAsync(obj[i].pathLiveConsumption, 0, true);
             await this.setStateAsync(obj[i].timeTotal, `00:00:00`, true);
+            await this.setStateAsync(obj[i].timeTotalMs, 0, true);
             await this.setStateAsync(obj[i].messageDP, ``, true);
             await this.setStateAsync(obj[i].averageConsumption, 0, true);
             await this.setStateAsync(obj[i].doNotDisturb, false, true);
@@ -811,19 +818,27 @@ class Template extends utils.Adapter {
         length = pathOld.lastIndexOf('.');
         pathNew = pathOld.slice(0, length);
         pathNew = String(pathNew) + strVol;
-        if (action) {
-            let val = 0;
-            val = await this.getForeignStateAsync(pathNew);
-            obj.volOld = val.val;
-            await this.setForeignStateAsync(pathNew, obj.volume);
-        } else {
-            if (obj.timeout != null) {
-                clearTimeout(obj.timeout);
-                obj.timeout = null;
+        // check pathNew
+        const checkPath = await this.getForeignObjectAsync(pathNew);
+        if (!checkPath) {
+            this.log.debug(`DP speak-volume was not found at alexa path: ${pathNew}`);
+            pathNew = null;
+        };
+        if (pathNew !== null) {
+            if (action) {
+                let val = 0;
+                val = await this.getForeignStateAsync(pathNew);
+                obj.volOld = val.val;
+                await this.setForeignStateAsync(pathNew, obj.volume);
+            } else {
+                if (obj.timeout != null) {
+                    clearTimeout(obj.timeout);
+                    obj.timeout = null;
+                };
+                obj.timeout = setTimeout(async () => {  //timeout starten
+                    await this.setForeignStateAsync(pathNew, obj.volOld);
+                }, 2000);
             };
-            obj.timeout = setTimeout(async () => {  //timeout starten
-                await this.setForeignStateAsync(pathNew, obj.volOld);
-            }, 1000);
         };
     };
 
@@ -867,41 +882,6 @@ class Template extends utils.Adapter {
             callback();
         };
     };
-
-    // If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
-    // You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
-    /**
-    //  * Is called if a subscribed object changes
-    //  * @param {string} id
-    //  * @param {ioBroker.Object | null | undefined} obj
-    //  */
-    // onObjectChange(id, obj) {
-    //     if (obj) {
-    //         // The object was changed
-    //         this.log.debug(`object ${id} changed: ${JSON.stringify(obj)}`);
-    //     } else {
-    //         // The object was deleted
-    //         this.log.debug(`object ${id} deleted`);
-    //     };
-    // };
-
-    // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
-    // /**
-    //  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-    //  * Using this method requires `common.message` property to be set to true in io-package.json
-    //  * @param {ioBroker.Message} obj
-    //  */
-    // onMessage(obj) {
-    //     if (typeof obj === `object` && obj.message) {
-    //         if (obj.command === `send`) {
-    //             // e.g. send email or pushover or whatever
-    //             this.log.debug(`send command`);
-
-    //             // Send response in callback if required
-    //             if (obj.callback) this.sendTo(obj.from, obj.command, `Message received`, obj.callback);
-    //         };
-    //     };
-    // };
 };
 
 
