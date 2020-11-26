@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.5.2",
+        "version": "0.5.3",
         "news": {
+            "0.5.3": {
+                "en": "bugfix: can't find val of null alexa speak-volume",
+                "de": "Bugfix: Wert von null alexa speak-volume kann nicht gefunden werden",
+                "ru": "исправление: не удается найти значение null alexa speak-volume",
+                "pt": "correção de bug: não é possível encontrar val of null alexa speak-volume",
+                "nl": "bugfix: kan val van null alexa speak-volume niet vinden",
+                "fr": "correction de bogue: impossible de trouver la valeur de null alexa speak-volume",
+                "it": "bugfix: impossibile trovare val di null alexa speak-volume",
+                "es": "corrección de error: no se puede encontrar el valor de volumen de voz nulo de alexa",
+                "pl": "bugfix: nie można znaleźć wartości null alexa speak-volume",
+                "zh-cn": "错误修正：找不到空alexa语音量的val"
+            },
             "0.5.2": {
                 "en": "bugfix: speak-volume Alexa has partially returned \"undefined\"",
                 "de": "Bugfix: Speak-Volume Alexa hat teilweise \"undefined\" zurückgegeben.",
@@ -230,18 +242,6 @@
                 "es": "arreglar package.json",
                 "pl": "fix package.json",
                 "zh-cn": "修复package.json"
-            },
-            "0.1.1-0": {
-                "en": "readme \"sayit\" hinzugefügt",
-                "de": "readme \"sayit\" hinzugefügt",
-                "ru": "readme \"sayit\" hinzugefügt",
-                "pt": "leia-me \"sayit\" hinzugefügt",
-                "nl": "lees mij \"sayit\" hinzugefügt",
-                "fr": "readme \"sayit\" hinzugefügt",
-                "it": "readme \"sayit\" hinzugefügt",
-                "es": "léame \"sayit\" hinzugefügt",
-                "pl": "readme \"sayit\" hinzugefügt",
-                "zh-cn": "自述文件“ sayit”hinzugefügt"
             }
         },
         "title": "device-reminder",

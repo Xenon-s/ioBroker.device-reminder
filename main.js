@@ -26,7 +26,7 @@ let status = -1;
 // Load your modules here, e.g.:
 // const fs = require(`fs`);
 
-class Template extends utils.Adapter {
+class deviceReminder extends utils.Adapter {
 
     /**
      * @param {Partial<utils.AdapterOptions>} [options={}]
@@ -102,6 +102,7 @@ class Template extends utils.Adapter {
                     this.log.error(`${type} "${objTemp[i].name}": Path could not be found! Please check your entry! Device deleted`);
                     delete objTemp[i];
                 };
+                obj[i].timeout = null;
             };
         } else if (type === "devices") {
             for (const i in objTemp) {
@@ -828,16 +829,22 @@ class Template extends utils.Adapter {
             if (action) {
                 let val = 0;
                 val = await this.getForeignStateAsync(pathNew);
-                obj.volOld = val.val;
+                if (val !== null && val !== undefined) {
+                    obj.volOld = val.val;
+                } else {
+                    obj.volOld = null
+                };
                 await this.setForeignStateAsync(pathNew, obj.volume);
             } else {
                 if (obj.timeout != null) {
                     clearTimeout(obj.timeout);
                     obj.timeout = null;
                 };
-                obj.timeout = setTimeout(async () => {  //timeout starten
-                    await this.setForeignStateAsync(pathNew, obj.volOld);
-                }, 2000);
+                if (obj.volOld !== null) {
+                    obj.timeout = setTimeout(async () => {  //timeout starten
+                        await this.setForeignStateAsync(pathNew, obj.volOld);
+                    }, 2000);
+                };
             };
         };
     };
@@ -872,9 +879,13 @@ class Template extends utils.Adapter {
         try {
             // Here you must clear all timeouts or intervals that may still be active
             for (const i in arrObj) {
-                if (arrObj[i].timeout) {
-                    clearTimeout(arrObj[i].timeout);
-                    this.log.debug(`timeout ${arrObj[i].deviceName}: was deleted`);
+                this.delTimeout(arrObj[i].timeout, i);
+                this.delTimeout(arrObj[i].timeoutMsg, i);
+                for (const i in alexaInput) {
+                    this.delTimeout(alexaInput[obj.alexaID[i]].timeout, i);
+                };
+                for (const i in sayitInput) {
+                    this.delTimeout(sayitInput[obj.sayItID[i]].timeout, i);
                 };
             };
             callback();
@@ -882,7 +893,15 @@ class Template extends utils.Adapter {
             callback();
         };
     };
+    async delTimeout(obj, i) {
+        if (obj) {
+            clearTimeout(obj);
+            this.log.debug(`timeout ${JSON.stringify(i)}: was deleted`);
+        };
+    };
 };
+
+
 
 
 // @ts-ignore parent is a valid property on module
@@ -891,8 +910,8 @@ if (module.parent) {
     /**
      * @param {Partial<utils.AdapterOptions>} [options={}]
      */
-    module.exports = (options) => new Template(options);
+    module.exports = (options) => new deviceReminder(options);
 } else {
     // otherwise start the instance directly
-    new Template();
+    new deviceReminder();
 };
