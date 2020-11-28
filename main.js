@@ -132,7 +132,7 @@ class deviceReminder extends utils.Adapter {
                     case true: {
                         let consumpTmp = await this.getForeignStateAsync(obj[i].currentConsumption);
                         consumpTmp = consumpTmp.val;
-                        if (consumpTmp <= 0.1) {
+                        if (consumpTmp <= 0.5) {
                             await this.setStateAsync(obj[i].pathStatus, `switched off`, true);
                         } else {
                             await this.setStateAsync(obj[i].pathStatus, `standby`, true);
@@ -228,6 +228,16 @@ class deviceReminder extends utils.Adapter {
                 this.arrStandby = [];
 
                 // Methoden
+
+                // Abbruchvalue erstellen
+                if (objVal.endCount >= 5 && objVal.endCount < 20) {
+                    this.valCancel = objVal.endCount - 2;
+                } else if (objVal.endCount > 20) {
+                    this.valCancel = 20;
+                } else {
+                    this.valCancel = 5;
+                };
+
                 /*obj Startext erstellen*/
                 this.startMessageText = obj.startText;
 
@@ -442,6 +452,7 @@ class deviceReminder extends utils.Adapter {
         this.log.debug(`RETURN ${JSON.stringify(objTemp)}`);
         this.log.debug(`arrDevices ${JSON.stringify(arrDevices)}`);
         this.log.info(`Device ${JSON.stringify(objTemp.deviceName)} was successfully created`)
+
         return objTemp;
     };
 
@@ -449,32 +460,71 @@ class deviceReminder extends utils.Adapter {
     /**
      * @param {string | number} id
      */
-    onStateChange(id) {
-        this.Evaluation(id);
-    };
-
-    /**
-     * @param {string | number} id
-     */
-    async Evaluation(id) {
+    async onStateChange(id) {
 
         const obj = arrObj[id];
         const result = await this.getForeignStateAsync(obj.currentConsumption);
         obj.verbrauch = result.val;
+
+        if (result.ack) {
+            await this.evaluatingInputValue(obj);
+            await this.evaluateStatus(obj);
+        };
+
+    };
+
+
+    async evaluatingInputValue(obj) {
+
+        this.log.debug(`Berechnung gestartet: ${obj.deviceName}`);
+
+        switch (obj.started) {
+            case true: {
+                // standby Berechnung starten
+                await this.calcStart(obj, "standby");  // standby Berechnung
+                // endwert Berechnung durchfuehren
+                await this.calcStart(obj, "end"); // Endwert Berechnung
+                obj.arrStart = [];
+                this.log.debug(`arrStart gelöscht`);
+                break;
+            };
+            case false: {
+                if (obj.verbrauch < obj.startValue) {
+                    // Startabbruch -> array leeren
+                    obj.arrStart = [];
+                    this.log.debug(`arrStart gelöscht`);
+                    // standby Berechnung durchfuehren
+                    await this.calcStart(obj, "standby");  // Startwert Berechnung
+                } else {
+                    // Startphase -> Startwertberechnung
+                    await this.calcStart(obj, "start");  // Startwert Berechnung
+                    // standby Berechnung löschen
+                    obj.arrStandby = [];
+                    this.log.debug(`arrStandby gelöscht`);
+                };
+                break;
+            };
+            default:
+                break;
+        };
+        this.log.debug(`Berechnung beendet: ${obj.deviceName}`);
+    };
+
+
+    async evaluateStatus(obj) {
+        this.log.debug(`Auswertung gestartet: ${obj.deviceName}`);
 
         // confirm data point
         let dnd = await this.getStateAsync(obj.doNotDisturb);
         dnd = dnd.val;
         await this.setStateAsync(obj.doNotDisturb, dnd, true); // Status in DP schreiben;
 
-        // device nicht gestartet, Zustand ermitteln wenn autoOff == false
-        if (obj.verbrauch <= 0.1) {
-            this.log.debug(`length standby: ${obj.arrStandby.length}`);
-            const val = 20;
-            this.log.debug(`Verbrauch unter 0,2W`);
-            await this.calcStart(obj, "standby", val);
-            if (obj.resultStandby <= 0.1 && obj.arrStandby.length >= val && obj.started) { // verbrauch kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet und war in Betrieb
-                await this.setStatus(obj, status = 0);
+        const val = 0.2;
+
+        if (obj.started) {
+            if (obj.resultStandby < val && obj.arrStandby.length >= obj.valCancel) { // verbrauch kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet und war in Betrieb
+                await this.setStatus(obj, 0);
+                await this.setStateAsync(obj.averageConsumption, obj.resultStandby, true);
                 if (obj.endMessage && !obj.endMessageSent && obj.startMessageSent) {  // Ende Benachrichtigung aktiv?
                     if (obj.timeoutMsg != null) {
                         clearTimeout(obj.timeoutMsg);
@@ -498,66 +548,56 @@ class deviceReminder extends utils.Adapter {
                 obj.started = false;
                 obj.endMessageSent = false;
                 obj.startMessageSent = false;
+
                 // clear all arrays
                 obj.arrStart = [];
                 obj.arrEnd = [];
-            } else if (obj.resultStandby <= 0.1 && obj.arrStandby.length >= val && !obj.started) {
-                await this.setStatus(obj, status = 0);
+                obj.arrStandby = [];
             };
-        } else if (obj.verbrauch > 0.5 && !obj.started) {
-            this.log.debug(`standby Berechnung abgebrochen`)
-            obj.arrStandby = [];
-            if (obj.verbrauch < obj.startValue) {
-                await this.setStatus(obj, status = 2);
-            } else {
-                await this.setStatus(obj, status = 4);
+        } else {
+            if (obj.arrStandby.length >= obj.valCancel) {
+                if (obj.resultStandby < (2 * val)) {
+                    await this.setStatus(obj, 0);
+                } else {
+                    await this.setStatus(obj, 2);
+                };
             };
         };
 
-        // device wurde gestartet
-        this.log.debug(` WERTE für START${obj.verbrauch}; ${obj.startValue}; ${obj.started}`)
-        if (obj.verbrauch > obj.startValue && obj.started == false) {
-            obj.startZeit = Date.now(); // Startzeit loggen
-            this.log.debug(`STARTWERBERECHNUNG`);
-            this.calcStart(obj, "start", null); //Startwert berechnen und ueberpruefen
-            if (obj.resultStart > obj.startValue && obj.resultStart != null && obj.arrStart.length >= obj.startCount && obj.started == false) {
-                obj.started = true; // Vorgang started
-                this.log.debug(`Gerät gestartet, device läuft`);
-                // await this.setStateAsync(obj.pathStatus, `started`, true); // Status in DP schreiben
-                this.log.debug(`startMessage: ${obj.startMessage} startMessageSent ${obj.startMessageSent}`);
-                if (obj.startMessage && !obj.startMessageSent) { // Start Benachrichtigung aktiv?
-                    if (obj.timeoutMsg != null) {
-                        clearTimeout(obj.timeoutMsg);
-                        obj.timeoutMsg = null;
-                    };
 
-                    if (!dnd) {
-                        await this.setVolume(obj, true, "alexa");
-                        await this.setVolume(obj, true, "sayit");
-                        obj.timeoutMsg = setTimeout(async () => {  //timeout starten
-                            this.message(obj, "start");
-                            await this.setVolume(obj, false, "alexa");
-                            await this.setVolume(obj, false, "sayit");
-                        }, 1000);
-                    };
+        // device wurde gestartet
+        this.log.debug(` WERTE für START${obj.verbrauch}; ${obj.startValue}; ${obj.started}`);
+        if (obj.resultStart > obj.startValue && obj.resultStart != null && obj.arrStart.length >= obj.startCount && obj.started == false) {
+            obj.started = true; // Vorgang started
+            obj.startZeit = Date.now(); // Startzeit loggen
+            await this.setStatus(obj, 1);
+            this.log.debug(`Gerät gestartet, device läuft`);
+
+            if (obj.startMessage && !obj.startMessageSent) { // Start Benachrichtigung aktiv?
+                if (obj.timeoutMsg != null) {
+                    clearTimeout(obj.timeoutMsg);
+                    obj.timeoutMsg = null;
                 };
 
-                obj.startMessageSent = true; // startMessage wurde versendet
-                obj.endMessageSent = false; // Ende Benachrichtigung freigeben
-            } else if (obj.resultStart < obj.startValue && obj.resultStart != null && obj.arrStart.length >= obj.startCount && obj.started == false) {
-                obj.started = false; // Vorgang started
-                await this.setStatus(obj, status = 2);
+                if (!dnd) {
+                    await this.setVolume(obj, true, "alexa");
+                    await this.setVolume(obj, true, "sayit");
+                    obj.timeoutMsg = setTimeout(async () => {  //timeout starten
+                        this.message(obj, "start");
+                        await this.setVolume(obj, false, "alexa");
+                        await this.setVolume(obj, false, "sayit");
+                    }, 1000);
+                };
             };
-        } else if (obj.verbrauch < (obj.startCount / 2) && obj.arrStart.length != 0 && obj.started == false) { // Wert mind > obj.startCount/2 & arrStart nicht leer und nicht started, sonst `Abbruch`
-            obj.arrStart = []; // array wieder leeren
-            this.log.debug(`Startphase abgebrochen, array Start wieder geloescht`);
-            // await this.setStatus(obj, status = 2);
+
+            obj.startMessageSent = true; // startMessage wurde versendet
+            obj.endMessageSent = false; // Ende Benachrichtigung freigeben
+
         };
 
         // device läuft, Live Verbrauch berechnen
         if (obj.started) { // wurde geraet started?
             this.log.debug(`ENDWERTBERECHNUNG`);
-            await this.calcStart(obj, "end", null); // endeberechnung durchfuehren
         };
         this.log.debug(`in Betrieb? Name: ${JSON.stringify(obj.deviceName)} Ergebnis ENDE: ${JSON.stringify(obj.resultEnd)} Wert ENDE: ${JSON.stringify(obj.endValue)} started: ${JSON.stringify(obj.started)} Arraylength: ${JSON.stringify(obj.arrEnd.length)} Zaehler Arr Ende: ${JSON.stringify(obj.endCount)} `);
         if (obj.resultEnd > obj.endValue && obj.resultEnd != null && obj.started) { // Wert > endValue und Verbrauch lag 1x ueber startValue
@@ -566,15 +606,15 @@ class deviceReminder extends utils.Adapter {
                 obj.timeout = null;
                 this.log.debug(`timeout autoOff gelöscht`);
             };
-            await this.setStatus(obj, status = 1);
+            await this.setStatus(obj, 1);
             await this.time(obj);
-        } else if (obj.resultEnd < obj.endValue && obj.resultEnd != null && obj.started && obj.arrEnd.length >= (obj.endCount / 2)) { // geraet muss mind. 1x ueber startValue gewesen sein, arrEnd muss voll sein und ergebis aus arrEnd unter endValue
+        } else if (obj.resultEnd < obj.endValue && obj.resultEnd != null && obj.started && obj.arrEnd.length >= (obj.endCount * (2/3))) { // geraet muss mind. 1x ueber startValue gewesen sein, arrEnd muss voll sein und ergebis aus arrEnd unter endValue
             obj.started = false; // vorgang beendet
             this.log.debug("Vorgang beendet, Gerät fertig");
-            this.log.debug(`${obj.autoOff},${obj.timeoutInMS},${obj.timer} `);
-            await this.setStatus(obj, status = 2);
 
+            await this.setStatus(obj, 2);
             await this.autoOff(obj);
+
             obj.endZeit = Date.now(); // ende Zeit loggen
             obj.arrStart = []; // array wieder leeren
             obj.arrEnd = []; // array wieder leeren
@@ -599,16 +639,18 @@ class deviceReminder extends utils.Adapter {
             obj.endMessageSent = true;
             obj.startMessageSent = false;
         };
+
         await this.setStateAsync(obj.pathLiveConsumption, `${obj.verbrauch}`, true);
+
+        this.log.debug(`Auswertung beendet: ${obj.deviceName}`);
     };
 
     async autoOff(obj) {
         /* auto off*/
         if (obj.autoOff) { // auto Off aktiv, timeout aktiv 
-            this.log.debug(`autoOff == true, timeout > 0ms (${obj.timeoutInMS}), timer == true, timeout startet`);
             if (obj.timeout == null) {  // timeout <> null?
                 obj.timeout = setTimeout(async () => {  //timeout starten
-                    await this.setStatus(obj, status = 3);
+                    await this.setStatus(obj, 3);
                     if (obj.timeout != null) {
                         clearTimeout(obj.timeout);
                         obj.timeout = null;
@@ -617,7 +659,7 @@ class deviceReminder extends utils.Adapter {
                 }, obj.timeoutInMS);
             };
         } else {
-            await this.setStatus(obj, status = 2); // kein auto Off aktiv
+            await this.setStatus(obj, 2); // kein auto Off aktiv
         };
     };
 
@@ -644,7 +686,7 @@ class deviceReminder extends utils.Adapter {
                         await this.setForeignStateAsync(obj.switchPower, false); // Geraet ausschalten, falls angewaehlt
                     };
                 };
-                await this.setStatus(obj, status = 0);
+                await this.setStatus(obj, 0);
                 break;
             };
             case 4: {
@@ -658,20 +700,22 @@ class deviceReminder extends utils.Adapter {
         };
     };
 
-    async calcStart(obj, type, valCount) {
-        this.log.debug(`berechnung "${type}" wird fuer ${JSON.stringify(obj.deviceName)} ausgefuehrt`);
+    async calcStart(obj, type) {
+        this.log.debug(`berechnung "${type}" wird fuer ${obj.deviceName} ausgefuehrt`);
         switch (type) {
             case "start": {
                 obj.arrStart.push(obj.verbrauch);
                 obj.resultStart = await this.calculation(obj.resultStart, obj.arrStart);
-                this.log.debug(`ergebnisTemp start: ${obj.resultStart}`);
+                this.log.debug(`resultTemp start: ${obj.resultStart}`);
+                this.log.debug(`Länge array start: ${obj.arrStart.length}, Inhalt: [${obj.arrStart}]`);
                 await this.setStateAsync(obj.averageConsumption, obj.resultStart, true);
                 break;
             };
             case "end": {
                 obj.arrEnd.push(obj.verbrauch);
                 obj.resultEnd = await this.calculation(obj.resultEnd, obj.arrEnd);
-                this.log.debug(`ergebnisTemp end: ${obj.resultEnd}`);
+                this.log.debug(`Länge array ende: ${obj.arrEnd.length}, Inhalt: [${obj.arrEnd}]`);
+                this.log.debug(`resultTemp end: ${obj.resultEnd}`);
                 if (obj.arrEnd.length > obj.endCount) {
                     obj.arrEnd.shift();
                 };
@@ -681,8 +725,9 @@ class deviceReminder extends utils.Adapter {
             case "standby": {
                 obj.arrStandby.push(obj.verbrauch);
                 obj.resultStandby = await this.calculation(obj.resultStandby, obj.arrStandby);
-                this.log.debug(`ergebnisTemp standby: ${obj.resultStandby}`);
-                if (obj.arrStandby.length > valCount) {
+                this.log.debug(`Länge array standby: ${obj.arrStandby.length}, Inhalt: [${obj.arrStandby}]`);
+                this.log.debug(`resultTemp standby: ${obj.resultStandby}`);
+                if (obj.arrStandby.length > obj.valCancel) {
                     obj.arrStandby.shift();
                 };
                 await this.setStateAsync(obj.averageConsumption, obj.resultStandby, true);
@@ -696,13 +741,16 @@ class deviceReminder extends utils.Adapter {
     };
 
     async calculation(obj, arr) {
-        let zahl = 0;
-        let ergebnisTemp = 0;
+        let numb = 0;
+        let resultTemp = 0;
         for (const counter in arr) {
-            zahl = parseFloat(arr[counter]);
-            ergebnisTemp = ergebnisTemp + zahl;
+            numb = parseFloat(arr[counter]);
+            resultTemp = resultTemp + numb;
         };
-        obj = Math.round((ergebnisTemp / parseFloat(arr.length) * 10) / 10);
+
+        obj = ((resultTemp / arr.length) * 100);
+        obj = Math.round(obj) / 100;
+
         return obj;
     };
 
@@ -822,7 +870,7 @@ class deviceReminder extends utils.Adapter {
         // check pathNew
         const checkPath = await this.getForeignObjectAsync(pathNew);
         if (!checkPath) {
-            this.log.debug(`DP speak-volume was not found at alexa path: ${pathNew}`);
+            this.log.debug(`DP was not found: ${pathNew}`);
             pathNew = null;
         };
         if (pathNew !== null) {

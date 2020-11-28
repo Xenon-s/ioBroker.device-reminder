@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.5.3",
+        "version": "0.5.4",
         "news": {
+            "0.5.4": {
+                "en": "calculation optimised, custom / default values may have to be adjusted if they have been changed by the user",
+                "de": "Berechnungsoptimiert müssen benutzerdefinierte / Standardwerte möglicherweise angepasst werden, wenn sie vom Benutzer geändert wurden",
+                "ru": "расчет оптимизирован, пользовательские значения / значения по умолчанию, возможно, придется скорректировать, если они были изменены пользователем",
+                "pt": "cálculo otimizado, valores personalizados / padrão podem ter que ser ajustados se tiverem sido alterados pelo usuário",
+                "nl": "berekening geoptimaliseerd, aangepaste / standaardwaarden moeten mogelijk worden aangepast als ze door de gebruiker zijn gewijzigd",
+                "fr": "calcul optimisé, les valeurs personnalisées / par défaut peuvent devoir être ajustées si elles ont été modifiées par l'utilisateur",
+                "it": "ottimizzato per il calcolo, i valori personalizzati / predefiniti potrebbero dover essere modificati se sono stati modificati dall'utente",
+                "es": "cálculo optimizado, los valores personalizados / predeterminados pueden tener que ajustarse si el usuario los ha cambiado",
+                "pl": "zoptymalizowane obliczenia, wartości niestandardowe / domyślne mogą wymagać dostosowania, jeśli zostały zmienione przez użytkownika",
+                "zh-cn": "计算已优化，如果用户更改了自定义/默认值，则可能必须对其进行调整"
+            },
             "0.5.3": {
                 "en": "bugfix: can't find val of null alexa speak-volume",
                 "de": "Bugfix: Wert von null alexa speak-volume kann nicht gefunden werden",
@@ -230,18 +242,6 @@
                 "es": "corregir error en index_m.html: Usuario werden nicht immer richtig angezeigt",
                 "pl": "napraw błąd w index_m.html: User werden nicht immer richtig angezeigt",
                 "zh-cn": "修复index_m.html中的错误：用户werden nicht immer richtig angezeigt"
-            },
-            "0.1.1-beta.0": {
-                "en": "fix package.json",
-                "de": "fix package.json",
-                "ru": "исправить package.json",
-                "pt": "corrigir package.json",
-                "nl": "fix package.json",
-                "fr": "réparer package.json",
-                "it": "correggere package.json",
-                "es": "arreglar package.json",
-                "pl": "fix package.json",
-                "zh-cn": "修复package.json"
             }
         },
         "title": "device-reminder",

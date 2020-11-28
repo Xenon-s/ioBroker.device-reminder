@@ -181,6 +181,9 @@ To find out more about the function, simply read about it here at "**default dev
 	### __WORK IN PROGRESS__
 -->
 
+### 0.5.4 (2020-11-28)
+* (xenon-s) calculation optimised, custom / default values may have to be adjusted if they have been changed by the user
+
 ### 0.5.3 (2020-11-26)
 * (xenon-s) bugfix: can't find val of null alexa speak-volume
 
