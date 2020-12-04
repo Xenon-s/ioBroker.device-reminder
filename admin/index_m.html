@@ -37,6 +37,7 @@
         let arrTelegramUser = [];
         let customTypeID = [];
         let defaultTypeID = [];
+        let valStates = [];
         let alexa = [];
         let sayit = [];
         let devices = [];
@@ -94,14 +95,14 @@
                             $.each(JSON.parse(state.val), (index, element) => {
                                 if (element.firstName !== undefined || element.firstName !== "" || element.firstName !== null) {
                                     firstName.push({ name: element.firstName, id: element.firstName });
-                                } else if (element.userName !== undefined || element.userName !== "" || element.userName !== null) {
-                                    firstName.push({ name: element.userName, id: element.userName });
-                                } else {
-                                    firstName.push(`kein User gefunden`);
                                 };
-                                // console.log(firstName);
+                                if (element.userName !== undefined || element.userName !== "" || element.userName !== null) {
+                                    firstName.push({ name: element.userName, id: element.userName });
+                                };
                             });
-                            // $('#telegramIds').attr("data-options", firstName.join(';'));
+                            if (firstName.length <= 0) {
+                                firstName.push(`kein User gefunden`);
+                            };
                         };
                     };
                 });
@@ -281,6 +282,7 @@
             obj.whatsappID = table2values('whatsappID');
             obj.customTypeID = table2values('customTypeID');
             obj.defaultTypeID = table2values('defaultTypeID');
+            obj.valStates = table2values('valStates');
 
             obj.deviceID = createId(obj.deviceID, device_counter, "device_counter");
             obj.alexaID = createId(obj.alexaID, alexa_counter, "alexa_counter");
@@ -363,12 +365,33 @@
 
             deviceID = settings.deviceID || []; // device ID native anlegen
             device = settings.device || []; // devices native anlegen
+
             alexaID = settings.alexaID || []; // alexaID native anlegen 
+
             sayitID = settings.sayitID || []; // sayit ID native anlegen
             whatsappID = settings.whatsappID || []; // whatsapp ID native anlegen
             customTypeID = settings.customTypeID || [];
             defaultTypeID = settings.defaultTypeID || [];
             device_final = settings.device_final || []; // output -> main.js
+
+            // create own device status
+            if (settings.valStates.length === 0) {
+                valStates = [{ "stateAction": "in action", "stateStandby": "standby", "stateOff": "off" }];
+            } else {
+                let objTemp = {};
+                objTemp = settings.valStates[0];
+                if (objTemp.stateAction === "") {
+                    objTemp.stateAction = "in action";
+                };
+                if (objTemp.stateStandby === "") {
+                    objTemp.stateStandby = "standby";
+                };
+                if (objTemp.stateOff === "") {
+                    objTemp.stateOff = "off";
+                };
+                settings.valStates[0] = objTemp;
+                valStates = settings.valStates;
+            };
 
             // counter ID
             device_counter = settings.device_counter;
@@ -392,6 +415,9 @@
                 values2table('whatsappID', whatsappID, onChange); // whatsapp
                 values2table('customTypeID', customTypeID, onChange); // custom devices
                 values2table('defaultTypeID', defaultTypeID, onChange); // custom devices
+                console.warn(valStates);
+
+                values2table('valStates', valStates, onChange)
 
                 $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true);
 
@@ -407,7 +433,6 @@
                 });
 
                 createDynamicTable(settings, onChange, device); // create dynamic table "device"
-                console.warn(settings);
                 $('#dynamicTableLoading, #dynamicTableLoadingText').css('display', 'none'); // ladekringel
             }, 2000);
 
@@ -461,7 +486,7 @@
                             timeMin = `${timeMinHourTemp}:${timeMinMinTemp}`;
                             timeMax = `${timeMaxHourTemp}:${timeMaxMinTemp}`;
                         };
-                        if (obj[id].volume < 0 || obj[id].volume > 100) {
+                        if (obj[id].volume < 0 || obj[id].volume > 100 || obj[id].volume === undefined || obj[id].volume === '') {
                             obj[id].volume = 50;
                         };
                     };
@@ -595,6 +620,69 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div id="valStates">
+                                <div class="col s6">
+                                    <div class="card">
+                                        <div class="card-panel blue lighten-5">
+                                            <div>
+                                                <h5>Configure your own device status</h5>
+                                            </div>
+                                            <table class="table-values changeOnChangeEvent remove-first-column">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="header translate" style="width: 0px; display: none;">
+                                                        </th>
+                                                        <th class="header translate" data-type="text"
+                                                            data-name="stateAction">status: "in
+                                                            action"</th>
+                                                        <th class="header translate" data-type="text"
+                                                            data-name="stateStandby">status: "in
+                                                            standby"</th>
+                                                        <th class="header translate" data-type="text"
+                                                            data-name="stateOff">
+                                                            status: "device
+                                                            off"</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- <div id="valStates1">
+                                <div class="col s6">
+                                    <div class="card">
+                                        <div class="card-panel blue lighten-5">
+                                            <div>
+                                                <h5>Configure your own device status</h5>
+                                            </div>
+                                            <table class="table-values changeOnChangeEvent remove-first-column">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="header translate" style="width: 0px; display: none;">
+                                                        </th>
+                                                        <th class="header translate" data-type="text"
+                                                            data-name="stateAction">status: "in
+                                                            action"</th>
+                                                        <th class="header translate" data-type="text"
+                                                            data-name="stateStandby">status: "in
+                                                            standby"</th>
+                                                        <th class="header translate" data-type="text"
+                                                            data-name="stateOff">
+                                                            status: "device
+                                                            off"</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+
                         <!-- dynamic table -->
                         <div class="card-panel blue lighten-5">
                             <table id="dynamicTable" class="table-values changeOnChangeEvent remove-last-column">
@@ -680,10 +768,6 @@
                                             style="width: 150px" class="header translate" data-default="no device"
                                             data-options="">
                                             *device type</th>
-                                        <!-- <th id="deviceTypeID" data-name="type" data-type="select" style="width: 150px"
-                                            class="header translate" data-default="no device"
-                                            data-options="Waschmaschine;Trockner;Geschirrspueler;Wasserkocher;Computer;Mikrowelle;Custom1;Custom2;Custom3;Custom4;Custom5">
-                                            *device type</th> -->
                                         <th data-name="consumption" data-type="OID" class="header translate">
                                             *path<br>consumption/energy</th>
                                         <th data-name="switch" data-type="OID" class="header translate">

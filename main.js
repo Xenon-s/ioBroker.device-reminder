@@ -18,6 +18,10 @@ let alexaInput = [];
 let sayitInput = [];
 let whatsappInput = [];
 
+let stateAction = ``;
+let stateStandby = ``;
+let stateOff = ``;
+
 const arrObj = {};
 const arrDevices = [];
 
@@ -49,10 +53,14 @@ class deviceReminder extends utils.Adapter {
     async onReady() {
         // Initialize your adapter here
 
-        objectInput = this.config.devicesFinal; // load objects
-        alexaInput = this.config.alexaFinal;
-        sayitInput = this.config.sayitFinal;
-        whatsappInput = this.config.whatsappFinal;
+        objectInput = await this.config.devicesFinal; // load objects
+        alexaInput = await this.config.alexaFinal;
+        sayitInput = await this.config.sayitFinal;
+        whatsappInput = await this.config.whatsappFinal;
+
+        stateAction = await this.config.valStates[0].stateAction;
+        stateStandby = await this.config.valStates[0].stateStandby;
+        stateOff = await this.config.valStates[0].stateOff;
 
         this.log.debug(`ARR INPUT devices ${JSON.stringify(objectInput)}`);
         this.log.debug(`ARR INPUT alexa ${JSON.stringify(alexaInput)}`);
@@ -102,6 +110,9 @@ class deviceReminder extends utils.Adapter {
                     this.log.error(`${type} "${objTemp[i].name}": Path could not be found! Please check your entry! Device deleted`);
                     delete objTemp[i];
                 };
+                if (obj[i].volume === undefined) {
+                    obj[i].volume = 50;
+                }
                 obj[i].timeout = null;
             };
         } else if (type === "devices") {
@@ -133,14 +144,14 @@ class deviceReminder extends utils.Adapter {
                         let consumpTmp = await this.getForeignStateAsync(obj[i].currentConsumption);
                         consumpTmp = consumpTmp.val;
                         if (consumpTmp <= 0.5) {
-                            await this.setStateAsync(obj[i].pathStatus, `switched off`, true);
+                            await this.setStateAsync(obj[i].pathStatus, stateOff, true);
                         } else {
-                            await this.setStateAsync(obj[i].pathStatus, `standby`, true);
+                            await this.setStateAsync(obj[i].pathStatus, stateStandby, true);
                         };
                         break;
                     };
                     case false: {
-                        await this.setStateAsync(obj[i].pathStatus, `switched off`, true);
+                        await this.setStateAsync(obj[i].pathStatus, stateOff, true);
                         break;
                     };
                     default: {
@@ -519,7 +530,7 @@ class deviceReminder extends utils.Adapter {
         dnd = dnd.val;
         await this.setStateAsync(obj.doNotDisturb, dnd, true); // Status in DP schreiben;
 
-        const val = 0.2;
+        const val = 0.1;
 
         if (obj.started) {
             if (obj.resultStandby < val && obj.arrStandby.length >= obj.valCancel) { // verbrauch kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet und war in Betrieb
@@ -608,7 +619,7 @@ class deviceReminder extends utils.Adapter {
             };
             await this.setStatus(obj, 1);
             await this.time(obj);
-        } else if (obj.resultEnd < obj.endValue && obj.resultEnd != null && obj.started && obj.arrEnd.length >= (obj.endCount * (2/3))) { // geraet muss mind. 1x ueber startValue gewesen sein, arrEnd muss voll sein und ergebis aus arrEnd unter endValue
+        } else if (obj.resultEnd < obj.endValue && obj.resultEnd != null && obj.started && obj.arrEnd.length >= (obj.endCount * (2 / 3))) { // geraet muss mind. 1x ueber startValue gewesen sein, arrEnd muss voll sein und ergebis aus arrEnd unter endValue
             obj.started = false; // vorgang beendet
             this.log.debug("Vorgang beendet, Gerät fertig");
 
@@ -667,15 +678,15 @@ class deviceReminder extends utils.Adapter {
         this.log.debug(`value status: ${status}`);
         switch (status) {
             case 0: {
-                await this.setStateAsync(obj.pathStatus, `switched off`, true); // Status in DP schreiben;
+                await this.setStateAsync(obj.pathStatus, stateOff, true); // Status in DP schreiben;
                 break;
             };
             case 1: {
-                await this.setStateAsync(obj.pathStatus, `in action`, true); // Status in DP schreiben
+                await this.setStateAsync(obj.pathStatus, stateAction, true); // Status in DP schreiben
                 break;
             };
             case 2: {
-                await this.setStateAsync(obj.pathStatus, `standby`, true); // Status in DP schreiben
+                await this.setStateAsync(obj.pathStatus, stateStandby, true); // Status in DP schreiben
                 break;
             };
             case 3: {

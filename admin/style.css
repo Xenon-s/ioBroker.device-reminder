@@ -65,6 +65,10 @@ width: 200px;
 }
 
 
+.remove-first-column td:first-child{
+    display: none;
+}
+
 .remove-last-column td:last-child{
     display: none;
 }

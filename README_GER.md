@@ -1,10 +1,10 @@
 ﻿![Logo](admin/icon.png)
 # ioBroker.device-reminder
 
+![Number of Installations (stable)](http://iobroker.live/badges/device-reminder-stable.svg)
+![Number of Installations (latest)](http://iobroker.live/badges/device-reminder-installed.svg)
 [![NPM version](http://img.shields.io/npm/v/iobroker.device-reminder.svg)](https://www.npmjs.com/package/iobroker.device-reminder)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.device-reminder.svg)](https://www.npmjs.com/package/iobroker.device-reminder)
-![Number of Installations (stable)](http://iobroker.live/badges/device-reminder-installed-stable.svg)
-<!-- ![Number of Installations (latest)](http://iobroker.live/badges/device-reminder-installed.svg) -->
 [![Dependency Status](https://img.shields.io/david/xenon-s/iobroker.device-reminder.svg)](https://david-dm.org/xenon-s/iobroker.device-reminder)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/xenon-s/iobroker.device-reminder/LICENSE)
 ![Test and Release](https://github.com/xenon-s/iobroker.device-reminder/workflows/Test%20and%20Release/badge.svg)
@@ -118,6 +118,15 @@ Der Button wird nur aktiv, wenn neue Geräte eingefügt oder bestehende geänder
 
 # Devices konfigurieren
 ![configureDevices.png](admin/configureDevices.png)
+
+## configure your own device status
+
+- **in action**: Status der angezeigt wird, wenn das Gerät in Betrieb ist.
+- **in standby**: Status der angezeigt wird, wenn sich das Gerät in standby befindet.
+- **device off**: Status der angezeigt wird, wenn das Gerät ausgeschaltet ist.
+
+## device konfigurieren
+
 Hier werden nun, nachdem man auf den Button "**click here to reload**" auf der Config Seite geklickt hatte, alle angelegten devices angezeigt und können weiter konfiguriert werden.
 
 - **active**: Ist standardmäßig aktiviert. Hier kann man ein Device vorrübergehend deaktivieren, so dass es keine Benachrichtigungen mehr sendet
@@ -128,7 +137,7 @@ Hier werden nun, nachdem man auf den Button "**click here to reload**" auf der C
 - **Telegram username**: Hier werden alle verfügbaren Telegram User angezeigt und können per Klick dem Gerät zugeordnet werden. 
 
     **Sollten keine Namen angezeigt werden:**
-    Prüfen, ob der Eintrag unter "telegram.X.communicate.users" (das X steht für die jeweilige Instanz, zb 0) folgende Struktur enthält: "{"ID IN ZAHLEN":{"firstName":"User1"}}", wenn nicht kann diese einfach angepasst werden. Der Adapter sucht sowohl nach **firstName**, als auch nach **userName**.
+    Prüfen, ob der Eintrag unter "telegram.X.communicate.users" (das X steht für die jeweilige Instanz, zb 0) folgende Struktur enthält: "{"ID IN ZAHLEN":{"firstName":"User1"}}", wenn nicht kann diese einfach angepasst werden. Der Adapter sucht sowohl nach **firstName**, als auch nach **userName**. Man kann sich dann entscheiden, an welchen Namen gesendet werden soll. Es kann nur entweder der **firstName** oder der **userName** gewählt werden!
 
 - **auto off**: Wenn angewählt, schaltet sich die Steckdose nach Beendigung des Vorgangs automatisch ab
 - **timer**: Hier kann optional ein timeout in **Minuten** eingegeben werden. Nach Ablauf des timeouts wird die Steckdose, *wenn auto off denn altiviert ist*, abgeschaltet. Die Ende Benachrichtigung des Gerätes bleibt von einem timeout jedoch unberührt!
