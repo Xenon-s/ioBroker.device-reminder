@@ -59,8 +59,17 @@ class deviceReminder extends utils.Adapter {
         whatsappInput = await this.config.whatsappFinal;
 
         stateAction = await this.config.valStates[0].stateAction;
+        if (stateAction === ``) {
+            stateAction = `in action`;
+        };
         stateStandby = await this.config.valStates[0].stateStandby;
+        if (stateStandby === ``) {
+            stateStandby = `standby`;
+        };
         stateOff = await this.config.valStates[0].stateOff;
+        if (stateOff === ``) {
+            stateOff = `switched off`;
+        };
 
         this.log.debug(`ARR INPUT devices ${JSON.stringify(objectInput)}`);
         this.log.debug(`ARR INPUT alexa ${JSON.stringify(alexaInput)}`);

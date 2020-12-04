@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.6.0",
+        "version": "0.6.1",
         "news": {
+            "0.6.1": {
+                "en": "bugfix: wrong status was displayed in the data point",
+                "de": "Bugfix: Im Datenpunkt wurde ein falscher Status angezeigt",
+                "ru": "исправление: в точке данных отображался неправильный статус",
+                "pt": "correção de bug: status incorreto foi exibido no ponto de dados",
+                "nl": "bugfix: verkeerde status werd weergegeven in het datapunt",
+                "fr": "correction de bogue: un état incorrect était affiché dans le point de données",
+                "it": "bugfix: nel punto dati veniva visualizzato uno stato errato",
+                "es": "corrección de errores: se mostraba un estado incorrecto en el punto de datos",
+                "pl": "poprawka: w punkcie danych wyświetlany był zły stan",
+                "zh-cn": "错误修正：错误的状态显示在数据点"
+            },
             "0.6.0": {
                 "en": "bugfix: alexa speak-volume when input is empty\nbugfix: telegram now shows both names, otherwise there were errors in the notifications \nadd: Device status can now be configured yourself",
                 "de": "Bugfix: Alexa Speak-Volume bei leerer Eingabe\nBugfix: Telegramm zeigt jetzt beide Namen, ansonsten gab es Fehler in den Benachrichtigungen\nHinzufügen: Der Gerätestatus kann jetzt selbst konfiguriert werden",
@@ -230,18 +242,6 @@
                 "es": "actualización de auf versión 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
                 "pl": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
                 "zh-cn": "更新auf版本0.2：index_m komplettüberarbeitet和whatsapp提示"
-            },
-            "0.1.2": {
-                "en": "fix bug in index_m.html: User werden nicht immer richtig angezeigt",
-                "de": "Fehler in index_m.html beheben: Benutzer wird nicht immer richtig eingestellt",
-                "ru": "исправить ошибку в index_m.html: Пользователь werden nicht immer richtig angezeigt",
-                "pt": "corrigir bug em index_m.html: Usuário werden nicht immer richtig angezeigt",
-                "nl": "bug in index_m.html repareren: de gebruiker werd niet in de richting van een andere gericht",
-                "fr": "correction d'un bug dans index_m.html: utilisateur werden nicht immer richtig angezeigt",
-                "it": "fix bug in index_m.html: User werden nicht immer richtig angezeigt",
-                "es": "corregir error en index_m.html: Usuario werden nicht immer richtig angezeigt",
-                "pl": "napraw błąd w index_m.html: User werden nicht immer richtig angezeigt",
-                "zh-cn": "修复index_m.html中的错误：用户werden nicht immer richtig angezeigt"
             }
         },
         "title": "device-reminder",

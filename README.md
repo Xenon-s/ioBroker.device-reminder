@@ -190,6 +190,9 @@ To find out more about the function, simply read about it here at "**default dev
 	### __WORK IN PROGRESS__
 -->
 
+### 0.6.1 (2020-12-04)
+* (xenon-s) bugfix: wrong status was displayed in the data point
+
 ### 0.6.0 (2020-12-04)
 * (xenon-s) bugfix: alexa speak-volume when input is empty
 * (xenon-s) bugfix: telegram now shows both names, otherwise there were errors in the notifications 
