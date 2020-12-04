@@ -1,31 +1,19 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.6.1",
+        "version": "0.6.2",
         "news": {
-            "0.6.1": {
-                "en": "bugfix: wrong status was displayed in the data point",
-                "de": "Bugfix: Im Datenpunkt wurde ein falscher Status angezeigt",
-                "ru": "исправление: в точке данных отображался неправильный статус",
-                "pt": "correção de bug: status incorreto foi exibido no ponto de dados",
-                "nl": "bugfix: verkeerde status werd weergegeven in het datapunt",
-                "fr": "correction de bogue: un état incorrect était affiché dans le point de données",
-                "it": "bugfix: nel punto dati veniva visualizzato uno stato errato",
-                "es": "corrección de errores: se mostraba un estado incorrecto en el punto de datos",
-                "pl": "poprawka: w punkcie danych wyświetlany był zły stan",
-                "zh-cn": "错误修正：错误的状态显示在数据点"
-            },
-            "0.6.0": {
-                "en": "bugfix: alexa speak-volume when input is empty\nbugfix: telegram now shows both names, otherwise there were errors in the notifications \nadd: Device status can now be configured yourself",
-                "de": "Bugfix: Alexa Speak-Volume bei leerer Eingabe\nBugfix: Telegramm zeigt jetzt beide Namen, ansonsten gab es Fehler in den Benachrichtigungen\nHinzufügen: Der Gerätestatus kann jetzt selbst konfiguriert werden",
-                "ru": "исправление: алекса говорит громко, когда вход пуст\nисправление: в телеграмме теперь отображаются оба имени, иначе в уведомлениях были ошибки\nдобавлено: статус устройства теперь можно настроить самостоятельно",
-                "pt": "correção de bug: alexa speak-volume quando a entrada está vazia\ncorreção de bug: o telegrama agora mostra os dois nomes, caso contrário, havia erros nas notificações\nadicionar: o status do dispositivo agora pode ser configurado por você mesmo",
-                "nl": "bugfix: alexa spreekvolume wanneer invoer leeg is\nbugfix: telegram toont nu beide namen, anders zaten er fouten in de notificaties\ntoevoegen: de apparaatstatus kan nu zelf worden geconfigureerd",
-                "fr": "correction de bogue: alexa speak-volume lorsque l'entrée est vide\ncorrection de bogue: le télégramme affiche maintenant les deux noms, sinon il y avait des erreurs dans les notifications\nadd: l'état de l'appareil peut maintenant être configuré vous-même",
-                "it": "bugfix: alexa speak-volume quando l'input è vuoto\nbugfix: telegram ora mostra entrambi i nomi, altrimenti c'erano errori nelle notifiche\naggiungi: lo stato del dispositivo ora può essere configurato da solo",
-                "es": "corrección de errores: alexa speak-volume cuando la entrada está vacía\ncorrección de errores: Telegram ahora muestra ambos nombres; de lo contrario, hubo errores en las notificaciones\nagregar: el estado del dispositivo ahora se puede configurar usted mismo",
-                "pl": "poprawka: alexa speak-volume, gdy wejście jest puste\npoprawka: telegram pokazuje teraz obie nazwy, w przeciwnym razie w powiadomieniach były błędy\nadd: stan urządzenia można teraz skonfigurować samodzielnie",
-                "zh-cn": "错误修正：输入为空时，Alexa语音量\n错误修正：电报现在显示两个名称，否则通知中有错误\n添加：现在可以自行配置设备状态"
+            "0.6.2": {
+                "en": "bugfix index_m",
+                "de": "Bugfix index_m",
+                "ru": "исправление ошибки index_m",
+                "pt": "correção de bug index_m",
+                "nl": "bugfix index_m",
+                "fr": "correction de bogue index_m",
+                "it": "bugfix index_m",
+                "es": "corrección de errores index_m",
+                "pl": "bugfix index_m",
+                "zh-cn": "错误修正index_m"
             },
             "0.5.4": {
                 "en": "calculation optimised, custom / default values may have to be adjusted if they have been changed by the user",
@@ -242,6 +230,18 @@
                 "es": "actualización de auf versión 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
                 "pl": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
                 "zh-cn": "更新auf版本0.2：index_m komplettüberarbeitet和whatsapp提示"
+            },
+            "0.1.2": {
+                "en": "fix bug in index_m.html: User werden nicht immer richtig angezeigt",
+                "de": "Fehler in index_m.html beheben: Benutzer wird nicht immer richtig eingestellt",
+                "ru": "исправить ошибку в index_m.html: Пользователь werden nicht immer richtig angezeigt",
+                "pt": "corrigir bug em index_m.html: Usuário werden nicht immer richtig angezeigt",
+                "nl": "bug in index_m.html repareren: de gebruiker werd niet in de richting van een andere gericht",
+                "fr": "correction d'un bug dans index_m.html: utilisateur werden nicht immer richtig angezeigt",
+                "it": "fix bug in index_m.html: User werden nicht immer richtig angezeigt",
+                "es": "corregir error en index_m.html: Usuario werden nicht immer richtig angezeigt",
+                "pl": "napraw błąd w index_m.html: User werden nicht immer richtig angezeigt",
+                "zh-cn": "修复index_m.html中的错误：用户werden nicht immer richtig angezeigt"
             }
         },
         "title": "device-reminder",
@@ -394,6 +394,13 @@
                 "startCount": 5,
                 "endCount": 10,
                 "id": 25
+            }
+        ],
+        "valStates": [
+            {
+                "stateAction": "in action",
+                "stateStandby": "standby",
+                "stateOff": "switched off"
             }
         ]
     },
