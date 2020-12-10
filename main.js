@@ -27,6 +27,9 @@ const arrDevices = [];
 
 let status = -1;
 
+let intervall = null;
+let id = ``;
+
 // Load your modules here, e.g.:
 // const fs = require(`fs`);
 
@@ -41,8 +44,8 @@ class deviceReminder extends utils.Adapter {
             name: `device-reminder`,
         });
         this.on(`ready`, this.onReady.bind(this));
-        this.on(`stateChange`, this.onStateChange.bind(this));
-        //this.on(`objectChange`, this.onObjectChange.bind(this));
+        // this.on(`stateChange`, this.onStateChange.bind(this));
+        // this.on(`objectChange`, this.onObjectChange.bind(this));
         // this.on(`message`, this.onMessage.bind(this));
         this.on(`unload`, this.onUnload.bind(this));
     }
@@ -95,20 +98,31 @@ class deviceReminder extends utils.Adapter {
 
             for (const i in objectInput) {
                 this.log.debug(`element for each ${JSON.stringify(objectInput[i])}`)
-                let id = ``;
                 id = objectInput[i].pathConsumption
                 const obj = objectInput[i];
                 this.log.debug(`obj in constructor "${JSON.stringify(obj)}"`);
                 arrObj[id] = await this.funcCreateObject(obj);
                 await this.stateIni(arrObj);
                 this.log.debug(`objFinal ${JSON.stringify(arrObj)}`);
-                this.subscribeForeignStates(id);
-                this.log.debug(`subscribe ${JSON.stringify(id)}`);
+                // this.subscribeForeignStates(id);
+                // this.log.debug(`subscribe ${JSON.stringify(id)}`);
             };
 
         } else {
             this.log.error(`No devices were created. Please create a device!`);
         };
+
+        // start cyclical status request
+        if (intervall != null) {
+            clearInterval(intervall);
+            intervall = null;
+        };
+        intervall = setInterval(async () => {
+            for (const i in arrObj) {
+                this.log.debug(JSON.stringify(arrObj[i].currentConsumption));
+                this.getValues(arrObj[i].currentConsumption);
+            }
+        }, 10000);
     };
 
     async checkInput(obj, type) {
@@ -408,18 +422,6 @@ class deviceReminder extends utils.Adapter {
             native: {},
         });
 
-        //Adjustable data points
-        // await this.setObjectNotExistsAsync(autoOffDP, {
-        //     type: `state`,
-        //     common: {
-        //         name: `auto Off ${obj.name}`,
-        //         type: `boolean`,
-        //         role: `indicator`,
-        //         read: true,
-        //         write: true,
-        //     },
-        //     native: {},
-        // });
         await this.setObjectNotExistsAsync(doNotDisturb, {
             type: `state`,
             common: {
@@ -477,11 +479,28 @@ class deviceReminder extends utils.Adapter {
     };
 
 
-    /**
-     * @param {string | number} id
-     */
-    async onStateChange(id) {
+    // /**
+    //  * @param {string | number} id
+    //  */
+    // async onStateChange(id) {
 
+    //     const obj = arrObj[id];
+    //     const result = await this.getForeignStateAsync(obj.currentConsumption);
+    //     obj.verbrauch = result.val;
+
+    //     if (result.ack) {
+    //         await this.evaluatingInputValue(obj);
+    //         await this.evaluateStatus(obj);
+    //     };
+
+    // };
+
+
+    /**
+    * @param {string | number} id
+    */
+    async getValues(id) {
+        this.log.debug(JSON.stringify(id));
         const obj = arrObj[id];
         const result = await this.getForeignStateAsync(obj.currentConsumption);
         obj.verbrauch = result.val;
@@ -490,8 +509,7 @@ class deviceReminder extends utils.Adapter {
             await this.evaluatingInputValue(obj);
             await this.evaluateStatus(obj);
         };
-
-    };
+    }
 
 
     async evaluatingInputValue(obj) {
@@ -955,6 +973,10 @@ class deviceReminder extends utils.Adapter {
                 for (const i in sayitInput) {
                     this.delTimeout(sayitInput[obj.sayItID[i]].timeout, i);
                 };
+            };
+            if (intervall != null) {
+                clearInterval(intervall);
+                intervall = null;
             };
             callback();
         } catch (e) {

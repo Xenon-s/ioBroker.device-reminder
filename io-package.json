@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.6.2",
+        "version": "0.7.0",
         "news": {
+            "0.7.0": {
+                "en": "Data is now queried cyclically",
+                "de": "Daten werden jetzt zyklisch abgefragt",
+                "ru": "Данные теперь запрашиваются циклически",
+                "pt": "Os dados agora são consultados ciclicamente",
+                "nl": "De gegevens worden nu cyclisch opgevraagd",
+                "fr": "Les données sont désormais interrogées de manière cyclique",
+                "it": "I dati vengono ora interrogati ciclicamente",
+                "es": "Los datos ahora se consultan cíclicamente",
+                "pl": "Dane są teraz odpytywane cyklicznie",
+                "zh-cn": "现在可以循环查询数据"
+            },
             "0.6.2": {
                 "en": "bugfix index_m",
                 "de": "Bugfix index_m",
@@ -230,44 +242,15 @@
                 "es": "actualización de auf versión 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
                 "pl": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
                 "zh-cn": "更新auf版本0.2：index_m komplettüberarbeitet和whatsapp提示"
-            },
-            "0.1.2": {
-                "en": "fix bug in index_m.html: User werden nicht immer richtig angezeigt",
-                "de": "Fehler in index_m.html beheben: Benutzer wird nicht immer richtig eingestellt",
-                "ru": "исправить ошибку в index_m.html: Пользователь werden nicht immer richtig angezeigt",
-                "pt": "corrigir bug em index_m.html: Usuário werden nicht immer richtig angezeigt",
-                "nl": "bug in index_m.html repareren: de gebruiker werd niet in de richting van een andere gericht",
-                "fr": "correction d'un bug dans index_m.html: utilisateur werden nicht immer richtig angezeigt",
-                "it": "fix bug in index_m.html: User werden nicht immer richtig angezeigt",
-                "es": "corregir error en index_m.html: Usuario werden nicht immer richtig angezeigt",
-                "pl": "napraw błąd w index_m.html: User werden nicht immer richtig angezeigt",
-                "zh-cn": "修复index_m.html中的错误：用户werden nicht immer richtig angezeigt"
             }
         },
         "title": "device-reminder",
         "titleLang": {
-            "en": "device-reminder",
-            "de": "Geräteerinnerung",
-            "ru": "устройство-напоминание",
-            "pt": "dispositivo-lembrete",
-            "nl": "apparaatherinnering",
-            "fr": "rappel d'appareil",
-            "it": "promemoria dispositivo",
-            "es": "recordatorio de dispositivo",
-            "pl": "urządzenie-przypomnienie",
-            "zh-cn": "设备提醒"
+            "en": "device-reminder"
         },
         "desc": {
-            "en": "device-reminder",
-            "de": "Geräteerinnerung",
-            "ru": "устройство-напоминание",
-            "pt": "dispositivo-lembrete",
-            "nl": "apparaatherinnering",
-            "fr": "rappel d'appareil",
-            "it": "promemoria dispositivo",
-            "es": "recordatorio de dispositivo",
-            "pl": "urządzenie-przypomnienie",
-            "zh-cn": "设备提醒"
+            "en": "Adapter für Geräteerinnerung und Benachrichtigung beim Erreichen von verschiedenen Zuständen",
+            "de": "Adapter for device reminder and notification when reaching different states"
         },
         "authors": [
             "xenon-s <ente_s@hotmail.de>"
