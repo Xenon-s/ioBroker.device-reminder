@@ -43,6 +43,7 @@
         let devices = [];
         let whatsapp = [];
         let deviceTypes = [];
+        let telegramUserID = [];
         const firstName = []; // telegram firstname user
 
         let device_counter;
@@ -57,6 +58,7 @@
         let devicesFinal = [];
         let customTypeIDFinal = [];
         let defaultTypeIDFinal = [];
+        let telegramFinal = [];
 
         let curDevice = null
 
@@ -71,13 +73,16 @@
                 }
                 else {
                     let result = [];
+                    let instance = ``;
                     $.each(state.rows, (index, element) => {
                         result.push(element.value);
                     });
                     $.each(result, (index, element) => {
                         for (let i = 0; i < 10; i++) {
                             if (element._id === `system.adapter.telegram.${i}`) {
-                                arrTelegramUser.push(`telegram.${i}.communicate.users`);
+                                instance = `${i}`;
+                                let arr = {name: `telegram.${i}.communicate.users`, instance: instance};
+                                arrTelegramUser.push(arr);
                             };
                         };
                     });
@@ -88,16 +93,23 @@
 
         function readUserTelegram(arrTelegramUser) {
             // telegram auswahl erstellen
-            for (const i in arrTelegramUser) {
-                socket.emit('getState', arrTelegramUser[i], (err, state) => {
+            arrTelegramUser.forEach(i => {
+                console.log(i);
+                socket.emit('getState', i.name, (err, state) => {
                     if (state !== null || state !== undefined) {
                         if (state.val !== ``) {
                             $.each(JSON.parse(state.val), (index, element) => {
+                                let strTemP = ``;
                                 if (element.firstName !== undefined || element.firstName !== "" || element.firstName !== null) {
-                                    firstName.push({ name: element.firstName, id: element.firstName });
+                                    strTemP = `[${i.instance}]${element.firstName}`;
+                                    firstName.push({ name: strTemP, id: element.firstName });
+                                    telegramUserID[element.firstName] = { name: element.firstName, inst: i.instance, type: `first` };
                                 };
                                 if (element.userName !== undefined || element.userName !== "" || element.userName !== null) {
-                                    firstName.push({ name: element.userName, id: element.userName });
+                                    strTemP = `[${i.instance}]${element.userName}`;
+                                    firstName.push({ name: strTemP, id: element.userName });
+                                    telegramUserID[element.userName] = { name: element.userName, inst: i.instance, type: `user` };
+
                                 };
                             });
                             if (firstName.length <= 0) {
@@ -106,7 +118,8 @@
                         };
                     };
                 });
-            };
+            });
+            console.warn(telegramUserID);
         };
 
         function readUser() {
@@ -195,8 +208,9 @@
                     { type: 'label', name: "deviceName", value: curDevice.deviceName },
                     { type: 'multiple', data: alexa, name: "idAlexa", value: curDevice.idAlexa },
                     { type: 'multiple', data: sayit, name: "idsayit", value: curDevice.idsayit },
-                    { type: 'multiple', data: whatsapp, name: "idWhatsapp", value: curDevice.idWhatsapp },
                     { type: 'multiple', data: firstName, name: "idTelegram", value: curDevice.idTelegram },
+                    { type: 'multiple', data: whatsapp, name: "idWhatsapp", value: curDevice.idWhatsapp },
+                    // { type: 'multiple', data: firstName, name: "idTelegram", value: curDevice.idTelegram },
                     { type: 'checkbox', name: "autoOff", value: curDevice.autoOff },
                     { type: 'timer', name: "idTimer", value: parseInt(curDevice.idTimer) },
                     { type: 'id', name: "id", value: parseInt(deviceId) }
@@ -279,6 +293,7 @@
             obj.alexaID = table2values('alexaID');
             obj.sayitID = table2values('sayitID');
             obj.telegramID = table2values('telegramID');
+
             obj.whatsappID = table2values('whatsappID');
             obj.customTypeID = table2values('customTypeID');
             obj.defaultTypeID = table2values('defaultTypeID');
@@ -373,6 +388,8 @@
             customTypeID = settings.customTypeID || [];
             defaultTypeID = settings.defaultTypeID || [];
             device_final = settings.device_final || []; // output -> main.js
+            telegramFinal = settings.telegramFinal || [];
+
 
             // create own device status
             if (settings.valStates.length === 0) {
@@ -457,7 +474,9 @@
             obj.whatsappFinal = createArray(JSON.parse(JSON.stringify(obj.whatsappID)), "whatsapp");
             obj.customTypeIDFinal = createArray(JSON.parse(JSON.stringify(obj.customTypeID)), "typeID");
             obj.defaultTypeIDFinal = createArray(JSON.parse(JSON.stringify(obj.defaultTypeID)), "typeID");
-
+            // console.warn(telegramUserID);
+            // obj.telegramFinal = telegramUserID;
+            // console.warn(obj.telegramFinal);
 
             for (const i in obj.customTypeID) {
                 let bla;
@@ -542,6 +561,12 @@
                     for (const j in arr) {
                         if (obj[i].id == arr[j].id) {
                             if (obj[i].enabled) {
+
+                                let tele = [];
+                                obj[i].idTelegram.forEach(name =>{
+                                    tele.push(telegramUserID[name]);
+                                });
+
                                 objTemp[obj[i].id] = {
                                     name: arr[j].name,
                                     type: arr[j].type,
@@ -552,7 +577,7 @@
                                     alexa: obj[i].idAlexa,
                                     sayit: obj[i].idsayit,
                                     whatsapp: obj[i].idWhatsapp,
-                                    telegram: obj[i].idTelegram,
+                                    telegram: tele,
                                     autoOff: obj[i].autoOff,
                                     timer: obj[i].idTimer,
                                     id: obj[i].id
@@ -693,8 +718,9 @@
                                         <th class="header translate" data-name="deviceName">device name</th>
                                         <th class="header translate" data-name="idAlexa">Device alexa</th>
                                         <th class="header translate" data-name="idsayit">Device SayIt</th>
-                                        <th class="header translate" data-name="idWhatsapp">whatsapp user</th>
                                         <th class="header translate" data-name="idTelegram">telegram user</th>
+                                        <th class="header translate" data-name="idWhatsapp">whatsapp user</th>
+                                        <!-- <th class="header translate" data-name="idTelegram">telegram user</th> -->
                                         <th class="header translate" data-name="autoOff" style="width: 40px">auto
                                             off</th>
                                         <th class="header translate" data-name="idTimer">timeout in min</th>
@@ -805,7 +831,8 @@
                                         </th>
                                         <th data-name="path" data-type="OID" class="header translate">*alexa
                                             path
-                                            <br>"announcement"/"speak"</th>
+                                            <br>"announcement"/"speak"
+                                        </th>
                                         <th data-name="volume" style="width: 80px" data-type="number"
                                             class="header translate" data-default="50">volume <br> 0-100</th>
                                         <th data-name="timeMinHour" style="width: 80px" data-type="select"
@@ -815,7 +842,8 @@
                                         <th data-name="timeMinMin" style="width: 80px" data-type="select"
                                             class="header translate" data-default="00" data-options="00;15;30;45">
                                             time
-                                            <br>active min</th>
+                                            <br>active min
+                                        </th>
                                         <th data-name="timeMaxHour" style="width: 80px" data-type="select"
                                             class="header translate" data-default="23"
                                             data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
@@ -823,7 +851,8 @@
                                         <th data-name="timeMaxMin" style="width: 80px" data-type="select"
                                             class="header translate" data-default="59" data-options="00;15;30;45;59">
                                             time
-                                            <br>inactive min</th>
+                                            <br>inactive min
+                                        </th>
                                         <th data-buttons="delete" style="width: 80px" class="header translate">
                                             delete
                                         </th>
@@ -853,7 +882,8 @@
                                         <th data-name="name" data-type="text" class="header translate">*sayit name
                                         </th>
                                         <th data-name="path" data-type="OID" class="header translate">*sayit path
-                                            <br>"../text"</th>
+                                            <br>"../text"
+                                        </th>
                                         <th data-name="volume" style="width: 80px" data-type="number"
                                             class="header translate" data-default="50">volume <br> 0-100</th>
                                         <th data-name="timeMinHour" style="width: 80px" data-type="select"
@@ -862,7 +892,8 @@
                                             time <br>active hour</th>
                                         <th data-name="timeMinMin" style="width: 80px" data-type="select"
                                             class="header translate" data-default="00" data-options="00;15;30;45">time
-                                            <br>active min</th>
+                                            <br>active min
+                                        </th>
                                         <th data-name="timeMaxHour" style="width: 80px" data-type="select"
                                             class="header translate" data-default="23"
                                             data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
@@ -870,7 +901,8 @@
                                         <th data-name="timeMaxMin" style="width: 80px" data-type="select"
                                             class="header translate" data-default="59" data-options="00;15;30;45;59">
                                             time
-                                            <br>inactive min</th>
+                                            <br>inactive min
+                                        </th>
                                         <th data-buttons="delete" style="width: 80px" class="header translate">delete
                                         </th>
                                         <th data-name="id" style="width: 0px; display: none;" class="header translate">
@@ -901,7 +933,8 @@
                                         </th>
                                         <th data-name="path" data-type="OID" class="header translate">*whatsapp
                                             path
-                                            <br>"sendMessage"</th>
+                                            <br>"sendMessage"
+                                        </th>
                                         <th data-buttons="delete" style="width: 80px" class="header translate">
                                             delete
                                         </th>

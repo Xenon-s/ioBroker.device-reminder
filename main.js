@@ -74,7 +74,7 @@ class deviceReminder extends utils.Adapter {
             stateOff = `switched off`;
         };
 
-        this.log.debug(`ARR INPUT devices ${JSON.stringify(objectInput)}`);
+        this.log.warn(`ARR INPUT devices ${JSON.stringify(objectInput)}`);
         this.log.debug(`ARR INPUT alexa ${JSON.stringify(alexaInput)}`);
         this.log.debug(`ARR INPUT sayit ${JSON.stringify(sayitInput)}`);
         this.log.debug(`ARR INPUT whatsapp ${JSON.stringify(whatsappInput)}`);
@@ -193,21 +193,12 @@ class deviceReminder extends utils.Adapter {
         };
     };
 
-
-
-    /**
-     * @param {{enabled: boolean; deviceIdName: string; deviceType: string; pathConsumption: string; pathSwitch: string; startText: string; endText: string; idTelegram: string; idAlexa: array; idWhatsapp: string; idsayit: array; autoOff: boolean; timer: boolean; idTimer: number}} obj
-     */
     async funcCreateObject(obj) {
         let objTemp = {};
 
-        /**
-         * @param {{enabled: boolean; deviceIdName: string; deviceType: string; pathConsumption: string; pathSwitch: string; startText: string; endText: string; idTelegram: string; idAlexa: array; idWhatsapp: string; idsayit: array; autoOff: boolean; timer: boolean; idTimer: number}} obj
-         */
         //Klasse erstellen
         class Geraet {
             /**
-             * @param {{enabled: boolean; deviceIdName: string; deviceType: string; pathConsumption: string; pathSwitch: string; startText: string; endText: string; idTelegram: string; idAlexa: array; idWhatsapp: string; idsayit: array; autoOff: boolean; timer: boolean; idTimer: number}} obj
              * @param {number} startValue
              * @param {number} endValue
              * @param {number} startCount
@@ -303,7 +294,7 @@ class deviceReminder extends utils.Adapter {
 
                 /*obj telegram erstellen*/
                 if (obj.telegram != `` && obj.telegram != undefined) {
-                    this.telegramUser = obj.telegram.toString();
+                    this.telegramUser = obj.telegram
                     this.telegram = true;
                 } else {
                     this.telegram = false;
@@ -339,9 +330,6 @@ class deviceReminder extends utils.Adapter {
         };
 
         // Objekte erstellen
-        /**
-         * @param {{ deviceName: string; deviceType: string; enabled: boolean; device.deviceIdName: string; pathConsumption: string; pathSwitch: string; startText: string; endText: string; idTelegram: string; idAlexa: string; idWhatsapp: string; idsayit: array; autoOff: boolean; }} obj
-         */
         //DPs erstellen
         const statusDevice = (`${obj.name}.Status`);
         const consumpLive = (`${obj.name}.live consumption`);
@@ -515,6 +503,7 @@ class deviceReminder extends utils.Adapter {
     async evaluatingInputValue(obj) {
 
         this.log.debug(`Berechnung gestartet: ${obj.deviceName}`);
+        this.log.warn(JSON.stringify(obj.telegramUser));
 
         switch (obj.started) {
             case true: {
@@ -827,11 +816,17 @@ class deviceReminder extends utils.Adapter {
         };
 
         if (obj.telegram) { // telegram nachricht versenden
-            this.log.debug(`telegram message wird ausgefuehrt`);
-            this.sendTo(`telegram`, `send`, {
-                text: msg,
-                user: obj.telegramUser
-            });
+            for (const i in obj.telegramUser) {
+                let user = ``;
+                let strTele = ``;
+                user = obj.telegramUser[i].name;
+                strTele = `telegram.${obj.telegramUser[i].inst}`;
+                this.log.debug(`telegram message wird ausgefuehrt`);
+                this.sendTo(strTele, `send`, {
+                    text: msg,
+                    user: user
+                });
+            };
         };
 
         if (obj.whatsapp) { // WhatsApp nachricht versenden

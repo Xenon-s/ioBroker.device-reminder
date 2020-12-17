@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.7.0",
+        "version": "0.7.1",
         "news": {
+            "0.7.1": {
+                "en": "fix telegram bug\nDeleted incorrect version numbers in the io package",
+                "de": "Telegrammfehler beheben\nFalsche Versionsnummern im io-Paket gelöscht",
+                "ru": "исправить ошибку телеграммы\nУдалены неправильные номера версий в пакете io",
+                "pt": "consertar bug de telegrama\nNúmeros de versão incorretos excluídos do pacote io",
+                "nl": "telegram-bug repareren\nOnjuiste versienummers in het io-pakket verwijderd",
+                "fr": "correction d'un bug de télégramme\nSuppression des numéros de version incorrects dans le package io",
+                "it": "correggere il bug del telegramma\nEliminati numeri di versione errati nel pacchetto io",
+                "es": "corregir error de telegrama\nNúmeros de versión incorrectos eliminados en el paquete io",
+                "pl": "napraw błąd telegramu\nUsunięto nieprawidłowe numery wersji w pakiecie io",
+                "zh-cn": "修复电报错误\n删除了io包中的错误版本号"
+            },
             "0.7.0": {
                 "en": "Data is now queried cyclically",
                 "de": "Daten werden jetzt zyklisch abgefragt",
@@ -39,54 +51,6 @@
                 "pl": "zoptymalizowane obliczenia, wartości niestandardowe / domyślne mogą wymagać dostosowania, jeśli zostały zmienione przez użytkownika",
                 "zh-cn": "计算已优化，如果用户更改了自定义/默认值，则可能必须对其进行调整"
             },
-            "0.5.3": {
-                "en": "bugfix: can't find val of null alexa speak-volume",
-                "de": "Bugfix: Wert von null alexa speak-volume kann nicht gefunden werden",
-                "ru": "исправление: не удается найти значение null alexa speak-volume",
-                "pt": "correção de bug: não é possível encontrar val of null alexa speak-volume",
-                "nl": "bugfix: kan val van null alexa speak-volume niet vinden",
-                "fr": "correction de bogue: impossible de trouver la valeur de null alexa speak-volume",
-                "it": "bugfix: impossibile trovare val di null alexa speak-volume",
-                "es": "corrección de error: no se puede encontrar el valor de volumen de voz nulo de alexa",
-                "pl": "bugfix: nie można znaleźć wartości null alexa speak-volume",
-                "zh-cn": "错误修正：找不到空alexa语音量的val"
-            },
-            "0.5.2": {
-                "en": "bugfix: speak-volume Alexa has partially returned \"undefined\"",
-                "de": "Bugfix: Speak-Volume Alexa hat teilweise \"undefined\" zurückgegeben.",
-                "ru": "исправление: Alexa частично вернула \"undefined\"",
-                "pt": "correção de bug: speak-volume Alexa retornou parcialmente \"undefined\"",
-                "nl": "bugfix: speak-volume Alexa heeft gedeeltelijk \"undefined\" teruggegeven",
-                "fr": "bugfix: speak-volume Alexa a partiellement renvoyé \"undefined\"",
-                "it": "bugfix: speak-volume Alexa ha restituito parzialmente \"undefined\"",
-                "es": "corrección de error: el volumen de voz de Alexa ha devuelto parcialmente \"indefinido\"",
-                "pl": "poprawka: głośność mowy Alexa zwróciła częściowo „undefined”",
-                "zh-cn": "错误修正：语音量Alexa已部分返回“未定义”"
-            },
-            "0.5.1": {
-                "en": "bugfix: Alexa responds only to announcement",
-                "de": "Bugfix: Alexa reagiert nur auf Ankündigung",
-                "ru": "исправление: Alexa реагирует только на объявление",
-                "pt": "correção de bug: Alexa responde apenas ao anúncio",
-                "nl": "bugfix: Alexa reageert alleen op aankondiging",
-                "fr": "bugfix: Alexa ne répond qu'à l'annonce",
-                "it": "bugfix: Alexa risponde solo all'annuncio",
-                "es": "corrección de errores: Alexa responde solo al anuncio",
-                "pl": "poprawka: Alexa odpowiada tylko na ogłoszenie",
-                "zh-cn": "错误修正：Alexa只回应公告"
-            },
-            "0.5.0": {
-                "en": "bugfix: volume sayit\nadd: volume alexa\nDP runtime in milliseconds",
-                "de": "Bugfix: Volume Sayit\nhinzufügen: Volumen alexa\nDP-Laufzeit in Millisekunden",
-                "ru": "исправление: громкость сайит\nдобавить: volume alexa\nВремя выполнения DP в миллисекундах",
-                "pt": "bugfix: volume sayit\nadicionar: volume alexa\nTempo de execução DP em milissegundos",
-                "nl": "bugfix: volume sayit\ntoevoegen: volume alexa\nDP-runtime in milliseconden",
-                "fr": "correction de bogue: volume sayit\najouter: volume alexa\nDurée d'exécution DP en millisecondes",
-                "it": "bugfix: volume sayit\naggiungi: volume alexa\nRuntime DP in millisecondi",
-                "es": "corrección de errores: volumen sayit\nañadir: volumen alexa\nTiempo de ejecución de DP en milisegundos",
-                "pl": "poprawka: głośność sayit\ndodaj: objętość alexa\nDP runtime w milisekundach",
-                "zh-cn": "错误修正：音量sayit\n添加：卷Alexa\nDP运行时间（以毫秒为单位）"
-            },
             "0.4.10": {
                 "en": "bugfix main.js",
                 "de": "Bugfix main.js",
@@ -98,126 +62,6 @@
                 "es": "corrección de errores main.js",
                 "pl": "poprawka błędu main.js",
                 "zh-cn": "修正main.js"
-            },
-            "0.4.9": {
-                "en": "Bugfix: switch off detection\nBugfix: index_m memory button was not displayed",
-                "de": "Bugfix: Erkennung ausschalten\nBugfix: Die Schaltfläche index_m memory wurde nicht angezeigt",
-                "ru": "Исправление: отключение обнаружения\nИсправление: кнопка памяти index_m не отображалась",
-                "pt": "Correção: desligue a detecção\nCorreção de bug: o botão de memória index_m não era exibido",
-                "nl": "Bugfix: detectie uitschakelen\nBugfix: index_m geheugenknop werd niet weergegeven",
-                "fr": "Correction de bug: désactiver la détection\nCorrection de bug: le bouton mémoire index_m n'était pas affiché",
-                "it": "Bugfix: disattiva il rilevamento\nBugfix: il pulsante di memoria index_m non veniva visualizzato",
-                "es": "Corrección de error: apagar la detección\nCorrección de error: el botón de memoria index_m no se mostraba",
-                "pl": "Poprawka: wyłącz wykrywanie\nPoprawka: przycisk pamięci index_m nie był wyświetlany",
-                "zh-cn": "错误修正：关闭检测\n错误修正：未显示index_m内存按钮"
-            },
-            "0.4.8": {
-                "en": "bugfix: Device status was partly recognized incorrectly",
-                "de": "Bugfix: Gerätestatus wurde teilweise falsch erkannt",
-                "ru": "исправление: статус устройства частично распознавался неправильно",
-                "pt": "correção de bug: o status do dispositivo foi parcialmente reconhecido incorretamente",
-                "nl": "bugfix: apparaatstatus werd gedeeltelijk onjuist herkend",
-                "fr": "correction de bogue: l'état de l'appareil a été partiellement reconnu incorrectement",
-                "it": "bugfix: lo stato del dispositivo è stato parzialmente riconosciuto in modo errato",
-                "es": "corrección de errores: el estado del dispositivo se reconoció parcialmente incorrectamente",
-                "pl": "poprawka: stan urządzenia został częściowo rozpoznany nieprawidłowo",
-                "zh-cn": "错误修正：设备状态被部分错误地识别"
-            },
-            "0.4.7": {
-                "en": "readme translated into english",
-                "de": "Readme ins Englische übersetzt",
-                "ru": "Readme переведен на английский",
-                "pt": "leia-me traduzido para o inglês",
-                "nl": "readme vertaald in het engels",
-                "fr": "readme traduit en anglais",
-                "it": "readme tradotto in inglese",
-                "es": "Léame traducido al inglés",
-                "pl": "readme przetłumaczone na angielski",
-                "zh-cn": "自述文件翻译成英文"
-            },
-            "0.4.6": {
-                "en": "Bugfix index_m",
-                "de": "Bugfix index_m",
-                "ru": "Исправление ошибки index_m",
-                "pt": "Bugfix index_m",
-                "nl": "Bugfix index_m",
-                "fr": "Correction de bug index_m",
-                "it": "Bugfix index_m",
-                "es": "Corrección de errores index_m",
-                "pl": "Poprawka index_m",
-                "zh-cn": "错误修正index_m"
-            },
-            "0.4.5": {
-                "en": "Fehler Adapterchecker behoben",
-                "de": "Fehler Adapterchecker Einstellungen",
-                "ru": "Fehler Adapterchecker behoben",
-                "pt": "Fehler Adapterchecker behoben",
-                "nl": "Fehler Adapterchecker behoben",
-                "fr": "Fehler Adapterchecker behoben",
-                "it": "Fehler Adapterchecker behoben",
-                "es": "Fehler Adapterchecker behoben",
-                "pl": "Fehler Adapterchecker behoben",
-                "zh-cn": "Fehler Adapterchecker贝宝"
-            },
-            "0.4.4": {
-                "en": "bugfix main.js",
-                "de": "Bugfix main.js",
-                "ru": "исправление ошибок main.js",
-                "pt": "bugfix main.js",
-                "nl": "bugfix main.js",
-                "fr": "correction de bogue main.js",
-                "it": "bugfix main.js",
-                "es": "corrección de errores main.js",
-                "pl": "poprawka błędu main.js",
-                "zh-cn": "修正main.js"
-            },
-            "0.4.3": {
-                "en": "release npm",
-                "de": "Release npm",
-                "ru": "выпустить npm",
-                "pt": "liberar npm",
-                "nl": "laat npm vrij",
-                "fr": "libération npm",
-                "it": "rilascia npm",
-                "es": "liberar npm",
-                "pl": "zwolnij npm",
-                "zh-cn": "发布npm"
-            },
-            "0.4.2": {
-                "en": "readme angepasst \nindex_m gefixt",
-                "de": "readme besteht\nindex_m gefixt",
-                "ru": "readme angepasst\nindex_m gefixt",
-                "pt": "leia-me angepasst\nindex_m gefixt",
-                "nl": "readme angepasst\nindex_m gefixt",
-                "fr": "readme angepasst\nindex_m gefixt",
-                "it": "readme angepasst\nindex_m gefixt",
-                "es": "léame angepasst\nindex_m gefixt",
-                "pl": "readme angepasst\nindex_m gefixt",
-                "zh-cn": "自述\nindex_m gefixt"
-            },
-            "0.4.1": {
-                "en": "bugfix: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
-                "de": "Bugfix: falscher Status wurde festgestellt, wenn Programmabbruch erkannt wurde",
-                "ru": "исправление: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
-                "pt": "correção de bug: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
-                "nl": "bugfix: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
-                "fr": "correction de bogue: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
-                "it": "bugfix: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
-                "es": "corrección de errores: estado de falscher wurde angezeigt, wenn Programmabbruch erkannt wurde",
-                "pl": "poprawka: falscher Status wurde angezeigt, wenn Programmabbruch erkannt wurde",
-                "zh-cn": "错误修正：falscher Status wurde angezeigt，wenn Programmabbruch erkannt wurde"
-            },
-            "0.4.0": {
-                "en": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\nbugfix: telegram User werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
-                "de": "config Seite gehört, damit die von von sichtbaren vereinfacht wird\nein Abbruch eingezogen wird, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter wird\nBugfix: Telegramm Benutzer werden nicht immer richtig erkannt und falsch gesehen\neinstellbare Werte bei \"Type\" eingezogen\nreadme entfernen und entfernen",
-                "ru": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\nисправление: пользователь телеграммы werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
-                "pt": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\nbugfix: telegram User werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nleia-me erweitert und angepasst",
-                "nl": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\nbugfix: telegram De gebruiker kon niet worden bekeken of gewijzigd\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
-                "fr": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\ncorrection de bogue: télégramme utilisateur werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
-                "it": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\nbugfix: telegram User werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
-                "es": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\ncorrección de error: usuario de telegrama werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
-                "pl": "config Seite überarbeitet, damit die Eingabe von Geräten deutlich vereinfacht wird\neinen Abbruch eingefügt, damit erkannt wird, wenn ein Gerät vorzeitig am Geräteschalter ausgeschaltet wird\npoprawka: telegram Użytkownik werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei \"Type\" eingefügt\nreadme erweitert und angepasst",
-                "zh-cn": "设定Seiteüberarbeitet，离开Eingabe vonGerätendeutlich vereinfacht wird\neinen Abbrucheingefügt，damit erkannt wird，wenn einGerätvorzeitig amGeräteschalterausgeschaltet wird\n错误修正：电报用户werden nicht immer richtig erkannt und falsch angezeigt\neinstellbare Werte bei“ Type”eingefügt\n自述文件"
             },
             "0.2.1": {
                 "en": "readme angepasst",
@@ -249,8 +93,8 @@
             "en": "device-reminder"
         },
         "desc": {
-            "en": "Adapter für Geräteerinnerung und Benachrichtigung beim Erreichen von verschiedenen Zuständen",
-            "de": "Adapter for device reminder and notification when reaching different states"
+            "en": "Adapter for device reminder and notification when reaching different states",
+            "de": "Adapter für Geräteerinnerung und Benachrichtigung beim Erreichen von verschiedenen Zuständen"
         },
         "authors": [
             "xenon-s <ente_s@hotmail.de>"

@@ -117,7 +117,7 @@ Der Button wird nur aktiv, wenn neue Geräte eingefügt oder bestehende geänder
 <br>
 
 # Devices konfigurieren
-![configureDevices.png](admin/configureDevices.png)
+![configureDevices.png](admin/configureDevicesGER.png)
 
 ## configure your own device status
 
@@ -134,7 +134,7 @@ Hier werden nun, nachdem man auf den Button "**click here to reload**" auf der C
 - **Alexa devices**: alle zuvor erstellen Alexas werden hier aufgelistet und können per Klick hinzugefügt werden
 - **sayit ID**: alle zuvor erstellen sayit devices werden hier aufgelistet und können per Klick hinzugefügt werden
 - **whatsapp User**: alle zuvor angelegten whatsapp user werden hier aufgelistet und können per Klick hinzugefügt werden
-- **Telegram username**: Hier werden alle verfügbaren Telegram User angezeigt und können per Klick dem Gerät zugeordnet werden. 
+- **Telegram username**: Hier werden alle verfügbaren Telegram User angezeigt und können per Klick dem Gerät zugeordnet werden. In der [eckigen] Klammer wird die jeweilige Instanz angegeben.
 
     **Sollten keine Namen angezeigt werden:**
     Prüfen, ob der Eintrag unter "telegram.X.communicate.users" (das X steht für die jeweilige Instanz, zb 0) folgende Struktur enthält: "{"ID IN ZAHLEN":{"firstName":"User1"}}", wenn nicht kann diese einfach angepasst werden. Der Adapter sucht sowohl nach **firstName**, als auch nach **userName**. Man kann sich dann entscheiden, an welchen Namen gesendet werden soll. Es kann nur entweder der **firstName** oder der **userName** gewählt werden!
