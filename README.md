@@ -190,6 +190,9 @@ To find out more about the function, simply read about it here at "**default dev
 	### __WORK IN PROGRESS__
 -->
 
+### 0.7.2 (2020-12-17)
+* (xenon-s) Removed unnecessary debug message
+
 ### 0.7.1 (2020-12-17)
 * (xenon-s) fix telegram bug
 * (xenon-s) Deleted incorrect version numbers in the io package

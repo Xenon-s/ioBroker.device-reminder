@@ -74,7 +74,7 @@ class deviceReminder extends utils.Adapter {
             stateOff = `switched off`;
         };
 
-        this.log.warn(`ARR INPUT devices ${JSON.stringify(objectInput)}`);
+        this.log.debug(`ARR INPUT devices ${JSON.stringify(objectInput)}`);
         this.log.debug(`ARR INPUT alexa ${JSON.stringify(alexaInput)}`);
         this.log.debug(`ARR INPUT sayit ${JSON.stringify(sayitInput)}`);
         this.log.debug(`ARR INPUT whatsapp ${JSON.stringify(whatsappInput)}`);
@@ -503,7 +503,7 @@ class deviceReminder extends utils.Adapter {
     async evaluatingInputValue(obj) {
 
         this.log.debug(`Berechnung gestartet: ${obj.deviceName}`);
-        this.log.warn(JSON.stringify(obj.telegramUser));
+        this.log.debug(JSON.stringify(obj.telegramUser));
 
         switch (obj.started) {
             case true: {

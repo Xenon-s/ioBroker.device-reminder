@@ -1,31 +1,19 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.7.1",
+        "version": "0.7.2",
         "news": {
-            "0.7.1": {
-                "en": "fix telegram bug\nDeleted incorrect version numbers in the io package",
-                "de": "Telegrammfehler beheben\nFalsche Versionsnummern im io-Paket gelöscht",
-                "ru": "исправить ошибку телеграммы\nУдалены неправильные номера версий в пакете io",
-                "pt": "consertar bug de telegrama\nNúmeros de versão incorretos excluídos do pacote io",
-                "nl": "telegram-bug repareren\nOnjuiste versienummers in het io-pakket verwijderd",
-                "fr": "correction d'un bug de télégramme\nSuppression des numéros de version incorrects dans le package io",
-                "it": "correggere il bug del telegramma\nEliminati numeri di versione errati nel pacchetto io",
-                "es": "corregir error de telegrama\nNúmeros de versión incorrectos eliminados en el paquete io",
-                "pl": "napraw błąd telegramu\nUsunięto nieprawidłowe numery wersji w pakiecie io",
-                "zh-cn": "修复电报错误\n删除了io包中的错误版本号"
-            },
-            "0.7.0": {
-                "en": "Data is now queried cyclically",
-                "de": "Daten werden jetzt zyklisch abgefragt",
-                "ru": "Данные теперь запрашиваются циклически",
-                "pt": "Os dados agora são consultados ciclicamente",
-                "nl": "De gegevens worden nu cyclisch opgevraagd",
-                "fr": "Les données sont désormais interrogées de manière cyclique",
-                "it": "I dati vengono ora interrogati ciclicamente",
-                "es": "Los datos ahora se consultan cíclicamente",
-                "pl": "Dane są teraz odpytywane cyklicznie",
-                "zh-cn": "现在可以循环查询数据"
+            "0.7.2": {
+                "en": "Removed unnecessary debug message",
+                "de": "Unnötige Debug-Meldung entfernt",
+                "ru": "Удалено ненужное сообщение отладки",
+                "pt": "Removida mensagem de depuração desnecessária",
+                "nl": "Onnodig foutopsporingsbericht verwijderd",
+                "fr": "Suppression du message de débogage inutile",
+                "it": "Messaggio di debug non necessario rimosso",
+                "es": "Se eliminó el mensaje de depuración innecesario",
+                "pl": "Usunięto niepotrzebną wiadomość debugowania",
+                "zh-cn": "删除了不必要的调试消息"
             },
             "0.6.2": {
                 "en": "bugfix index_m",
