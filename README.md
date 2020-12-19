@@ -16,14 +16,15 @@
 ## German readme needed? <br> [German readme](https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README_GER.md)
 <br>
 
-**ATTENTION**: It is absolutely necessary to delete all existing instances, if you are using a version < 0.4 !
-
 ## Adapter for monitoring device statuses
 This adapter can detect whether a device has been switched on, in operation or switched off by means of measuring sockets and react to this. Messages can then be output automatically via telegram, whatsapp, alexa and sayit (multiple selection per device possible). It is also possible to switch off the socket automatically after the process is finished (also time-delayed). (previous project from which this adapter was developed: https://github.com/Xenon-s/js.device-reminder)
 
 ## What should be considered?
 The refresh interval from the "live consumption value (means **"_energy "**)" for most devices should not be more than 10 seconds, otherwise there may be very delayed messages.
-<br>command in the Tasmota console : TelePeriod 10 <br>
+<br>command in the Tasmota console : TelePeriod 10
+<br>**Note:**
+- Values below 1 watt are considered 0 watts and automatically indicate "**switched off**".
+- Values above 1 watt indicate the unit as "**standby**".
 
 ## Which devices can be monitored at the moment?
 There are default values for the following devices:
@@ -33,6 +34,7 @@ There are default values for the following devices:
 - electric kettle,
 - computer,
 - microwave
+These values were determined over months and should fit most devices.
 <br>
 In addition 5 custom devices are available. These can be configured by the user if required. The threshold values of all device types can also be adjusted manually.
 <br>
@@ -140,6 +142,7 @@ After clicking on the button "**click here to reload**" on the Config page, all 
 
 - **auto off**: If selected, the power outlet will automatically switch off after the process is finished
 - **timer**: Here you can optionally enter a timeout in **minutes**. After the timeout has expired, the power outlet will be switched off *if auto off is activated*. The end notification of the device is not affected by a timeout!
+- **abort detection**: If activated, the adapter tries to detect whether a device has already been switched off manually before the notification and then no longer reports.
 
 After clicking on "**Save and close**", a folder is now created under *Objects -> device-reminder* for each newly created Device, in which 
 - the current runtime in hh:mm:ss  
@@ -148,7 +151,7 @@ After clicking on "**Save and close**", a folder is now created under *Objects -
 - the current live consumption (fetched from the *path consumption/energy*) and
 - the message to the messengers
 - averageConsumption (Can be used as an aid to determine your own threshold values)
-- do not disturb (if activated, no messages are sent)
+- do not disturb (If activated, no messages are sent via **voice assistant**.)
 is displayed.
 <br>
 <br>
@@ -187,8 +190,12 @@ To find out more about the function, simply read about it here at "**default dev
 ## Changelog
 <!--
 	Placeholder for the next version (at the beginning of the line):
-	### __WORK IN PROGRESS__
+    ### __WORK IN PROGRESS__
 -->
+
+### 0.7.3 (2020-12-19)
+* (xenon-s) bugfix: telegram instance was not recognised correctly
+* (xenon-s) bugfix: abort detection prevented sending of notifications
 
 ### 0.7.2 (2020-12-17)
 * (xenon-s) Removed unnecessary debug message

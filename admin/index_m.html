@@ -25,9 +25,6 @@
 
     <script type="text/javascript">
 
-        let counterTemp = 0;
-
-
         let device = [];
         let selectId;
         let alexaID = [];
@@ -43,13 +40,14 @@
         let devices = [];
         let whatsapp = [];
         let deviceTypes = [];
-        let telegramUserID = [];
+        // let telegramUserID = [];
         const firstName = []; // telegram firstname user
 
         let device_counter;
         let alexa_counter;
         let sayit_counter;
         let whatsapp_counter;
+        let telegram_counter = 0;
         // let custom_device_counter;
 
         let alexaFinal = [];
@@ -81,7 +79,7 @@
                         for (let i = 0; i < 10; i++) {
                             if (element._id === `system.adapter.telegram.${i}`) {
                                 instance = `${i}`;
-                                let arr = {name: `telegram.${i}.communicate.users`, instance: instance};
+                                let arr = { name: `telegram.${i}.communicate.users`, instance: instance };
                                 arrTelegramUser.push(arr);
                             };
                         };
@@ -93,23 +91,22 @@
 
         function readUserTelegram(arrTelegramUser) {
             // telegram auswahl erstellen
-            arrTelegramUser.forEach(i => {
-                console.log(i);
-                socket.emit('getState', i.name, (err, state) => {
+            console.log(arrTelegramUser.length);
+            for (const i in arrTelegramUser) {
+                socket.emit('getState', arrTelegramUser[i].name, (err, state) => {
                     if (state !== null || state !== undefined) {
                         if (state.val !== ``) {
                             $.each(JSON.parse(state.val), (index, element) => {
                                 let strTemP = ``;
                                 if (element.firstName !== undefined || element.firstName !== "" || element.firstName !== null) {
-                                    strTemP = `[${i.instance}]${element.firstName}`;
-                                    firstName.push({ name: strTemP, id: element.firstName });
-                                    telegramUserID[element.firstName] = { name: element.firstName, inst: i.instance, type: `first` };
+                                    strTemP = `[${arrTelegramUser[i].instance}]${element.firstName}`;
+                                    firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.firstName, inst: `.${arrTelegramUser[i].instance}` });
+                                    telegram_counter++;
                                 };
                                 if (element.userName !== undefined || element.userName !== "" || element.userName !== null) {
-                                    strTemP = `[${i.instance}]${element.userName}`;
-                                    firstName.push({ name: strTemP, id: element.userName });
-                                    telegramUserID[element.userName] = { name: element.userName, inst: i.instance, type: `user` };
-
+                                    strTemP = `[${arrTelegramUser[i].instance}]${element.userName}`;
+                                    firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.userName, inst: `.${arrTelegramUser[i].instance}` });
+                                    telegram_counter++;
                                 };
                             });
                             if (firstName.length <= 0) {
@@ -118,8 +115,7 @@
                         };
                     };
                 });
-            });
-            console.warn(telegramUserID);
+            };
         };
 
         function readUser() {
@@ -199,6 +195,7 @@
                         idTelegram: 0,
                         autoOff: false,
                         idTimer: 0,
+                        abort: false,
                         id: -1
                     };
                 };
@@ -210,9 +207,9 @@
                     { type: 'multiple', data: sayit, name: "idsayit", value: curDevice.idsayit },
                     { type: 'multiple', data: firstName, name: "idTelegram", value: curDevice.idTelegram },
                     { type: 'multiple', data: whatsapp, name: "idWhatsapp", value: curDevice.idWhatsapp },
-                    // { type: 'multiple', data: firstName, name: "idTelegram", value: curDevice.idTelegram },
                     { type: 'checkbox', name: "autoOff", value: curDevice.autoOff },
                     { type: 'timer', name: "idTimer", value: parseInt(curDevice.idTimer) },
+                    { type: 'checkbox', name: "abort", value: curDevice.abort},
                     { type: 'id', name: "id", value: parseInt(deviceId) }
                 ];
 
@@ -292,7 +289,7 @@
             obj.deviceID = table2values('deviceID');
             obj.alexaID = table2values('alexaID');
             obj.sayitID = table2values('sayitID');
-            obj.telegramID = table2values('telegramID');
+            obj.telegramID = firstName; // telegram namen sichern
 
             obj.whatsappID = table2values('whatsappID');
             obj.customTypeID = table2values('customTypeID');
@@ -303,6 +300,7 @@
             obj.alexaID = createId(obj.alexaID, alexa_counter, "alexa_counter");
             obj.sayitID = createId(obj.sayitID, sayit_counter, "sayit_counter");
             obj.whatsappID = createId(obj.whatsappID, whatsapp_counter, "whatsapp_counter");
+            // obj.telegramID = createId(obj.whatsappID, telegram_counter, "telegram_counter");
 
             function createId(array, counter, counter_name) {
                 for (const i in array) {
@@ -344,11 +342,9 @@
                     data[$(this).data('name')] = value;
 
                 });
-
                 geraete.push(data);
             });
             obj.device = geraete;
-            console.warn(obj);
             return obj;
         };
 
@@ -388,8 +384,6 @@
             customTypeID = settings.customTypeID || [];
             defaultTypeID = settings.defaultTypeID || [];
             device_final = settings.device_final || []; // output -> main.js
-            telegramFinal = settings.telegramFinal || [];
-
 
             // create own device status
             if (settings.valStates.length === 0) {
@@ -415,9 +409,13 @@
             alexa_counter = settings.alexa_counter;
             sayit_counter = settings.sayit_counter;
             whatsapp_counter = settings.whatsapp_counter;
+            telegram_counter = settings.telegram_counter;
+
             // custom_device_counter = settings.custom_device_counter;
 
-            readUser(); // telegram user
+            // getTelegramUser();
+
+            readUser();
 
             loadUser(settings, onChange);
 
@@ -432,7 +430,6 @@
                 values2table('whatsappID', whatsappID, onChange); // whatsapp
                 values2table('customTypeID', customTypeID, onChange); // custom devices
                 values2table('defaultTypeID', defaultTypeID, onChange); // custom devices
-                console.warn(valStates);
 
                 values2table('valStates', valStates, onChange)
 
@@ -474,14 +471,12 @@
             obj.whatsappFinal = createArray(JSON.parse(JSON.stringify(obj.whatsappID)), "whatsapp");
             obj.customTypeIDFinal = createArray(JSON.parse(JSON.stringify(obj.customTypeID)), "typeID");
             obj.defaultTypeIDFinal = createArray(JSON.parse(JSON.stringify(obj.defaultTypeID)), "typeID");
-            // console.warn(telegramUserID);
-            // obj.telegramFinal = telegramUserID;
-            // console.warn(obj.telegramFinal);
+            obj.telegramFinal = createArray(JSON.parse(JSON.stringify(obj.telegramID)), "telegram");
+            console.warn(obj.telegramFinal);
 
             for (const i in obj.customTypeID) {
                 let bla;
                 bla = obj.customTypeID[i].id;
-                console.warn(bla);
             };
 
             function createArray(obj, type) {
@@ -546,6 +541,14 @@
                                 startCount: obj[id].startCount,
                                 endCount: obj[id].endCount
                             };
+                            break;
+                        };
+                        case "telegram": {
+                            objTemp[obj[id].id] = {
+                                name: obj[id].nameFinal,
+                                inst: obj[id].inst
+                            };
+                            break;
                         };
                     };
                 };
@@ -562,11 +565,6 @@
                         if (obj[i].id == arr[j].id) {
                             if (obj[i].enabled) {
 
-                                let tele = [];
-                                obj[i].idTelegram.forEach(name =>{
-                                    tele.push(telegramUserID[name]);
-                                });
-
                                 objTemp[obj[i].id] = {
                                     name: arr[j].name,
                                     type: arr[j].type,
@@ -577,9 +575,10 @@
                                     alexa: obj[i].idAlexa,
                                     sayit: obj[i].idsayit,
                                     whatsapp: obj[i].idWhatsapp,
-                                    telegram: tele,
+                                    telegram: obj[i].idTelegram,
                                     autoOff: obj[i].autoOff,
                                     timer: obj[i].idTimer,
+                                    abort: obj[i].abort,
                                     id: obj[i].id
                                 };
                             };
@@ -721,11 +720,10 @@
                                         <th class="header translate" data-name="idTelegram">telegram user</th>
                                         <th class="header translate" data-name="idWhatsapp">whatsapp user</th>
                                         <!-- <th class="header translate" data-name="idTelegram">telegram user</th> -->
-                                        <th class="header translate" data-name="autoOff" style="width: 40px">auto
-                                            off</th>
-                                        <th class="header translate" data-name="idTimer">timeout in min</th>
-                                        <th class="header translate" data-name="id" style="width: 0px; display: none;">
-                                            id</th>
+                                        <th class="header translate" data-name="autoOff" style="width: 60px">autooff</th>
+                                        <th class="header translate" data-name="idTimer" style="width: 60px">timeout in min</th>
+                                        <th class="header translate" data-name="abort" style="width: 80px">abort <br>detection</th>
+                                        <th class="header translate" data-name="id" style="width: 0px; display: none;">id</th>
                                     </tr>
                                 </thead>
                                 <tbody id="dynamic-table-body" class="table-values">

@@ -16,14 +16,15 @@
 ## English readme needed? <br>[english readme](https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README.md)
 <br>
 
-**ACHTUNG**: Es ist zwingend erforderlich alle vorhandenen Instanzen zu löschen, sollte man von einer Version kleiner 0.4 kommen !!!
-
 # Adapter zur Überwachung von Gerätezuständen
 Dieser Adapter kann anhand von Messsteckdosen erkennen, ob ein Gerät eingeschaltet, in Betrieb oder ausgeschaltet wurde und darauf reagieren. Es können dann Nachrichten per Telegram, whatsapp, alexa und sayit (Mehrfachauswahl pro Gerät möglich) automatisiert ausgegeben werden. Es ist ebenfalls möglich, die Steckdose nach Beendigung des Vorgangs automatisch abzuschalten (auch Zeitverzögert). (voheriges Projekt, aus dem dieser Adapter entstanden ist: https://github.com/Xenon-s/js.device-reminder)
 
 # Was sollte beachtet werden?
 Der refresh Intervall vom "Live-Verbrauchswert (heißt bei den meisten Geräten **"_energy"**)" sollte nicht mehr als 10 Sekunden betragen, da es sonst zu sehr stark verzögerten Meldungen kommen kann.
-<br>Befehl in der Tasmota Konsole : TelePeriod 10 <br>
+<br>Befehl in der Tasmota Konsole : TelePeriod 10
+<br>**Hinweis:**
+- Werte unter 1 Watt werden als 0 Watt angesehen und geben automatisch "**ausgeschaltet**" an
+- Werte über 1 Watt geben das Gerät als "**Standby**" an
 
 # Welche Geräte können zur Zeit überwacht werden?
 Es gibt default-Werte für folgende Geräte:
@@ -33,6 +34,7 @@ Es gibt default-Werte für folgende Geräte:
 - Wasserkocher,
 - Computer,
 - Mikrowelle
+Diese Werte wurden über Monate hinweg ermittelt und sollten bei den meisten Geräten passen.
 <br>
 Außerdem stehen 5 Custom devices zur Verfügung. Diese können selber konfiguriert werden, falls Bedarf besteht. Auch können die Schwellwerte aller Gerätetypen manuell angepasst werden.
 <br>
@@ -122,7 +124,7 @@ Der Button wird nur aktiv, wenn neue Geräte eingefügt oder bestehende geänder
 ## configure your own device status
 
 - **in action**: Status der angezeigt wird, wenn das Gerät in Betrieb ist.
-- **in standby**: Status der angezeigt wird, wenn sich das Gerät in standby befindet.
+- **in standby**: Status der angezeigt wird, wenn sich das Gerät in standby befindet. 
 - **device off**: Status der angezeigt wird, wenn das Gerät ausgeschaltet ist.
 
 ## device konfigurieren
@@ -141,6 +143,7 @@ Hier werden nun, nachdem man auf den Button "**click here to reload**" auf der C
 
 - **auto off**: Wenn angewählt, schaltet sich die Steckdose nach Beendigung des Vorgangs automatisch ab
 - **timer**: Hier kann optional ein timeout in **Minuten** eingegeben werden. Nach Ablauf des timeouts wird die Steckdose, *wenn auto off denn altiviert ist*, abgeschaltet. Die Ende Benachrichtigung des Gerätes bleibt von einem timeout jedoch unberührt!
+- **abort detection**: Wenn aktiviert, versucht der Adapter zu erkennen, ob ein Gerät bereits vor der Benachrichtigung von Hand abgeschaltet wurde und meldet dann nicht mehr.
 
 Nachdem nun auf "**Speichern und schliessen**" geklickt wurde, wird unter *Objekte -> device-reminder* nun für jedes neu angelegte Device ein Ordner erstellt, in dem 
 - die aktuelle Laufzeit in hh:mm:ss  
@@ -149,7 +152,7 @@ Nachdem nun auf "**Speichern und schliessen**" geklickt wurde, wird unter *Objek
 - der aktuelle Live-Verbrauch (wird aus dem *path consumption/energy* geholt) und
 - die Nachricht an die Messenger
 - averageConsumption (Kann als Hilfe genutzt werden um die eigenen Schwellwerte zu ermitteln)
-- do not disturb (wenn aktiviert, werden keine Nachrichten versendet)
+- do not disturb (wenn aktiviert, werden keine Nachrichten per **Sprachassistent** versendet)
 angezeigt wird.
 <br>
 <br>

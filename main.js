@@ -17,6 +17,7 @@ let objectInput = [];
 let alexaInput = [];
 let sayitInput = [];
 let whatsappInput = [];
+let telegramInput = [];
 
 let stateAction = ``;
 let stateStandby = ``;
@@ -44,7 +45,7 @@ class deviceReminder extends utils.Adapter {
             name: `device-reminder`,
         });
         this.on(`ready`, this.onReady.bind(this));
-        // this.on(`stateChange`, this.onStateChange.bind(this));
+        this.on(`stateChange`, this.onStateChange.bind(this));
         // this.on(`objectChange`, this.onObjectChange.bind(this));
         // this.on(`message`, this.onMessage.bind(this));
         this.on(`unload`, this.onUnload.bind(this));
@@ -60,6 +61,7 @@ class deviceReminder extends utils.Adapter {
         alexaInput = await this.config.alexaFinal;
         sayitInput = await this.config.sayitFinal;
         whatsappInput = await this.config.whatsappFinal;
+        telegramInput = await this.config.telegramFinal;
 
         stateAction = await this.config.valStates[0].stateAction;
         if (stateAction === ``) {
@@ -78,6 +80,7 @@ class deviceReminder extends utils.Adapter {
         this.log.debug(`ARR INPUT alexa ${JSON.stringify(alexaInput)}`);
         this.log.debug(`ARR INPUT sayit ${JSON.stringify(sayitInput)}`);
         this.log.debug(`ARR INPUT whatsapp ${JSON.stringify(whatsappInput)}`);
+        this.log.debug(`ARR INPUT telegram ${JSON.stringify(telegramInput)}`);
 
 
         // Input auf Plausibilität prüfen
@@ -104,7 +107,7 @@ class deviceReminder extends utils.Adapter {
                 arrObj[id] = await this.funcCreateObject(obj);
                 await this.stateIni(arrObj);
                 this.log.debug(`objFinal ${JSON.stringify(arrObj)}`);
-                // this.subscribeForeignStates(id);
+                this.subscribeStates(arrObj[id].doNotDisturb);
                 // this.log.debug(`subscribe ${JSON.stringify(id)}`);
             };
 
@@ -121,7 +124,7 @@ class deviceReminder extends utils.Adapter {
             for (const i in arrObj) {
                 this.log.debug(JSON.stringify(arrObj[i].currentConsumption));
                 this.getValues(arrObj[i].currentConsumption);
-            }
+            };
         }, 10000);
     };
 
@@ -159,36 +162,37 @@ class deviceReminder extends utils.Adapter {
 
     async stateIni(obj) {
         for (const i in obj) {
-            if (obj[i].switchPower !== undefined && obj[i].switchPower !== null && obj[i].switchPower !== ``) {
-                const resultSwitch = await this.getForeignStateAsync(obj[i].switchPower);
-                const objSwitch = resultSwitch.val;
-                switch (objSwitch) {
-                    case true: {
-                        let consumpTmp = await this.getForeignStateAsync(obj[i].currentConsumption);
-                        consumpTmp = consumpTmp.val;
-                        if (consumpTmp <= 0.5) {
-                            await this.setStateAsync(obj[i].pathStatus, stateOff, true);
-                        } else {
-                            await this.setStateAsync(obj[i].pathStatus, stateStandby, true);
-                        };
-                        break;
-                    };
-                    case false: {
-                        await this.setStateAsync(obj[i].pathStatus, stateOff, true);
-                        break;
-                    };
-                    default: {
-                        await this.setStateAsync(obj[i].pathStatus, `unknown status`, true);
-                        break;
-                    };
-                };
-            };
+            // if (obj[i].switchPower !== undefined && obj[i].switchPower !== null && obj[i].switchPower !== ``) {
+            //     const resultSwitch = await this.getForeignStateAsync(obj[i].switchPower);
+            //     const objSwitch = resultSwitch.val;
+            //     switch (objSwitch) {
+            //         case true: {
+            //             let consumpTmp = await this.getForeignStateAsync(obj[i].currentConsumption);
+            //             consumpTmp = consumpTmp.val;
+            //             if (consumpTmp >= 1) {
+            //                 await this.setStateAsync(obj[i].pathStatus, stateStandby, true);
+            //             } else {
+            //                 await this.setStateAsync(obj[i].pathStatus, stateOff, true);
+            //             };
+            //             break;
+            //         };
+            //         case false: {
+            //             await this.setStateAsync(obj[i].pathStatus, stateOff, true);
+            //             break;
+            //         };
+            //         default: {
+            //             await this.setStateAsync(obj[i].pathStatus, `unknown status`, true);
+            //             break;
+            //         };
+            //     };
+            // };
+            await this.setStateAsync(obj[i].pathStatus, `initialize`, true);
             await this.setStateAsync(obj[i].pathLiveConsumption, 0, true);
             await this.setStateAsync(obj[i].timeTotal, `00:00:00`, true);
             await this.setStateAsync(obj[i].timeTotalMs, 0, true);
             await this.setStateAsync(obj[i].messageDP, ``, true);
             await this.setStateAsync(obj[i].averageConsumption, 0, true);
-            await this.setStateAsync(obj[i].doNotDisturb, false, true);
+            await this.setStateAsync(obj[i].doNotDisturb, await this.getStateAsync(obj[i].doNotDisturb));
             await this.setStateAsync(obj[i].autoOffDP, obj[i].autoOff, true);
         };
     };
@@ -225,11 +229,13 @@ class deviceReminder extends utils.Adapter {
                 this.messageDP = messageDP;
                 this.averageConsumption = averageConsumption;
                 this.doNotDisturb = doNotDisturb;
+                this.dnd = false;
                 this.autoOffDP = autoOffDP;
                 // boolean
                 this.startMessageSent = false;
                 this.endMessageSent = false;
                 this.started = false;
+                this.abort = obj.abort;
                 // boolean Benutzervorgaben
                 this.autoOff = obj.autoOff;
                 // number
@@ -255,10 +261,10 @@ class deviceReminder extends utils.Adapter {
                 // Methoden
 
                 // Abbruchvalue erstellen
-                if (objVal.endCount >= 5 && objVal.endCount < 20) {
-                    this.valCancel = objVal.endCount - 2;
-                } else if (objVal.endCount > 20) {
-                    this.valCancel = 20;
+                if (objVal.endCount >= 5 && objVal.endCount <= 10) {
+                    this.valCancel = objVal.endCount - 5;
+                } else if (objVal.endCount > 10) {
+                    this.valCancel = 10;
                 } else {
                     this.valCancel = 5;
                 };
@@ -290,7 +296,6 @@ class deviceReminder extends utils.Adapter {
                     };
                 };
                 this.timeout = null
-
 
                 /*obj telegram erstellen*/
                 if (obj.telegram != `` && obj.telegram != undefined) {
@@ -425,25 +430,28 @@ class deviceReminder extends utils.Adapter {
         // device type ermitteln und Objekt bauen
         let devCusType;
         let devDefType;
-        devCusType = this.config.defaultTypeIDFinal;
-        devDefType = this.config.customTypeIDFinal;
+        devCusType = await this.config.defaultTypeIDFinal;
+        devDefType = await this.config.customTypeIDFinal;
+
         let objVal = {
-            startVal: null,
-            endVal: null,
-            startCount: null,
-            endCount: null
+            used: false,
+            startVal: 0,
+            endVal: 0,
+            startCount: 0,
+            endCount: 0
         };
 
         for (const i in devCusType) {
             if (devCusType[i].name == obj.type) {
-                objVal.startVal = devCusType[i].startVal
-                objVal.endVal = devCusType[i].endVal
-                objVal.startCount = devCusType[i].startCount
-                objVal.endCount = devCusType[i].endCount
+                objVal.used = true;
+                objVal.startVal = devCusType[i].startVal;
+                objVal.endVal = devCusType[i].endVal;
+                objVal.startCount = devCusType[i].startCount;
+                objVal.endCount = devCusType[i].endCount;
             };
         };
 
-        if (objVal.startVal == null) {
+        if (objVal.used == false) {
             for (const i in devDefType) {
                 if (devDefType[i].name == obj.type) {
                     objVal.startVal = devDefType[i].startVal
@@ -466,23 +474,11 @@ class deviceReminder extends utils.Adapter {
         return objTemp;
     };
 
-
-    // /**
-    //  * @param {string | number} id
-    //  */
-    // async onStateChange(id) {
-
-    //     const obj = arrObj[id];
-    //     const result = await this.getForeignStateAsync(obj.currentConsumption);
-    //     obj.verbrauch = result.val;
-
-    //     if (result.ack) {
-    //         await this.evaluatingInputValue(obj);
-    //         await this.evaluateStatus(obj);
-    //     };
-
-    // };
-
+    async onStateChange(id, state) {
+        if ((state.val || !state.val) && !state.ack) {
+            await this.setStateAsync(id, state.val, true); // Status in DP schreiben;
+        };
+    };
 
     /**
     * @param {string | number} id
@@ -521,11 +517,12 @@ class deviceReminder extends utils.Adapter {
                     obj.arrStart = [];
                     this.log.debug(`arrStart gelöscht`);
                     // standby Berechnung durchfuehren
-                    await this.calcStart(obj, "standby");  // Startwert Berechnung
+                    await this.calcStart(obj, "standby");  // standby Berechnung
                 } else {
                     // Startphase -> Startwertberechnung
                     await this.calcStart(obj, "start");  // Startwert Berechnung
                     // standby Berechnung löschen
+                    await this.setStatus(obj, 4);
                     obj.arrStandby = [];
                     this.log.debug(`arrStandby gelöscht`);
                 };
@@ -541,60 +538,61 @@ class deviceReminder extends utils.Adapter {
     async evaluateStatus(obj) {
         this.log.debug(`Auswertung gestartet: ${obj.deviceName}`);
 
-        // confirm data point
-        let dnd = await this.getStateAsync(obj.doNotDisturb);
-        dnd = dnd.val;
-        await this.setStateAsync(obj.doNotDisturb, dnd, true); // Status in DP schreiben;
+        obj.dnd = await this.getStateAsync(obj.doNotDisturb);
+        obj.dnd = await obj.dnd.val;
 
-        const val = 0.1;
+        const val = 0.2;
 
-        if (obj.started) {
-            if (obj.resultStandby < val && obj.arrStandby.length >= obj.valCancel) { // verbrauch kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet und war in Betrieb
-                await this.setStatus(obj, 0);
-                await this.setStateAsync(obj.averageConsumption, obj.resultStandby, true);
-                if (obj.endMessage && !obj.endMessageSent && obj.startMessageSent) {  // Ende Benachrichtigung aktiv?
-                    if (obj.timeoutMsg != null) {
-                        clearTimeout(obj.timeoutMsg);
-                        obj.timeoutMsg = null;
-                    };
-                    if (!dnd) {
-                        await this.setVolume(obj, true, "alexa");
-                        await this.setVolume(obj, true, "sayit");
-                        obj.timeoutMsg = setTimeout(async () => {  //timeout starten
-                            this.message(obj, "end");
-                            await this.setVolume(obj, false, "alexa");
-                            await this.setVolume(obj, false, "sayit");
-                            this.log.debug(`${obj.endMessageText}`);
-                        }, 1000);
-                    };
-                };
-
-                if (obj.autoOff) { // auto Off aktiviert?
-                    await this.autoOff(obj);
-                };
-                obj.started = false;
-                obj.endMessageSent = false;
-                obj.startMessageSent = false;
-
-                // clear all arrays
-                obj.arrStart = [];
-                obj.arrEnd = [];
-                obj.arrStandby = [];
-            };
-        } else {
-            if (obj.arrStandby.length >= obj.valCancel) {
-                if (obj.resultStandby < (2 * val)) {
+        if (obj.abort) {  // Abbrucherkennung aktiviert?
+            if (obj.started) {
+                if (obj.resultStandby <= val && obj.arrStandby.length >= obj.valCancel) { // verbrauch kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet und war in Betrieb
                     await this.setStatus(obj, 0);
-                } else {
-                    await this.setStatus(obj, 2);
+                    await this.setStateAsync(obj.averageConsumption, obj.resultStandby, true);
+                    // if (obj.endMessage && !obj.endMessageSent && obj.startMessageSent) {  // Ende Benachrichtigung aktiv?
+                    //     if (obj.timeoutMsg != null) {
+                    //         clearTimeout(obj.timeoutMsg);
+                    //         obj.timeoutMsg = null;
+                    //     };
+                    //     if (!dnd) {
+                    //         await this.setVolume(obj, true, "alexa");
+                    //         await this.setVolume(obj, true, "sayit");
+                    //         obj.timeoutMsg = setTimeout(async () => {  //timeout starten
+                    //             this.message(obj, "end");
+                    //             await this.setVolume(obj, false, "alexa");
+                    //             await this.setVolume(obj, false, "sayit");
+                    //             this.log.debug(`${obj.endMessageText}`);
+                    //         }, 1000);
+                    //     };
+                    // };
+
+                    if (obj.autoOff) { // auto Off aktiviert?
+                        await this.autoOff(obj);
+                    };
+                    obj.started = false;
+                    obj.endMessageSent = false;
+                    obj.startMessageSent = false;
+
+                    // clear all arrays
+                    obj.arrStart = [];
+                    obj.arrEnd = [];
+                    obj.arrStandby = [];
                 };
+                // } else {
+                //     if (obj.arrStandby.length >= obj.valCancel) {
+                //         if (obj.resultStandby <= val) {
+                //             await this.setStatus(obj, 0);
+                //         } else {
+                //             await this.setStatus(obj, 2);
+                //         };
+                //     };
             };
         };
 
-
-        // device wurde gestartet
+        // device nich in Betrieb
+        // Ermittlung, ob device gestartet wurde
         this.log.debug(` WERTE für START${obj.verbrauch}; ${obj.startValue}; ${obj.started}`);
-        if (obj.resultStart > obj.startValue && obj.resultStart != null && obj.arrStart.length >= obj.startCount && obj.started == false) {
+        if (obj.resultStart > obj.startValue && obj.resultStart != null && obj.arrStart.length >= obj.startCount && !obj.started) {
+            // device wurde gestartet
             obj.started = true; // Vorgang started
             obj.startZeit = Date.now(); // Startzeit loggen
             await this.setStatus(obj, 1);
@@ -605,27 +603,25 @@ class deviceReminder extends utils.Adapter {
                     clearTimeout(obj.timeoutMsg);
                     obj.timeoutMsg = null;
                 };
-
-                if (!dnd) {
+                if (!obj.dnd) {
                     await this.setVolume(obj, true, "alexa");
                     await this.setVolume(obj, true, "sayit");
-                    obj.timeoutMsg = setTimeout(async () => {  //timeout starten
-                        this.message(obj, "start");
+                };
+                obj.timeoutMsg = setTimeout(async () => {  //timeout starten
+                    this.message(obj, "start");
+                    if (!obj.dnd) {
                         await this.setVolume(obj, false, "alexa");
                         await this.setVolume(obj, false, "sayit");
-                    }, 1000);
-                };
+                    };
+                }, 1000);
             };
 
             obj.startMessageSent = true; // startMessage wurde versendet
             obj.endMessageSent = false; // Ende Benachrichtigung freigeben
-
         };
 
-        // device läuft, Live Verbrauch berechnen
-        if (obj.started) { // wurde geraet started?
-            this.log.debug(`ENDWERTBERECHNUNG`);
-        };
+        // device in Betrieb
+        // Ermittlung, ob device nocht laeuft
         this.log.debug(`in Betrieb? Name: ${JSON.stringify(obj.deviceName)} Ergebnis ENDE: ${JSON.stringify(obj.resultEnd)} Wert ENDE: ${JSON.stringify(obj.endValue)} started: ${JSON.stringify(obj.started)} Arraylength: ${JSON.stringify(obj.arrEnd.length)} Zaehler Arr Ende: ${JSON.stringify(obj.endCount)} `);
         if (obj.resultEnd > obj.endValue && obj.resultEnd != null && obj.started) { // Wert > endValue und Verbrauch lag 1x ueber startValue
             if (obj.timeout != null) {
@@ -636,10 +632,18 @@ class deviceReminder extends utils.Adapter {
             await this.setStatus(obj, 1);
             await this.time(obj);
         } else if (obj.resultEnd < obj.endValue && obj.resultEnd != null && obj.started && obj.arrEnd.length >= (obj.endCount * (2 / 3))) { // geraet muss mind. 1x ueber startValue gewesen sein, arrEnd muss voll sein und ergebis aus arrEnd unter endValue
-            obj.started = false; // vorgang beendet
+            // Vorgang vom device beendet
+            obj.started = false; // device started = false ;
             this.log.debug("Vorgang beendet, Gerät fertig");
 
-            await this.setStatus(obj, 2);
+            // standby oder off?
+            if (obj.resultEnd <= 1) {
+                await this.setStatus(obj, 0);
+            } else {
+                await this.setStatus(obj, 2);
+            };
+
+            // autoOff active?
             await this.autoOff(obj);
 
             obj.endZeit = Date.now(); // ende Zeit loggen
@@ -651,20 +655,32 @@ class deviceReminder extends utils.Adapter {
                     clearTimeout(obj.timeoutMsg);
                     obj.timeoutMsg = null;
                 };
-                if (!dnd) {
+                if (!obj.dnd) {
                     await this.setVolume(obj, true, "alexa");
                     await this.setVolume(obj, true, "sayit");
-                    obj.timeoutMsg = setTimeout(async () => {  //timeout starten
-                        this.message(obj, "end");
+                };
+                obj.timeoutMsg = setTimeout(async () => {  //timeout starten
+                    this.message(obj, "end");
+                    if (!obj.dnd) {
                         await this.setVolume(obj, false, "alexa");
                         await this.setVolume(obj, false, "sayit");
-                        this.log.debug(`${obj.endMessageText}`);
-                    }, 1000);
-                };
+                    };
+                    this.log.debug(`${obj.endMessageText}`);
+                }, 1000);
             };
 
             obj.endMessageSent = true;
             obj.startMessageSent = false;
+        };
+
+        // device nicht in Betrieb
+        // device nicht in Startphase
+        if (!obj.started) {
+            if (obj.resultStandby < 1 && obj.arrStandby.length >= obj.valCancel) {
+                await this.setStatus(obj, 0);
+            } else if (obj.resultStandby >= 1 && obj.arrStandby.length >= obj.valCancel) {
+                await this.setStatus(obj, 2);
+            };
         };
 
         await this.setStateAsync(obj.pathLiveConsumption, `${obj.verbrauch}`, true);
@@ -685,8 +701,6 @@ class deviceReminder extends utils.Adapter {
                     };
                 }, obj.timeoutInMS);
             };
-        } else {
-            await this.setStatus(obj, 2); // kein auto Off aktiv
         };
     };
 
@@ -819,8 +833,8 @@ class deviceReminder extends utils.Adapter {
             for (const i in obj.telegramUser) {
                 let user = ``;
                 let strTele = ``;
-                user = obj.telegramUser[i].name;
-                strTele = `telegram.${obj.telegramUser[i].inst}`;
+                user = telegramInput[obj.telegramUser[i]].name;
+                strTele = `telegram${telegramInput[obj.telegramUser[i]].inst}`;
                 this.log.debug(`telegram message wird ausgefuehrt`);
                 this.sendTo(strTele, `send`, {
                     text: msg,
@@ -836,7 +850,7 @@ class deviceReminder extends utils.Adapter {
             };
         };
 
-        if (obj.alexa) {    // alexa quatschen lassen   
+        if (obj.alexa && !obj.dnd) {    // alexa quatschen lassen   
             this.log.debug(`Alexa message wird ausgefuehrt`);
             let timeMin = ``;
             let timeMax = ``;
@@ -849,7 +863,7 @@ class deviceReminder extends utils.Adapter {
             };
         };
 
-        if (obj.sayIt) {  //sayit 
+        if (obj.sayIt && !obj.dnd) {  //sayit 
             this.log.debug(`sayIt message wird ausgefuehrt`);
             let timeMin = ``;
             let timeMax = ``;
@@ -871,7 +885,7 @@ class deviceReminder extends utils.Adapter {
                 if (obj.alexa) {
                     for (const i in obj.alexaID) {
                         const strVol = '.speak-volume';
-                        this.volume(alexaInput[obj.alexaID[i]], action, strVol)
+                        await this.volume(alexaInput[obj.alexaID[i]], action, strVol)
                     };
                 };
                 break;
@@ -880,7 +894,7 @@ class deviceReminder extends utils.Adapter {
                 if (obj.sayIt) {
                     for (const i in obj.sayItID) {
                         const strVol = '.volume';
-                        this.volume(sayitInput[obj.sayItID[i]], action, strVol)
+                        await this.volume(sayitInput[obj.sayItID[i]], action, strVol)
                     };
                 };
                 break;

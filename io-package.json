@@ -1,19 +1,19 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.7.2",
+        "version": "0.7.3",
         "news": {
-            "0.7.2": {
-                "en": "Removed unnecessary debug message",
-                "de": "Unnötige Debug-Meldung entfernt",
-                "ru": "Удалено ненужное сообщение отладки",
-                "pt": "Removida mensagem de depuração desnecessária",
-                "nl": "Onnodig foutopsporingsbericht verwijderd",
-                "fr": "Suppression du message de débogage inutile",
-                "it": "Messaggio di debug non necessario rimosso",
-                "es": "Se eliminó el mensaje de depuración innecesario",
-                "pl": "Usunięto niepotrzebną wiadomość debugowania",
-                "zh-cn": "删除了不必要的调试消息"
+            "0.7.3": {
+                "en": "bugfix: telegram instance was not recognised correctly\nbugfix: abort detection prevented sending of notifications",
+                "de": "Bugfix: Telegramminstanz wurde nicht richtig erkannt\nBugfix: Abbrucherkennung verhindert das Senden von Benachrichtigungen",
+                "ru": "исправление: экземпляр телеграммы не распознавался правильно\nисправление: обнаружение прерывания препятствовало отправке уведомлений",
+                "pt": "bugfix: a instância do telegrama não foi reconhecida corretamente\ncorreção de bug: detecção de aborto impediu o envio de notificações",
+                "nl": "bugfix: telegram-instantie werd niet correct herkend\nbugfix: afbreken detectie verhinderde verzending van notificaties",
+                "fr": "correction de bogue: l'instance de télégramme n'était pas reconnue correctement\ncorrection de bogue: la détection d'abandon empêchait l'envoi de notifications",
+                "it": "bugfix: l'istanza di telegram non è stata riconosciuta correttamente\nbugfix: interruzione del rilevamento impediva l'invio di notifiche",
+                "es": "corrección de error: la instancia de telegrama no se reconoció correctamente\ncorrección de errores: la detección de abortos impidió el envío de notificaciones",
+                "pl": "poprawka: instancja telegramu nie została poprawnie rozpoznana\npoprawka: wykrywanie przerwania uniemożliwiło wysyłanie powiadomień",
+                "zh-cn": "错误修正：电报实例无法正确识别\n错误修正：中止检测阻止发送通知"
             },
             "0.6.2": {
                 "en": "bugfix index_m",
