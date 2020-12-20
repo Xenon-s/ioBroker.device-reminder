@@ -41,13 +41,13 @@
         let whatsapp = [];
         let deviceTypes = [];
         // let telegramUserID = [];
-        const firstName = []; // telegram firstname user
+        let firstName = []; // telegram firstname user
 
         let device_counter;
         let alexa_counter;
         let sayit_counter;
         let whatsapp_counter;
-        let telegram_counter = 0;
+        let telegram_counter;
         // let custom_device_counter;
 
         let alexaFinal = [];
@@ -61,292 +61,6 @@
         let curDevice = null
 
         let varTrue = false;
-
-
-        function getTelegramUser() {
-            /* Telegram Instanzen ermitteln */
-            socket.emit('getObjectView', 'system', 'instance', { startkey: 'system.adapter.', endkey: 'system.adapter.\u9999' }, (err, state) => {
-                if (err) {
-                    console.error(err);
-                }
-                else {
-                    let result = [];
-                    let instance = ``;
-                    $.each(state.rows, (index, element) => {
-                        result.push(element.value);
-                    });
-                    $.each(result, (index, element) => {
-                        for (let i = 0; i < 10; i++) {
-                            if (element._id === `system.adapter.telegram.${i}`) {
-                                instance = `${i}`;
-                                let arr = { name: `telegram.${i}.communicate.users`, instance: instance };
-                                arrTelegramUser.push(arr);
-                            };
-                        };
-                    });
-                    readUserTelegram(arrTelegramUser);
-                };
-            });
-        };
-
-        function readUserTelegram(arrTelegramUser) {
-            // telegram auswahl erstellen
-            console.log(arrTelegramUser.length);
-            for (const i in arrTelegramUser) {
-                socket.emit('getState', arrTelegramUser[i].name, (err, state) => {
-                    if (state !== null || state !== undefined) {
-                        if (state.val !== ``) {
-                            $.each(JSON.parse(state.val), (index, element) => {
-                                let strTemP = ``;
-                                if (element.firstName !== undefined || element.firstName !== "" || element.firstName !== null) {
-                                    strTemP = `[${arrTelegramUser[i].instance}]${element.firstName}`;
-                                    firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.firstName, inst: `.${arrTelegramUser[i].instance}` });
-                                    telegram_counter++;
-                                };
-                                if (element.userName !== undefined || element.userName !== "" || element.userName !== null) {
-                                    strTemP = `[${arrTelegramUser[i].instance}]${element.userName}`;
-                                    firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.userName, inst: `.${arrTelegramUser[i].instance}` });
-                                    telegram_counter++;
-                                };
-                            });
-                            if (firstName.length <= 0) {
-                                firstName.push(`kein User gefunden`);
-                            };
-                        };
-                    };
-                });
-            };
-        };
-
-        function readUser() {
-
-            alexa = [];
-            sayit = [];
-            devices = [];
-            whatsapp = [];
-            deviceTypes = [];
-
-            // alexa auswahl erstellen
-            $.each(alexaID, (index, element) => {
-                if (element.alexaName !== "" && element.name != undefined && element.path !== "" && element.path !== undefined) {
-                    alexa.push({ name: element.name, id: element.id });
-                };
-            });
-            // $('#alexaIds').attr("data-options", alexa.join(';'));
-
-            // sayit auswahl erstellen
-            $.each(sayitID, (index, element) => {
-                if (element.name !== "" && element.name != undefined && element.path !== "" && element.path !== undefined) {
-                    sayit.push({ name: element.name, id: element.id });
-                };
-            });
-            // $('#sayitIds').attr("data-options", sayit.join(';'));
-
-            // whatsapp auswahl erstellen
-            $.each(whatsappID, (index, element) => {
-                if (element.name !== "" && element.name != undefined && element.path !== "" && element.path !== undefined) {
-                    whatsapp.push({ name: element.name, id: element.id });
-                };
-            });
-            // $('#whatsappIds').attr("data-options", whatsapp.join(';'));
-
-            // device auswahl erstellen
-            $.each(deviceID, (index, element) => {
-                if (element.name !== "" && element.name != undefined && element.consumption !== "" && element.consumption != undefined) {
-                    devices.push({ name: element.name, id: element.id });
-                };
-            });
-            // $('#deviceIds').attr("data-options", devices.join(';'));
-
-            // deviceType auswahl erstellen
-            $.each(defaultTypeID, (index, element) => {
-                if (element.name !== "" && element.name != undefined && element.startVal !== "" && element.startVal != undefined && element.endVal !== "" && element.endVal != undefined && element.startCount !== "" && element.startCount != undefined && element.endCount !== "" && element.endCount != undefined) {
-                    deviceTypes.push(`${element.name}`);
-                };
-            });
-            $.each(customTypeID, (index, element) => {
-                if (element.name !== "" && element.name != undefined && element.startVal !== "" && element.startVal != undefined && element.endVal !== "" && element.endVal != undefined && element.startCount !== "" && element.startCount != undefined && element.endCount !== "" && element.endCount != undefined) {
-                    deviceTypes.push(`${element.name}`);
-                };
-            });
-            $('#deviceTypeID').attr("data-options", deviceTypes.join(';'));
-        };
-
-        function createDynamicTable(settings, onChange, device) {
-            $('#dynamic-table-body').html("");
-            for (const i in devices) {
-                let ID = devices[i].name;
-                let deviceId = devices[i].id;
-                curDevice = null
-                let data = {};
-
-                device.forEach(function (d) {
-                    if (d.deviceName == ID)
-                        curDevice = d;
-                });
-
-                if (curDevice == null) {
-                    curDevice = {
-                        enabled: true,
-                        deviceName: devices[i].name,
-                        idAlexa: 0,
-                        idsayit: 0,
-                        idWhatsapp: 0,
-                        idTelegram: 0,
-                        autoOff: false,
-                        idTimer: 0,
-                        abort: false,
-                        id: -1
-                    };
-                };
-
-                data = [
-                    { type: 'checkbox', name: "enabled", value: curDevice.enabled },
-                    { type: 'label', name: "deviceName", value: curDevice.deviceName },
-                    { type: 'multiple', data: alexa, name: "idAlexa", value: curDevice.idAlexa },
-                    { type: 'multiple', data: sayit, name: "idsayit", value: curDevice.idsayit },
-                    { type: 'multiple', data: firstName, name: "idTelegram", value: curDevice.idTelegram },
-                    { type: 'multiple', data: whatsapp, name: "idWhatsapp", value: curDevice.idWhatsapp },
-                    { type: 'checkbox', name: "autoOff", value: curDevice.autoOff },
-                    { type: 'timer', name: "idTimer", value: parseInt(curDevice.idTimer) },
-                    { type: 'checkbox', name: "abort", value: curDevice.abort},
-                    { type: 'id', name: "id", value: parseInt(deviceId) }
-                ];
-
-                let col = "<tr>";
-                data.forEach(d => {
-                    let style = "";
-                    if (d.name == "deviceName") {
-                        style = 'style="font-weight:bold;"';
-                    }
-
-                    col += `<td data-type=${d.type} data-name="${d.name}" ${style}>`;
-                    switch (d.type) {
-                        case 'checkbox':
-                            let checked = '';
-                            if (d.value == true || d.value == 'on') {
-                                checked = 'checked="checked"';
-                            }
-                            col += `<label><input type="checkbox" class="values-input" ${checked} data-old-value="${d.value}"><span></span></label>`;
-                            break;
-                        case 'label':
-                            col += `<span class="values-input" data-old-value="${d.value}">${d.value}</span>`;
-                            break;
-                        case 'multiple':
-                            col += `<select multiple class="values-input" data-old-value="${d.value}">`;
-                            d.data.forEach(name => {
-                                let checked = '';
-                                if ($.inArray(name, d.value))
-                                    checked = 'selected';
-                                col += `<option ${checked} value='${name.id}'>${name.name}</option>`
-                            });
-                            col += `</select>`;
-                            break;
-                        case 'timer':
-                            col += `<input type="number" min="0" class="values-input" data-old-value="${d.value}">`;
-                            break;
-                        case 'id':
-                            col += `<span class="values-input" data-old-value="${d.value}">${d.value}</span>`;
-                            break;
-                        default:
-                            col += `Test`;
-                            break;
-                    };
-                    col += `</td>`;
-                });
-                col += "</tr>";
-                $('#dynamic-table-body').append(col);
-
-                $('#dynamic-table-body').children().eq(i).children().each(function () {
-                    if ($(this).data('type') == 'multiple') {
-                        $(this).find('select').val(curDevice[$(this).data('name')]);
-                    }
-                    else {
-                        $(this).find('input').val(curDevice[$(this).data('name')]);
-                    }
-                });
-
-                $('#dynamic-table-body').find('.values-input').on('change', function () {
-                    if ($(this).val() != $(this).data('old-value')) {
-                        onChange();
-                    };
-                });
-            };
-            if (curDevice != null) {
-                let selectInstance = M.FormSelect.getInstance($('select'));
-                instances = M.FormSelect.init($('select'));
-                M.updateTextFields();
-            };
-
-            if (settings != null && settings != undefined)
-                loadUser(settings, onChange);
-
-        };
-
-        function createSettings() {
-            let obj = {};
-            obj.deviceID = null;
-            obj.deviceID = table2values('deviceID');
-            obj.alexaID = table2values('alexaID');
-            obj.sayitID = table2values('sayitID');
-            obj.telegramID = firstName; // telegram namen sichern
-
-            obj.whatsappID = table2values('whatsappID');
-            obj.customTypeID = table2values('customTypeID');
-            obj.defaultTypeID = table2values('defaultTypeID');
-            obj.valStates = table2values('valStates');
-
-            obj.deviceID = createId(obj.deviceID, device_counter, "device_counter");
-            obj.alexaID = createId(obj.alexaID, alexa_counter, "alexa_counter");
-            obj.sayitID = createId(obj.sayitID, sayit_counter, "sayit_counter");
-            obj.whatsappID = createId(obj.whatsappID, whatsapp_counter, "whatsapp_counter");
-            // obj.telegramID = createId(obj.whatsappID, telegram_counter, "telegram_counter");
-
-            function createId(array, counter, counter_name) {
-                for (const i in array) {
-                    if (array[i].id == "") {
-                        array[i].id = counter;
-                        counter++;
-                    };
-                };
-                obj[counter_name] = counter;
-                return array;
-            };
-
-            let body = $('#dynamic-table-body');
-            let geraete = [];
-
-            body.children().each(function () {
-
-                let data = {};
-                $(this).children().each(function () {
-                    let value;
-                    if ($(this).data('type') == 'multiple') {
-                        value = $(this).find('select').val();
-                        $(this).find('select').data('old-value', value);
-                    }
-                    else if ($(this).data('type') == 'label') {
-                        value = $(this).find('span').text();
-                    }
-                    else if ($(this).data('type') == 'checkbox') {
-                        value = $(this).find('input').prop('checked');
-                        $(this).find('input').data('old-value', value);
-                    }
-                    else if ($(this).data('type') == 'id') {
-                        value = $(this).find('span').text();
-                    }
-                    else {
-                        value = $(this).find('input').val();
-                        $(this).find('input').data('old-value', value);
-                    };
-                    data[$(this).data('name')] = value;
-
-                });
-                geraete.push(data);
-            });
-            obj.device = geraete;
-            return obj;
-        };
 
         function loadUser(settings, onChange) {
             $('.value').each(function () {
@@ -368,17 +82,13 @@
             });
         };
 
-        getTelegramUser();
-
         // This will be called by the admin adapter when the settings page loads
         function load(settings, onChange) {
             if (!settings) return;
 
             deviceID = settings.deviceID || []; // device ID native anlegen
             device = settings.device || []; // devices native anlegen
-
             alexaID = settings.alexaID || []; // alexaID native anlegen 
-
             sayitID = settings.sayitID || []; // sayit ID native anlegen
             whatsappID = settings.whatsappID || []; // whatsapp ID native anlegen
             customTypeID = settings.customTypeID || [];
@@ -405,6 +115,22 @@
             };
 
             // counter ID
+            console.log(settings.telegram_counter);
+
+            settings.device_counter = ctrlCntr(settings.device_counter);
+            settings.alexa_counter = ctrlCntr(settings.alexa_counter);
+            settings.sayit_counter = ctrlCntr(settings.sayit_counter);
+            settings.whatsapp_counter = ctrlCntr(settings.whatsapp_counter);
+            settings.telegram_counter = ctrlCntr(settings.telegram_counter);
+
+            function ctrlCntr(cntr) {
+                if (cntr == undefined) {
+                    cntr = 0;
+                };
+                console.log(cntr);
+                return cntr;
+            };
+
             device_counter = settings.device_counter;
             alexa_counter = settings.alexa_counter;
             sayit_counter = settings.sayit_counter;
@@ -413,14 +139,13 @@
 
             // custom_device_counter = settings.custom_device_counter;
 
-            // getTelegramUser();
+            getTelegramUser();
 
             readUser();
 
             loadUser(settings, onChange);
 
             onChange(false);
-
 
             // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
             setTimeout(function () {
@@ -472,12 +197,12 @@
             obj.customTypeIDFinal = createArray(JSON.parse(JSON.stringify(obj.customTypeID)), "typeID");
             obj.defaultTypeIDFinal = createArray(JSON.parse(JSON.stringify(obj.defaultTypeID)), "typeID");
             obj.telegramFinal = createArray(JSON.parse(JSON.stringify(obj.telegramID)), "telegram");
-            console.warn(obj.telegramFinal);
+            console.log(obj.telegramFinal);
 
-            for (const i in obj.customTypeID) {
-                let bla;
-                bla = obj.customTypeID[i].id;
-            };
+            // for (const i in obj.customTypeID) {
+            //     let bla;
+            //     bla = obj.customTypeID[i].id;
+            // };
 
             function createArray(obj, type) {
                 let objTemp = {};
@@ -603,6 +328,298 @@
             });
         };
 
+        // functions 
+
+        function getTelegramUser() {
+            console.log('telegramUser');
+            arrTelegramUser = [];
+            /* Telegram Instanzen ermitteln */
+            socket.emit('getObjectView', 'system', 'instance', { startkey: 'system.adapter.', endkey: 'system.adapter.\u9999' }, (err, state) => {
+                if (err) {
+                    console.error(err);
+                }
+                else {
+                    let result = [];
+                    let inst = ``;
+                    $.each(state.rows, (index, element) => {
+                        result.push(element.value);
+                    });
+                    $.each(result, (index, element) => {
+                        for (let i = 0; i < 10; i++) {
+                            if (element._id === `system.adapter.telegram.${i}`) {
+                                inst = `${i}`;
+                                let arr = { name: `telegram.${i}.communicate.users`, inst: inst };
+                                arrTelegramUser.push(arr);
+                            };
+                        };
+                    });
+                    readUserTelegram(arrTelegramUser);
+                };
+            });
+        };
+
+        function readUserTelegram(arrTelegramUser) {
+            // telegram auswahl erstellen
+            console.log(arrTelegramUser.length);
+            firstName = [];
+            for (const i in arrTelegramUser) {
+                socket.emit('getState', arrTelegramUser[i].name, (err, state) => {
+                    if (state !== null || state !== undefined) {
+                        if (state.val !== ``) {
+                            $.each(JSON.parse(state.val), (index, element) => {
+                                let strTemP = ``;
+                                if (element.firstName !== undefined || element.firstName !== "" || element.firstName !== null) {
+                                    strTemP = `[${arrTelegramUser[i].inst}]${element.firstName}`;
+                                    firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.firstName, inst: `.${arrTelegramUser[i].inst}` });
+                                    telegram_counter++;
+                                };
+                                if (element.userName !== undefined || element.userName !== "" || element.userName !== null) {
+                                    strTemP = `[${arrTelegramUser[i].inst}]${element.userName}`;
+                                    firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.userName, inst: `.${arrTelegramUser[i].inst}` });
+                                    telegram_counter++;
+                                };
+                            });
+                            if (firstName.length <= 0) {
+                                firstName.push(`kein User gefunden`);
+                            };
+                        };
+                    };
+                });
+            };
+            console.log(firstName);
+        };
+
+        function readUser() {
+
+            alexa = [];
+            sayit = [];
+            devices = [];
+            whatsapp = [];
+            deviceTypes = [];
+
+            // alexa auswahl erstellen
+            $.each(alexaID, (index, element) => {
+                if (element.alexaName !== "" && element.name != undefined && element.path !== "" && element.path !== undefined) {
+                    alexa.push({ name: element.name, id: element.id });
+                };
+            });
+            // $('#alexaIds').attr("data-options", alexa.join(';'));
+
+            // sayit auswahl erstellen
+            $.each(sayitID, (index, element) => {
+                if (element.name !== "" && element.name != undefined && element.path !== "" && element.path !== undefined) {
+                    sayit.push({ name: element.name, id: element.id });
+                };
+            });
+            // $('#sayitIds').attr("data-options", sayit.join(';'));
+
+            // whatsapp auswahl erstellen
+            $.each(whatsappID, (index, element) => {
+                if (element.name !== "" && element.name != undefined && element.path !== "" && element.path !== undefined) {
+                    whatsapp.push({ name: element.name, id: element.id });
+                };
+            });
+            // $('#whatsappIds').attr("data-options", whatsapp.join(';'));
+
+            // device auswahl erstellen
+            $.each(deviceID, (index, element) => {
+                if (element.name !== "" && element.name != undefined && element.consumption !== "" && element.consumption != undefined) {
+                    devices.push({ name: element.name, id: element.id });
+                };
+            });
+            // $('#deviceIds').attr("data-options", devices.join(';'));
+
+            // deviceType auswahl erstellen
+            $.each(defaultTypeID, (index, element) => {
+                if (element.name !== "" && element.name != undefined && element.startVal !== "" && element.startVal != undefined && element.endVal !== "" && element.endVal != undefined && element.startCount !== "" && element.startCount != undefined && element.endCount !== "" && element.endCount != undefined) {
+                    deviceTypes.push(`${element.name}`);
+                };
+            });
+            $.each(customTypeID, (index, element) => {
+                if (element.name !== "" && element.name != undefined && element.startVal !== "" && element.startVal != undefined && element.endVal !== "" && element.endVal != undefined && element.startCount !== "" && element.startCount != undefined && element.endCount !== "" && element.endCount != undefined) {
+                    deviceTypes.push(`${element.name}`);
+                };
+            });
+            $('#deviceTypeID').attr("data-options", deviceTypes.join(';'));
+        };
+
+        function createDynamicTable(settings, onChange, device) {
+            $('#dynamic-table-body').html("");
+            for (const i in devices) {
+                let ID = devices[i].name;
+                let deviceId = devices[i].id;
+                curDevice = null
+                let data = {};
+
+                device.forEach(function (d) {
+                    if (d.deviceName == ID)
+                        curDevice = d;
+                });
+
+                if (curDevice == null) {
+                    curDevice = {
+                        enabled: true,
+                        deviceName: devices[i].name,
+                        idAlexa: 0,
+                        idsayit: 0,
+                        idWhatsapp: 0,
+                        idTelegram: 0,
+                        autoOff: false,
+                        idTimer: 0,
+                        abort: false,
+                        id: -1
+                    };
+                };
+
+                data = [
+                    { type: 'checkbox', name: "enabled", value: curDevice.enabled },
+                    { type: 'label', name: "deviceName", value: curDevice.deviceName },
+                    { type: 'multiple', data: alexa, name: "idAlexa", value: curDevice.idAlexa },
+                    { type: 'multiple', data: sayit, name: "idsayit", value: curDevice.idsayit },
+                    { type: 'multiple', data: firstName, name: "idTelegram", value: curDevice.idTelegram },
+                    { type: 'multiple', data: whatsapp, name: "idWhatsapp", value: curDevice.idWhatsapp },
+                    { type: 'checkbox', name: "autoOff", value: curDevice.autoOff },
+                    { type: 'timer', name: "idTimer", value: parseInt(curDevice.idTimer) },
+                    { type: 'checkbox', name: "abort", value: curDevice.abort },
+                    { type: 'id', name: "id", value: parseInt(deviceId) }
+                ];
+
+                let col = "<tr>";
+                data.forEach(d => {
+                    let style = "";
+                    if (d.name == "deviceName") {
+                        style = 'style="font-weight:bold;"';
+                    }
+
+                    col += `<td data-type=${d.type} data-name="${d.name}" ${style}>`;
+                    switch (d.type) {
+                        case 'checkbox':
+                            let checked = '';
+                            if (d.value == true || d.value == 'on') {
+                                checked = 'checked="checked"';
+                            }
+                            col += `<label><input type="checkbox" class="values-input" ${checked} data-old-value="${d.value}"><span></span></label>`;
+                            break;
+                        case 'label':
+                            col += `<span class="values-input" data-old-value="${d.value}">${d.value}</span>`;
+                            break;
+                        case 'multiple':
+                            col += `<select multiple class="values-input" data-old-value="${d.value}">`;
+                            d.data.forEach(name => {
+                                let checked = '';
+                                if ($.inArray(name, d.value))
+                                    checked = 'selected';
+                                col += `<option ${checked} value='${name.id}'>${name.name}</option>`
+                            });
+                            col += `</select>`;
+                            break;
+                        case 'timer':
+                            col += `<input type="number" min="0" class="values-input" data-old-value="${d.value}">`;
+                            break;
+                        case 'id':
+                            col += `<span class="values-input" data-old-value="${d.value}">${d.value}</span>`;
+                            break;
+                        default:
+                            col += `Test`;
+                            break;
+                    };
+                    col += `</td>`;
+                });
+                col += "</tr>";
+                $('#dynamic-table-body').append(col);
+
+                $('#dynamic-table-body').children().eq(i).children().each(function () {
+                    if ($(this).data('type') == 'multiple') {
+                        $(this).find('select').val(curDevice[$(this).data('name')]);
+                    }
+                    else {
+                        $(this).find('input').val(curDevice[$(this).data('name')]);
+                    }
+                });
+
+                $('#dynamic-table-body').find('.values-input').on('change', function () {
+                    if ($(this).val() != $(this).data('old-value')) {
+                        onChange();
+                    };
+                });
+            };
+            if (curDevice != null) {
+                let selectInstance = M.FormSelect.getInstance($('select'));
+                instances = M.FormSelect.init($('select'));
+                M.updateTextFields();
+            };
+
+            if (settings != null && settings != undefined)
+                loadUser(settings, onChange);
+
+        };
+
+        function createSettings() {
+            let obj = {};
+            obj.deviceID = null;
+            obj.deviceID = table2values('deviceID');
+            obj.alexaID = table2values('alexaID');
+            obj.sayitID = table2values('sayitID');
+            console.log(firstName);
+            obj.telegramID = firstName; // telegram namen sichern
+
+            obj.whatsappID = table2values('whatsappID');
+            obj.customTypeID = table2values('customTypeID');
+            obj.defaultTypeID = table2values('defaultTypeID');
+            obj.valStates = table2values('valStates');
+
+            obj.deviceID = createId(obj.deviceID, device_counter, "device_counter");
+            obj.alexaID = createId(obj.alexaID, alexa_counter, "alexa_counter");
+            obj.sayitID = createId(obj.sayitID, sayit_counter, "sayit_counter");
+            obj.whatsappID = createId(obj.whatsappID, whatsapp_counter, "whatsapp_counter");
+            // obj.telegramID = createId(obj.whatsappID, telegram_counter, "telegram_counter");
+
+            function createId(array, counter, counter_name) {
+                for (const i in array) {
+                    if (array[i].id == "") {
+                        array[i].id = counter;
+                        counter++;
+                    };
+                };
+                obj[counter_name] = counter;
+                return array;
+            };
+
+            let body = $('#dynamic-table-body');
+            let geraete = [];
+
+            body.children().each(function () {
+
+                let data = {};
+                $(this).children().each(function () {
+                    let value;
+                    if ($(this).data('type') == 'multiple') {
+                        value = $(this).find('select').val();
+                        $(this).find('select').data('old-value', value);
+                    }
+                    else if ($(this).data('type') == 'label') {
+                        value = $(this).find('span').text();
+                    }
+                    else if ($(this).data('type') == 'checkbox') {
+                        value = $(this).find('input').prop('checked');
+                        $(this).find('input').data('old-value', value);
+                    }
+                    else if ($(this).data('type') == 'id') {
+                        value = $(this).find('span').text();
+                    }
+                    else {
+                        value = $(this).find('input').val();
+                        $(this).find('input').data('old-value', value);
+                    };
+                    data[$(this).data('name')] = value;
+
+                });
+                geraete.push(data);
+            });
+            obj.device = geraete;
+            return obj;
+        };
+
     </script>
 </head>
 
@@ -720,10 +737,15 @@
                                         <th class="header translate" data-name="idTelegram">telegram user</th>
                                         <th class="header translate" data-name="idWhatsapp">whatsapp user</th>
                                         <!-- <th class="header translate" data-name="idTelegram">telegram user</th> -->
-                                        <th class="header translate" data-name="autoOff" style="width: 60px">autooff</th>
-                                        <th class="header translate" data-name="idTimer" style="width: 60px">timeout in min</th>
-                                        <th class="header translate" data-name="abort" style="width: 80px">abort <br>detection</th>
-                                        <th class="header translate" data-name="id" style="width: 0px; display: none;">id</th>
+                                        <th class="header translate" data-name="autoOff" style="width: 60px">autooff
+                                        </th>
+                                        <th class="header translate" data-name="idTimer" style="width: 60px">timeout in
+                                            min</th>
+                                        <th class="header translate" data-name="abort" style="width: 80px">abort
+                                            <br>detection
+                                        </th>
+                                        <th class="header translate" data-name="id" style="width: 0px; display: none;">
+                                            id</th>
                                     </tr>
                                 </thead>
                                 <tbody id="dynamic-table-body" class="table-values">

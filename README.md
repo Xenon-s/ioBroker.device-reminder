@@ -193,12 +193,9 @@ To find out more about the function, simply read about it here at "**default dev
     ### __WORK IN PROGRESS__
 -->
 
-### 0.7.3 (2020-12-19)
+### 0.7.4 (2020-12-20)
 * (xenon-s) bugfix: telegram instance was not recognised correctly
 * (xenon-s) bugfix: abort detection prevented sending of notifications
-
-### 0.7.2 (2020-12-17)
-* (xenon-s) Removed unnecessary debug message
 
 ### 0.7.1 (2020-12-17)
 * (xenon-s) fix telegram bug
@@ -210,9 +207,6 @@ To find out more about the function, simply read about it here at "**default dev
 ### 0.6.2 (2020-12-04)
 * (xenon-s) bugfix index_m
 
-### 0.6.1 (2020-12-04)
-* (xenon-s) bugfix: wrong status was displayed in the data point
-
 ### 0.6.0 (2020-12-03)
 * (xenon-s) bugfix: alexa speak-volume when input is empty
 * (xenon-s) bugfix: telegram now shows both names, otherwise there were errors in the notifications 
@@ -220,15 +214,6 @@ To find out more about the function, simply read about it here at "**default dev
 
 ### 0.5.4 (2020-11-28)
 * (xenon-s) calculation optimised, custom / default values may have to be adjusted if they have been changed by the user
-
-### 0.5.3 (2020-11-26)
-* (xenon-s) bugfix: can't find val of null alexa speak-volume
-
-### 0.5.2 (2020-11-23)
-* (xenon-s) bugfix: speak-volume Alexa has partially returned "undefined"
-
-### 0.5.1 (2020-11-22)
-* (xenon-s) bugfix: Alexa responds only to announcement
 
 ### 0.5.0 (2020-11-22)
 * (xenon-s) bugfix: volume sayit
@@ -238,47 +223,12 @@ To find out more about the function, simply read about it here at "**default dev
 ### 0.4.10 (2020-11-17)
 * (xenon-s) bugfix main.js
 
-### 0.4.9 (2020-11-14)
-* (xenon-s) Bugfix: switch off detection
-* (xenon-s) Bugfix: index_m save button was not displayed
-
-### 0.4.8 (2020-11-13)
-* (xenon-s) bugfix: Device status was partly recognized incorrectly
-
-### 0.4.7 (2020-11-13)
-* (xenon-s) readme translated into english
-
-### 0.4.6 (2020-11-12)
-* (xenon-s) Bugfix index_m
-
-### 0.4.5 (2020-11-12)
-* (xenon-s) error Adapterchecker fixed
-
-### 0.4.4 (2020-11-12)
-* (xenon-s) bugfix main.js
-
-### 0.4.3 (2020-11-12)
-* (xenon-s) release npm
-
-### 0.4.2 (2020-11-12)
-* (xenon-s) readme adapted 
-* (xenon-s) index_m fixed
-
-### 0.4.1 (2020-11-12)
-* (xenon-s) bugfix: wrong status was displayed when program abort was detected
-
 ### 0.4.0 (2020-11-11)
 * (xenon-s) config page revised to simplify the input of devices
 * (xenon-s) inserted a break, so that it is recognized, if a device is switched off prematurely at the device switch
 * (xenon-s) bugfix: telegram users are not always recognized correctly and displayed incorrectly
 * (xenon-s) adjustable values inserted at "Type
 * (xenon-s) readme extended and adapted
-
-### 0.3.2 (2020-11-08)
-* (xenon-s) bug: auto Off did not work anymore 
-
-### 0.3.1 (2020-11-07)
-* (xenon-s) bugfix
 
 ### 0.3.0 (2020-11-07)
 * (xenon-s) standby detection, even if the power outlet should not be switched off
@@ -290,12 +240,6 @@ To find out more about the function, simply read about it here at "**default dev
 
 ### 0.2.0 (2020-11-05)
 * (xenon-s) update to version 0.2: index_m completely revised and whatsapp added
-
-### 0.1.2 (2020-10-23)
-* (xenon-s) fix bug in index_m.html: users are not always displayed correctly
-
-### 0.1.1-beta.0 (2020-10-23)
-* (xenon-s) fix package.json
 
 ### 0.1.0 (2020-10-23)
 * (xenon-s) beta release

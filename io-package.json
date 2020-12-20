@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.7.3",
+        "version": "0.7.4",
         "news": {
-            "0.7.3": {
+            "0.7.4": {
                 "en": "bugfix: telegram instance was not recognised correctly\nbugfix: abort detection prevented sending of notifications",
                 "de": "Bugfix: Telegramminstanz wurde nicht richtig erkannt\nBugfix: Abbrucherkennung verhindert das Senden von Benachrichtigungen",
                 "ru": "исправление: экземпляр телеграммы не распознавался правильно\nисправление: обнаружение прерывания препятствовало отправке уведомлений",
