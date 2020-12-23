@@ -12,6 +12,7 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require(`@iobroker/adapter-core`);
+const { create } = require("domain");
 
 let objectInput = [];
 let alexaInput = [];
@@ -47,7 +48,7 @@ class deviceReminder extends utils.Adapter {
         this.on(`ready`, this.onReady.bind(this));
         this.on(`stateChange`, this.onStateChange.bind(this));
         // this.on(`objectChange`, this.onObjectChange.bind(this));
-        // this.on(`message`, this.onMessage.bind(this));
+        this.on(`message`, this.onMessage.bind(this));
         this.on(`unload`, this.onUnload.bind(this));
     }
 
@@ -82,22 +83,21 @@ class deviceReminder extends utils.Adapter {
         this.log.debug(`ARR INPUT whatsapp ${JSON.stringify(whatsappInput)}`);
         this.log.debug(`ARR INPUT telegram ${JSON.stringify(telegramInput)}`);
 
-
         // Input auf Plausibilität prüfen
         if (objectInput !== "") {
 
-            if (objectInput != "" && objectInput != undefined) {
-                objectInput = await this.checkInput(objectInput, "devices");
-            };
-            if (alexaInput != "" && alexaInput != undefined) {
-                alexaInput = await this.checkInput(alexaInput, "alexa");
-            };
-            if (sayitInput != "" && sayitInput != undefined) {
-                sayitInput = await this.checkInput(sayitInput, "sayit");
-            };
-            if (whatsappInput != "" && whatsappInput != undefined) {
-                whatsappInput = await this.checkInput(whatsappInput, "whatsapp");
-            };
+            // if (objectInput != "" && objectInput != undefined) {
+            //     objectInput = await this.checkInput(objectInput, "devices");
+            // };
+            // if (alexaInput != "" && alexaInput != undefined) {
+            //     alexaInput = await this.checkInput(alexaInput, "alexa");
+            // };
+            // if (sayitInput != "" && sayitInput != undefined) {
+            //     sayitInput = await this.checkInput(sayitInput, "sayit");
+            // };
+            // if (whatsappInput != "" && whatsappInput != undefined) {
+            //     whatsappInput = await this.checkInput(whatsappInput, "whatsapp");
+            // };
 
             for (const i in objectInput) {
                 this.log.debug(`element for each ${JSON.stringify(objectInput[i])}`)
@@ -128,64 +128,10 @@ class deviceReminder extends utils.Adapter {
         }, 10000);
     };
 
-    async checkInput(obj, type) {
-        let objTemp = obj;
-        if (type === "alexa" || type === "sayit" || type === "whatsapp") {
-            for (const i in objTemp) {
-                if (! await this.getForeignObjectAsync(objTemp[i].path)) {
-                    this.log.error(`${type} "${objTemp[i].name}": Path could not be found! Please check your entry! Device deleted`);
-                    delete objTemp[i];
-                };
-                if (obj[i].volume === undefined) {
-                    obj[i].volume = 50;
-                }
-                obj[i].timeout = null;
-            };
-        } else if (type === "devices") {
-            for (const i in objTemp) {
-                if (! await this.getForeignObjectAsync(objTemp[i].pathConsumption)) {
-                    this.log.error(`${type} "${objTemp[i].name}": Path could not be found! Please check your entry! Device deleted`);
-                    delete objTemp[i];
-                } else {
-                    if (objTemp[i].pathSwitch != "") {
-                        if (! await this.getForeignObjectAsync(objTemp[i].pathSwitch)) {
-                            this.log.error(`${type} "${objTemp[i].name}": Path could not be found! Please check your entry! Device deleted`);
-                            delete objTemp[i];
-                        };
-                    } else {
-                        objTemp[i].pathSwitch = null;
-                    };
-                };
-            };
-        } return objTemp;
-    };
+
 
     async stateIni(obj) {
         for (const i in obj) {
-            // if (obj[i].switchPower !== undefined && obj[i].switchPower !== null && obj[i].switchPower !== ``) {
-            //     const resultSwitch = await this.getForeignStateAsync(obj[i].switchPower);
-            //     const objSwitch = resultSwitch.val;
-            //     switch (objSwitch) {
-            //         case true: {
-            //             let consumpTmp = await this.getForeignStateAsync(obj[i].currentConsumption);
-            //             consumpTmp = consumpTmp.val;
-            //             if (consumpTmp >= 1) {
-            //                 await this.setStateAsync(obj[i].pathStatus, stateStandby, true);
-            //             } else {
-            //                 await this.setStateAsync(obj[i].pathStatus, stateOff, true);
-            //             };
-            //             break;
-            //         };
-            //         case false: {
-            //             await this.setStateAsync(obj[i].pathStatus, stateOff, true);
-            //             break;
-            //         };
-            //         default: {
-            //             await this.setStateAsync(obj[i].pathStatus, `unknown status`, true);
-            //             break;
-            //         };
-            //     };
-            // };
             await this.setStateAsync(obj[i].pathStatus, `initialize`, true);
             await this.setStateAsync(obj[i].pathLiveConsumption, 0, true);
             await this.setStateAsync(obj[i].timeTotal, `00:00:00`, true);
@@ -271,7 +217,6 @@ class deviceReminder extends utils.Adapter {
 
                 /*obj Startext erstellen*/
                 this.startMessageText = obj.startText;
-
                 if (obj.startText != `` && obj.startText != undefined) {
                     this.startMessage = true;
                 } else {
@@ -280,7 +225,6 @@ class deviceReminder extends utils.Adapter {
 
                 /*obj Endtext erstellen*/
                 this.endMessageText = obj.endText;
-
                 if (obj.endText != `` && obj.endText != undefined) {
                     this.endMessage = true;
                 } else {
@@ -306,8 +250,7 @@ class deviceReminder extends utils.Adapter {
                 };
 
                 /*obj alexa erstellen*/
-
-                if (obj.alexa.length >= 1) {
+                if (obj.alexa != undefined) {
                     this.alexaID = obj.alexa;
                     this.alexaVolOld = 0;
                     this.alexa = true;
@@ -316,7 +259,7 @@ class deviceReminder extends utils.Adapter {
                 };
 
                 /*obj sayIt erstellen*/
-                if (obj.sayit.length >= 1) {
+                if (obj.sayit != undefined) {
                     this.sayItID = obj.sayit;
                     this.sayItVolOld = 0;
                     this.sayIt = true;
@@ -331,6 +274,7 @@ class deviceReminder extends utils.Adapter {
                 } else {
                     this.whatsapp = false;
                 };
+
             };
         };
 
@@ -998,7 +942,247 @@ class deviceReminder extends utils.Adapter {
             this.log.debug(`timeout ${JSON.stringify(i)}: was deleted`);
         };
     };
+    async onMessage(obj) {
+
+        this.log.info(`Data from configuration received : ${JSON.stringify(obj.command)}`);
+
+        // responds to the adapter that sent the original message
+        function respond(response, that) {
+            if (obj.callback)
+                that.sendTo(obj.from, obj.command, response, obj.callback);
+        };
+
+        // const createResult = async () => {
+        //     let arr = [];
+        //     let arrError = [];
+        //     for (const i in obj.message) {
+        //         const result = await this.ctrlInput(obj.message[i], arr);
+
+        //         this.log.warn(JSON.stringify(result));
+
+        //         if (result.check === "success") {
+        //             arr.push(result);
+        //         } else {
+        //             arrError.push(result);
+        //         };
+        //     };
+        //     console.error(JSON.stringify(arr));
+        //     return(arr);
+        // };
+
+        const array = await obj.message;
+        const counter = await obj.message;
+
+        let checked = [];
+        let failed = [];
+        switch (obj.command[0]) {
+            case '1val': {
+                this.log.warn('1VAL WIRD AUSGEFUEHRT');
+                for (const i in array) {
+                    if (array[i][obj.command[1]] != undefined && array[i][obj.command[1]] != ``) {
+                        checked.push({ name: array[i][obj.command[1]], id: array[i].id });
+                    } else {
+                        failed.push({ name: array[i][obj.command[1]], id: array[i].id });
+                    };
+                };
+                break;
+            };
+            case '2val': {
+                this.log.warn('2VAL WIRD AUSGEFUEHRT');
+                for (const i in array) {
+                    if (array[i][obj.command[1]] != undefined && array[i][obj.command[1]] != `` && array[i][obj.command[2]] != undefined && array[i][obj.command[2]] != ``) {
+                        if (await this.getForeignObjectAsync(array[i][obj.command[2]])) {
+                            checked.push({ name: array[i][obj.command[1]], id: array[i].id });
+                        } else {
+                            failed.push({ name: array[i][obj.command[1]], id: array[i].id });
+                        }
+                    } else {
+                        failed.push({ name: array[i][obj.command[1]], id: array[i].id });
+                    };
+                };
+                break;
+            };
+            case '3val': {
+                this.log.warn('3VAL WIRD AUSGEFUEHRT');
+                for (const i in array) {
+                    if (array[i][obj.command[1]] != undefined && array[i][obj.command[1]] != `` && array[i][obj.command[2]] != undefined && array[i][obj.command[2]] != ``) {
+                        if (await this.getForeignObjectAsync(array[i][obj.command[2]])) {
+                            if (array[i][obj.command[3]] != undefined && array[i][obj.command[3]] != ``) {
+                                if (await this.getForeignObjectAsync(array[i][obj.command[3]])) {
+                                    checked.push({ name: array[i][obj.command[1]], id: array[i].id });
+                                } else {
+                                    failed.push({ name: array[i][obj.command[1]], id: array[i].id });
+                                }
+                            } else {
+                                checked.push({ name: array[i][obj.command[1]], id: array[i].id });
+                            };
+                        } else {
+                            failed.push({ name: array[i][obj.command[1]], id: array[i].id });
+                        }
+                    } else {
+                        failed.push({ name: array[i][obj.command[1]], id: array[i].id });
+                    };
+                };
+                break;
+            };
+            case 'telegram': {  
+                this.log.warn('TELEGRAM WIRD AUSGEFUEHRT');
+                let arrTelegramUser = [];
+                this.getObjectView('system', 'instance',
+                    { startkey: 'system.adapter.', endkey: 'system.adapter.\u9999' }, (err, state) => {
+                        if (err) {
+                            console.error(err);
+                        }
+                        else {
+                            let result = [];
+                            let inst = ``;
+                            state.rows.forEach(async (element) => {
+                                result.push(element.id);
+                            });
+                            result.forEach(async (element) => {
+                                for (let i = 0; i < 10; i++) {
+                                    if (element === `system.adapter.telegram.${i}`) {
+                                        inst = `${i}`;
+                                        let arr = { name: `telegram.${i}.communicate.users`, inst: inst };
+                                        arrTelegramUser.push(arr);
+                                    };
+                                };
+                            });
+                            let telegram_counter = 0;
+                            telegram_counter = counter;
+                            arrTelegramUser.forEach(async (element) => {
+                                const state = await this.getForeignStateAsync(element.name);
+                                if (state != undefined && state != null) {
+                                    if (state != ``) {
+                                        state.val = await JSON.parse(state.val);
+                                        for (const i in state.val) {
+                                            let strTemp = ``;
+                                            this.log.warn(JSON.stringify(state.val[i].firstName));
+                                            if (state.val[i].firstName != undefined && state.val[i].firstName !== "" && state.val[i].firstName != null) {
+                                                strTemp = `[${element.inst}]${state.val[i].firstName}`;
+                                                checked.push({ name: strTemp, id: telegram_counter, nameFinal: state.val[i].firstName, inst: `.${element.inst}` });
+                                                telegram_counter++;
+                                            };
+                                            if (state.val[i].userName != undefined && state.val[i].userName !== "" && state.val[i].userName != null) {
+                                                strTemp = `[${element.inst}]${state.val[i].userName}`;
+                                                checked.push({ name: strTemp, id: telegram_counter, nameFinal: state.val[i].userName, inst: `.${element.inst}` });
+                                                telegram_counter++;
+                                            };
+                                            this.log.warn(JSON.stringify(checked));
+                                        };
+                                    };
+                                };
+                            });
+                        };
+                    });
+                break;
+            }
+            default: {
+
+                break;
+            };
+        };
+
+        const result = {
+            checked: checked,
+            failed: failed
+        }
+        this.log.info(JSON.stringify(result));
+        respond(result, this);
+
+
+
+        // function readUserTelegram(arr) {
+        //     let firstName = [];
+        //     arr.forEach(async (element) => {
+        //         const state = await this.getForeignState(element);
+        //         if (state != undefined && state != null) {
+        //             if (state.val != ``) {
+        //                 state.val.forEach(async (element) => {
+        //                     let strTemp = ``;
+        //                     if (element.firstName != undefined && element.firstName !== "" && element.firstName != null) {
+        //                         strTemP = `[${arrTelegramUser[i].inst}]${element.firstName}`;
+        //                         firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.firstName, inst: `.${arrTelegramUser[i].inst}` });
+        //                         telegram_counter++;
+        //                     };
+        //                     if (element.userName != undefined && element.userName !== "" && element.userName != null) {
+        //                         strTemP = `[${arrTelegramUser[i].inst}]${element.userName}`;
+        //                         firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.userName, inst: `.${arrTelegramUser[i].inst}` });
+        //                         telegram_counter++;
+        //                     };
+        //                 });
+        //             };
+        //         };
+        //     });
+        //     this.log.warn(`telegram User: ${firstName}`);
+        // };
+
+        // function readUserTelegram1(arrTelegramUser) {
+        //     // telegram auswahl erstellen
+        //     console.log(arrTelegramUser.length);
+        //     firstName = [];
+        //     for (const i in arrTelegramUser) {
+        //         socket.emit('getState', arrTelegramUser[i].name, (err, state) => {
+        //             if (state !== null || state !== undefined) {
+        //                 if (state.val !== ``) {
+        //                     $.each(JSON.parse(state.val), (index, element) => {
+        //                         let strTemP = ``;
+        //                         if (element.firstName != undefined && element.firstName !== "" && element.firstName != null) {
+        //                             strTemP = `[${arrTelegramUser[i].inst}]${element.firstName}`;
+        //                             firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.firstName, inst: `.${arrTelegramUser[i].inst}` });
+        //                             telegram_counter++;
+        //                         };
+        //                         if (element.userName != undefined && element.userName !== "" && element.userName != null) {
+        //                             strTemP = `[${arrTelegramUser[i].inst}]${element.userName}`;
+        //                             firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.userName, inst: `.${arrTelegramUser[i].inst}` });
+        //                             telegram_counter++;
+        //                         };
+        //                     });
+        //                 };
+        //             };
+        //         });
+        //     };
+        //     console.log(firstName);
+        // };
+
+
+
+        // const test = await createResult();
+        // respond(test, this);
+
+
+        // respond(obj, this);
+
+
+
+
+        // obj.message.forEach(element => {
+        //     this.log.warn(JSON.stringify(element.name));
+        // });
+        // Disable check of const declaration in case function
+        // eslint-disable-next-line no-case-declarations
+        // const result = await this.readData(obj.message);
+        // this.log.debug('Response from Read Data : ' + JSON.stringify(result));
+        // if (result === 'success') {
+        //     respond('success', this);
+        //     // Add new device to array ensuring data polling at intervall time
+        //     this.devices[obj.message] = 'xxx';
+        // } else {
+        // respond('failed', this);
+
+    };
+
 };
+
+
+// async checkInput(val1, val2, name) {
+//     let arrTemp;
+//     if (!this.getForeignObjectAsync(val1)) {
+//         if (!this.getForeignObjectAsync(val2)) {
+//             arrTemp.push()
+//         };
+//     };
+// };
 
 
 
