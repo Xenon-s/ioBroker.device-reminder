@@ -32,6 +32,7 @@
         let deviceID = [];
         let whatsappID = [];
         let arrTelegramUser = [];
+        let pushoverID = [];
         let customTypeID = [];
         let defaultTypeID = [];
         let valStates = [];
@@ -42,12 +43,14 @@
         let deviceTypes = [];
         // let telegramUserID = [];
         let firstName = []; // telegram firstname user
+        let pushover = [];
 
         let device_counter;
         let alexa_counter;
         let sayit_counter;
         let whatsapp_counter;
         let telegram_counter;
+        let pushover_counter;
         // let custom_device_counter;
 
         let alexaFinal = [];
@@ -57,10 +60,10 @@
         let customTypeIDFinal = [];
         let defaultTypeIDFinal = [];
         let telegramFinal = [];
-
+        let pushoverFinal = [];
         let curDevice = null
-
         let varTrue = false;
+
 
         function loadUser(settings, onChange) {
             $('.value').each(function () {
@@ -91,6 +94,7 @@
             alexaID = settings.alexaID || []; // alexaID native anlegen 
             sayitID = settings.sayitID || []; // sayit ID native anlegen
             whatsappID = settings.whatsappID || []; // whatsapp ID native anlegen
+            pushoverID = settings.pushoverID || []; // pushover ID native anlegen
             customTypeID = settings.customTypeID || [];
             defaultTypeID = settings.defaultTypeID || [];
             device_final = settings.device_final || []; // output -> main.js
@@ -122,6 +126,7 @@
             settings.sayit_counter = ctrlCntr(settings.sayit_counter);
             settings.whatsapp_counter = ctrlCntr(settings.whatsapp_counter);
             settings.telegram_counter = ctrlCntr(settings.telegram_counter);
+            settings.pushover_counter = ctrlCntr(settings.pushover_counter);
 
             function ctrlCntr(cntr) {
                 if (cntr == undefined) {
@@ -136,14 +141,76 @@
             sayit_counter = settings.sayit_counter;
             whatsapp_counter = settings.whatsapp_counter;
             telegram_counter = settings.telegram_counter;
+            pushover_counter = settings.pushover_counter;
+            custom_device_counter = settings.custom_device_counter;
 
-            // custom_device_counter = settings.custom_device_counter;
 
-            getTelegramUser();
+
+            let arrAll = [];
+
+            // putType(deviceID, 'deviceID');
+            // putType(alexaID, 'alexaID');
+            // putType(sayitID, 'sayitID');
+            // putType(whatsappID, 'whatsappID');
+            // putType(pushoverID, 'pushoverID');
+
+            // async function putType(arr, name) {
+            //     if (arr != undefined && arr.length > 0) {
+            //         for (const i in arr) {
+            //             arr[i].def = name;
+            //         };
+            //         arrAll.push(arr);
+            //         console.warn(arrAll);
+            //     }; 
+            // };
+
+            // const validateInput = async (arrAll) => {
+            //     let arrTemp = [];
+            //     console.warn(arrAll);
+            //     for (const i in arrAll) {
+            //         if (arrAll[i] != undefined && arrAll[i].length > 0) {
+            //             for (const j in arrAll[i]) {
+            //             }
+            //             sendTo(null, "ctrlDevice", arrAll[i], async data => {
+            //                 if (data != undefined) test(data);
+            //             });
+            //         };
+            //     };
+            // };
+
+            // validateInput(arrAll);
+
+            // const test = async arr => console.warn(arr);
+
+
+            // // alte Schreibweise
+            // let oldFunction = function () {
+            //     console.warn('OLD');
+            // };
+            // // neue Schreibweise
+            // let newFunction = () => {
+            //     console.warn('NEW');
+            // };
+
+            // // neue Schreibweise short + param
+            // let newFunction2 = age => console.warn(age);
+            // newFunction2(42);
+
+            // let newFunction3 = () => console.warn('test');
+
+            // promise
 
             readUser();
 
             loadUser(settings, onChange);
+
+            setTimeout(function () {
+                showHeader('dynamicTable', 'idAlexa', alexa);
+                showHeader('dynamicTable', 'idsayit', sayit);
+                showHeader('dynamicTable', 'idTelegram', firstName);
+                showHeader('dynamicTable', 'idWhatsapp', whatsapp);
+                showHeader('dynamicTable', 'idPushover', pushover);
+            }, 200);
 
             onChange(false);
 
@@ -153,6 +220,8 @@
                 values2table('alexaID', alexaID, onChange); //alexa
                 values2table('sayitID', sayitID, onChange); //sayit
                 values2table('whatsappID', whatsappID, onChange); // whatsapp
+                values2table('pushoverID', pushoverID, onChange); // whatsapp
+
                 values2table('customTypeID', customTypeID, onChange); // custom devices
                 values2table('defaultTypeID', defaultTypeID, onChange); // custom devices
 
@@ -160,7 +229,7 @@
 
                 $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true);
 
-            }, 30);
+            }, 200);
             setTimeout(function () {
                 $('.changeOnChangeEvent').off('change');
                 $('.changeOnChangeEvent').find('*').off('change');
@@ -170,7 +239,6 @@
                     $('#fill-dynamic-table, #fill-dynamic-table1').removeClass('disabled');
 
                 });
-
                 createDynamicTable(settings, onChange, device); // create dynamic table "device"
                 $('#dynamicTableLoading, #dynamicTableLoadingText').css('display', 'none'); // ladekringel
             }, 2000);
@@ -197,12 +265,7 @@
             obj.customTypeIDFinal = createArray(JSON.parse(JSON.stringify(obj.customTypeID)), "typeID");
             obj.defaultTypeIDFinal = createArray(JSON.parse(JSON.stringify(obj.defaultTypeID)), "typeID");
             obj.telegramFinal = createArray(JSON.parse(JSON.stringify(obj.telegramID)), "telegram");
-            console.log(obj.telegramFinal);
-
-            // for (const i in obj.customTypeID) {
-            //     let bla;
-            //     bla = obj.customTypeID[i].id;
-            // };
+            obj.pushoverFinal = createArray(JSON.parse(JSON.stringify(obj.pushoverID)), "pushover"); // !!!
 
             function createArray(obj, type) {
                 let objTemp = {};
@@ -275,6 +338,15 @@
                             };
                             break;
                         };
+                        case "pushover": {
+                            objTemp[obj[id].id] = {
+                                name: obj[id].name,
+                                inst: obj[id].inst,
+                                prio: obj[id].prio,
+                                sound: obj[id].sound,
+                            };
+                            break;
+                        };
                     };
                 };
                 return objTemp;
@@ -322,6 +394,7 @@
             $('#fill-dynamic-table, #fill-dynamic-table1').on('click', () => {
                 $('#fill-dynamic-table, #fill-dynamic-table1').addClass('disabled');
                 $('#dynamicTableLoading, #dynamicTableLoadingText').css('display', ''); // ladekringel
+
                 settings = createSettings();
                 load(settings, onChange);
                 onChange(true);
@@ -330,104 +403,108 @@
 
         // functions 
 
-        function getTelegramUser() {
-            console.log('telegramUser');
-            arrTelegramUser = [];
-            /* Telegram Instanzen ermitteln */
-            socket.emit('getObjectView', 'system', 'instance', { startkey: 'system.adapter.', endkey: 'system.adapter.\u9999' }, (err, state) => {
-                if (err) {
-                    console.error(err);
-                }
-                else {
-                    let result = [];
-                    let inst = ``;
-                    $.each(state.rows, (index, element) => {
-                        result.push(element.value);
-                    });
-                    $.each(result, (index, element) => {
-                        for (let i = 0; i < 10; i++) {
-                            if (element._id === `system.adapter.telegram.${i}`) {
-                                inst = `${i}`;
-                                let arr = { name: `telegram.${i}.communicate.users`, inst: inst };
-                                arrTelegramUser.push(arr);
-                            };
-                        };
-                    });
-                    readUserTelegram(arrTelegramUser);
-                };
-            });
-        };
+        // function getTelegramUser() {
+        //     console.log('telegramUser');
+        //     arrTelegramUser = [];
+        //     /* Telegram Instanzen ermitteln */
+        //     socket.emit('getObjectView', 'system', 'instance', { startkey: 'system.adapter.', endkey: 'system.adapter.\u9999' }, (err, state) => {
+        //         if (err) {
+        //             console.error(err);
+        //         }
+        //         else {
+        //             let result = [];
+        //             let inst = ``;
+        //             $.each(state.rows, (index, element) => {
+        //                 result.push(element.value);
+        //             });
+        //             $.each(result, (index, element) => {
+        //                 for (let i = 0; i < 10; i++) {
+        //                     if (element._id === `system.adapter.telegram.${i}`) {
+        //                         inst = `${i}`;
+        //                         let arr = { name: `telegram.${i}.communicate.users`, inst: inst };
+        //                         arrTelegramUser.push(arr);
+        //                     };
+        //                 };
+        //             });
+        //             readUserTelegram(arrTelegramUser);
+        //         };
+        //     });
+        // };
 
-        function readUserTelegram(arrTelegramUser) {
-            // telegram auswahl erstellen
-            console.log(arrTelegramUser.length);
-            firstName = [];
-            for (const i in arrTelegramUser) {
-                socket.emit('getState', arrTelegramUser[i].name, (err, state) => {
-                    if (state !== null || state !== undefined) {
-                        if (state.val !== ``) {
-                            $.each(JSON.parse(state.val), (index, element) => {
-                                let strTemP = ``;
-                                if (element.firstName !== undefined || element.firstName !== "" || element.firstName !== null) {
-                                    strTemP = `[${arrTelegramUser[i].inst}]${element.firstName}`;
-                                    firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.firstName, inst: `.${arrTelegramUser[i].inst}` });
-                                    telegram_counter++;
-                                };
-                                if (element.userName !== undefined || element.userName !== "" || element.userName !== null) {
-                                    strTemP = `[${arrTelegramUser[i].inst}]${element.userName}`;
-                                    firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.userName, inst: `.${arrTelegramUser[i].inst}` });
-                                    telegram_counter++;
-                                };
-                            });
-                            if (firstName.length <= 0) {
-                                firstName.push(`kein User gefunden`);
-                            };
-                        };
-                    };
-                });
-            };
-            console.log(firstName);
-        };
+        // function readUserTelegram(arrTelegramUser) {
+        //     // telegram auswahl erstellen
+        //     console.log(arrTelegramUser.length);
+        //     firstName = [];
+        //     for (const i in arrTelegramUser) {
+        //         socket.emit('getState', arrTelegramUser[i].name, (err, state) => {
+        //             if (state !== null || state !== undefined) {
+        //                 if (state.val !== ``) {
+        //                     $.each(JSON.parse(state.val), (index, element) => {
+        //                         let strTemP = ``;
+        //                         console.warn(JSON.stringify(element));
+        //                         if (element.firstName != undefined && element.firstName !== "" && element.firstName != null) {
+        //                             strTemP = `[${arrTelegramUser[i].inst}]${element.firstName}`;
+        //                             firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.firstName, inst: `.${arrTelegramUser[i].inst}` });
+        //                             telegram_counter++;
+        //                         };
+        //                         if (element.userName != undefined && element.userName !== "" && element.userName != null) {
+        //                             strTemP = `[${arrTelegramUser[i].inst}]${element.userName}`;
+        //                             firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.userName, inst: `.${arrTelegramUser[i].inst}` });
+        //                             telegram_counter++;
+        //                         };
+        //                     });
+        //                 };
+        //             };
+        //         });
+        //     };
+        //     console.log(firstName);
+        // };
 
-        function readUser() {
+        async function readUser() {
+
+            // getTelegramUser();
 
             alexa = [];
             sayit = [];
             devices = [];
             whatsapp = [];
             deviceTypes = [];
+            pushover = [];
+            firstName = [];
 
-            // alexa auswahl erstellen
-            $.each(alexaID, (index, element) => {
-                if (element.alexaName !== "" && element.name != undefined && element.path !== "" && element.path !== undefined) {
-                    alexa.push({ name: element.name, id: element.id });
-                };
-            });
-            // $('#alexaIds').attr("data-options", alexa.join(';'));
+            sendTo(null, ['telegram'], telegram_counter, async data => {
+                    if (data != undefined) firstName = await data;
+                    console.warn(data);
+                });
 
-            // sayit auswahl erstellen
-            $.each(sayitID, (index, element) => {
-                if (element.name !== "" && element.name != undefined && element.path !== "" && element.path !== undefined) {
-                    sayit.push({ name: element.name, id: element.id });
-                };
-            });
-            // $('#sayitIds').attr("data-options", sayit.join(';'));
 
-            // whatsapp auswahl erstellen
-            $.each(whatsappID, (index, element) => {
-                if (element.name !== "" && element.name != undefined && element.path !== "" && element.path !== undefined) {
-                    whatsapp.push({ name: element.name, id: element.id });
-                };
-            });
-            // $('#whatsappIds').attr("data-options", whatsapp.join(';'));
+            if (pushoverID.length > 0) {
+                sendTo(null, ['1val', 'name'], pushoverID, async data => {
+                    if (data != undefined) pushover = await data.checked;
+                });
+            };
+            if (alexaID.length > 0) {
+                sendTo(null, ['2val', 'name', 'path'], alexaID, async data => {
+                    if (data != undefined) alexa = await data.checked;
+                });
+            };
+            if (sayitID.length > 0) {
+                sendTo(null, ['2val', 'name', 'path'], sayitID, async data => {
+                    if (data != undefined) sayit = await data.checked;
 
-            // device auswahl erstellen
-            $.each(deviceID, (index, element) => {
-                if (element.name !== "" && element.name != undefined && element.consumption !== "" && element.consumption != undefined) {
-                    devices.push({ name: element.name, id: element.id });
-                };
-            });
-            // $('#deviceIds').attr("data-options", devices.join(';'));
+                });
+            };
+            if (whatsappID.length > 0) {
+                sendTo(null, ['2val', 'name', 'path'], whatsappID, async data => {
+                    if (data != undefined) whatsapp = await data.checked;
+                });
+            };
+            if (deviceID.length > 0) {
+                sendTo(null, ['3val', 'name', 'consumption', 'switch'], deviceID, async data => {
+                    if (data != undefined) devices = await data.checked;
+                });
+            };
+
 
             // deviceType auswahl erstellen
             $.each(defaultTypeID, (index, element) => {
@@ -464,6 +541,7 @@
                         idsayit: 0,
                         idWhatsapp: 0,
                         idTelegram: 0,
+                        idPushover: 0,
                         autoOff: false,
                         idTimer: 0,
                         abort: false,
@@ -478,6 +556,7 @@
                     { type: 'multiple', data: sayit, name: "idsayit", value: curDevice.idsayit },
                     { type: 'multiple', data: firstName, name: "idTelegram", value: curDevice.idTelegram },
                     { type: 'multiple', data: whatsapp, name: "idWhatsapp", value: curDevice.idWhatsapp },
+                    { type: 'multiple', data: pushover, name: "idPushover", value: curDevice.idPushover },
                     { type: 'checkbox', name: "autoOff", value: curDevice.autoOff },
                     { type: 'timer', name: "idTimer", value: parseInt(curDevice.idTimer) },
                     { type: 'checkbox', name: "abort", value: curDevice.abort },
@@ -486,44 +565,46 @@
 
                 let col = "<tr>";
                 data.forEach(d => {
-                    let style = "";
-                    if (d.name == "deviceName") {
-                        style = 'style="font-weight:bold;"';
-                    }
+                    if (d.data == undefined || d.data.length > 0) {
+                        let style = "";
+                        if (d.name == "deviceName") {
+                            style = 'style="font-weight:bold;"';
+                        };
 
-                    col += `<td data-type=${d.type} data-name="${d.name}" ${style}>`;
-                    switch (d.type) {
-                        case 'checkbox':
-                            let checked = '';
-                            if (d.value == true || d.value == 'on') {
-                                checked = 'checked="checked"';
-                            }
-                            col += `<label><input type="checkbox" class="values-input" ${checked} data-old-value="${d.value}"><span></span></label>`;
-                            break;
-                        case 'label':
-                            col += `<span class="values-input" data-old-value="${d.value}">${d.value}</span>`;
-                            break;
-                        case 'multiple':
-                            col += `<select multiple class="values-input" data-old-value="${d.value}">`;
-                            d.data.forEach(name => {
+                        col += `<td data-type=${d.type} data-name="${d.name}" ${style}>`;
+                        switch (d.type) {
+                            case 'checkbox':
                                 let checked = '';
-                                if ($.inArray(name, d.value))
-                                    checked = 'selected';
-                                col += `<option ${checked} value='${name.id}'>${name.name}</option>`
-                            });
-                            col += `</select>`;
-                            break;
-                        case 'timer':
-                            col += `<input type="number" min="0" class="values-input" data-old-value="${d.value}">`;
-                            break;
-                        case 'id':
-                            col += `<span class="values-input" data-old-value="${d.value}">${d.value}</span>`;
-                            break;
-                        default:
-                            col += `Test`;
-                            break;
+                                if (d.value == true || d.value == 'on') {
+                                    checked = 'checked="checked"';
+                                }
+                                col += `<label><input type="checkbox" class="values-input" ${checked} data-old-value="${d.value}"><span></span></label>`;
+                                break;
+                            case 'label':
+                                col += `<span class="values-input" data-old-value="${d.value}">${d.value}</span>`;
+                                break;
+                            case 'multiple':
+                                col += `<select multiple class="values-input" data-old-value="${d.value}">`;
+                                d.data.forEach(name => {
+                                    let checked = '';
+                                    if ($.inArray(name, d.value))
+                                        checked = 'selected';
+                                    col += `<option ${checked} value='${name.id}'>${name.name}</option>`
+                                });
+                                col += `</select>`;
+                                break;
+                            case 'timer':
+                                col += `<input type="number" min="0" class="values-input" data-old-value="${d.value}">`;
+                                break;
+                            case 'id':
+                                col += `<span class="values-input" data-old-value="${d.value}">${d.value}</span>`;
+                                break;
+                            default:
+                                col += `Test`;
+                                break;
+                        };
+                        col += `</td>`;
                     };
-                    col += `</td>`;
                 });
                 col += "</tr>";
                 $('#dynamic-table-body').append(col);
@@ -555,6 +636,8 @@
         };
 
         function createSettings() {
+            console.warn()
+
             let obj = {};
             obj.deviceID = null;
             obj.deviceID = table2values('deviceID');
@@ -567,12 +650,16 @@
             obj.customTypeID = table2values('customTypeID');
             obj.defaultTypeID = table2values('defaultTypeID');
             obj.valStates = table2values('valStates');
+            obj.pushoverID = table2values('pushoverID'); // !!!
 
             obj.deviceID = createId(obj.deviceID, device_counter, "device_counter");
             obj.alexaID = createId(obj.alexaID, alexa_counter, "alexa_counter");
             obj.sayitID = createId(obj.sayitID, sayit_counter, "sayit_counter");
             obj.whatsappID = createId(obj.whatsappID, whatsapp_counter, "whatsapp_counter");
             // obj.telegramID = createId(obj.whatsappID, telegram_counter, "telegram_counter");
+            obj.pushoverID = createId(obj.pushoverID, pushover_counter, "pushover_counter");
+
+            pushover_counter
 
             function createId(array, counter, counter_name) {
                 for (const i in array) {
@@ -619,6 +706,15 @@
             obj.device = geraete;
             return obj;
         };
+
+        function showHeader(tblId, columnName, arr) {
+            if (arr.length > 0) {
+                $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'table-cell');
+            }
+            else {
+                $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'none');
+            }
+        }
 
     </script>
 </head>
@@ -729,14 +825,14 @@
                             <table id="dynamicTable" class="table-values changeOnChangeEvent remove-last-column">
                                 <thead>
                                     <tr>
-                                        <th class="header translate" data-name="enabled" style="width: 40px">active
+                                        <th class="header translate" data-name="enabled" style="width: 60px">active
                                         </th>
                                         <th class="header translate" data-name="deviceName">device name</th>
                                         <th class="header translate" data-name="idAlexa">Device alexa</th>
                                         <th class="header translate" data-name="idsayit">Device SayIt</th>
                                         <th class="header translate" data-name="idTelegram">telegram user</th>
                                         <th class="header translate" data-name="idWhatsapp">whatsapp user</th>
-                                        <!-- <th class="header translate" data-name="idTelegram">telegram user</th> -->
+                                        <th class="header translate" data-name="idPushover">pushover user</th>
                                         <th class="header translate" data-name="autoOff" style="width: 60px">autooff
                                         </th>
                                         <th class="header translate" data-name="idTimer" style="width: 60px">timeout in
@@ -966,6 +1062,43 @@
                             </table>
                         </div>
                     </div>
+
+                    <!-- pushover id  -->
+                    <div class="col s12" id="pushoverID">
+                        <div class="card-panel blue lighten-5">
+                            <div class="row">
+                                <div class="col left">
+                                    <a class="btn-floating waves-effect waves-light blue table-button-add"><i
+                                            class="material-icons">add</i></a> <b>add pushover user</b>
+                                </div>
+                            </div>
+                            <b>*Required fields</b>
+                            <table class="table-values changeOnChangeEvent remove-last-column">
+                                <thead>
+                                    <tr>
+                                        <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                        <th data-name="name" data-type="text" class="header translate">*pushover name
+                                        </th>
+                                        <th data-name="inst" data-type="select" class="header translate"
+                                            data-default=".0" data-options=".0;.1;.2;.3;.4;.5">*pushover instance</th>
+                                        <th data-name="prio" data-type="select" class="header translate"
+                                            data-default="normal" data-options="normal; high; quiet">priority</th>
+                                        <th data-name="sound" data-type="select" class="header translate"
+                                            data-default="pushover" data-options="pushover; bike; bugle; cashregister; classical; cosmic; falling; gamelan; 
+                                            incoming; intermission; magic; mechanical; pianobar; siren; spacealarm; tugboat; alien; 
+                                            climb; persistent; echo; updown; none">
+                                            sound</th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate">delete
+                                        </th>
+                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
+                                            id</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
 
