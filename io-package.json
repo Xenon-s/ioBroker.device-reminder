@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "news": {
+            "1.0.1": {
+                "en": "bugfix",
+                "de": "Bug-Fix",
+                "ru": "Исправлена ошибка",
+                "pt": "correção de bug",
+                "nl": "bugfix",
+                "fr": "correction d'un bug",
+                "it": "risoluzione del problema",
+                "es": "arreglo del fallo",
+                "pl": "naprawa błędów",
+                "zh-cn": "错误修正"
+            },
             "1.0.0": {
                 "en": "initial commit version 1.0",
                 "de": "Initial Commit Version 1.0",

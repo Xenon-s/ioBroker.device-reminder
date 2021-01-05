@@ -164,6 +164,9 @@ is displayed.
     ### __WORK IN PROGRESS__
 -->
 
+### 1.0.1 (2021-01-05)
+* (xenon-s) bugfix
+
 ### 1.0.0 (2021-01-05)
 * (xenon-s) initial commit version 1.0
 
