@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.0 beta",
+        "version": "1.0beta",
         "news": {
             "0.7.4": {
                 "en": "bugfix: telegram instance was not recognised correctly\nbugfix: abort detection prevented sending of notifications",
