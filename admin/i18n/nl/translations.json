@@ -1,0 +1,15 @@
+{
+    "add device": "Voeg toestel toe",
+    "check input": "controleer invoer",
+    "create device": "maak apparaat",
+    "device name": "toestelnaam",
+    "device type": "soort apparaat",
+    "device-reminder adapter settings": "Adapterinstellingen voor device-reminder",
+    "endtext": "endtext",
+    "help": "helpen",
+    "option1": "Optie 1",
+    "option2": "Optie 2",
+    "path consumption/energy": "pad verbruik / energie",
+    "path switch on/off": "pad schakelaar aan / uit",
+    "starttext": "starttekst"
+}

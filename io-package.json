@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.7.4",
+        "version": "1.0 beta",
         "news": {
             "0.7.4": {
                 "en": "bugfix: telegram instance was not recognised correctly\nbugfix: abort detection prevented sending of notifications",
@@ -78,11 +78,28 @@
         },
         "title": "device-reminder",
         "titleLang": {
-            "en": "device-reminder"
+            "en": "device-reminder",
+            "de": "Geräteerinnerung",
+            "ru": "устройство-напоминание",
+            "pt": "dispositivo-lembrete",
+            "nl": "apparaatherinnering",
+            "fr": "rappel d'appareil",
+            "it": "promemoria dispositivo",
+            "es": "recordatorio de dispositivo",
+            "pl": "urządzenie-przypomnienie",
+            "zh-cn": "设备提醒"
         },
         "desc": {
             "en": "Adapter for device reminder and notification when reaching different states",
-            "de": "Adapter für Geräteerinnerung und Benachrichtigung beim Erreichen von verschiedenen Zuständen"
+            "de": "Adapter für Geräteerinnerung und Benachrichtigung beim Erreichen von verschiedenen Zuständen",
+            "ru": "Адаптер для напоминания и уведомления устройства при достижении разных состояний",
+            "pt": "Adaptador para lembrete e notificação do dispositivo ao atingir diferentes estados",
+            "nl": "Adapter voor apparaatherinnering en melding bij het bereiken van verschillende toestanden",
+            "fr": "Adaptateur pour le rappel de l'appareil et la notification lorsque vous atteignez différents états",
+            "it": "Adattatore per promemoria del dispositivo e notifica al raggiungimento di stati diversi",
+            "es": "Adaptador para recordatorio y notificación del dispositivo al llegar a diferentes estados",
+            "pl": "Adapter do przypomnienia o urządzeniu i powiadomienia po osiągnięciu różnych stanów",
+            "zh-cn": "达到不同状态时用于设备提醒和通知的适配器"
         },
         "authors": [
             "xenon-s <ente_s@hotmail.de>"
@@ -119,6 +136,9 @@
         "alexa_counter": 0,
         "sayit_counter": 0,
         "whatsapp_counter": 0,
+        "telegram_counter": 0,
+        "pushover_counter": 0,
+        "email_counter": 0,
         "custom_device_counter": 0,
         "defaultTypeID": [
             {

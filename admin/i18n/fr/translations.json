@@ -1,0 +1,15 @@
+{
+    "add device": "ajouter un appareil",
+    "check input": "vérifier l'entrée",
+    "create device": "créer un appareil",
+    "device name": "nom de l'appareil",
+    "device type": "type d'appareil",
+    "device-reminder adapter settings": "Paramètres d'adaptateur pour device-reminder",
+    "endtext": "fin de texte",
+    "help": "Aidez-moi",
+    "option1": "Option 1",
+    "option2": "Option 2",
+    "path consumption/energy": "consommation de chemin / énergie",
+    "path switch on/off": "allumer / éteindre le chemin",
+    "starttext": "texte de départ"
+}

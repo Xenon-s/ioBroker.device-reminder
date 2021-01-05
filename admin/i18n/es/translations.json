@@ -1,0 +1,15 @@
+{
+    "add device": "añadir dispositivo",
+    "check input": "comprobar entrada",
+    "create device": "crear dispositivo",
+    "device name": "nombre del dispositivo",
+    "device type": "tipo de dispositivo",
+    "device-reminder adapter settings": "Ajustes del adaptador para device-reminder",
+    "endtext": "endtext",
+    "help": "ayuda",
+    "option1": "Opción 1",
+    "option2": "opcion 2",
+    "path consumption/energy": "consumo de ruta / energía",
+    "path switch on/off": "interruptor de ruta encendido / apagado",
+    "starttext": "starttext"
+}

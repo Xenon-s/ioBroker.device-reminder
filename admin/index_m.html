@@ -33,6 +33,7 @@
         let whatsappID = [];
         let arrTelegramUser = [];
         let pushoverID = [];
+        let emailID = [];
         let customTypeID = [];
         let defaultTypeID = [];
         let valStates = [];
@@ -41,9 +42,9 @@
         let devices = [];
         let whatsapp = [];
         let deviceTypes = [];
-        // let telegramUserID = [];
         let firstName = []; // telegram firstname user
         let pushover = [];
+        let email = [];
 
         let device_counter;
         let alexa_counter;
@@ -51,7 +52,7 @@
         let whatsapp_counter;
         let telegram_counter;
         let pushover_counter;
-        // let custom_device_counter;
+        let email_counter;
 
         let alexaFinal = [];
         let sayitFinal = [];
@@ -61,11 +62,12 @@
         let defaultTypeIDFinal = [];
         let telegramFinal = [];
         let pushoverFinal = [];
+        let emailFinal = [];
         let curDevice = null
         let varTrue = false;
+        let active = false;
 
-
-        function loadUser(settings, onChange) {
+        async function loadUser(settings, onChange) {
             $('.value').each(function () {
                 const $key = $(this);
                 const id = $key.attr('id');
@@ -86,175 +88,93 @@
         };
 
         // This will be called by the admin adapter when the settings page loads
-        function load(settings, onChange) {
+        async function load(settings, onChange) {
             if (!settings) return;
+            let namespace = `${adapter}.${instance}`;
 
-            deviceID = settings.deviceID || []; // device ID native anlegen
-            device = settings.device || []; // devices native anlegen
-            alexaID = settings.alexaID || []; // alexaID native anlegen 
-            sayitID = settings.sayitID || []; // sayit ID native anlegen
-            whatsappID = settings.whatsappID || []; // whatsapp ID native anlegen
-            pushoverID = settings.pushoverID || []; // pushover ID native anlegen
-            customTypeID = settings.customTypeID || [];
-            defaultTypeID = settings.defaultTypeID || [];
-            device_final = settings.device_final || []; // output -> main.js
+            socket.emit('getState', `system.adapter.${namespace}.alive`, async function (err, state) {
+                active = await /*common.enabled ||*/ (state && state.val);
+                if (!active) {
+                    await $(`#test`).html(`<div class="collapsible-header red lighten-1"><i class="large material-icons">error_outline</i>Please activate the device-reminder.${instance} instance!</div>`);
+                    await $('.btn-save, .btn-save-close').addClass('disabled');
+                } else {
 
-            // create own device status
-            if (settings.valStates.length === 0) {
-                valStates = [{ "stateAction": "in action", "stateStandby": "standby", "stateOff": "off" }];
-            } else {
-                let objTemp = {};
-                objTemp = settings.valStates[0];
-                if (objTemp.stateAction === "") {
-                    objTemp.stateAction = "in action";
+                    deviceID = settings.deviceID || []; // device ID native anlegen
+                    device = settings.device || []; // devices native anlegen
+                    alexaID = settings.alexaID || []; // alexaID native anlegen 
+                    sayitID = settings.sayitID || []; // sayit ID native anlegen
+                    whatsappID = settings.whatsappID || []; // whatsapp ID native anlegen
+                    pushoverID = settings.pushoverID || []; // pushover ID native anlegen
+                    emailID = settings.emailID || []; // emailID native anlegen
+
+                    customTypeID = settings.customTypeID || [];
+                    defaultTypeID = settings.defaultTypeID || [];
+                    device_final = settings.device_final || []; // output -> main.js
+
+                    device_counter = settings.device_counter;
+                    alexa_counter = settings.alexa_counter;
+                    sayit_counter = settings.sayit_counter;
+                    whatsapp_counter = settings.whatsapp_counter;
+                    telegram_counter = settings.telegram_counter;
+                    pushover_counter = settings.pushover_counter;
+                    email_counter = settings.email_counter;
+                    custom_device_counter = settings.custom_device_counter;
+                    valStates = settings.valStates;
+
+                    await readUser('start');
+
+                    $('#fill-dynamic-table').addClass('disabled');
+
+                    loadUser(settings, onChange);
+
+                    setTimeout(function () {
+                        showHeader('dynamicTable', 'idAlexa', alexa);
+                        showHeader('dynamicTable', 'idsayit', sayit);
+                        showHeader('dynamicTable', 'idTelegram', firstName);
+                        showHeader('dynamicTable', 'idWhatsapp', whatsapp);
+                        showHeader('dynamicTable', 'idPushover', pushover);
+                        showHeader('dynamicTable', 'idEmail', email);
+                    }, 200);
+
+                    onChange(false);
+
+                    // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
+                    setTimeout(function () {
+                        values2table('deviceID', deviceID, onChange); //deviceID
+                        values2table('alexaID', alexaID, onChange); //alexa
+                        values2table('sayitID', sayitID, onChange); //sayit
+                        values2table('whatsappID', whatsappID, onChange); // whatsapp
+                        values2table('pushoverID', pushoverID, onChange); // pushover
+                        values2table('emailID', emailID, onChange); // email
+                        values2table('customTypeID', customTypeID, onChange); // custom devices
+                        values2table('defaultTypeID', defaultTypeID, onChange); // custom devices
+                        values2table('valStates', valStates, onChange); // custom states
+                        $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true);
+
+                    }, 200);
+                    setTimeout(function () {
+                        createDynamicTable(settings, onChange, device); // create dynamic table "device"
+                        $('#dynamicTableLoading, #dynamicTableLoadingText').css('display', 'none'); // ladekringel
+                    }, 200);
+
+                    if (M) M.updateTextFields();
+                    if (varTrue == false) clickButton(onChange);
+                    $('.collapsible').collapsible();
+                    $('.modal').modal();
                 };
-                if (objTemp.stateStandby === "") {
-                    objTemp.stateStandby = "standby";
-                };
-                if (objTemp.stateOff === "") {
-                    objTemp.stateOff = "off";
-                };
-                settings.valStates[0] = objTemp;
-                valStates = settings.valStates;
-            };
-
-            // counter ID
-            console.log(settings.telegram_counter);
-
-            settings.device_counter = ctrlCntr(settings.device_counter);
-            settings.alexa_counter = ctrlCntr(settings.alexa_counter);
-            settings.sayit_counter = ctrlCntr(settings.sayit_counter);
-            settings.whatsapp_counter = ctrlCntr(settings.whatsapp_counter);
-            settings.telegram_counter = ctrlCntr(settings.telegram_counter);
-            settings.pushover_counter = ctrlCntr(settings.pushover_counter);
-
-            function ctrlCntr(cntr) {
-                if (cntr == undefined) {
-                    cntr = 0;
-                };
-                console.log(cntr);
-                return cntr;
-            };
-
-            device_counter = settings.device_counter;
-            alexa_counter = settings.alexa_counter;
-            sayit_counter = settings.sayit_counter;
-            whatsapp_counter = settings.whatsapp_counter;
-            telegram_counter = settings.telegram_counter;
-            pushover_counter = settings.pushover_counter;
-            custom_device_counter = settings.custom_device_counter;
-
-
-
-            let arrAll = [];
-
-            // putType(deviceID, 'deviceID');
-            // putType(alexaID, 'alexaID');
-            // putType(sayitID, 'sayitID');
-            // putType(whatsappID, 'whatsappID');
-            // putType(pushoverID, 'pushoverID');
-
-            // async function putType(arr, name) {
-            //     if (arr != undefined && arr.length > 0) {
-            //         for (const i in arr) {
-            //             arr[i].def = name;
-            //         };
-            //         arrAll.push(arr);
-            //         console.warn(arrAll);
-            //     }; 
-            // };
-
-            // const validateInput = async (arrAll) => {
-            //     let arrTemp = [];
-            //     console.warn(arrAll);
-            //     for (const i in arrAll) {
-            //         if (arrAll[i] != undefined && arrAll[i].length > 0) {
-            //             for (const j in arrAll[i]) {
-            //             }
-            //             sendTo(null, "ctrlDevice", arrAll[i], async data => {
-            //                 if (data != undefined) test(data);
-            //             });
-            //         };
-            //     };
-            // };
-
-            // validateInput(arrAll);
-
-            // const test = async arr => console.warn(arr);
-
-
-            // // alte Schreibweise
-            // let oldFunction = function () {
-            //     console.warn('OLD');
-            // };
-            // // neue Schreibweise
-            // let newFunction = () => {
-            //     console.warn('NEW');
-            // };
-
-            // // neue Schreibweise short + param
-            // let newFunction2 = age => console.warn(age);
-            // newFunction2(42);
-
-            // let newFunction3 = () => console.warn('test');
-
-            // promise
-
-            readUser();
-
-            loadUser(settings, onChange);
-
-            setTimeout(function () {
-                showHeader('dynamicTable', 'idAlexa', alexa);
-                showHeader('dynamicTable', 'idsayit', sayit);
-                showHeader('dynamicTable', 'idTelegram', firstName);
-                showHeader('dynamicTable', 'idWhatsapp', whatsapp);
-                showHeader('dynamicTable', 'idPushover', pushover);
-            }, 200);
-
-            onChange(false);
-
-            // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
-            setTimeout(function () {
-                values2table('deviceID', deviceID, onChange); //deviceID
-                values2table('alexaID', alexaID, onChange); //alexa
-                values2table('sayitID', sayitID, onChange); //sayit
-                values2table('whatsappID', whatsappID, onChange); // whatsapp
-                values2table('pushoverID', pushoverID, onChange); // whatsapp
-
-                values2table('customTypeID', customTypeID, onChange); // custom devices
-                values2table('defaultTypeID', defaultTypeID, onChange); // custom devices
-
-                values2table('valStates', valStates, onChange)
-
-                $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true);
-
-            }, 200);
-            setTimeout(function () {
-                $('.changeOnChangeEvent').off('change');
-                $('.changeOnChangeEvent').find('*').off('change');
-                $('.changeOnChangeEvent').find('*').on('change keyup', function () {
-
-                    $('.btn-save, .btn-save-close').addClass('disabled');
-                    $('#fill-dynamic-table, #fill-dynamic-table1').removeClass('disabled');
-
-                });
-                createDynamicTable(settings, onChange, device); // create dynamic table "device"
-                $('#dynamicTableLoading, #dynamicTableLoadingText').css('display', 'none'); // ladekringel
-            }, 2000);
-
-            if (M) M.updateTextFields();
-
-            if (varTrue == false) clickButton(onChange);
-
+            });
         };
 
-        // Load End
-        //#################################################################################################################
-        // Save Start
+        //##################################################################################################
+        //############################################ Load End ############################################
+        //##################################################################################################
 
-        // This will be called by the admin adapter when the user presses the save button
-        function save(callback) {
+        //##################################################################################################
+        //############################################ save start ##########################################
+        //##################################################################################################
+
+        async function save(callback) {
+
             let obj = {};
             obj = createSettings();
 
@@ -265,9 +185,11 @@
             obj.customTypeIDFinal = createArray(JSON.parse(JSON.stringify(obj.customTypeID)), "typeID");
             obj.defaultTypeIDFinal = createArray(JSON.parse(JSON.stringify(obj.defaultTypeID)), "typeID");
             obj.telegramFinal = createArray(JSON.parse(JSON.stringify(obj.telegramID)), "telegram");
-            obj.pushoverFinal = createArray(JSON.parse(JSON.stringify(obj.pushoverID)), "pushover"); // !!!
+            obj.pushoverFinal = createArray(JSON.parse(JSON.stringify(obj.pushoverID)), "pushover");
+            obj.emailFinal = createArray(JSON.parse(JSON.stringify(obj.emailID)), "email");
 
             function createArray(obj, type) {
+
                 let objTemp = {};
                 for (const id in obj) {
                     if (type === "alexa" || type === "sayit") {
@@ -345,6 +267,21 @@
                                 prio: obj[id].prio,
                                 sound: obj[id].sound,
                             };
+                            if (objTemp[obj[id].id].prio == 'high') {
+                                objTemp[obj[id].id].prio = 1;
+                            } else if (objTemp[obj[id].id].prio == 'quiet') {
+                                objTemp[obj[id].id].prio = -1;
+                            } else {
+                                delete objTemp[obj[id].id].prio;
+                            };
+                            break;
+                        };
+                        case "email": {
+                            objTemp[obj[id].id] = {
+                                name: obj[id].name,
+                                emailFrom: obj[id].emailFrom,
+                                emailTo: obj[id].emailTo
+                            };
                             break;
                         };
                     };
@@ -356,7 +293,6 @@
 
             function createDevicesFinal(obj, arr) {
                 let objTemp = {};
-
                 for (const i in obj) {
                     for (const j in arr) {
                         if (obj[i].id == arr[j].id) {
@@ -373,6 +309,8 @@
                                     sayit: obj[i].idsayit,
                                     whatsapp: obj[i].idWhatsapp,
                                     telegram: obj[i].idTelegram,
+                                    pushover: obj[i].idPushover,
+                                    email: obj[i].idEmail,
                                     autoOff: obj[i].autoOff,
                                     timer: obj[i].idTimer,
                                     abort: obj[i].abort,
@@ -387,82 +325,51 @@
             callback(obj);
         };
 
-        function clickButton(onChange) {
+        async function clickButton(onChange) {
 
             varTrue = true;
 
-            $('#fill-dynamic-table, #fill-dynamic-table1').on('click', () => {
-                $('#fill-dynamic-table, #fill-dynamic-table1').addClass('disabled');
+            // refresh dynamic table
+            $('#fill-dynamic-table').on('click', () => {
                 $('#dynamicTableLoading, #dynamicTableLoadingText').css('display', ''); // ladekringel
-
                 settings = createSettings();
                 load(settings, onChange);
                 onChange(true);
+                $('.btn-save, .btn-save-close').removeClass('disabled');
+                $('#fill-dynamic-table').addClass('disabled');
+
+            });
+
+            //check buttons for input
+            $('#btn-check-device').on('click',() => {
+                readUser('device');
+            });
+            $('#btn-check-alexa').on('click', () => {
+                readUser('alexa');
+            });
+            $('#btn-check-sayit').on('click', () => {
+                readUser('sayit');
+            });
+            $('#btn-check-whatsapp').on('click', () => {
+                readUser('whatsapp');
+            });
+            $('#btn-check-pushover').on('click', () => {
+                readUser('pushover');
+            });
+            $('#btn-check-default-type').on('click', () => {
+                readUser('default');
+            });
+            $('#btn-check-custom-type').on('click', () => {
+                readUser('custom');
+            });
+            $('#btn-check-email').on('click', () => {
+                readUser('email');
             });
         };
 
-        // functions 
+        async function readUser(val) {
 
-        // function getTelegramUser() {
-        //     console.log('telegramUser');
-        //     arrTelegramUser = [];
-        //     /* Telegram Instanzen ermitteln */
-        //     socket.emit('getObjectView', 'system', 'instance', { startkey: 'system.adapter.', endkey: 'system.adapter.\u9999' }, (err, state) => {
-        //         if (err) {
-        //             console.error(err);
-        //         }
-        //         else {
-        //             let result = [];
-        //             let inst = ``;
-        //             $.each(state.rows, (index, element) => {
-        //                 result.push(element.value);
-        //             });
-        //             $.each(result, (index, element) => {
-        //                 for (let i = 0; i < 10; i++) {
-        //                     if (element._id === `system.adapter.telegram.${i}`) {
-        //                         inst = `${i}`;
-        //                         let arr = { name: `telegram.${i}.communicate.users`, inst: inst };
-        //                         arrTelegramUser.push(arr);
-        //                     };
-        //                 };
-        //             });
-        //             readUserTelegram(arrTelegramUser);
-        //         };
-        //     });
-        // };
-
-        // function readUserTelegram(arrTelegramUser) {
-        //     // telegram auswahl erstellen
-        //     console.log(arrTelegramUser.length);
-        //     firstName = [];
-        //     for (const i in arrTelegramUser) {
-        //         socket.emit('getState', arrTelegramUser[i].name, (err, state) => {
-        //             if (state !== null || state !== undefined) {
-        //                 if (state.val !== ``) {
-        //                     $.each(JSON.parse(state.val), (index, element) => {
-        //                         let strTemP = ``;
-        //                         console.warn(JSON.stringify(element));
-        //                         if (element.firstName != undefined && element.firstName !== "" && element.firstName != null) {
-        //                             strTemP = `[${arrTelegramUser[i].inst}]${element.firstName}`;
-        //                             firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.firstName, inst: `.${arrTelegramUser[i].inst}` });
-        //                             telegram_counter++;
-        //                         };
-        //                         if (element.userName != undefined && element.userName !== "" && element.userName != null) {
-        //                             strTemP = `[${arrTelegramUser[i].inst}]${element.userName}`;
-        //                             firstName.push({ name: strTemP, id: telegram_counter, nameFinal: element.userName, inst: `.${arrTelegramUser[i].inst}` });
-        //                             telegram_counter++;
-        //                         };
-        //                     });
-        //                 };
-        //             };
-        //         });
-        //     };
-        //     console.log(firstName);
-        // };
-
-        async function readUser() {
-
-            // getTelegramUser();
+            $('#fill-dynamic-table').removeClass('disabled');
 
             alexa = [];
             sayit = [];
@@ -472,52 +379,173 @@
             pushover = [];
             firstName = [];
 
-            sendTo(null, ['telegram'], telegram_counter, async data => {
-                    if (data != undefined) firstName = await data;
-                    console.warn(data);
-                });
+            const objCtrl = await { 0: 'device', 1: 'telegram', 2: 'alexa', 3: 'sayit', 4: 'whatsapp', 5: 'pushover', 6: 'email', 7: 'default', 8: 'custom', 9: 'status' };
 
-
-            if (pushoverID.length > 0) {
-                sendTo(null, ['1val', 'name'], pushoverID, async data => {
-                    if (data != undefined) pushover = await data.checked;
-                });
-            };
-            if (alexaID.length > 0) {
-                sendTo(null, ['2val', 'name', 'path'], alexaID, async data => {
-                    if (data != undefined) alexa = await data.checked;
-                });
-            };
-            if (sayitID.length > 0) {
-                sendTo(null, ['2val', 'name', 'path'], sayitID, async data => {
-                    if (data != undefined) sayit = await data.checked;
-
-                });
-            };
-            if (whatsappID.length > 0) {
-                sendTo(null, ['2val', 'name', 'path'], whatsappID, async data => {
-                    if (data != undefined) whatsapp = await data.checked;
-                });
-            };
-            if (deviceID.length > 0) {
-                sendTo(null, ['3val', 'name', 'consumption', 'switch'], deviceID, async data => {
-                    if (data != undefined) devices = await data.checked;
-                });
-            };
-
-
-            // deviceType auswahl erstellen
-            $.each(defaultTypeID, (index, element) => {
-                if (element.name !== "" && element.name != undefined && element.startVal !== "" && element.startVal != undefined && element.endVal !== "" && element.endVal != undefined && element.startCount !== "" && element.startCount != undefined && element.endCount !== "" && element.endCount != undefined) {
-                    deviceTypes.push(`${element.name}`);
+            const checked = async (obj) => {
+                if (obj.dataFailed == null) {
+                    $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: grey;">
+                            <i class="material-icons">check_circle_outline</i> <b>no entries found</b> </div>`);
+                    // Header innen "config devices"
+                    $(`#${obj.header}`).html(`<div class="collapsible-header grey lighten-2 translate"><i class="material-icons">create</i>click here for create your first ${obj.name}</div>`);
+                } else if (obj.dataFailed.length >= 1) {
+                    $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: red;">
+                            <i class="large material-icons">error_outline</i><span><b>invalid input detected:</b><br> - ${obj.dataFailed.join('<br> - ')}</span></div>`);
+                    // Header innen "config devices"
+                    $(`#${obj.header}`).html(`<div class="collapsible-header red lighten-2 translate"><i class="material-icons">create</i>${obj.dataFailed.length} error(s) found in ${obj.name}</div>`);
+                    // Header außen "config devices"
+                    $(`#header-config`).html(`<div class="collapsible-header red lighten-2 translate"><i class="material-icons">create</i>Erros(s) found in configuration</div>`);
+                    $('.btn-save, .btn-save-close').addClass('disabled');
+                } else {
+                    $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: green;">
+                            <i class="material-icons">check_circle_outline</i> <b>Input checked</b> </div>`);
+                    // Header innen "config devices"
+                    $(`#${obj.header}`).html(`<div class="collapsible-header green lighten-2 translate"><i class="material-icons">create</i>Click here to edit your ${obj.name}</div>`);
+                    // Header außen "config devices"
+                    $(`#header-config`).html(`<div class="collapsible-header green lighten-2 translate"><i class="material-icons">create</i>Click here to create or edit your devices, messenger, etc</div>`);
+                    // Header "link devices"
+                    $(`#header-link-device`).html(`<div class="collapsible-header green lighten-2" translate><i class="material-icons">create</i>Here you can link your devices</div>`);
                 };
-            });
-            $.each(customTypeID, (index, element) => {
-                if (element.name !== "" && element.name != undefined && element.startVal !== "" && element.startVal != undefined && element.endVal !== "" && element.endVal != undefined && element.startCount !== "" && element.startCount != undefined && element.endCount !== "" && element.endCount != undefined) {
-                    deviceTypes.push(`${element.name}`);
+                $(`#help-${obj.anchorName}`).html(`<div><h4>create ${obj.name}</h4><p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README.md#${obj.anchorEn}" target="_blank">${obj.anchorEn} english</a></p>
+                    <p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README_GER.md#${obj.anchorGer}" target="_blank">${obj.anchorGer} deutsch</a></p></div>`);
+            };
+
+            // All entries from the Admin are checked here
+            const ctrlInput = (val) => {
+                let test;
+                const name = `${val}`;
+                const header = `header-${val}`;
+                switch (val) {
+                    case 'start': {
+                        for (const i in objCtrl) {
+                            ctrlInput(objCtrl[i]);
+                        };
+                        $('.btn-save, .btn-save-close').addClass('disabled');
+                        break;
+                    }
+                    case 'telegram': {
+                        sendTo(null, { cmd: 'telegram' }, telegram_counter, async data => {
+                            if (data != undefined)
+                                firstName = await data;
+                        });
+                        break;
+                    };
+                    case 'device': {
+                        let obj = { dataChecked: null, dataFailed: null, err: `errDevice`, header: header, name: `${name}s`, anchorEn: `create-device`, anchorGer: `device-anlegen`, anchorName: `device`};
+                        if (deviceID.length > 0) {
+                            sendTo(null, { cmd: 'val', 1: 'name', 2: 'consumption', 3: 'switch', cntr: 3 }, deviceID, async data => {
+                                if (data != undefined) {
+                                    devices = await data.checked;
+                                    obj.dataFailed = await data.failed;
+                                    checked(obj);
+                                };
+                            });
+                        } else checked(obj);
+                        break;
+                    };
+                    case 'alexa': {
+                        let obj = { dataChecked: null, dataFailed: null, err: `errAlexa`, header: header, name: `${name} device`, anchorEn: `create-alexa`, anchorGer: `alexa-erstellen`, anchorName: `alexa`};
+                        if (alexaID.length > 0) {
+                            sendTo(null, { cmd: 'val', 1: 'name', 2: 'path', cntr: 2 }, alexaID, async data => {
+                                if (data != undefined) {
+                                    alexa = await data.checked;
+                                    obj.dataFailed = await data.failed;
+                                    checked(obj);
+                                };
+                            });
+                        } else checked(obj);
+                        break;
+                    };
+                    case 'sayit': {
+                        let obj = { dataChecked: null, dataFailed: null, err: `errSayIt`, header: header, name: `${name} device`, anchorEn: `create-sayit-device`, anchorGer: `sayit-device-erstellen`, anchorName: `sayit`};
+                        if (sayitID.length > 0) {
+                            sendTo(null, { cmd: 'val', 1: 'name', 2: 'path', cntr: 2 }, sayitID, async data => {
+                                if (data != undefined) {
+                                    sayit = await data.checked;
+                                    obj.dataFailed = await data.failed;
+                                    checked(obj);
+                                };
+                            });
+                        } else checked(obj);
+                        break;
+                    };
+                    case 'whatsapp': {
+                        let obj = { dataChecked: null, dataFailed: null, err: `errWhatsapp`, header: header, name: `${name} user`, anchorEn: `create-whatsapp-user`, anchorGer: `whatsapp-user-erstellen`, anchorName: `whatsapp`};
+                        if (whatsappID.length > 0) {
+                            sendTo(null, { cmd: 'val', 1: 'name', 2: 'path', cntr: 2 }, whatsappID, async data => {
+                                if (data != undefined) {
+                                    whatsapp = await data.checked;
+                                    obj.dataFailed = await data.failed;
+                                    checked(obj);
+                                };
+                            });
+                        } checked(obj);
+                        break;
+                    };
+                    case 'pushover': {
+                        let obj = { dataChecked: null, dataFailed: null, err: `errPushover`, header: header, name: `${name} user`, anchorEn: `create-pushover-user`, anchorGer: `pushover-user-erstellen`, anchorName: `pushover`};
+                        if (pushoverID.length > 0) {
+                            sendTo(null, { cmd: 'type', 1: 'name', 2: 'inst', 3: 'prio', 4: 'sound', cntr: 4 }, pushoverID, async data => {
+                                if (data != undefined) {
+                                    pushover = await data.checked;
+                                    obj.dataFailed = await data.failed;
+                                    checked(obj);
+                                };
+                            });
+                        } else checked(obj);
+                        break;
+                    };
+                    case 'email': {
+                        let obj = { dataChecked: null, dataFailed: null, err: `errEmail`, header: header, name: `${name} user`, anchorEn: `create-email-user`, anchorGer: `email-user-erstellen`, anchorName: `email`};
+                        if (emailID.length > 0) {
+                            sendTo(null, { cmd: 'email', 1: 'name', 2: 'emailFrom', 3: 'emailTo', cntr: 3 }, emailID, async data => {
+                                if (data != undefined) {
+                                    email = await data.checked;
+                                    obj.dataFailed = await data.failed;
+                                    checked(obj);
+                                };
+                            });
+                        } else checked(obj);
+                        break;
+                    };
+                    case 'default': {
+                        let obj = { dataChecked: null, dataFailed: null, err: `errDefault`, header: header, name: `${name} type config`, anchorEn: `default-devices`, anchorGer: `default-devices`, anchorName: `default-type`};
+                        pushTypes(defaultTypeID, obj);
+                        break;
+                    };
+                    case 'custom': {
+                        let obj = { dataChecked: null, dataFailed: null, err: `errCustom`, header: header, name: `${name} type config`, anchorEn: `custom-devices`, anchorGer: `custom-devices`, anchorName: `create-custom-type`};
+                        pushTypes(customTypeID, obj);
+                        break;
+                    };
+                    case 'status': {
+                        let obj = { dataChecked: null, dataFailed: [], err: `errStates`, header: header, name: `custom device ${name}`, anchorEn: `custom-states`, anchorGer: `eigene-zustaende`, anchorName: `custom-status`};
+                        const emptyArr = [];
+                        checked(obj)
+                        $('#errStates').css('display', 'none');
+                        break;
+                    }
+                    default: {
+                        console.warn('wrong input');
+                        break;
+                    };
                 };
-            });
-            $('#deviceTypeID').attr("data-options", deviceTypes.join(';'));
+            };
+
+            async function pushTypes(arr,obj, header, name, err) {
+                if (arr.length > 0) {
+                    sendTo(null, { cmd: 'type', 1: 'name', 2: 'startVal', 3: 'endVal', 4: 'startCount', 5: 'endCount', cntr: 5 }, arr, async data => {
+                        if (data != undefined) {
+                            $.each(await data.checked, async (index, element) => {
+                                deviceTypes.push(`${element.name}`);
+                            });
+                            await $('#deviceTypeID').attr("data-options", deviceTypes.join(';'));
+                            obj.dataFailed = await data.failed;
+                            await checked(obj);
+                        };
+                    });
+                } else await checked(obj);
+            };
+            await ctrlInput(val);
         };
 
         function createDynamicTable(settings, onChange, device) {
@@ -542,6 +570,7 @@
                         idWhatsapp: 0,
                         idTelegram: 0,
                         idPushover: 0,
+                        idEmail: 0,
                         autoOff: false,
                         idTimer: 0,
                         abort: false,
@@ -557,6 +586,7 @@
                     { type: 'multiple', data: firstName, name: "idTelegram", value: curDevice.idTelegram },
                     { type: 'multiple', data: whatsapp, name: "idWhatsapp", value: curDevice.idWhatsapp },
                     { type: 'multiple', data: pushover, name: "idPushover", value: curDevice.idPushover },
+                    { type: 'multiple', data: email, name: "idEmail", value: curDevice.idEmail },
                     { type: 'checkbox', name: "autoOff", value: curDevice.autoOff },
                     { type: 'timer', name: "idTimer", value: parseInt(curDevice.idTimer) },
                     { type: 'checkbox', name: "abort", value: curDevice.abort },
@@ -615,7 +645,7 @@
                     }
                     else {
                         $(this).find('input').val(curDevice[$(this).data('name')]);
-                    }
+                    };
                 });
 
                 $('#dynamic-table-body').find('.values-input').on('change', function () {
@@ -632,34 +662,30 @@
 
             if (settings != null && settings != undefined)
                 loadUser(settings, onChange);
-
         };
 
         function createSettings() {
-            console.warn()
 
             let obj = {};
             obj.deviceID = null;
             obj.deviceID = table2values('deviceID');
             obj.alexaID = table2values('alexaID');
             obj.sayitID = table2values('sayitID');
-            console.log(firstName);
             obj.telegramID = firstName; // telegram namen sichern
 
             obj.whatsappID = table2values('whatsappID');
             obj.customTypeID = table2values('customTypeID');
             obj.defaultTypeID = table2values('defaultTypeID');
             obj.valStates = table2values('valStates');
-            obj.pushoverID = table2values('pushoverID'); // !!!
+            obj.pushoverID = table2values('pushoverID');
+            obj.emailID = table2values('emailID');
 
             obj.deviceID = createId(obj.deviceID, device_counter, "device_counter");
             obj.alexaID = createId(obj.alexaID, alexa_counter, "alexa_counter");
             obj.sayitID = createId(obj.sayitID, sayit_counter, "sayit_counter");
             obj.whatsappID = createId(obj.whatsappID, whatsapp_counter, "whatsapp_counter");
-            // obj.telegramID = createId(obj.whatsappID, telegram_counter, "telegram_counter");
             obj.pushoverID = createId(obj.pushoverID, pushover_counter, "pushover_counter");
-
-            pushover_counter
+            obj.emailID = createId(obj.emailID, email_counter, "email_counter");
 
             function createId(array, counter, counter_name) {
                 for (const i in array) {
@@ -676,30 +702,24 @@
             let geraete = [];
 
             body.children().each(function () {
-
                 let data = {};
                 $(this).children().each(function () {
                     let value;
                     if ($(this).data('type') == 'multiple') {
                         value = $(this).find('select').val();
                         $(this).find('select').data('old-value', value);
-                    }
-                    else if ($(this).data('type') == 'label') {
+                    } else if ($(this).data('type') == 'label') {
                         value = $(this).find('span').text();
-                    }
-                    else if ($(this).data('type') == 'checkbox') {
+                    } else if ($(this).data('type') == 'checkbox') {
                         value = $(this).find('input').prop('checked');
                         $(this).find('input').data('old-value', value);
-                    }
-                    else if ($(this).data('type') == 'id') {
+                    } else if ($(this).data('type') == 'id') {
                         value = $(this).find('span').text();
-                    }
-                    else {
+                    } else {
                         value = $(this).find('input').val();
                         $(this).find('input').data('old-value', value);
                     };
                     data[$(this).data('name')] = value;
-
                 });
                 geraete.push(data);
             });
@@ -713,476 +733,561 @@
             }
             else {
                 $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'none');
-            }
-        }
+            };
+        };
 
     </script>
 </head>
 
 <body>
     <div class="m adapter-container">
-        <div class="row">
+        <div class="row" id="test">
             <!-- Tabs: Menu -->
-            <div class="col s12"
+            <div class="col s12 .tabs-fixed-width"
                 style="padding-left:0;padding-right:0; margin-top: 0px; margin-bottom: 1px; background-color:#174475; box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);">
                 <ul class="tabs blue lighten-4">
                     <li class="tab col s3"><a href="#tab-config" class="translate">Config</a></li>
-                    <li class="tab col s3"><a href="#tab-devices" class="translate">Devices</a></li>
-                    <li class="tab col s3"><a href="#tab-type" class="translate">Type</a></li>
                 </ul>
             </div>
 
-            <!-- Tab id "devices" -->
-            <div id="tab-devices" class="col s12">
-                <div class="row">
-                    <div class="col s12" id="device">
+            <div class="row">
+                <!-- Tab with id "config" -->
+                <div id="tab-config" class="col s12">
+                    <div class="row">
                         <div class="row">
                             <div class="input-field col s3">
                                 <img src="icon.png">
                             </div>
-                            <div class="col s4">
-                                <div class="card">
-                                    <div class="card-panel blue lighten-5">
-                                        <span class="card-title">
-
-                                            If the following button is blue, it must be clicked once. This will update
-                                            the table.</span>
-                                        <p><a id="fill-dynamic-table"
-                                                class="btn-save waves-effect waves-light btn disabled">Click
-                                                here to
-                                                refresh table</a></p>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
-                        <div class="row">
-                            <div id="valStates">
-                                <div class="col s6">
-                                    <div class="card">
-                                        <div class="card-panel blue lighten-5">
-                                            <div>
-                                                <h5>Configure your own device status</h5>
+                        <div>
+                            <ul class="collapsible">
+                                <li>
+                                    <div id="header-config">
+                                        <!-- text -->
+                                    </div>
+                                    <div class="collapsible-body blue lighten-5 translate">
+                                        <!-- create device -->
+                                        <ul class="collapsible">
+                                            <li>
+                                                <div id="header-device" class="translate">
+                                                    <!-- text -->
+                                                </div>
+                                                <div class="collapsible-body blue lighten-5" id="deviceID">
+                                                    <div class="row">
+                                                        <div style="display: flex; align-items: center;">
+                                                            <div class="col left s2">
+                                                                <a class="btn-floating waves-effect waves-light blue table-button-add translate">
+                                                                    <i class="material-icons">add_circle_outline</i></a>
+                                                                <b>add device</b>
+                                                            </div>
+                                                            <div class="col s2">
+                                                                <a id="btn-check-device" class="waves-effect waves-teal btn" class="translate">check input</a>
+                                                            </div>
+                                                            <div class="col s8 translate" id="errDevice">
+                                                                <!-- 'text' -->
+                                                            </div>
+                                                            <!-- Modal Trigger -->
+                                                            <a class="waves-effect waves-light btn modal-trigger translate" href="#modal1">help</a>
+                                                            <!-- Modal Structure -->
+                                                            <div id="modal1" class="modal">
+                                                                <div id="help-device" class="modal-content translate">
+                                                                    <div>
+                                                                        <!-- text -->
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <b>*Required fields</b>
+                                                    <table class="table-values changeOnChangeEvent remove-last-column">
+                                                        <thead>
+                                                            <tr>
+                                                                <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                                                <th data-name="name" data-type="text" class="header translate">*device name</th>
+                                                                <th id="deviceTypeID" data-name="type" style="width: 200px;" data-type="select" style="width: 150px"
+                                                                    class="header translate" data-options="">*device type</th>
+                                                                <th data-name="consumption" data-type="OID" class="header translate">*consumption/energy</th>
+                                                                <th data-name="switch" data-type="OID" class="header translate">switch on/off</th>
+                                                                <th data-name="startText" data-type="OID" class="header translate">starttext</th>
+                                                                <th data-name="endText" data-type="OID" class="header translate">endtext</th>
+                                                                <th data-buttons="delete" style="width: 80px;" class="header translate">delete</th>
+                                                                <th data-name="id" style="width: 0px; display: none;" class="header translate">id</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <!-- create alexa device -->
+                                        <ul class="collapsible">
+                                            <li>
+                                                <div id="header-alexa">
+                                                    <!-- text -->
+                                                </div>
+                                                <div class="collapsible-body blue lighten-5" id="alexaID">
+                                                    <div class="row">
+                                                        <div style="display: flex; align-items: center;">
+                                                            <div class="col left s2">
+                                                                <a class="btn-floating waves-effect waves-light blue table-button-add">
+                                                                    <i class="material-icons">add_circle_outline</i></a>
+                                                                <b>add device</b>
+                                                            </div>
+                                                            <div class="col s2">
+                                                                <a id="btn-check-alexa" class="waves-effect waves-light btn">check input</a>
+                                                            </div>
+                                                            <div class="col s8" id="errAlexa">
+                                                                <!-- 'text' -->
+                                                            </div>
+                                                            <!-- Modal Trigger -->
+                                                            <a class="waves-effect waves-light btn modal-trigger translate" href="#modal2">help</a>
+                                                            <!-- Modal Structure -->
+                                                            <div id="modal2" class="modal">
+                                                                <div id="help-alexa" class="modal-content translate">
+                                                                    <div>
+                                                                        <!-- text -->
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <b>*Required fields</b>
+                                                    <table class="table-values changeOnChangeEvent remove-last-column">
+                                                        <thead>
+                                                            <tr>
+                                                                <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                                                <th data-name="name" data-type="text" class="header translate">*name</th>
+                                                                <th data-name="path" data-type="OID" class="header translate">*"../announcement"/"speak"</th>
+                                                                <th data-name="volume" style="width: 80px" data-type="number" class="header translate" data-default="50">*volume <br> 0-100</th>
+                                                                <th data-name="timeMinHour" style="width: 80px" data-type="select" class="header translate" data-default="0" data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">active from hour</th>
+                                                                <th data-name="timeMinMin" style="width: 80px" data-type="select" class="header translate" data-default="00" data-options="00;15;30;45">active from minute</th>
+                                                                <th data-name="timeMaxHour" style="width: 80px" data-type="select" class="header translate" data-default="23" data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">inactive from hour</th>
+                                                                <th data-name="timeMaxMin" style="width: 80px" data-type="select" class="header translate" data-default="59" data-options="00;15;30;45;59">inactive from minute</th>
+                                                                <th data-buttons="delete" style="width: 80px" class="header translate">delete</th>
+                                                                <th data-name="id" style="width: 0px; display: none;" class="header translate">id</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <!-- create sayit User -->
+                                        <ul class="collapsible">
+                                            <li>
+                                                <div id="header-sayit">
+                                                    <!-- text -->
+                                                </div>
+                                                <div class="collapsible-body blue lighten-5" id="sayitID">
+                                                    <div class="row">
+                                                        <div style="display: flex; align-items: center;">
+                                                            <div class="col left s2">
+                                                                <a class="btn-floating waves-effect waves-light blue table-button-add">
+                                                                    <i class="material-icons">add_circle_outline</i></a>
+                                                                <b>add device</b>
+                                                            </div>
+                                                            <div class="col s2">
+                                                                <a id="btn-check-sayit" class="waves-effect waves-light btn">check input</a>
+                                                            </div>
+                                                            <div class="col s8" id="errSayIt">
+                                                                <!-- 'text' -->
+                                                            </div>
+                                                            <!-- Modal Trigger -->
+                                                            <a class="waves-effect waves-light btn modal-trigger translate" href="#modal3">help</a>
+                                                            <!-- Modal Structure -->
+                                                            <div id="modal3" class="modal">
+                                                                <div id="help-sayit" class="modal-content translate">
+                                                                    <div>
+                                                                        <!-- text -->
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <b>*Required fields</b>
+                                                    <table class="table-values changeOnChangeEvent remove-last-column">
+                                                        <thead>
+                                                            <tr>
+                                                                <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                                                <th data-name="name" data-type="text" class="header translate">*name</th>
+                                                                <th data-name="path" data-type="OID" class="header translate">*"../text"</th>
+                                                                <th data-name="volume" style="width: 80px" data-type="number" class="header translate" data-default="50">*volume <br> 0-100</th>
+                                                                <th data-name="timeMinHour" style="width: 80px" data-type="select" class="header translate" data-default="0" data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">active from hour</th>
+                                                                <th data-name="timeMinMin" style="width: 80px" data-type="select" class="header translate" data-default="00" data-options="00;15;30;45">active from minute</th>
+                                                                <th data-name="timeMaxHour" style="width: 80px" data-type="select" class="header translate" data-default="23" data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">inactive from hour</th>
+                                                                <th data-name="timeMaxMin" style="width: 80px" data-type="select" class="header translate" data-default="59" data-options="00;15;30;45;59">inactive from minute</th>
+                                                                <th data-buttons="delete" style="width: 80px" class="header translate">delete</th>
+                                                                <th data-name="id" style="width: 0px; display: none;" class="header translate">id</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <!-- create whatsapp user -->
+                                        <ul class="collapsible">
+                                            <li>
+                                                <div id="header-whatsapp">
+                                                    <!-- text -->
+                                                </div>
+                                                <div class="collapsible-body blue lighten-5" id="whatsappID">
+                                                    <div class="row">
+                                                        <div style="display: flex; align-items: center;">
+                                                            <div class="col left s2">
+                                                                <a class="btn-floating waves-effect waves-light blue table-button-add">
+                                                                    <i class="material-icons">add_circle_outline</i></a>
+                                                                <b>add device</b>
+                                                            </div>
+                                                            <div class="col s2">
+                                                                <a id="btn-check-whatsapp" class="waves-effect waves-light btn">check input</a>
+                                                            </div>
+                                                            <div class="col s8" id="errWhatsapp">
+                                                                <!-- 'text' -->
+                                                            </div>
+                                                            <!-- Modal Trigger -->
+                                                            <a class="waves-effect waves-light btn modal-trigger translate" href="#modal4">help</a>
+                                                            <!-- Modal Structure -->
+                                                            <div id="modal4" class="modal">
+                                                                <div id="help-whatsapp" class="modal-content translate">
+                                                                    <div>
+                                                                        <!-- text -->
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <b>*Required fields</b>
+                                                    <table class="table-values changeOnChangeEvent remove-last-column">
+                                                        <thead>
+                                                            <tr>
+                                                                <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                                                <th data-name="name" data-type="text" class="header translate">*name</th>
+                                                                <th data-name="path" data-type="OID" class="header translate">*"../sendMessage"</th>
+                                                                <th data-buttons="delete" style="width: 80px" class="header translate">delete</th>
+                                                                <th data-name="id" style="width: 0px; display: none;" class="header translate">id</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <!-- create Pusherover User -->
+                                        <ul class="collapsible">
+                                            <li>
+                                                <div id="header-pushover">
+                                                    <!-- text -->
+                                                </div>
+                                                <div class="collapsible-body blue lighten-5" id="pushoverID">
+                                                    <div class="row">
+                                                        <div style="display: flex; align-items: center;">
+                                                            <div class="col left s2">
+                                                                <a class="btn-floating waves-effect waves-light blue table-button-add">
+                                                                    <i class="material-icons">add_circle_outline</i></a>
+                                                                <b>add device</b>
+                                                            </div>
+                                                            <div class="col s2">
+                                                                <a id="btn-check-pushover" class="waves-effect waves-light btn">check input</a>
+                                                            </div>
+                                                            <div class="col s8" id="errPushover">
+                                                                <!-- 'text' -->
+                                                            </div>
+                                                            <!-- Modal Trigger -->
+                                                            <a class="waves-effect waves-light btn modal-trigger translate" href="#modal5">help</a>
+                                                            <!-- Modal Structure -->
+                                                            <div id="modal5" class="modal">
+                                                                <div id="help-pushover" class="modal-content translate">
+                                                                    <div>
+                                                                        <!-- text -->
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <b>*Required fields</b>
+                                                    <table class="table-values changeOnChangeEvent remove-last-column">
+                                                        <thead>
+                                                            <tr>
+                                                                <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                                                <th data-name="name" data-type="text" class="header translate"> *name</th>
+                                                                <th data-name="inst" data-type="select" class="header translate" data-default=".0" data-options=".0;.1;.2;.3;.4;.5">*pushover instance</th>
+                                                                <th data-name="prio" data-type="select" class="header translate" data-default="normal" data-options="normal;high;quiet">*priority </th>
+                                                                <th data-name="sound" data-type="select" class="header translate" data-default="pushover" data-options="pushover; bike; bugle; cashregister; classical; cosmic; falling; gamelan; incoming; intermission; magic; mechanical; pianobar; siren; spacealarm; tugboat; alien; climb; persistent; echo; updown; none">*sound </th>
+                                                                <th data-buttons="delete" style="width: 80px" class="header translate">delete</th>
+                                                                <th data-name="id" style="width: 0px; display: none;" class="header translate">id </th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <!-- create email User -->
+                                        <ul class="collapsible">
+                                                <li>
+                                                    <div id="header-email">
+    
+                                                    </div>
+                                                    <div class="collapsible-body blue lighten-5" id="emailID">
+                                                        <div class="row">
+                                                            <div style="display: flex; align-items: center;">
+                                                                <div class="col left s2">
+                                                                    <a class="btn-floating waves-effect waves-light blue table-button-add">
+                                                                        <i class="material-icons">add_circle_outline</i></a>
+                                                                    <b>add device</b>
+                                                                </div>
+                                                                <div class="col s2">
+                                                                    <a id="btn-check-email" class="waves-effect waves-light btn">check input</a>
+                                                                </div>
+                                                                <div class="col s8" id="errEmail">
+                                                                    <!-- text -->
+                                                                </div>
+                                                                <!-- Modal Trigger -->
+                                                                <a class="waves-effect waves-light btn modal-trigger translate" href="#modal6">help</a>
+                                                                <!-- Modal Structure -->
+                                                                <div id="modal6" class="modal">
+                                                                    <div id="help-email" class="modal-content translate">
+                                                                        <div>
+                                                                            <!-- text -->
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <b>*Required fields</b>
+                                                        <table class="table-values changeOnChangeEvent remove-last-column">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                                                    <th data-name="name" data-type="text" class="header translate">*Name</th>
+                                                                    <th data-name="emailFrom" data-type="text" class="header translate">*sender address</th>
+                                                                    <th data-name="emailTo" data-type="text" class="header translate">*receiver address</th>
+                                                                    <th data-buttons="delete" style="width: 80px" class="header translate">delete</th>
+                                                                    <th data-name="id" style="width: 0px; display: none;" class="header translate">id</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </li>
+                                            </ul>
+
+                                        <!-- create Default Type -->
+                                        <ul class="collapsible">
+                                            <li>
+                                                <div id="header-default">
+                                                    <!-- text -->
+                                                </div>
+                                                <div class="collapsible-body blue lighten-5" id="defaultTypeID">
+                                                    <div class="row">
+                                                        <div style="display: flex; align-items: center;">
+                                                            <div>
+                                                                <a id="btn-check-default-type" class="waves-effect waves-light btn">check input</a>
+                                                            </div>
+                                                            <div class="col s10" id="errDefault">
+                                                                <!-- 'text' -->
+                                                            </div>
+                                                            <!-- Modal Trigger -->
+                                                            <a class="waves-effect waves-light btn modal-trigger translate" href="#modal7">help</a>
+                                                            <!-- Modal Structure -->
+                                                            <div id="modal7" class="modal">
+                                                                <div id="help-default-type" class="modal-content translate">
+                                                                    <div>
+                                                                        <!-- text -->
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h3>default devices</h3>
+                                                    </div>
+                                                    <table id="disableFirstField" class="table-values remove-last-column">
+                                                        <thead>
+                                                            <tr>
+                                                                <th id="disableFirstField" class="header translate"data-type="text" data-name="name">name 'type'</th>
+                                                                <th class="header translate" data-type="number" data-name="startVal">starting value</th>
+                                                                <th class="header translate" data-type="number" data-name="endVal">final value</th>
+                                                                <th class="header translate" data-type="number" data-name="startCount">number of values 'start'</th>
+                                                                <th class="header translate" data-type="number" data-name="endCount">number of values ​'end'</th>
+                                                                <th class="header translate" data-type="number" data-name="id" style="width: 0px; display: none;">id</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <!-- create Custom Type -->
+                                        <ul class="collapsible">
+                                            <li>
+                                                <div id="header-custom">
+                                                    <!-- text -->
+                                                </div>
+                                                <div class="collapsible-body blue lighten-5" id="customTypeID">
+                                                    <div class="row">
+                                                        <div style="display: flex; align-items: center;">
+                                                            <div class="col left s2">
+                                                                <a class="btn-floating waves-effect waves-light blue table-button-add">
+                                                                    <i class="material-icons">add_circle_outline</i></a>
+                                                                <b>add device</b>
+                                                            </div>
+                                                            <div class="col s2">
+                                                                <a id="btn-check-custom-type" class="waves-effect waves-light btn">check input</a>
+                                                            </div>
+                                                            <div class="col s8" id="errCustom">
+                                                                <!-- 'text' -->
+                                                            </div>
+                                                            <!-- Modal Trigger -->
+                                                            <a class="waves-effect waves-light btn modal-trigger translate" href="#modal8">help</a>
+                                                            <!-- Modal Structure -->
+                                                            <div id="modal8" class="modal">
+                                                                <div id="help-custom-type" class="modal-content translate">
+                                                                    <div>
+                                                                        <!-- text -->
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h3>custom devices</h3>
+                                                    </div>
+                                                    <table id="disableFirstField" class="table-values remove-last-column">
+                                                        <thead>
+                                                            <tr>
+                                                                <th id="disableFirstField" class="header translate" data-type="text" data-name="name">type name</th>
+                                                                <th class="header translate" data-type="number" data-name="startVal">starting value</th>
+                                                                <th class="header translate" data-type="number" data-name="endVal">final value</th>
+                                                                <th class="header translate" data-type="number" data-name="startCount">number of values 'start'</th>
+                                                                <th class="header translate" data-type="number" data-name="endCount">number of values ​'end'</th>
+                                                                <th data-buttons="delete" style="width: 80px" class="header translate">delete</th>
+                                                                <th class="header translate" data-type="number" data-name="id" style="width: 0px; display: none;">id</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <!-- create Custom device status -->
+                                        <ul class="collapsible">
+                                            <li>
+                                                <div id="header-status">
+                                                    <!-- text -->
+                                                </div>
+                                                <div class="collapsible-body blue lighten-5" id="valStates">
+                                                    <div class="row">
+                                                        <div style="display: flex; align-items: center;">
+                                                            <div class="col s8" id="errStates">
+                                                                <!-- 'text' -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h5>Configure your own device status</h5>
+                                                    </div>
+                                                    <table class="table-values changeOnChangeEvent remove-first-column">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="header translate" style="width: 0px; display: none;"></th>
+                                                                <th class="header translate" data-type="text" data-name="stateAction">status: 'in action'</th>
+                                                                <th class="header translate" data-type="text" data-name="stateStandby">status: 'in standby'</th>
+                                                                <th class="header translate" data-type="text" data-name="stateOff">status: 'device off'</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- link devices -->
+                        <div>
+                            <ul class="collapsible">
+                                <li>
+                                    <div id="header-link-device">
+                                        <!-- text -->
+                                    </div>
+                                    <div class="collapsible-body blue lighten-5" id="device">
+                                        <div class="row">
+                                            <div style="display: flex; align-items: center;">
+                                                <div>
+                                                    <a id="fill-dynamic-table" class="waves-effect waves-teal btn">refresh table</a>
+                                                </div>
                                             </div>
-                                            <table class="table-values changeOnChangeEvent remove-first-column">
+                                        </div>
+                                        <div class="card-panel blue lighten-5">
+                                            <table id="dynamicTable" class="table-values changeOnChangeEvent remove-last-column">
                                                 <thead>
                                                     <tr>
-                                                        <th class="header translate" style="width: 0px; display: none;">
-                                                        </th>
-                                                        <th class="header translate" data-type="text"
-                                                            data-name="stateAction">status: "in
-                                                            action"</th>
-                                                        <th class="header translate" data-type="text"
-                                                            data-name="stateStandby">status: "in
-                                                            standby"</th>
-                                                        <th class="header translate" data-type="text"
-                                                            data-name="stateOff">
-                                                            status: "device
-                                                            off"</th>
+                                                        <th class="header translate" data-name="enabled" style="width: 60px">active</th>
+                                                        <th class="header translate" data-name="deviceName">device</th>
+                                                        <th class="header translate" data-name="idAlexa">alexa</th>
+                                                        <th class="header translate" data-name="idsayit">SayIt</th>
+                                                        <th class="header translate" data-name="idTelegram">telegram</th>
+                                                        <th class="header translate" data-name="idWhatsapp">whatsapp</th>
+                                                        <th class="header translate" data-name="idPushover">pushover</th>
+                                                        <th class="header translate" data-name="idEmail">email</th>
+                                                        <th class="header translate" data-name="autoOff" style="width: 60px">switch off</th>
+                                                        <th class="header translate" data-name="idTimer" style="width: 60px">switch off after minutes</th>
+                                                        <th class="header translate" data-name="abort" style="width: 80px">abort detection</th>
+                                                        <th class="header translate" data-name="id" style="width: 0px; display: none;">id</th>
                                                     </tr>
                                                 </thead>
+                                                <tbody id="dynamic-table-body" class="table-values">
+                                                </tbody>
                                             </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <!-- <div id="valStates1">
-                                <div class="col s6">
-                                    <div class="card">
-                                        <div class="card-panel blue lighten-5">
-                                            <div>
-                                                <h5>Configure your own device status</h5>
+                                            <div id="dynamicTableLoading" class="preloader-wrapper big active"
+                                                style="margin: auto">
+                                                <div class="spinner-layer spinner-blue-only">
+                                                    <div class="circle-clipper left">
+                                                        <div class="circle"></div>
+                                                    </div>
+                                                    <div class="gap-patch">
+                                                        <div class="circle"></div>
+                                                    </div>
+                                                    <div class="circle-clipper right">
+                                                        <div class="circle"></div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <table class="table-values changeOnChangeEvent remove-first-column">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="header translate" style="width: 0px; display: none;">
-                                                        </th>
-                                                        <th class="header translate" data-type="text"
-                                                            data-name="stateAction">status: "in
-                                                            action"</th>
-                                                        <th class="header translate" data-type="text"
-                                                            data-name="stateStandby">status: "in
-                                                            standby"</th>
-                                                        <th class="header translate" data-type="text"
-                                                            data-name="stateOff">
-                                                            status: "device
-                                                            off"</th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
+                                            <div id="dynamicTableLoadingText" style="margin: auto">
+                                                Please wait while table is loading
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div> -->
-                        </div>
-
-                        <!-- dynamic table -->
-                        <div class="card-panel blue lighten-5">
-                            <table id="dynamicTable" class="table-values changeOnChangeEvent remove-last-column">
-                                <thead>
-                                    <tr>
-                                        <th class="header translate" data-name="enabled" style="width: 60px">active
-                                        </th>
-                                        <th class="header translate" data-name="deviceName">device name</th>
-                                        <th class="header translate" data-name="idAlexa">Device alexa</th>
-                                        <th class="header translate" data-name="idsayit">Device SayIt</th>
-                                        <th class="header translate" data-name="idTelegram">telegram user</th>
-                                        <th class="header translate" data-name="idWhatsapp">whatsapp user</th>
-                                        <th class="header translate" data-name="idPushover">pushover user</th>
-                                        <th class="header translate" data-name="autoOff" style="width: 60px">autooff
-                                        </th>
-                                        <th class="header translate" data-name="idTimer" style="width: 60px">timeout in
-                                            min</th>
-                                        <th class="header translate" data-name="abort" style="width: 80px">abort
-                                            <br>detection
-                                        </th>
-                                        <th class="header translate" data-name="id" style="width: 0px; display: none;">
-                                            id</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dynamic-table-body" class="table-values">
-                                </tbody>
-                            </table>
-                            <div id="dynamicTableLoading" class="preloader-wrapper big active" style="margin: auto">
-                                <div class="spinner-layer spinner-blue-only">
-                                    <div class="circle-clipper left">
-                                        <div class="circle"></div>
-                                    </div>
-                                    <div class="gap-patch">
-                                        <div class="circle"></div>
-                                    </div>
-                                    <div class="circle-clipper right">
-                                        <div class="circle"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="dynamicTableLoadingText" style="margin: auto">
-                                Please wait while table is loading
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tab with id "config" -->
-            <div id="tab-config" class="col s12">
-                <div class="row">
-                    <div class="col s12" id="deviceID">
-                        <div class="row">
-                            <div class="input-field col s3">
-                                <img src="icon.png">
-                            </div>
-                            <div class="col s4">
-                                <div class="card">
-                                    <div class="card-panel blue lighten-5">
-                                        <span class="card-title">
-                                            After done pls click the following button</span>
-                                        <p><a id="fill-dynamic-table1"
-                                                class="btn-save waves-effect waves-light btn disabled">Click
-                                                here to
-                                                safe config</a></p>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card-panel blue lighten-5">
-                            <div class="row">
-                                <div class="col left">
-                                    <a class="btn-floating waves-effect waves-light blue table-button-add"><i
-                                            class="material-icons">add</i></a> <b>add device</b>
-                                </div>
-                            </div>
-                            <b>*Required fields</b>
-                            <table class="table-values changeOnChangeEvent remove-last-column">
-                                <thead>
-                                    <tr>
-                                        <th data-name="_index" style="width: 40px" class="header translate">nr</th>
-                                        <th data-name="name" data-type="text" class="header translate">*device
-                                            name
-                                        </th>
-                                        <th id="deviceTypeID" data-name="type" style="width: 200px;" data-type="select"
-                                            style="width: 150px" class="header translate" data-default="no device"
-                                            data-options="">
-                                            *device type</th>
-                                        <th data-name="consumption" data-type="OID" class="header translate">
-                                            *path<br>consumption/energy</th>
-                                        <th data-name="switch" data-type="OID" class="header translate">
-                                            path<br>switch on/off</th>
-                                        <th data-name="startText" data-type="OID" class="header translate">Starttext
-                                        </th>
-                                        <th data-name="endText" data-type="OID" class="header translate">Endtext</th>
-                                        <th data-buttons="delete" style="width: 80px;" class="header translate">delete
-                                        </th>
-                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
-                                            id
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- alexa id  -->
-                    <div class="col s12" id="alexaID">
-                        <div class="card-panel blue lighten-5">
-                            <div class="row">
-                                <div class="col left">
-                                    <a class="btn-floating waves-effect waves-light blue table-button-add"><i
-                                            class="material-icons">add</i></a> <b>add alexa device</b>
-                                </div>
-                            </div>
-                            <b>*Required fields</b>
-                            <table class="table-values changeOnChangeEvent remove-last-column">
-                                <thead>
-                                    <tr>
-                                        <th data-name="_index" style="width: 40px" class="header translate">nr</th>
-                                        <th data-name="name" data-type="text" class="header translate">*alexa
-                                            name
-                                        </th>
-                                        <th data-name="path" data-type="OID" class="header translate">*alexa
-                                            path
-                                            <br>"announcement"/"speak"
-                                        </th>
-                                        <th data-name="volume" style="width: 80px" data-type="number"
-                                            class="header translate" data-default="50">volume <br> 0-100</th>
-                                        <th data-name="timeMinHour" style="width: 80px" data-type="select"
-                                            class="header translate" data-default="0"
-                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
-                                            time <br>active hour</th>
-                                        <th data-name="timeMinMin" style="width: 80px" data-type="select"
-                                            class="header translate" data-default="00" data-options="00;15;30;45">
-                                            time
-                                            <br>active min
-                                        </th>
-                                        <th data-name="timeMaxHour" style="width: 80px" data-type="select"
-                                            class="header translate" data-default="23"
-                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
-                                            time <br>inactive hour</th>
-                                        <th data-name="timeMaxMin" style="width: 80px" data-type="select"
-                                            class="header translate" data-default="59" data-options="00;15;30;45;59">
-                                            time
-                                            <br>inactive min
-                                        </th>
-                                        <th data-buttons="delete" style="width: 80px" class="header translate">
-                                            delete
-                                        </th>
-                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
-                                            id
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- sayIt id -->
-                    <div class="col s12" id="sayitID">
-                        <div class="card-panel blue lighten-5">
-                            <div class="row">
-                                <div class="col left">
-                                    <a class="btn-floating waves-effect waves-light blue table-button-add"><i
-                                            class="material-icons">add</i></a> <b>add sayIt device</b>
-                                </div>
-                            </div>
-                            <b>*Required fields</b>
-                            <table class="table-values changeOnChangeEvent remove-last-column">
-                                <thead>
-                                    <tr>
-                                        <th data-name="_index" style="width: 40px" class="header translate">nr</th>
-                                        <th data-name="name" data-type="text" class="header translate">*sayit name
-                                        </th>
-                                        <th data-name="path" data-type="OID" class="header translate">*sayit path
-                                            <br>"../text"
-                                        </th>
-                                        <th data-name="volume" style="width: 80px" data-type="number"
-                                            class="header translate" data-default="50">volume <br> 0-100</th>
-                                        <th data-name="timeMinHour" style="width: 80px" data-type="select"
-                                            class="header translate" data-default="0"
-                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
-                                            time <br>active hour</th>
-                                        <th data-name="timeMinMin" style="width: 80px" data-type="select"
-                                            class="header translate" data-default="00" data-options="00;15;30;45">time
-                                            <br>active min
-                                        </th>
-                                        <th data-name="timeMaxHour" style="width: 80px" data-type="select"
-                                            class="header translate" data-default="23"
-                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
-                                            time <br>inactive hour</th>
-                                        <th data-name="timeMaxMin" style="width: 80px" data-type="select"
-                                            class="header translate" data-default="59" data-options="00;15;30;45;59">
-                                            time
-                                            <br>inactive min
-                                        </th>
-                                        <th data-buttons="delete" style="width: 80px" class="header translate">delete
-                                        </th>
-                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
-                                            id
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- whatsapp id  -->
-                    <div class="col s12" id="whatsappID">
-                        <div class="card-panel blue lighten-5">
-                            <div class="row">
-                                <div class="col left">
-                                    <a class="btn-floating waves-effect waves-light blue table-button-add"><i
-                                            class="material-icons">add</i></a> <b>add whatsapp user</b>
-                                </div>
-                            </div>
-                            <b>*Required fields</b>
-                            <table class="table-values changeOnChangeEvent remove-last-column">
-                                <thead>
-                                    <tr>
-                                        <th data-name="_index" style="width: 40px" class="header translate">nr</th>
-                                        <th data-name="name" data-type="text" class="header translate">*whatsapp
-                                            name
-                                        </th>
-                                        <th data-name="path" data-type="OID" class="header translate">*whatsapp
-                                            path
-                                            <br>"sendMessage"
-                                        </th>
-                                        <th data-buttons="delete" style="width: 80px" class="header translate">
-                                            delete
-                                        </th>
-                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
-                                            id
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- pushover id  -->
-                    <div class="col s12" id="pushoverID">
-                        <div class="card-panel blue lighten-5">
-                            <div class="row">
-                                <div class="col left">
-                                    <a class="btn-floating waves-effect waves-light blue table-button-add"><i
-                                            class="material-icons">add</i></a> <b>add pushover user</b>
-                                </div>
-                            </div>
-                            <b>*Required fields</b>
-                            <table class="table-values changeOnChangeEvent remove-last-column">
-                                <thead>
-                                    <tr>
-                                        <th data-name="_index" style="width: 40px" class="header translate">nr</th>
-                                        <th data-name="name" data-type="text" class="header translate">*pushover name
-                                        </th>
-                                        <th data-name="inst" data-type="select" class="header translate"
-                                            data-default=".0" data-options=".0;.1;.2;.3;.4;.5">*pushover instance</th>
-                                        <th data-name="prio" data-type="select" class="header translate"
-                                            data-default="normal" data-options="normal; high; quiet">priority</th>
-                                        <th data-name="sound" data-type="select" class="header translate"
-                                            data-default="pushover" data-options="pushover; bike; bugle; cashregister; classical; cosmic; falling; gamelan; 
-                                            incoming; intermission; magic; mechanical; pianobar; siren; spacealarm; tugboat; alien; 
-                                            climb; persistent; echo; updown; none">
-                                            sound</th>
-                                        <th data-buttons="delete" style="width: 80px" class="header translate">delete
-                                        </th>
-                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
-                                            id</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-
-            <!-- Tab id "type" -->
-            <div id="tab-type" class="col s12">
-                <div class="row">
-                    <div class="col s12" id="device_type">
-                        <div class="row">
-                            <div class="input-field col s3">
-                                <img src="icon.png">
-                            </div>
-                            <div class="col s4">
-                                <div class="card">
-                                    <div class="card-panel red lighten-5">
-                                        <span class="card-title">
-                                            Changes of the values can lead to the fact that devices are no longer
-                                            recognized correctly!</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- table "default " -->
-                        <div class="col s12" id="defaultTypeID">
-                            <div class="card-panel blue lighten-5">
-                                <div>
-                                    <h3>default devices</h3>
-                                </div>
-                                <table id="disableFirstField" class="table-values remove-last-column">
-                                    <thead>
-                                        <tr>
-                                            <th id="disableFirstField" class="header translate" data-type="text"
-                                                data-name="name">type name</th>
-                                            <th class="header translate" data-type="number" data-name="startVal">
-                                                Starting value</th>
-                                            <th class="header translate" data-type="number" data-name="endVal">Final
-                                                value</th>
-                                            <th class="header translate" data-type="number" data-name="startCount">
-                                                Number of values
-                                                ​​ "start"
-                                            </th>
-                                            <th class="header translate" data-type="number" data-name="endCount">Number
-                                                of values ​"end"
-                                            </th>
-                                            <th class="header translate" data-type="number" data-name="id"
-                                                style="width: 0px; display: none;">
-                                                id</th>
-                                        </tr>
-                                    </thead>
-                                    </tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- table "custom " -->
-                        <div class="col s12" id="customTypeID">
-                            <div class="card-panel blue lighten-5">
-                                <div>
-                                    <h3>custom devices</h3>
-                                </div>
-                                <table id="disableFirstField" class="table-values remove-last-column">
-                                    <thead>
-                                        <tr>
-                                            <th class="header translate" data-type="text" data-name="name">type name
-                                            </th>
-                                            <th class="header translate" data-type="number" data-name="startVal">
-                                                Starting value</th>
-                                            <th class="header translate" data-type="number" data-name="endVal">Final
-                                                value</th>
-                                            <th class="header translate" data-type="number" data-name="startCount">
-                                                Number of values
-                                                ​​ "start"</th>
-                                            <th class="header translate" data-type="number" data-name="endCount">Number
-                                                of values ​"end"
-                                            </th>
-                                            <th class="header translate" data-type="number" data-name="id"
-                                                style="width: 0px; display: none;">id</th>
-                                        </tr>
-                                    </thead>
-                                    </tbody>
-                                    </tbody>
-                                </table>
-                            </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

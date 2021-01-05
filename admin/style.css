@@ -73,3 +73,11 @@ width: 200px;
     display: none;
 }
 
+.m .collapsible-header { 
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    font-weight: bold;
+    background-color:#64BfF6;
+}; 
+
+
