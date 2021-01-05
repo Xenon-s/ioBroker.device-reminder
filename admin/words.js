@@ -1,4 +1,3 @@
-  
 /*global systemDictionary:true */
 "use strict";
 
@@ -38,5 +37,5 @@ systemDictionary = {
 		"es": "opcion 2",
 		"pl": "Opcja 2",
 		"zh-cn": "选项2"
-    }
+	}
 };

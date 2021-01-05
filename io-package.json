@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.7.4",
+        "version": "1.0.0",
         "news": {
+            "1.0.0": {
+                "en": "initial commit version 1.0",
+                "de": "Initial Commit Version 1.0",
+                "ru": "начальная версия фиксации 1.0",
+                "pt": "commit inicial versão 1.0",
+                "nl": "initiële commit versie 1.0",
+                "fr": "commit initial version 1.0",
+                "it": "commit iniziale versione 1.0",
+                "es": "confirmación inicial versión 1.0",
+                "pl": "początkowa zatwierdzona wersja 1.0",
+                "zh-cn": "初始提交版本1.0"
+            },
             "0.7.4": {
                 "en": "bugfix: telegram instance was not recognised correctly\nbugfix: abort detection prevented sending of notifications",
                 "de": "Bugfix: Telegramminstanz wurde nicht richtig erkannt\nBugfix: Abbrucherkennung verhindert das Senden von Benachrichtigungen",
