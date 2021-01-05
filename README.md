@@ -70,7 +70,7 @@ With **start text** and **end text** you can also get a message from an external
 <br>
 <br>
 
-[create an anchor](#test)
+## <a name="some-text">My header with a lot of words, and punctuation</a>
 
 ## Create Alexa
 ![addAlexa.png](admin/addAlexa.png)
