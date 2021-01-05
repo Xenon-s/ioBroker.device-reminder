@@ -164,6 +164,9 @@ is displayed.
     ### __WORK IN PROGRESS__
 -->
 
+### 1.0 beta (2021-01-05)
+* (xenon-s) initial commit version 1.0
+
 ### 0.7.4 (2020-12-20)
 * (xenon-s) bugfix: telegram instance was not recognised correctly
 * (xenon-s) bugfix: abort detection prevented sending of notifications
