@@ -164,6 +164,9 @@ is displayed.
     ### __WORK IN PROGRESS__
 -->
 
+### 1.0.2 (2021-01-06)
+* (xenon-s) fix name i io-package.json
+
 ### 1.0.1 (2021-01-05)
 * (xenon-s) bugfix
 

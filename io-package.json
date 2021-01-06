@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.0.1",
+        "version": "1.0.2",
         "news": {
+            "1.0.2": {
+                "en": "fix name i io-package.json",
+                "de": "Fixname i io-package.json",
+                "ru": "исправить имя я io-package.json",
+                "pt": "nome da correção i io-package.json",
+                "nl": "fix naam i io-package.json",
+                "fr": "nom du correctif i io-package.json",
+                "it": "correggere il nome i io-package.json",
+                "es": "arreglar el nombre i io-package.json",
+                "pl": "nazwa poprawki i io-package.json",
+                "zh-cn": "修复名称i io-package.json"
+            },
             "1.0.1": {
                 "en": "bugfix",
                 "de": "Bug-Fix",
@@ -102,16 +114,7 @@
         },
         "title": "device-reminder",
         "titleLang": {
-            "en": "device-reminder",
-            "de": "Geräteerinnerung",
-            "ru": "устройство-напоминание",
-            "pt": "dispositivo-lembrete",
-            "nl": "apparaatherinnering",
-            "fr": "rappel d'appareil",
-            "it": "promemoria dispositivo",
-            "es": "recordatorio de dispositivo",
-            "pl": "urządzenie-przypomnienie",
-            "zh-cn": "设备提醒"
+            "en": "device-reminder"
         },
         "desc": {
             "en": "Adapter for device reminder and notification when reaching different states",
