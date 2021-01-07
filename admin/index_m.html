@@ -111,6 +111,14 @@
                     defaultTypeID = settings.defaultTypeID || [];
                     device_final = settings.device_final || []; // output -> main.js
 
+                    function ctrlCntr(cntr) {
+                        if (cntr == undefined) {
+                            cntr = 0;
+                        };
+                        console.log(cntr);
+                        return cntr;
+                    };
+
                     device_counter = settings.device_counter;
                     alexa_counter = settings.alexa_counter;
                     sayit_counter = settings.sayit_counter;
@@ -292,6 +300,7 @@
             obj.devicesFinal = createDevicesFinal(JSON.parse(JSON.stringify(obj.device)), obj.deviceID);
 
             function createDevicesFinal(obj, arr) {
+
                 let objTemp = {};
                 for (const i in obj) {
                     for (const j in arr) {
@@ -484,8 +493,10 @@
                     case 'pushover': {
                         let obj = { dataChecked: null, dataFailed: null, err: `errPushover`, header: header, name: `${name} user`, anchorEn: `create-pushover-user`, anchorGer: `pushover-user-erstellen`, anchorName: `pushover`};
                         if (pushoverID.length > 0) {
+                            console.warn(JSON.stringify(pushoverID));
                             sendTo(null, { cmd: 'type', 1: 'name', 2: 'inst', 3: 'prio', 4: 'sound', cntr: 4 }, pushoverID, async data => {
                                 if (data != undefined) {
+                                    console.warn(JSON.stringify(data))
                                     pushover = await data.checked;
                                     obj.dataFailed = await data.failed;
                                     checked(obj);

@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.0.2",
+        "version": "1.0.3",
         "news": {
+            "1.0.3": {
+                "en": "bugfix pushover\nadded link \"german readme\" in readme",
+                "de": "Bugfix Pushover\nLink \"german readme\" in readme hinzugefügt",
+                "ru": "исправление ошибок\nдобавлена ссылка \"немецкий ридми\" в ридми",
+                "pt": "bug fix pushover\nadicionado link \"readme alemão\" no readme",
+                "nl": "bugfix pushover\nlink \"duits readme\" toegevoegd in readme",
+                "fr": "bugfix pushover\nAjout du lien \"readme allemand\" dans le readme",
+                "it": "bugfix pushover\naggiunto link \"german readme\" in readme",
+                "es": "corrección de errores\nenlace añadido \"Léame alemán\" en Léame",
+                "pl": "pushover bugfix\ndodano link „niemiecki plik readme” w pliku Readme",
+                "zh-cn": "错误修正推覆\n在自述文件中添加了链接“德语自述文件”"
+            },
             "1.0.2": {
                 "en": "fix name i io-package.json",
                 "de": "Fixname i io-package.json",

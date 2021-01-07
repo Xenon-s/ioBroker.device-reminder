@@ -16,7 +16,7 @@
 ## English readme needed? <br>[english readme](https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README.md)
 <br>
 
-# Adapter zur Überwachung von Gerätezuständen Version 1.0
+# Adapter zur Überwachung von Gerätezuständen Version 1.x
 Dieser Adapter kann anhand von Messsteckdosen erkennen, ob ein Gerät eingeschaltet, in Betrieb ist oder ausgeschaltet wurde und darauf reagieren. Es können dann Nachrichten per Telegram, whatsapp, alexa, sayit, pushover und Email (Mehrfachauswahl pro Gerät möglich) automatisiert ausgegeben werden. Es ist ebenfalls möglich, die Steckdose nach Beendigung des Vorgangs automatisch abzuschalten (auch Zeitverzögert).
 
 # Was sollte beachtet werden?

@@ -1005,7 +1005,7 @@ class deviceReminder extends utils.Adapter {
                     for (const i in array) {
                         if (array[i][cmd[val]] == undefined || array[i][cmd[val]] == `` && array[i].check == 'open') array[i].check = 'err';
                         if (array[i].check == 'open' && val == 1) {
-                            checked.push({ name: array[i]['name'] });
+                            checked.push({ name: array[i]['name'], id: array[i].id });
                         } else if (array[i].check == 'err' && val == 1) failed.push(array[i]['name']);
                     };
                 };
