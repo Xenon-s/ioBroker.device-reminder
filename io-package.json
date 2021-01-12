@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.0.3",
+        "version": "1.0.4",
         "news": {
+            "1.0.4": {
+                "en": "bugfix pushover\nbugfix message: there may now be a \".\" at the end of the messages",
+                "de": "Bugfix Pushover\nBugfix-Meldung: Möglicherweise wird jetzt ein \".\" am Ende der Nachrichten",
+                "ru": "исправление ошибок\nсообщение об исправлении ошибки: теперь может быть \".\" в конце сообщений",
+                "pt": "bug fix pushover\nmensagem de correção de bug: agora pode haver um \".\" no final das mensagens",
+                "nl": "bugfix pushover\nbugfix bericht: er kan nu een \".\" aan het einde van de berichten",
+                "fr": "bugfix pushover\nmessage de correction de bogue: il peut maintenant y avoir un \".\" à la fin des messages",
+                "it": "bugfix pushover\nmessaggio di bugfix: ora potrebbe esserci un \".\" alla fine dei messaggi",
+                "es": "corrección de errores\nmensaje de corrección de errores: ahora puede haber un \".\" al final de los mensajes",
+                "pl": "pushover bugfix\nwiadomość z poprawką błędu: może teraz występować znak „.” na końcu wiadomości",
+                "zh-cn": "错误修正推覆\n错误修正消息：现在可能有一个“。”在消息末尾"
+            },
             "1.0.3": {
                 "en": "bugfix pushover\nadded link \"german readme\" in readme",
                 "de": "Bugfix Pushover\nLink \"german readme\" in readme hinzugefügt",

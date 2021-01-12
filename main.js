@@ -96,7 +96,7 @@ class deviceReminder extends utils.Adapter {
                 this.log.debug(`element for each ${JSON.stringify(objectInput[i])}`)
                 id = objectInput[i].pathConsumption
                 const obj = objectInput[i];
-                this.log.info(`obj in constructor "${JSON.stringify(obj)}"`);
+                this.log.debug(`obj in constructor "${JSON.stringify(obj)}"`);
                 arrObj[id] = await this.funcCreateObject(obj);
                 await this.stateIni(arrObj);
                 this.log.debug(`objFinal ${JSON.stringify(arrObj)}`);
@@ -811,9 +811,8 @@ class deviceReminder extends utils.Adapter {
                 if (pushoverInput[obj.pushoverID[i]].prio == undefined) {
                     delete objTemp.priority;
                 };
-                for (const i in obj.pushoverID) {
-                    this.sendTo(strPush, "send", objTemp);
-                };
+                this.log.debug(`PUSHOVER OBJECT SENDTO: ${JSON.stringify(objTemp)}`);
+                this.sendTo(strPush, "send", objTemp);
             };
         };
 
@@ -910,10 +909,16 @@ class deviceReminder extends utils.Adapter {
 
     async createObjMsg(objMsg) {
         let msgTemp = ``;
+        let length = 0;
+        let lengthTotal = 0;
+        length = (await objMsg.lastIndexOf(".") + 1);
+        lengthTotal = await objMsg.length;
         if (objMsg != `` && objMsg != undefined) {
-            if (await this.getForeignObjectAsync(objMsg)) {
-                const result = await this.getForeignStateAsync(objMsg);
-                msgTemp = result.val;
+            if (length < lengthTotal) {
+                if (await this.getForeignObjectAsync(objMsg) != null) {
+                    const result = await this.getForeignStateAsync(objMsg);
+                    msgTemp = result.val;
+                }
             } else {
                 msgTemp = objMsg;
             };
