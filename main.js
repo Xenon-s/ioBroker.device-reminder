@@ -428,7 +428,6 @@ class deviceReminder extends utils.Adapter {
     * @param {string | number} id
     */
     async getValues(id) {
-        this.log.debug(JSON.stringify(id));
         const obj = arrObj[id];
         const result = await this.getForeignStateAsync(obj.currentConsumption);
         obj.verbrauch = result.val;
@@ -441,9 +440,7 @@ class deviceReminder extends utils.Adapter {
 
 
     async evaluatingInputValue(obj) {
-
-        this.log.debug(`Berechnung gestartet: ${obj.deviceName}`);
-        this.log.debug(JSON.stringify(obj.telegramUser));
+        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Berechnung gestartet`);
 
         switch (obj.started) {
             case true: {
@@ -452,14 +449,14 @@ class deviceReminder extends utils.Adapter {
                 // endwert Berechnung durchfuehren
                 await this.calcStart(obj, "end"); // Endwert Berechnung
                 obj.arrStart = [];
-                this.log.debug(`arrStart gelöscht`);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: arrStart gelöscht`);
                 break;
             };
             case false: {
                 if (obj.verbrauch < obj.startValue) {
                     // Startabbruch -> array leeren
                     obj.arrStart = [];
-                    this.log.debug(`arrStart gelöscht`);
+                    this.log.debug(`[${JSON.stringify(obj.deviceName)}]: arrStart gelöscht`);
                     // standby Berechnung durchfuehren
                     await this.calcStart(obj, "standby");  // standby Berechnung
                 } else {
@@ -468,19 +465,19 @@ class deviceReminder extends utils.Adapter {
                     // standby Berechnung löschen
                     await this.setStatus(obj, 4);
                     obj.arrStandby = [];
-                    this.log.debug(`arrStandby gelöscht`);
+                    this.log.debug(`[${JSON.stringify(obj.deviceName)}]: arrStandby gelöscht`);
                 };
                 break;
             };
             default:
                 break;
         };
-        this.log.debug(`Berechnung beendet: ${obj.deviceName}`);
+        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Berechnung beendet`);
     };
 
 
     async evaluateStatus(obj) {
-        this.log.debug(`Auswertung gestartet: ${obj.deviceName}`);
+        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Auswertung gestartet`);
 
         obj.dnd = await this.getStateAsync(obj.doNotDisturb);
         obj.dnd = await obj.dnd.val;
@@ -509,15 +506,16 @@ class deviceReminder extends utils.Adapter {
 
         // device nich in Betrieb
         // Ermittlung, ob device gestartet wurde
-        this.log.debug(` WERTE für START${obj.verbrauch}; ${obj.startValue}; ${obj.started}`);
+        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: WERTE für START${obj.verbrauch}; ${obj.startValue}; ${obj.started}`);
         if (obj.resultStart > obj.startValue && obj.resultStart != null && obj.arrStart.length >= obj.startCount && !obj.started) {
             // device wurde gestartet
             obj.started = true; // Vorgang started
             obj.startZeit = Date.now(); // Startzeit loggen
             await this.setStatus(obj, 1);
-            this.log.debug(`Gerät gestartet, device läuft`);
+            this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Gerät gestartet, device läuft`);
 
             if (obj.startMessage && !obj.startMessageSent) { // Start Benachrichtigung aktiv?
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: GESTARTET`);
                 if (obj.timeoutMsg != null) {
                     clearTimeout(obj.timeoutMsg);
                     obj.timeoutMsg = null;
@@ -541,19 +539,19 @@ class deviceReminder extends utils.Adapter {
 
         // device in Betrieb
         // Ermittlung, ob device nocht laeuft
-        this.log.debug(`in Betrieb? Name: ${JSON.stringify(obj.deviceName)} Ergebnis ENDE: ${JSON.stringify(obj.resultEnd)} Wert ENDE: ${JSON.stringify(obj.endValue)} started: ${JSON.stringify(obj.started)} Arraylength: ${JSON.stringify(obj.arrEnd.length)} Zaehler Arr Ende: ${JSON.stringify(obj.endCount)} `);
         if (obj.resultEnd > obj.endValue && obj.resultEnd != null && obj.started) { // Wert > endValue und Verbrauch lag 1x ueber startValue
+        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: in Betrieb?  Ergebnis ENDE: ${JSON.stringify(obj.resultEnd)} Wert ENDE: ${JSON.stringify(obj.endValue)} started: ${JSON.stringify(obj.started)} Arraylength: ${JSON.stringify(obj.arrEnd.length)} Zaehler Arr Ende: ${JSON.stringify(obj.endCount)} `);
             if (obj.timeout != null) {
                 clearTimeout(obj.timeout);
                 obj.timeout = null;
-                this.log.debug(`timeout autoOff gelöscht`);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: timeout autoOff gelöscht`);
             };
             await this.setStatus(obj, 1);
             await this.time(obj);
         } else if (obj.resultEnd < obj.endValue && obj.resultEnd != null && obj.started && obj.arrEnd.length >= (obj.endCount * (2 / 3))) { // geraet muss mind. 1x ueber startValue gewesen sein, arrEnd muss voll sein und ergebis aus arrEnd unter endValue
             // Vorgang vom device beendet
             obj.started = false; // device started = false ;
-            this.log.debug("Vorgang beendet, Gerät fertig");
+            this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Vorgang beendet, Gerät fertig`);
 
             // standby oder off?
             if (obj.resultEnd <= 1) {
@@ -584,7 +582,7 @@ class deviceReminder extends utils.Adapter {
                         await this.setVolume(obj, false, "alexa");
                         await this.setVolume(obj, false, "sayit");
                     };
-                    this.log.debug(`${obj.endMessageText}`);
+                    this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Endmessage: ${obj.endMessageText}`);
                 }, 1000);
             };
 
@@ -604,7 +602,7 @@ class deviceReminder extends utils.Adapter {
 
         await this.setStateAsync(obj.pathLiveConsumption, `${obj.verbrauch}`, true);
 
-        this.log.debug(`Auswertung beendet: ${obj.deviceName}`);
+        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Auswertung beendet`);
     };
 
     async autoOff(obj) {
@@ -616,7 +614,7 @@ class deviceReminder extends utils.Adapter {
                     if (obj.timeout != null) {
                         clearTimeout(obj.timeout);
                         obj.timeout = null;
-                        this.log.debug(`autoOff fertig, timeout clear`);
+                        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: autoOff fertig, timeout clear`);
                     };
                 }, obj.timeoutInMS);
             };
@@ -624,18 +622,21 @@ class deviceReminder extends utils.Adapter {
     };
 
     async setStatus(obj, status) {
-        this.log.debug(`value status: ${status}`);
+        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: value status: ${status}`);
         switch (status) {
             case 0: {
                 await this.setStateAsync(obj.pathStatus, stateOff, true); // Status in DP schreiben;
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: ${stateOff} (finished/off)`);
                 break;
             };
             case 1: {
                 await this.setStateAsync(obj.pathStatus, stateAction, true); // Status in DP schreiben
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: ${stateAction} (in action)`);
                 break;
             };
             case 2: {
                 await this.setStateAsync(obj.pathStatus, stateStandby, true); // Status in DP schreiben
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: ${stateStandby} (in standby)`);
                 break;
             };
             case 3: {
@@ -651,9 +652,11 @@ class deviceReminder extends utils.Adapter {
             };
             case 4: {
                 await this.setStateAsync(obj.pathStatus, `initialize`, true); // Status in DP schreiben
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: initialize`);
                 break;
             };
             default: {
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: unknown status`);
                 await this.setStateAsync(obj.pathStatus, `unknown status`, true); // Status in DP schreiben
                 break;
             };
@@ -661,21 +664,21 @@ class deviceReminder extends utils.Adapter {
     };
 
     async calcStart(obj, type) {
-        this.log.debug(`berechnung "${type}" wird fuer ${obj.deviceName} ausgefuehrt`);
+        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: berechnung "${type}" wird ausgefuehrt`);
         switch (type) {
             case "start": {
                 obj.arrStart.push(obj.verbrauch);
                 obj.resultStart = await this.calculation(obj.resultStart, obj.arrStart);
-                this.log.debug(`resultTemp start: ${obj.resultStart}`);
-                this.log.debug(`Länge array start: ${obj.arrStart.length}, Inhalt: [${obj.arrStart}]`);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: resultTemp start: ${obj.resultStart}`);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Länge array start: ${obj.arrStart.length}, Inhalt: [${obj.arrStart}]`);
                 await this.setStateAsync(obj.averageConsumption, obj.resultStart, true);
                 break;
             };
             case "end": {
                 obj.arrEnd.push(obj.verbrauch);
                 obj.resultEnd = await this.calculation(obj.resultEnd, obj.arrEnd);
-                this.log.debug(`Länge array ende: ${obj.arrEnd.length}, Inhalt: [${obj.arrEnd}]`);
-                this.log.debug(`resultTemp end: ${obj.resultEnd}`);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Länge array ende: ${obj.arrEnd.length}, Inhalt: [${obj.arrEnd}]`);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: resultTemp end: ${obj.resultEnd}`);
                 if (obj.arrEnd.length > obj.endCount) {
                     obj.arrEnd.shift();
                 };
@@ -685,8 +688,8 @@ class deviceReminder extends utils.Adapter {
             case "standby": {
                 obj.arrStandby.push(obj.verbrauch);
                 obj.resultStandby = await this.calculation(obj.resultStandby, obj.arrStandby);
-                this.log.debug(`Länge array standby: ${obj.arrStandby.length}, Inhalt: [${obj.arrStandby}]`);
-                this.log.debug(`resultTemp standby: ${obj.resultStandby}`);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Länge array standby: ${obj.arrStandby.length}, Inhalt: [${obj.arrStandby}]`);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: resultTemp standby: ${obj.resultStandby}`);
                 if (obj.arrStandby.length > obj.valCancel) {
                     obj.arrStandby.shift();
                 };
@@ -729,7 +732,7 @@ class deviceReminder extends utils.Adapter {
     };
 
     async message(obj, type) {
-        this.log.debug(`message wird ausgefuehrt`);
+        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: message wird ausgefuehrt`);
         let msg = ``;
         const a = new Date();
         const aHours = a.getHours();
@@ -740,10 +743,12 @@ class deviceReminder extends utils.Adapter {
         switch (type) {
             case "start": {
                 msg = await this.createObjMsg(obj.startMessageText);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: startmessage: ${JSON.stringify(obj.startMessageText)}`);
                 break;
             };
             case "end": {
                 msg = await this.createObjMsg(obj.endMessageText);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: startmessage: ${JSON.stringify(obj.endMessageText)}`);
                 break;
             };
         };
@@ -754,7 +759,7 @@ class deviceReminder extends utils.Adapter {
                 let strTele = ``;
                 user = telegramInput[obj.telegramUser[i]].name;
                 strTele = `telegram${telegramInput[obj.telegramUser[i]].inst}`;
-                this.log.debug(`telegram message wird ausgefuehrt`);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: telegram message wird ausgefuehrt`);
                 this.sendTo(strTele, `send`, {
                     text: msg,
                     user: user
@@ -763,19 +768,18 @@ class deviceReminder extends utils.Adapter {
         };
 
         if (obj.whatsapp) { // WhatsApp nachricht versenden
-            this.log.debug(`whatsapp message wird ausgefuehrt`);
             for (const i in obj.whatsappID) {
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: whatsapp message wird ausgefuehrt`);
                 await this.setForeignStateAsync(whatsappInput[obj.whatsappID[i]].path, msg);
             };
         };
 
         if (obj.alexa && !obj.dnd) {    // alexa quatschen lassen   
-            this.log.debug(`Alexa message wird ausgefuehrt`);
             // let timeMin = ``;
             // let timeMax = ``;
             for (const i in obj.alexaID) {
-                await this.sendMsgSpeaker(alexaInput[obj.alexaID[i]], time, msg);
-
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Alexa message wird ausgefuehrt`);
+                await this.sendMsgSpeaker(obj, alexaInput[obj.alexaID[i]], time, msg);
                 // timeMin = await this.str2time(alexaInput[obj.alexaID[i]].timeMin);
                 // timeMax = await this.str2time(alexaInput[obj.alexaID[i]].timeMax);
                 // if (time >= timeMin && time < timeMax) {
@@ -785,11 +789,11 @@ class deviceReminder extends utils.Adapter {
         };
 
         if (obj.sayIt && !obj.dnd) {  //sayit 
-            this.log.debug(`sayIt message wird ausgefuehrt`);
             // let timeMin = ``;
             // let timeMax = ``;
             for (const i in obj.sayItID) {
-                await this.sendMsgSpeaker(sayitInput[obj.sayItID[i]], time, msg);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: sayIt message wird ausgefuehrt`);
+                await this.sendMsgSpeaker(obj, sayitInput[obj.sayItID[i]], time, msg);
                 // timeMin = await this.str2time(sayitInput[obj.sayItID[i]].timeMin);
                 // timeMax = await this.str2time(sayitInput[obj.sayItID[i]].timeMax);
                 // if (time >= timeMin && time < timeMax) {
@@ -799,8 +803,8 @@ class deviceReminder extends utils.Adapter {
         };
 
         if (obj.pushover) { // pushover nachricht versenden
-            this.log.debug(`pushover message wird ausgefuehrt`);
             for (const i in obj.pushoverID) {
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: pushover message wird ausgefuehrt`);
                 const strPush = `pushover${pushoverInput[obj.pushoverID[i]].inst}`;
                 let objTemp = {
                     message: msg,
@@ -811,13 +815,14 @@ class deviceReminder extends utils.Adapter {
                 if (pushoverInput[obj.pushoverID[i]].prio == undefined) {
                     delete objTemp.priority;
                 };
-                this.log.debug(`PUSHOVER OBJECT SENDTO: ${JSON.stringify(objTemp)}`);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: PUSHOVER OBJECT SENDTO: ${JSON.stringify(objTemp)}`);
                 this.sendTo(strPush, "send", objTemp);
             };
         };
 
         if (obj.email) { // email nachricht versenden
             for (const i in obj.emailID) {
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: email message wird ausgefuehrt`);
                 this.sendTo("email", "send", {
                     text: msg,
                     to: emailInput[obj.emailID[i]].emailTo,
@@ -832,7 +837,8 @@ class deviceReminder extends utils.Adapter {
         await this.setStateAsync(obj.messageDP, msg, true);
     };
 
-    async sendMsgSpeaker(input, time, msg) {
+    async sendMsgSpeaker(obj, input, time, msg) {
+        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: sendMsgSpeaker: MSG:${JSON.stringify(msg)}`)
         let timeMin = ``;
         let timeMax = ``;
         timeMin = await this.str2time(input.timeMin);
@@ -843,6 +849,7 @@ class deviceReminder extends utils.Adapter {
     };
 
     async setVolume(obj, action, type) {
+        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: setVolume `)
         switch (type) {
             case "alexa": {
                 if (obj.alexa) {
@@ -928,6 +935,7 @@ class deviceReminder extends utils.Adapter {
 
     // send message DP
     async sendMsg(obj, msg) {
+        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: sendMsg: ${JSON.stringify(msg)}`)
         await this.setForeignStateAsync(obj, msg);
     };
 
