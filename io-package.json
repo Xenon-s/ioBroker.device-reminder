@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.0.4",
+        "version": "1.0.5",
         "news": {
+            "1.0.5": {
+                "en": "bugfix: no messages were sent",
+                "de": "Bugfix: Es wurden keine Nachrichten gesendet",
+                "ru": "исправление: сообщения не отправлялись",
+                "pt": "correção de bug: nenhuma mensagem foi enviada",
+                "nl": "bugfix: er zijn geen berichten verzonden",
+                "fr": "correction de bogue: aucun message n'a été envoyé",
+                "it": "bugfix: nessun messaggio è stato inviato",
+                "es": "corrección de errores: no se enviaron mensajes",
+                "pl": "poprawka: nie wysłano żadnych wiadomości",
+                "zh-cn": "错误修正：未发送任何消息"
+            },
             "1.0.4": {
                 "en": "bugfix pushover\nbugfix message: there may now be a \".\" at the end of the messages",
                 "de": "Bugfix Pushover\nBugfix-Meldung: Möglicherweise wird jetzt ein \".\" am Ende der Nachrichten",

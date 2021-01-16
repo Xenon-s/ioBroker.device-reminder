@@ -264,16 +264,20 @@ class deviceReminder extends utils.Adapter {
                     this.whatsapp = false;
                 };
 
+                /*obj pushover erstellen*/
                 if (obj.pushover != undefined) {
                     this.pushoverID = obj.pushover
                     this.pushover = true;
-                } else this.pushover = false;
+                } else {
+                    this.pushover = false;
+                };
 
+                /*obj email erstellen*/
                 if (obj.email != undefined) {
                     this.emailID = obj.email
                     this.email = true;
                 } else {
-                    this.pushover = false;
+                    this.email = false;
                 };
             };
         };
@@ -406,6 +410,8 @@ class deviceReminder extends utils.Adapter {
             };
         };
         this.log.debug(`RETURN ${JSON.stringify(objVal)}`);
+
+        this.log.debug(`OBJ IN CONSTRUCTOR: ${JSON.stringify(obj)}`);
 
         const device = new Geraet(obj, statusDevice, consumpLive, runtime, runtimeMS, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal);
         objTemp = device;
@@ -540,7 +546,7 @@ class deviceReminder extends utils.Adapter {
         // device in Betrieb
         // Ermittlung, ob device nocht laeuft
         if (obj.resultEnd > obj.endValue && obj.resultEnd != null && obj.started) { // Wert > endValue und Verbrauch lag 1x ueber startValue
-        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: in Betrieb?  Ergebnis ENDE: ${JSON.stringify(obj.resultEnd)} Wert ENDE: ${JSON.stringify(obj.endValue)} started: ${JSON.stringify(obj.started)} Arraylength: ${JSON.stringify(obj.arrEnd.length)} Zaehler Arr Ende: ${JSON.stringify(obj.endCount)} `);
+            this.log.debug(`[${JSON.stringify(obj.deviceName)}]: in Betrieb?  Ergebnis ENDE: ${JSON.stringify(obj.resultEnd)} Wert ENDE: ${JSON.stringify(obj.endValue)} started: ${JSON.stringify(obj.started)} Arraylength: ${JSON.stringify(obj.arrEnd.length)} Zaehler Arr Ende: ${JSON.stringify(obj.endCount)} `);
             if (obj.timeout != null) {
                 clearTimeout(obj.timeout);
                 obj.timeout = null;
@@ -740,101 +746,107 @@ class deviceReminder extends utils.Adapter {
         let time = `${aHours}:${aMin}`;
         time = await this.str2time(time);
 
+        const sendMsg = async (obj, msg) => {
+
+            // trigger dp
+            await this.setStateAsync(obj.messageDP, msg, true);
+
+            if (obj.telegram) { // telegram nachricht versenden
+                for (const i in obj.telegramUser) {
+                    let user = ``;
+                    let strTele = ``;
+                    user = telegramInput[obj.telegramUser[i]].name;
+                    strTele = `telegram${telegramInput[obj.telegramUser[i]].inst}`;
+                    this.log.debug(`[${JSON.stringify(obj.deviceName)}]: telegram message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
+                    this.sendTo(strTele, `send`, {
+                        text: msg,
+                        user: user
+                    });
+                };
+            };
+
+            if (obj.whatsapp) { // WhatsApp nachricht versenden
+                for (const i in obj.whatsappID) {
+                    this.log.debug(`[${JSON.stringify(obj.deviceName)}]: whatsapp message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
+                    await this.setForeignStateAsync(whatsappInput[obj.whatsappID[i]].path, msg);
+                };
+            };
+
+            if (obj.alexa && !obj.dnd) {    // alexa quatschen lassen   
+                // let timeMin = ``;
+                // let timeMax = ``;
+                for (const i in obj.alexaID) {
+                    this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Alexa message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
+                    await this.sendMsgSpeaker(obj, alexaInput[obj.alexaID[i]], time, msg);
+                    // timeMin = await this.str2time(alexaInput[obj.alexaID[i]].timeMin);
+                    // timeMax = await this.str2time(alexaInput[obj.alexaID[i]].timeMax);
+                    // if (time >= timeMin && time < timeMax) {
+                    //     await this.setForeignStateAsync(alexaInput[obj.alexaID[i]].path, msg);
+                    // };
+                };
+            };
+
+            if (obj.sayIt && !obj.dnd) {  //sayit 
+                // let timeMin = ``;
+                // let timeMax = ``;
+                for (const i in obj.sayItID) {
+                    this.log.debug(`[${JSON.stringify(obj.deviceName)}]: sayIt message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
+                    await this.sendMsgSpeaker(obj, sayitInput[obj.sayItID[i]], time, msg);
+                    // timeMin = await this.str2time(sayitInput[obj.sayItID[i]].timeMin);
+                    // timeMax = await this.str2time(sayitInput[obj.sayItID[i]].timeMax);
+                    // if (time >= timeMin && time < timeMax) {
+                    //     await this.setForeignStateAsync(sayitInput[obj.sayItID[i]].path, msg);
+                    // };
+                };
+            };
+
+            if (obj.pushover) { // pushover nachricht versenden
+                for (const i in obj.pushoverID) {
+                    this.log.debug(`[${JSON.stringify(obj.deviceName)}]: pushover message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
+                    const strPush = `pushover${pushoverInput[obj.pushoverID[i]].inst}`;
+                    let objTemp = {
+                        message: msg,
+                        sound: pushoverInput[obj.pushoverID[i]].sound,
+                        priority: pushoverInput[obj.pushoverID[i]].prio
+                    };
+
+                    if (pushoverInput[obj.pushoverID[i]].prio == undefined) {
+                        delete objTemp.priority;
+                    };
+                    this.log.debug(`[${JSON.stringify(obj.deviceName)}]: PUSHOVER OBJECT SENDTO: ${JSON.stringify(objTemp)}`);
+                    this.sendTo(strPush, "send", objTemp);
+                };
+            };
+
+            if (obj.email) { // email nachricht versenden
+                for (const i in obj.emailID) {
+                    this.log.debug(`[${JSON.stringify(obj.deviceName)}]: email message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
+                    this.sendTo("email", "send", {
+                        text: msg,
+                        to: emailInput[obj.emailID[i]].emailTo,
+                        subject: msg,
+                        from: emailInput[obj.emailID[i]].emailFrom
+                    });
+                };
+            };
+
+        };
+
         switch (type) {
             case "start": {
-                msg = await this.createObjMsg(obj.startMessageText);
+                // msg = await this.createObjMsg(obj.startMessageText);
                 this.log.debug(`[${JSON.stringify(obj.deviceName)}]: startmessage: ${JSON.stringify(obj.startMessageText)}`);
+                sendMsg(obj, await this.createObjMsg(obj.startMessageText));
                 break;
             };
             case "end": {
                 msg = await this.createObjMsg(obj.endMessageText);
-                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: startmessage: ${JSON.stringify(obj.endMessageText)}`);
+                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: endmessage: ${JSON.stringify(obj.endMessageText)}`);
+                sendMsg(obj, await this.createObjMsg(obj.endMessageText));
                 break;
             };
         };
 
-        if (obj.telegram) { // telegram nachricht versenden
-            for (const i in obj.telegramUser) {
-                let user = ``;
-                let strTele = ``;
-                user = telegramInput[obj.telegramUser[i]].name;
-                strTele = `telegram${telegramInput[obj.telegramUser[i]].inst}`;
-                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: telegram message wird ausgefuehrt`);
-                this.sendTo(strTele, `send`, {
-                    text: msg,
-                    user: user
-                });
-            };
-        };
-
-        if (obj.whatsapp) { // WhatsApp nachricht versenden
-            for (const i in obj.whatsappID) {
-                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: whatsapp message wird ausgefuehrt`);
-                await this.setForeignStateAsync(whatsappInput[obj.whatsappID[i]].path, msg);
-            };
-        };
-
-        if (obj.alexa && !obj.dnd) {    // alexa quatschen lassen   
-            // let timeMin = ``;
-            // let timeMax = ``;
-            for (const i in obj.alexaID) {
-                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: Alexa message wird ausgefuehrt`);
-                await this.sendMsgSpeaker(obj, alexaInput[obj.alexaID[i]], time, msg);
-                // timeMin = await this.str2time(alexaInput[obj.alexaID[i]].timeMin);
-                // timeMax = await this.str2time(alexaInput[obj.alexaID[i]].timeMax);
-                // if (time >= timeMin && time < timeMax) {
-                //     await this.setForeignStateAsync(alexaInput[obj.alexaID[i]].path, msg);
-                // };
-            };
-        };
-
-        if (obj.sayIt && !obj.dnd) {  //sayit 
-            // let timeMin = ``;
-            // let timeMax = ``;
-            for (const i in obj.sayItID) {
-                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: sayIt message wird ausgefuehrt`);
-                await this.sendMsgSpeaker(obj, sayitInput[obj.sayItID[i]], time, msg);
-                // timeMin = await this.str2time(sayitInput[obj.sayItID[i]].timeMin);
-                // timeMax = await this.str2time(sayitInput[obj.sayItID[i]].timeMax);
-                // if (time >= timeMin && time < timeMax) {
-                //     await this.setForeignStateAsync(sayitInput[obj.sayItID[i]].path, msg);
-                // };
-            };
-        };
-
-        if (obj.pushover) { // pushover nachricht versenden
-            for (const i in obj.pushoverID) {
-                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: pushover message wird ausgefuehrt`);
-                const strPush = `pushover${pushoverInput[obj.pushoverID[i]].inst}`;
-                let objTemp = {
-                    message: msg,
-                    sound: pushoverInput[obj.pushoverID[i]].sound,
-                    priority: pushoverInput[obj.pushoverID[i]].prio
-                };
-
-                if (pushoverInput[obj.pushoverID[i]].prio == undefined) {
-                    delete objTemp.priority;
-                };
-                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: PUSHOVER OBJECT SENDTO: ${JSON.stringify(objTemp)}`);
-                this.sendTo(strPush, "send", objTemp);
-            };
-        };
-
-        if (obj.email) { // email nachricht versenden
-            for (const i in obj.emailID) {
-                this.log.debug(`[${JSON.stringify(obj.deviceName)}]: email message wird ausgefuehrt`);
-                this.sendTo("email", "send", {
-                    text: msg,
-                    to: emailInput[obj.emailID[i]].emailTo,
-                    subject: msg,
-                    from: emailInput[obj.emailID[i]].emailFrom
-                });
-            };
-        };
-
-
-        // trigger dp
-        await this.setStateAsync(obj.messageDP, msg, true);
     };
 
     async sendMsgSpeaker(obj, input, time, msg) {
@@ -921,12 +933,19 @@ class deviceReminder extends utils.Adapter {
         length = (await objMsg.lastIndexOf(".") + 1);
         lengthTotal = await objMsg.length;
         if (objMsg != `` && objMsg != undefined) {
+            // message != undefined
             if (length < lengthTotal) {
+                // last digit is a dot TRUE
                 if (await this.getForeignObjectAsync(objMsg) != null) {
+                    // msg from DP TRUE
                     const result = await this.getForeignStateAsync(objMsg);
                     msgTemp = result.val;
+                } else {
+                    // msg from DP false
+                    msgTemp = objMsg;
                 }
             } else {
+                // last digit is a dot FALSE
                 msgTemp = objMsg;
             };
         } return msgTemp;
@@ -934,10 +953,10 @@ class deviceReminder extends utils.Adapter {
 
 
     // send message DP
-    async sendMsg(obj, msg) {
-        this.log.debug(`[${JSON.stringify(obj.deviceName)}]: sendMsg: ${JSON.stringify(msg)}`)
-        await this.setForeignStateAsync(obj, msg);
-    };
+    // async sendMsg(obj, msg) {
+    //     this.log.debug(`[${JSON.stringify(obj.deviceName)}]: sendMsg: ${JSON.stringify(msg)}`)
+    //     await this.setForeignStateAsync(obj, msg);
+    // };
 
     async str2time(str) {
         return str.split(":")[0] * 100 + parseInt(str.split(":")[1], 10);
@@ -981,6 +1000,7 @@ class deviceReminder extends utils.Adapter {
         this.log.debug(`Data from configuration received : ${JSON.stringify(obj)}`);
 
         const counter = await obj.message;
+        this.log.debug(`COUNTER ON MESSAGE: ${JSON.stringify(counter)}`);
 
         if (obj.command.cmd == 'telegram') {
             await this.getInstance(obj, 'telegram', 'communicate.users', counter);

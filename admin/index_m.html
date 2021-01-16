@@ -106,6 +106,7 @@
                     whatsappID = settings.whatsappID || []; // whatsapp ID native anlegen
                     pushoverID = settings.pushoverID || []; // pushover ID native anlegen
                     emailID = settings.emailID || []; // emailID native anlegen
+                    // telegramID = settings.telegramID || [] // telegram native
 
                     customTypeID = settings.customTypeID || [];
                     defaultTypeID = settings.defaultTypeID || [];
@@ -159,11 +160,11 @@
                         values2table('valStates', valStates, onChange); // custom states
                         $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true);
 
-                    }, 200);
+                    }, 300);
                     setTimeout(function () {
                         createDynamicTable(settings, onChange, device); // create dynamic table "device"
                         $('#dynamicTableLoading, #dynamicTableLoadingText').css('display', 'none'); // ladekringel
-                    }, 200);
+                    }, 300);
 
                     if (M) M.updateTextFields();
                     if (varTrue == false) clickButton(onChange);
@@ -339,13 +340,16 @@
             varTrue = true;
 
             // refresh dynamic table
-            $('#fill-dynamic-table').on('click', () => {
+            $('#fill-dynamic-table').on('click', async () => {
                 $('#dynamicTableLoading, #dynamicTableLoadingText').css('display', ''); // ladekringel
                 settings = createSettings();
                 load(settings, onChange);
                 onChange(true);
-                $('.btn-save, .btn-save-close').removeClass('disabled');
-                $('#fill-dynamic-table').addClass('disabled');
+
+                setTimeout(function () {
+                    $('.btn-save, .btn-save-close').removeClass('disabled');
+                    $('#fill-dynamic-table').addClass('disabled');
+                }, 200);
 
             });
 
@@ -493,10 +497,8 @@
                     case 'pushover': {
                         let obj = { dataChecked: null, dataFailed: null, err: `errPushover`, header: header, name: `${name} user`, anchorEn: `create-pushover-user`, anchorGer: `pushover-user-erstellen`, anchorName: `pushover`};
                         if (pushoverID.length > 0) {
-                            console.warn(JSON.stringify(pushoverID));
                             sendTo(null, { cmd: 'type', 1: 'name', 2: 'inst', 3: 'prio', 4: 'sound', cntr: 4 }, pushoverID, async data => {
                                 if (data != undefined) {
-                                    console.warn(JSON.stringify(data))
                                     pushover = await data.checked;
                                     obj.dataFailed = await data.failed;
                                     checked(obj);
@@ -695,6 +697,7 @@
             obj.alexaID = createId(obj.alexaID, alexa_counter, "alexa_counter");
             obj.sayitID = createId(obj.sayitID, sayit_counter, "sayit_counter");
             obj.whatsappID = createId(obj.whatsappID, whatsapp_counter, "whatsapp_counter");
+            obj.telegramID = createId(obj.telegramID, telegram_counter, "telegram_counter");
             obj.pushoverID = createId(obj.pushoverID, pushover_counter, "pushover_counter");
             obj.emailID = createId(obj.emailID, email_counter, "email_counter");
 

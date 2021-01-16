@@ -41,6 +41,10 @@ Der refresh Intervall vom "Live-Verbrauchswert (heißt bei den meisten Geräten 
 
 # Anleitung
 
+## Grundlegendes vorab
+
+Es gibt für jede Gruppe an devices, alexa etc. den Button "Check Input". Wird dieser Button angeklickt werden die vorhanden Eingaben auf Plausibilität geprüft und man bekommt sofort eine Antwort, ob alle Eingaben richtig sind. Hat man Änderungen vorgenommen, so muss dieser Button angeklickt werden!
+
 ## device anlegen
 ![addDevice.png](admin/addDevice.png)
 
