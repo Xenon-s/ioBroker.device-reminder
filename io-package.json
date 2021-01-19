@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.0.5",
+        "version": "1.0.6",
         "news": {
+            "1.0.6": {
+                "en": "bugfix: removed incorrect status",
+                "de": "Bugfix: Falscher Status entfernt",
+                "ru": "исправление: убран некорректный статус",
+                "pt": "correção de bug: status incorreto removido",
+                "nl": "bugfix: onjuiste status verwijderd",
+                "fr": "correction de bogue: statut incorrect supprimé",
+                "it": "bugfix: rimosso stato errato",
+                "es": "corrección de errores: eliminado estado incorrecto",
+                "pl": "bugfix: usunięto niepoprawny status",
+                "zh-cn": "错误修正：删除了不正确的状态"
+            },
             "1.0.5": {
                 "en": "bugfix: no messages were sent",
                 "de": "Bugfix: Es wurden keine Nachrichten gesendet",
@@ -14,54 +26,6 @@
                 "es": "corrección de errores: no se enviaron mensajes",
                 "pl": "poprawka: nie wysłano żadnych wiadomości",
                 "zh-cn": "错误修正：未发送任何消息"
-            },
-            "1.0.4": {
-                "en": "bugfix pushover\nbugfix message: there may now be a \".\" at the end of the messages",
-                "de": "Bugfix Pushover\nBugfix-Meldung: Möglicherweise wird jetzt ein \".\" am Ende der Nachrichten",
-                "ru": "исправление ошибок\nсообщение об исправлении ошибки: теперь может быть \".\" в конце сообщений",
-                "pt": "bug fix pushover\nmensagem de correção de bug: agora pode haver um \".\" no final das mensagens",
-                "nl": "bugfix pushover\nbugfix bericht: er kan nu een \".\" aan het einde van de berichten",
-                "fr": "bugfix pushover\nmessage de correction de bogue: il peut maintenant y avoir un \".\" à la fin des messages",
-                "it": "bugfix pushover\nmessaggio di bugfix: ora potrebbe esserci un \".\" alla fine dei messaggi",
-                "es": "corrección de errores\nmensaje de corrección de errores: ahora puede haber un \".\" al final de los mensajes",
-                "pl": "pushover bugfix\nwiadomość z poprawką błędu: może teraz występować znak „.” na końcu wiadomości",
-                "zh-cn": "错误修正推覆\n错误修正消息：现在可能有一个“。”在消息末尾"
-            },
-            "1.0.3": {
-                "en": "bugfix pushover\nadded link \"german readme\" in readme",
-                "de": "Bugfix Pushover\nLink \"german readme\" in readme hinzugefügt",
-                "ru": "исправление ошибок\nдобавлена ссылка \"немецкий ридми\" в ридми",
-                "pt": "bug fix pushover\nadicionado link \"readme alemão\" no readme",
-                "nl": "bugfix pushover\nlink \"duits readme\" toegevoegd in readme",
-                "fr": "bugfix pushover\nAjout du lien \"readme allemand\" dans le readme",
-                "it": "bugfix pushover\naggiunto link \"german readme\" in readme",
-                "es": "corrección de errores\nenlace añadido \"Léame alemán\" en Léame",
-                "pl": "pushover bugfix\ndodano link „niemiecki plik readme” w pliku Readme",
-                "zh-cn": "错误修正推覆\n在自述文件中添加了链接“德语自述文件”"
-            },
-            "1.0.2": {
-                "en": "fix name i io-package.json",
-                "de": "Fixname i io-package.json",
-                "ru": "исправить имя я io-package.json",
-                "pt": "nome da correção i io-package.json",
-                "nl": "fix naam i io-package.json",
-                "fr": "nom du correctif i io-package.json",
-                "it": "correggere il nome i io-package.json",
-                "es": "arreglar el nombre i io-package.json",
-                "pl": "nazwa poprawki i io-package.json",
-                "zh-cn": "修复名称i io-package.json"
-            },
-            "1.0.1": {
-                "en": "bugfix",
-                "de": "Bug-Fix",
-                "ru": "Исправлена ошибка",
-                "pt": "correção de bug",
-                "nl": "bugfix",
-                "fr": "correction d'un bug",
-                "it": "risoluzione del problema",
-                "es": "arreglo del fallo",
-                "pl": "naprawa błędów",
-                "zh-cn": "错误修正"
             },
             "1.0.0": {
                 "en": "initial commit version 1.0",

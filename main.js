@@ -126,10 +126,10 @@ class deviceReminder extends utils.Adapter {
             await this.setStateAsync(obj[i].pathLiveConsumption, 0, true);
             await this.setStateAsync(obj[i].timeTotal, `00:00:00`, true);
             await this.setStateAsync(obj[i].timeTotalMs, 0, true);
-            await this.setStateAsync(obj[i].messageDP, ``, true);
+            await this.setStateAsync(obj[i].messageDP, `initialize`, true);
             await this.setStateAsync(obj[i].averageConsumption, 0, true);
             await this.setStateAsync(obj[i].doNotDisturb, await this.getStateAsync(obj[i].doNotDisturb));
-            await this.setStateAsync(obj[i].autoOffDP, obj[i].autoOff, true);
+            // await this.setStateAsync(obj[i].autoOffDP, obj[i].autoOff, true);
         };
     };
 
