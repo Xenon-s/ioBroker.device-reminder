@@ -1,8 +1,47 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "0.7.4",
+        "version": "1.1.1-0",
         "news": {
+            "1.1.1-0": {
+                "de": "zahlreiche performance Verbesserungen, Admin wurde komplett neu erstellt"
+            },
+            "1.0.6": {
+                "en": "bugfix: removed incorrect status",
+                "de": "Bugfix: Falscher Status entfernt",
+                "ru": "исправление: убран некорректный статус",
+                "pt": "correção de bug: status incorreto removido",
+                "nl": "bugfix: onjuiste status verwijderd",
+                "fr": "correction de bogue: statut incorrect supprimé",
+                "it": "bugfix: rimosso stato errato",
+                "es": "corrección de errores: eliminado estado incorrecto",
+                "pl": "bugfix: usunięto niepoprawny status",
+                "zh-cn": "错误修正：删除了不正确的状态"
+            },
+            "1.0.5": {
+                "en": "bugfix: no messages were sent",
+                "de": "Bugfix: Es wurden keine Nachrichten gesendet",
+                "ru": "исправление: сообщения не отправлялись",
+                "pt": "correção de bug: nenhuma mensagem foi enviada",
+                "nl": "bugfix: er zijn geen berichten verzonden",
+                "fr": "correction de bogue: aucun message n'a été envoyé",
+                "it": "bugfix: nessun messaggio è stato inviato",
+                "es": "corrección de errores: no se enviaron mensajes",
+                "pl": "poprawka: nie wysłano żadnych wiadomości",
+                "zh-cn": "错误修正：未发送任何消息"
+            },
+            "1.0.0": {
+                "en": "initial commit version 1.0",
+                "de": "Initial Commit Version 1.0",
+                "ru": "начальная версия фиксации 1.0",
+                "pt": "commit inicial versão 1.0",
+                "nl": "initiële commit versie 1.0",
+                "fr": "commit initial version 1.0",
+                "it": "commit iniziale versione 1.0",
+                "es": "confirmación inicial versión 1.0",
+                "pl": "początkowa zatwierdzona wersja 1.0",
+                "zh-cn": "初始提交版本1.0"
+            },
             "0.7.4": {
                 "en": "bugfix: telegram instance was not recognised correctly\nbugfix: abort detection prevented sending of notifications",
                 "de": "Bugfix: Telegramminstanz wurde nicht richtig erkannt\nBugfix: Abbrucherkennung verhindert das Senden von Benachrichtigungen",
@@ -82,7 +121,15 @@
         },
         "desc": {
             "en": "Adapter for device reminder and notification when reaching different states",
-            "de": "Adapter für Geräteerinnerung und Benachrichtigung beim Erreichen von verschiedenen Zuständen"
+            "de": "Adapter für Geräteerinnerung und Benachrichtigung beim Erreichen von verschiedenen Zuständen",
+            "ru": "Адаптер для напоминания и уведомления устройства при достижении разных состояний",
+            "pt": "Adaptador para lembrete e notificação do dispositivo ao atingir diferentes estados",
+            "nl": "Adapter voor apparaatherinnering en melding bij het bereiken van verschillende toestanden",
+            "fr": "Adaptateur pour le rappel de l'appareil et la notification lorsque vous atteignez différents états",
+            "it": "Adattatore per promemoria del dispositivo e notifica al raggiungimento di stati diversi",
+            "es": "Adaptador para recordatorio y notificación del dispositivo al llegar a diferentes estados",
+            "pl": "Adapter do przypomnienia o urządzeniu i powiadomienia po osiągnięciu różnych stanów",
+            "zh-cn": "达到不同状态时用于设备提醒和通知的适配器"
         },
         "authors": [
             "xenon-s <ente_s@hotmail.de>"
@@ -112,14 +159,23 @@
             {
                 "js-controller": ">=2.0.0"
             }
-        ]
+        ],
+        "installedFrom": "iobroker.device-reminder@1.0.6"
     },
     "native": {
-        "device_counter": 0,
+        "devices_counter": 0,
         "alexa_counter": 0,
         "sayit_counter": 0,
         "whatsapp_counter": 0,
-        "custom_device_counter": 0,
+        "telegram_counter": 0,
+        "pushover_counter": 0,
+        "email_counter": 0,
+        "custom_counter": 25,
+        "default_counter":0,
+        "alert_counter":0,
+        "presence_counter":0,
+        "status_counter":0,
+
         "defaultTypeID": [
             {
                 "name": "washing-machine",
@@ -218,8 +274,44 @@
                 "stateStandby": "standby",
                 "stateOff": "switched off"
             }
+        ],
+        "freqAlert": [
+            {
+                "dnd_send": false,
+                "freq_Alert_in_min": 5,
+                "text_alert": "Attention! Runtime has been exceeded! "
+            }
+        ],
+        "presence": [
+            {
+                "presence_Notification": false,
+                "presence_msg": false,
+                "dp_presence": "Only boolean is allowed"
+            }
         ]
     },
     "objects": [],
-    "instanceObjects": []
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
 }

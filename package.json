@@ -1,26 +1,41 @@
 {
-  "name": "iobroker.device-reminder",
-  "version": "0.7.4",
-  "description": "device-reminder",
+  "_from": "iobroker.device-reminder@1.0.6",
+  "_id": "iobroker.device-reminder@1.0.6",
+  "_inBundle": false,
+  "_integrity": "sha512-FrBtM9wRbX0hJ0E/nLdjtVAocnvz+HRpdRrK8lmtzYEck/8uG8SclQDsOg8SoD3Gkn5tAcDANDnEPGcIVSI4iQ==",
+  "_location": "/iobroker.device-reminder",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "iobroker.device-reminder@1.0.6",
+    "name": "iobroker.device-reminder",
+    "escapedName": "iobroker.device-reminder",
+    "rawSpec": "1.0.6",
+    "saveSpec": null,
+    "fetchSpec": "1.0.6"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/iobroker.device-reminder/-/iobroker.device-reminder-1.0.6.tgz",
+  "_shasum": "8d5247ff4a9d09786bf20890ff36d2522f8f1db0",
+  "_spec": "iobroker.device-reminder@1.0.6",
+  "_where": "/opt/iobroker",
   "author": {
     "name": "xenon-s",
     "email": "ente_s@hotmail.de"
   },
-  "homepage": "https://github.com/xenon-s/ioBroker.device-reminder",
-  "license": "MIT",
-  "keywords": [
-    "ioBroker",
-    "device reminder",
-    "Smart Home",
-    "home automation"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/xenon-s/ioBroker.device-reminder"
+  "bugs": {
+    "url": "https://github.com/xenon-s/ioBroker.device-reminder/issues"
   },
+  "bundleDependencies": false,
   "dependencies": {
     "@iobroker/adapter-core": "^2.4.0"
   },
+  "deprecated": false,
+  "description": "device-reminder",
   "devDependencies": {
     "@alcalzone/release-script": "^1.8.1",
     "@iobroker/testing": "^2.3.0",
@@ -42,18 +57,28 @@
     "sinon": "^9.2.1",
     "sinon-chai": "^3.5.0"
   },
+  "homepage": "https://github.com/xenon-s/ioBroker.device-reminder",
+  "keywords": [
+    "ioBroker",
+    "device reminder",
+    "Smart Home",
+    "home automation"
+  ],
+  "license": "MIT",
   "main": "main.js",
+  "name": "iobroker.device-reminder",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xenon-s/ioBroker.device-reminder.git"
+  },
   "scripts": {
+    "lint": "eslint",
+    "release": "release-script",
+    "test": "npm run test:js && npm run test:package",
+    "test:integration": "mocha test/integration --exit",
     "test:js": "mocha --config test/mocharc.custom.json \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
     "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit",
-    "test:integration": "mocha test/integration --exit",
-    "test": "npm run test:js && npm run test:package",
-    "lint": "eslint",
-    "release": "release-script"
+    "test:unit": "mocha test/unit --exit"
   },
-  "bugs": {
-    "url": "https://github.com/xenon-s/ioBroker.device-reminder/issues"
-  },
-  "readmeFilename": "README.md"
+  "version": "1.1.1-0"
 }
