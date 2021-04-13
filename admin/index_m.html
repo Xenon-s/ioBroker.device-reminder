@@ -279,6 +279,7 @@
                             const resChecked = await staticTable(dataGlobal);
                             await dynamicTable(dataGlobal, resChecked);
                             $('.red').on('click', clickEventDelBtn); // click event auf delete button setzen
+                            onChange(false);
 
                             function createData(settings) {
 
