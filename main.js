@@ -142,7 +142,7 @@ class deviceReminder extends utils.Adapter {
                     this.trigger[`${instAdapter}.${device.dnd}`] = { id: id, path: device.dnd, target: 'dnd', type: 'value' };
                     this.trigger[`${instAdapter}.${device.runtimeMaxDP}`] = { id: id, path: device.runtimeMaxDP, target: 'runtimeMax', type: 'value' };
                     this.trigger[device.currentConsumption] = { id: id, path: device.currentConsumption, target: 'consumption', type: 'value' };
-                    if(device.switchPower !== undefined && device.switchPower !== ``) this.trigger[device.switchPower] = { id: id, path: device.switchPower, target: 'switch', type: 'value' };
+                    if (device.switchPower !== undefined && device.switchPower !== ``) this.trigger[device.switchPower] = { id: id, path: device.switchPower, target: 'switch', type: 'value' };
 
                     // values
                     this.values[id] = {
@@ -230,243 +230,243 @@ class deviceReminder extends utils.Adapter {
     */
     async funcCreateObject(id) {
         try {
-        const devicesInput = this.devices[id];
-        const name = this.devices[id].name;
+            const devicesInput = this.devices[id];
+            const name = this.devices[id].name;
 
-        class classDevice {
-            /**
-             * @param {number} startValue
-             * @param {number} endValue
-             * @param {number} startCount
-             * @param {number} endCount
-             * @param {number} runtimeMax
-             * @param {string | string} statusDevice
-             * @param {string | number} consumpLive
-             * @param {string | number} averageConsumption
-             * @param {string | number} runtime
-             * @param {string | number} lastRuntime
-             * @param {string | string} messageDP
-             */
-            constructor(obj, statusDevice, consumpLivePath, runtimePath, runtimeMSPath, lastRuntimePath, runtimeMaxDP, alertRuntimeDP, lastOperations, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal) {
-                // DPs
-                this.name = obj.name;
-                this.type = obj.type;
-                this.currentConsumption = obj.pathConsumption;
-                this.switchPower = obj.pathSwitch;
-                // script intern
-                this.pathStatus = statusDevice;
-                this.pathLiveConsumption = consumpLivePath;
-                this.timeTotal = runtimePath;
-                this.timeTotalMs = runtimeMSPath;
-                this.lastRuntime = lastRuntimePath;
-                this.runtimeMax = parseInt(obj.runtimeMax);
-                this.runtimeMaxDP = runtimeMaxDP;
-                this.alertRuntime = alertRuntimeDP;
-                this.messageDP = messageDP;
-                this.averageConsumption = averageConsumption;
-                this.dnd = doNotDisturb;
-                this.lastOperations = lastOperations;
-                this.autoOffDP = autoOffDP;
-                // string
-                this.startTimeJSON = `00:00:00`;
-                this.endtimeJSON = `00:00:00`;
-                this.runtimeJSON = '00:00:00';
-                // boolean
-                this.startMessageSent = false;
-                this.endMessageSent = false;
-                this.started = false;
-                this.abort = obj.abort;
-                this.alert = false;
-                // boolean Benutzervorgaben
-                this.autoOff = obj.autoOff;
-                // number
-                this.consumption = 0;
-                this.resultStart = 0;
-                this.resultEnd = 0;
-                this.resultStandby = 0;
-                // Verbrauchswerte
-                this.startValue = objVal.startVal;
-                this.endValue = objVal.endVal;
-                // Zaehler Abbruchbedingungen
-                this.startCount = objVal.startCount;
-                this.endCount = objVal.endCount;
-                // timeout
-                this.timeoutMsg = null;
-                this.timeoutAlert = null;
-                this.startTime = 0;
-                this.endTime = 0;
-                // array
-                this.arrStart = [];
-                this.arrEnd = [];
-                this.arrStandby = [];
-                this.dateJSON = [];
+            class classDevice {
+                /**
+                 * @param {number} startValue
+                 * @param {number} endValue
+                 * @param {number} startCount
+                 * @param {number} endCount
+                 * @param {number} runtimeMax
+                 * @param {string | string} statusDevice
+                 * @param {string | number} consumpLive
+                 * @param {string | number} averageConsumption
+                 * @param {string | number} runtime
+                 * @param {string | number} lastRuntime
+                 * @param {string | string} messageDP
+                 */
+                constructor(obj, statusDevice, consumpLivePath, runtimePath, runtimeMSPath, lastRuntimePath, runtimeMaxDP, alertRuntimeDP, lastOperations, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal) {
+                    // DPs
+                    this.name = obj.name;
+                    this.type = obj.type;
+                    this.currentConsumption = obj.pathConsumption;
+                    this.switchPower = obj.pathSwitch;
+                    // script intern
+                    this.pathStatus = statusDevice;
+                    this.pathLiveConsumption = consumpLivePath;
+                    this.timeTotal = runtimePath;
+                    this.timeTotalMs = runtimeMSPath;
+                    this.lastRuntime = lastRuntimePath;
+                    this.runtimeMax = parseInt(obj.runtimeMax);
+                    this.runtimeMaxDP = runtimeMaxDP;
+                    this.alertRuntime = alertRuntimeDP;
+                    this.messageDP = messageDP;
+                    this.averageConsumption = averageConsumption;
+                    this.dnd = doNotDisturb;
+                    this.lastOperations = lastOperations;
+                    this.autoOffDP = autoOffDP;
+                    // string
+                    this.startTimeJSON = `00:00:00`;
+                    this.endtimeJSON = `00:00:00`;
+                    this.runtimeJSON = '00:00:00';
+                    // boolean
+                    this.startMessageSent = false;
+                    this.endMessageSent = false;
+                    this.started = false;
+                    this.abort = obj.abort;
+                    this.alert = false;
+                    // boolean Benutzervorgaben
+                    this.autoOff = obj.autoOff;
+                    // number
+                    this.consumption = 0;
+                    this.resultStart = 0;
+                    this.resultEnd = 0;
+                    this.resultStandby = 0;
+                    // Verbrauchswerte
+                    this.startValue = objVal.startVal;
+                    this.endValue = objVal.endVal;
+                    // Zaehler Abbruchbedingungen
+                    this.startCount = objVal.startCount;
+                    this.endCount = objVal.endCount;
+                    // timeout
+                    this.timeoutMsg = null;
+                    this.timeoutAlert = null;
+                    this.startTime = 0;
+                    this.endTime = 0;
+                    // array
+                    this.arrStart = [];
+                    this.arrEnd = [];
+                    this.arrStandby = [];
+                    this.dateJSON = [];
 
-                // Methoden
-                // Abbruchvalue erstellen
-                if (objVal.endCount >= 5 && objVal.endCount <= 10) {
-                    this.valCancel = objVal.endCount - 5;
-                } else if (objVal.endCount > 10) {
-                    this.valCancel = 10;
-                } else {
-                    this.valCancel = 5;
-                };
-
-                /*obj Startext erstellen*/
-                this.startMessageText = obj.startText;
-                if (obj.startText != `` && obj.startText != undefined) {
-                    this.startMessage = true;
-                } else {
-                    this.startMessage = false;
-                };
-
-                /*obj Endtext erstellen*/
-                this.endMessageText = obj.endText;
-                if (obj.endText != `` && obj.endText != undefined) {
-                    this.endMessage = true;
-                } else {
-                    this.endMessage = false;
-                };
-
-                /*obj timer erstellen*/
-                if (obj.autoOff) {
-                    if (obj.timer != `` && obj.timer != undefined && obj.timer != 0) {
-                        this.timeoutInMS = (Math.floor(obj.timer) * 60 * 1000); // Umrechnung auf ms
+                    // Methoden
+                    // Abbruchvalue erstellen
+                    if (objVal.endCount >= 5 && objVal.endCount <= 10) {
+                        this.valCancel = objVal.endCount - 5;
+                    } else if (objVal.endCount > 10) {
+                        this.valCancel = 10;
                     } else {
-                        this.timeoutInMS = 0;
+                        this.valCancel = 5;
+                    };
+
+                    /*obj Startext erstellen*/
+                    this.startMessageText = obj.startText;
+                    if (obj.startText != `` && obj.startText != undefined) {
+                        this.startMessage = true;
+                    } else {
+                        this.startMessage = false;
+                    };
+
+                    /*obj Endtext erstellen*/
+                    this.endMessageText = obj.endText;
+                    if (obj.endText != `` && obj.endText != undefined) {
+                        this.endMessage = true;
+                    } else {
+                        this.endMessage = false;
+                    };
+
+                    /*obj timer erstellen*/
+                    if (obj.autoOff) {
+                        if (obj.timer != `` && obj.timer != undefined && obj.timer != 0) {
+                            this.timeoutInMS = (Math.floor(obj.timer) * 60 * 1000); // Umrechnung auf ms
+                        } else {
+                            this.timeoutInMS = 0;
+                        };
+                    };
+                    this.timeout = null
+
+                    /*obj telegram erstellen*/
+                    if (obj.telegram != `` && obj.telegram != undefined) {
+                        this.telegramUser = obj.telegram
+                        this.telegram = true;
+                    } else {
+                        this.telegram = false;
+                    };
+
+                    /*obj alexa erstellen*/
+                    if (obj.alexa != undefined) {
+                        this.alexaID = obj.alexa;
+                        this.alexaVolOld = 0;
+                        this.alexa = true;
+                    } else {
+                        this.alexa = false;
+                    };
+
+                    /*obj sayIt erstellen*/
+                    if (obj.sayit != undefined) {
+                        this.sayItID = obj.sayit;
+                        this.sayItVolOld = 0;
+                        this.sayIt = true;
+                    } else {
+                        this.sayIt = false;
+                    };
+
+                    /*obj whatsapp erstellen*/
+                    if (obj.whatsapp != `` && obj.whatsapp != undefined) {
+                        this.whatsappID = obj.whatsapp;
+                        this.whatsapp = true;
+                    } else {
+                        this.whatsapp = false;
+                    };
+
+                    /*obj pushover erstellen*/
+                    if (obj.pushover != undefined) {
+                        this.pushoverID = obj.pushover
+                        this.pushover = true;
+                    } else {
+                        this.pushover = false;
+                    };
+
+                    /*obj email erstellen*/
+                    if (obj.email != undefined) {
+                        this.emailID = obj.email
+                        this.email = true;
+                    } else {
+                        this.email = false;
                     };
                 };
-                this.timeout = null
+            };
 
-                /*obj telegram erstellen*/
-                if (obj.telegram != `` && obj.telegram != undefined) {
-                    this.telegramUser = obj.telegram
-                    this.telegram = true;
-                } else {
-                    this.telegram = false;
-                };
+            const autoOffDP = (`${name}.config.auto Off`);
 
-                /*obj alexa erstellen*/
-                if (obj.alexa != undefined) {
-                    this.alexaID = obj.alexa;
-                    this.alexaVolOld = 0;
-                    this.alexa = true;
-                } else {
-                    this.alexa = false;
-                };
+            const arrDP = {
+                statusDevice: { name: `statusDevice`, path: `${name}.Status`, parse: { "name": `Status ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
+                consumpLive: { name: `consumpLive`, path: `${name}.live consumption`, parse: { "name": `live consumption ${name}`, "type": "number", "role": "indicator", "unit": "W", "read": true, "write": false } },
+                runtime: { name: `runtime`, path: `${name}.runtime`, parse: { "name": `runtime ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
+                runtimeMS: { name: `runtimeMS`, path: `${name}.runtime in ms`, parse: { "name": `runtime in ms ${name}`, "type": "number", "role": "indicator", "read": true, "write": false } },
+                lastRuntime: { name: `lastRuntime`, path: `${name}.lastRuntime`, parse: { "name": `last runtime ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
+                messageDP: { name: `messageDP`, path: `${name}.messageDP`, parse: { "name": `messageDP ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
+                averageConsumption: { name: `averageConsumption`, path: `${name}.average consumption`, parse: { "name": `average consumption ${name}`, "type": "number", "role": "indicator", "unit": "W", "read": true, "write": false } },
+                alertRuntime: { name: `alertRuntime`, path: `${name}.alert runtime`, parse: { "name": `alert runtime ${name}`, "type": "boolean", "role": "indicator", "read": true, "write": false } },
+                lastOperations: { name: `lastOperations`, path: `${name}.last operations`, parse: { "name": `last operations ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
+                // config
+                doNotDisturb: { name: `doNotDisturb`, path: `${name}.config.do not disturb`, parse: { "name": `do not disturb ${name}`, "type": "boolean", "role": "indicator", "read": true, "write": true } },
+                runtimeMax: { name: `runtimeMax`, path: `${name}.config.runtime max`, parse: { "name": `runtime max ${name}`, "type": "number", "min": 0, "role": "indicator", "unit": "min", "read": true, "write": true } }
+            };
 
-                /*obj sayIt erstellen*/
-                if (obj.sayit != undefined) {
-                    this.sayItID = obj.sayit;
-                    this.sayItVolOld = 0;
-                    this.sayIt = true;
-                } else {
-                    this.sayIt = false;
-                };
+            for (const i in arrDP) {
+                await this.setObjectNotExistsAsync(arrDP[i].path, {
+                    type: `state`,
+                    common: arrDP[i].parse,
+                    native: {},
+                });
+            };
 
-                /*obj whatsapp erstellen*/
-                if (obj.whatsapp != `` && obj.whatsapp != undefined) {
-                    this.whatsappID = obj.whatsapp;
-                    this.whatsapp = true;
-                } else {
-                    this.whatsapp = false;
-                };
+            // device type ermitteln und Objekt bauen
+            const devCusType = await this.config.default.id;
+            const devDefType = await this.config.custom.id;
 
-                /*obj pushover erstellen*/
-                if (obj.pushover != undefined) {
-                    this.pushoverID = obj.pushover
-                    this.pushover = true;
-                } else {
-                    this.pushover = false;
-                };
+            let objVal = {
+                used: false,
+                startVal: 0,
+                endVal: 0,
+                startCount: 0,
+                endCount: 0
+            };
 
-                /*obj email erstellen*/
-                if (obj.email != undefined) {
-                    this.emailID = obj.email
-                    this.email = true;
-                } else {
-                    this.email = false;
+            for (const i in devCusType) {
+                if (devCusType[i].name == devicesInput.type) {
+                    objVal.used = true;
+                    objVal.startVal = devCusType[i].startVal;
+                    objVal.endVal = devCusType[i].endVal;
+                    objVal.startCount = devCusType[i].startCount;
+                    objVal.endCount = devCusType[i].endCount;
                 };
             };
-        };
 
-        const autoOffDP = (`${name}.config.auto Off`);
-
-        const arrDP = {
-            statusDevice: { name: `statusDevice`, path: `${name}.Status`, parse: { "name": `Status ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
-            consumpLive: { name: `consumpLive`, path: `${name}.live consumption`, parse: { "name": `live consumption ${name}`, "type": "number", "role": "indicator", "unit": "W", "read": true, "write": false } },
-            runtime: { name: `runtime`, path: `${name}.runtime`, parse: { "name": `runtime ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
-            runtimeMS: { name: `runtimeMS`, path: `${name}.runtime in ms`, parse: { "name": `runtime in ms ${name}`, "type": "number", "role": "indicator", "read": true, "write": false } },
-            lastRuntime: { name: `lastRuntime`, path: `${name}.lastRuntime`, parse: { "name": `last runtime ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
-            messageDP: { name: `messageDP`, path: `${name}.messageDP`, parse: { "name": `messageDP ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
-            averageConsumption: { name: `averageConsumption`, path: `${name}.average consumption`, parse: { "name": `average consumption ${name}`, "type": "number", "role": "indicator", "unit": "W", "read": true, "write": false } },
-            alertRuntime: { name: `alertRuntime`, path: `${name}.alert runtime`, parse: { "name": `alert runtime ${name}`, "type": "boolean", "role": "indicator", "read": true, "write": false } },
-            lastOperations: { name: `lastOperations`, path: `${name}.last operations`, parse: { "name": `last operations ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
-            // config
-            doNotDisturb: { name: `doNotDisturb`, path: `${name}.config.do not disturb`, parse: { "name": `do not disturb ${name}`, "type": "boolean", "role": "indicator", "read": true, "write": true } },
-            runtimeMax: { name: `runtimeMax`, path: `${name}.config.runtime max`, parse: { "name": `runtime max ${name}`, "type": "number", "min": 0, "role": "indicator", "unit": "min", "read": true, "write": true } }
-        };
-
-        for (const i in arrDP) {
-            await this.setObjectNotExistsAsync(arrDP[i].path, {
-                type: `state`,
-                common: arrDP[i].parse,
-                native: {},
-            });
-        };
-
-        // device type ermitteln und Objekt bauen
-        const devCusType = await this.config.default.id;
-        const devDefType = await this.config.custom.id;
-
-        let objVal = {
-            used: false,
-            startVal: 0,
-            endVal: 0,
-            startCount: 0,
-            endCount: 0
-        };
-
-        for (const i in devCusType) {
-            if (devCusType[i].name == devicesInput.type) {
-                objVal.used = true;
-                objVal.startVal = devCusType[i].startVal;
-                objVal.endVal = devCusType[i].endVal;
-                objVal.startCount = devCusType[i].startCount;
-                objVal.endCount = devCusType[i].endCount;
-            };
-        };
-
-        if (objVal.used == false) {
-            for (const i in devDefType) {
-                if (devDefType[i].name == devicesInput.type) {
-                    objVal.startVal = devDefType[i].startVal
-                    objVal.endVal = devDefType[i].endVal
-                    objVal.startCount = devDefType[i].startCount
-                    objVal.endCount = devDefType[i].endCount
+            if (objVal.used == false) {
+                for (const i in devDefType) {
+                    if (devDefType[i].name == devicesInput.type) {
+                        objVal.startVal = devDefType[i].startVal
+                        objVal.endVal = devDefType[i].endVal
+                        objVal.startCount = devDefType[i].startCount
+                        objVal.endCount = devDefType[i].endCount
+                    };
                 };
             };
-        };
-        this.log.debug(`RETURN ${JSON.stringify(objVal)}`);
-        this.log.debug(`OBJ IN CONSTRUCTOR: ${JSON.stringify(devicesInput)}`);
+            this.log.debug(`RETURN ${JSON.stringify(objVal)}`);
+            this.log.debug(`OBJ IN CONSTRUCTOR: ${JSON.stringify(devicesInput)}`);
 
-        const device = new classDevice(devicesInput,
-            arrDP.statusDevice.path,
-            arrDP.consumpLive.path,
-            arrDP.runtime.path,
-            arrDP.runtimeMS.path,
-            arrDP.lastRuntime.path,
-            arrDP.runtimeMax.path,
-            arrDP.alertRuntime.path,
-            arrDP.lastOperations.path,
-            arrDP.messageDP.path,
-            autoOffDP,
-            arrDP.averageConsumption.path,
-            arrDP.doNotDisturb.path,
-            objVal);
+            const device = new classDevice(devicesInput,
+                arrDP.statusDevice.path,
+                arrDP.consumpLive.path,
+                arrDP.runtime.path,
+                arrDP.runtimeMS.path,
+                arrDP.lastRuntime.path,
+                arrDP.runtimeMax.path,
+                arrDP.alertRuntime.path,
+                arrDP.lastOperations.path,
+                arrDP.messageDP.path,
+                autoOffDP,
+                arrDP.averageConsumption.path,
+                arrDP.doNotDisturb.path,
+                objVal);
 
-        this.log.debug(`RETURN ${JSON.stringify(device)}`);
-        this.log.info(`Device ${JSON.stringify(device.name)} was successfully created`)
-        return device;
+            this.log.debug(`RETURN ${JSON.stringify(device)}`);
+            this.log.info(`Device ${JSON.stringify(device.name)} was successfully created`)
+            return device;
         } catch (error) {
             this.log.error(`[ERROR] {funcCreateObject}: "${error}"`);
         };
@@ -482,24 +482,24 @@ class deviceReminder extends utils.Adapter {
         this.log.debug(`[THIS.TRIGGER 482] ${JSON.stringify(this.trigger)}`)
 
         try {
-        const trigger = this.trigger[id];
-        const valueType = `"${this.values[trigger.id][trigger.target].type}"`;
-        let dpType = `"${typeof state.val}"`;
-        const idPath = id.split('.');
+            const trigger = this.trigger[id];
+            const valueType = `"${this.values[trigger.id][trigger.target].type}"`;
+            let dpType = `"${typeof state.val}"`;
+            const idPath = id.split('.');
 
-        switch (trigger.type) {
-            case 'value':
-                if (dpType = valueType) {
-                    this.values[trigger.id][trigger.target].val = state.val;
-                    if (!state.ack && (`${this.name}` === `${idPath[0]}`)) {
-                        this.setStateAsync(this.values[trigger.id][trigger.target].path, state.val, true);
+            switch (trigger.type) {
+                case 'value':
+                    if (dpType = valueType) {
+                        this.values[trigger.id][trigger.target].val = state.val;
+                        if (!state.ack && (`${this.name}` === `${idPath[0]}`)) {
+                            this.setStateAsync(this.values[trigger.id][trigger.target].path, state.val, true);
+                        };
                     };
-                };
-                break;
-            case 'presence':
-                this.values[trigger.id].val = state.val;
-                break;
-        };
+                    break;
+                case 'presence':
+                    this.values[trigger.id].val = state.val;
+                    break;
+            };
         } catch (error) {
             this.log.error(`[onStateChange] <${JSON.stringify(this.trigger[id])}>`);
             this.log.error(`[onStateChange] <${error}>`);
@@ -990,7 +990,7 @@ class deviceReminder extends utils.Adapter {
             } catch (error) {
                 this.log.error(`[ERROR] {sendMsg: EMAIL}: "${error}"`);
             };
-            this.log.debug(`bufferArr: ${JSON.stringify(bufferArr)}`)
+            // this.log.debug(`bufferArr: ${JSON.stringify(bufferArr)}`)
         };
 
         switch (type) {
@@ -1181,7 +1181,7 @@ class deviceReminder extends utils.Adapter {
     // set foreign state
     async setCheckedState(path, state) {
         try {
-        this.setForeignStateAsync(path, state);
+            this.setForeignStateAsync(path, state);
         } catch (error) {
             this.log.error(`[setCheckedState]: ${error}`)
         };

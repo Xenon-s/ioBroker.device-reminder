@@ -1,27 +1,25 @@
 {
-  "_from": "iobroker.device-reminder@1.0.6",
-  "_id": "iobroker.device-reminder@1.0.6",
+  "_from": "github:Xenon-s/ioBroker.device-reminder#devTest",
+  "_id": "iobroker.device-reminder@1.1.1-1",
   "_inBundle": false,
-  "_integrity": "sha512-FrBtM9wRbX0hJ0E/nLdjtVAocnvz+HRpdRrK8lmtzYEck/8uG8SclQDsOg8SoD3Gkn5tAcDANDnEPGcIVSI4iQ==",
+  "_integrity": "",
   "_location": "/iobroker.device-reminder",
   "_phantomChildren": {},
   "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "iobroker.device-reminder@1.0.6",
-    "name": "iobroker.device-reminder",
-    "escapedName": "iobroker.device-reminder",
-    "rawSpec": "1.0.6",
-    "saveSpec": null,
-    "fetchSpec": "1.0.6"
+    "type": "git",
+    "raw": "Xenon-s/ioBroker.device-reminder#devTest",
+    "rawSpec": "Xenon-s/ioBroker.device-reminder#devTest",
+    "saveSpec": "github:Xenon-s/ioBroker.device-reminder#devTest",
+    "fetchSpec": null,
+    "gitCommittish": "devTest"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/iobroker.device-reminder/-/iobroker.device-reminder-1.0.6.tgz",
+  "_resolved": "github:Xenon-s/ioBroker.device-reminder#d2a781e8d4707742086557e45c23ade0a411678c",
   "_shasum": "8d5247ff4a9d09786bf20890ff36d2522f8f1db0",
-  "_spec": "iobroker.device-reminder@1.0.6",
+  "_spec": "Xenon-s/ioBroker.device-reminder#devTest",
   "_where": "/opt/iobroker",
   "author": {
     "name": "xenon-s",
@@ -80,5 +78,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "1.1.1-1"
+  "version": "1.1.1-2"
 }
