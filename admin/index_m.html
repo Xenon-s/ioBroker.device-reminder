@@ -391,11 +391,18 @@
 
                                         // create event "change" on table
                                         const eventID = `#${data[i].idHTML}`;
-                                        $(eventID).on('change keyup', () => {
-                                            $(`#btn-check-${name}`).fadeIn();
-                                            $('.btn-save, .btn-save-close').fadeOut();
-                                            onChange(false);
-                                        });
+                                        if (eventID !== '#valStates') {
+                                            $(eventID).on('change keyup', () => {
+                                                $(`#btn-check-${name}`).fadeIn();
+                                                $('.btn-save, .btn-save-close').fadeOut();
+                                                onChange(false);
+                                            });
+                                        } else {
+                                            $('#valStates').find('.values-input').on('change', () => {
+                                                $('.btn-save, .btn-save-close').fadeIn();
+                                                onChange(true);
+                                            });
+                                        };
                                     };
                                 };
 
@@ -1574,7 +1581,7 @@
                                     <div>
                                         <h5>Configure your own device status</h5>
                                     </div>
-                                    <table class="table-values changeOnChangeEvent remove-first-column">
+                                    <table class="table-values changeOnChangeEvent remove-first-column" id="table-states">
                                         <thead>
                                             <tr>
                                                 <th class="header translate" style="width: 0px; display: none;">
