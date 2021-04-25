@@ -359,6 +359,7 @@ class deviceReminder extends utils.Adapter {
                     // Verbrauchswerte
                     this.startValue = objVal.startVal;
                     this.endValue = objVal.endVal;
+                    this.standby = objVal.standby;
                     // Zaehler Abbruchbedingungen
                     this.startCount = objVal.startCount;
                     this.endCount = objVal.endCount;
@@ -461,9 +462,7 @@ class deviceReminder extends utils.Adapter {
                 };
             };
 
-            const autoOffDP = (`${name}.config.auto Off`);
-
-            this.adapterDPs[name] = await this.createDP(name);
+            this.adapterDPs[name] = await this.createDP(name); // DP erstellen und pfad in array speichern
 
             // device type ermitteln und Objekt bauen
             const devCusType = await this.config.default.id;
@@ -473,27 +472,30 @@ class deviceReminder extends utils.Adapter {
                 used: false,
                 startVal: 0,
                 endVal: 0,
+                standby: 0,
                 startCount: 0,
                 endCount: 0
             };
 
-            for (const i in devCusType) {
+            for (const i in devCusType) {   // default types
                 if (devCusType[i].name == devicesInput.type) {
                     objVal.used = true;
-                    objVal.startVal = devCusType[i].startVal;
-                    objVal.endVal = devCusType[i].endVal;
-                    objVal.startCount = devCusType[i].startCount;
-                    objVal.endCount = devCusType[i].endCount;
+                    objVal.startVal = devCusType[i].startVal; // startwert
+                    objVal.endVal = devCusType[i].endVal;   // endwert
+                    objVal.standby = devCusType[i].standby; //standbywert
+                    objVal.startCount = devCusType[i].startCount;   // anzahl Messungen "START"
+                    objVal.endCount = devCusType[i].endCount;   // anzahl Messungen "ENDE"
                 };
             };
 
-            if (objVal.used == false) {
+            if (objVal.used == false) { //custom types
                 for (const i in devDefType) {
-                    if (devDefType[i].name == devicesInput.type) {
-                        objVal.startVal = devDefType[i].startVal
-                        objVal.endVal = devDefType[i].endVal
-                        objVal.startCount = devDefType[i].startCount
-                        objVal.endCount = devDefType[i].endCount
+                    if (devDefType[i].name == devicesInput.type) {  
+                        objVal.startVal = devDefType[i].startVal    // startwert
+                        objVal.endVal = devDefType[i].endVal    // endwert
+                        objVal.standby = devDefType[i].standby    // stanbbywert
+                        objVal.startCount = devDefType[i].startCount    // anzahl Messungen "START"
+                        objVal.endCount = devDefType[i].endCount    // anzahl Messungen "ENDE"
                     };
                 };
             };
@@ -634,7 +636,7 @@ class deviceReminder extends utils.Adapter {
                     // Startphase -> Startwertberechnung
                     await this.calcStart(id, "start");  // Startwert Berechnung
                     // standby Berechnung löschen
-                    this.setStatus(id, 4);
+                    // this.setStatus(id, 4);
                     device.arrStandby = [];
                     this.log.debug(`[${JSON.stringify(device.name)}]: arrStandby gelöscht`);
                 };
@@ -654,11 +656,12 @@ class deviceReminder extends utils.Adapter {
         const value = this.values[id];
         this.log.debug(`[${JSON.stringify(device.name)}]: Auswertung gestartet`);
 
-        const val = 0.2;
+        // const val = 0.2;
 
         if (device.abort) {  // Abbrucherkennung aktiviert?
             if (device.started) {
-                if (device.resultStandby <= val && device.arrStandby.length >= device.valCancel) { // consumption kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet und war in Betrieb
+                if (device.resultStandby < device.standby && device.arrStandby.length >= device.valCancel) { // consumption kleiner Vorgabe, Gerät wurde von Hand ausgeschaltet und war in Betrieb
+                    this.log.debug(`1: ${device.resultStandby} < ${device.standby} && ${device.arrStandby.length} >= ${device.valCancel}`);
                     this.setStatus(id, 0);
                     await this.setStateAsync(device.averageConsumption, device.resultStandby, true);
                     if (device.autoOff) { // auto Off aktiviert?
@@ -741,14 +744,17 @@ class deviceReminder extends utils.Adapter {
             };
 
             this.setStateAsync(device.lastOperations, device.dateJSON, true);
-
             this.setStateAsync(device.lastRuntime, device.runtimeJSON, true);
             this.setStateAsync(device.alertRuntime, false, true);
 
             // standby oder off?
-            if (device.resultEnd <= 1) {
+            if (device.resultEnd < device.standby) {
+                this.log.debug(`2: ${device.resultEnd} < ${device.standby}; ${device.started}`);
+                device.resultStandby = device.resultEnd;
+                device.arrStandby = [];
                 this.setStatus(id, 0);
             } else {
+                this.log.debug(`STANDBY 1: ${device.resultEnd} > ${device.standby}; ${device.started}`);
                 this.setStatus(id, 2);
             };
 
@@ -785,9 +791,11 @@ class deviceReminder extends utils.Adapter {
         // device nicht in Betrieb
         // device nicht in Startphase
         if (!device.started) {
-            if (device.resultStandby < 1 && device.arrStandby.length >= device.valCancel) {
+            if (device.resultStandby < device.standby && device.arrStandby.length >= device.valCancel) {
                 this.setStatus(id, 0);
-            } else if (device.resultStandby >= 1 && device.arrStandby.length >= device.valCancel) {
+                this.log.debug(`3: ${device.resultStandby} < ${device.standby} && ${device.arrStandby.length} >= ${device.valCancel}`);
+            } else if (device.resultStandby >= device.standby && device.arrStandby.length >= device.valCancel) {
+                this.log.debug(`STANDBY2: ${device.resultStandby} >= ${device.standby} && ${device.arrStandby.length} >= ${device.valCancel}; valEND: ${device.resultEnd}`);
                 this.setStatus(id, 2);
             };
         };
@@ -846,6 +854,7 @@ class deviceReminder extends utils.Adapter {
                         await this.setCheckedState(device.switchPower, false);
                     };
                 };
+                this.log.debug(`4`);
                 this.setStatus(id, 0);
                 break;
             };
@@ -1244,7 +1253,7 @@ class deviceReminder extends utils.Adapter {
         let val = state;
         let result;
         try {
-            if (path !== undefined && path !== '') {
+            if (path !== undefined && path !== '' && state !== 'initialize') {
                 if (type === 'foreign') {
                     result = await this.getForeignStateAsync(path);
                 } else {
