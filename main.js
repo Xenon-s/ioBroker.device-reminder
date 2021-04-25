@@ -138,12 +138,12 @@ class deviceReminder extends utils.Adapter {
 
         // try {
         this.devices = await getDataFromAdmin(this.config.devices !== undefined ? this.config.devices.final || {} : {});
-        this.alexaInput = await getDataFromAdmin(this.config.alexa !== undefined ? this.config.devices.final || {} : {});
-        this.sayitInput = await getDataFromAdmin(this.config.sayit !== undefined ? this.config.devices.final || {} : {});
-        this.whatsappInput = await getDataFromAdmin(this.config.whatsapp !== undefined ? this.config.devices.final || {} : {});
-        this.telegramInput = await getDataFromAdmin(this.config.telegram !== undefined ? this.config.devices.final || {} : {});
-        this.pushoverInput = await getDataFromAdmin(this.config.pushover !== undefined ? this.config.devices.final || {} : {});
-        this.emailInput = await getDataFromAdmin(this.config.email !== undefined ? this.config.devices.final || {} : {});
+        this.alexaInput = await getDataFromAdmin(this.config.alexa !== undefined ? this.config.alexa.final || {} : {});
+        this.sayitInput = await getDataFromAdmin(this.config.sayit !== undefined ? this.config.sayit.final || {} : {});
+        this.whatsappInput = await getDataFromAdmin(this.config.whatsapp !== undefined ? this.config.whatsapp.final || {} : {});
+        this.telegramInput = await getDataFromAdmin(this.config.telegram !== undefined ? this.config.telegram.final || {} : {});
+        this.pushoverInput = await getDataFromAdmin(this.config.pushover !== undefined ? this.config.pushover.final || {} : {});
+        this.emailInput = await getDataFromAdmin(this.config.email !== undefined ? this.config.email.final || {} : {});
         alert = await getDataFromAdmin(this.config.alert !== undefined ? this.config.alert.id[0] || {} : {});
 
         this.states.action = this.config.valStates[0].stateAction;
