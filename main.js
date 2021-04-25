@@ -10,9 +10,6 @@
 const utils = require(`@iobroker/adapter-core`);
 const { create } = require("domain");
 
-let stateAction = ``;
-let stateStandby = ``;
-let stateOff = ``;
 let alert = {};
 let presence = {};
 let bPresence = false;
@@ -23,6 +20,26 @@ let instAdapter = ``;
 let status = -1;
 
 let id = ``;
+
+const arrDP = {
+    show: {
+        statusDevice: { name: `statusDevice`, path: `Status`, parse: { "name": `Status`, "type": "string", "role": "indicator", "read": true, "write": false } },
+        consumpLive: { name: `consumpLive`, path: `live consumption`, parse: { "name": `live consumption`, "type": "number", "role": "indicator", "unit": "W", "read": true, "write": false } },
+        runtime: { name: `runtime`, path: `runtime`, parse: { "name": `runtime`, "type": "string", "role": "indicator", "read": true, "write": false } },
+        runtimeMS: { name: `runtimeMS`, path: `runtime in ms`, parse: { "name": `runtime in ms`, "type": "number", "role": "indicator", "read": true, "write": false } },
+        lastRuntime: { name: `lastRuntime`, path: `lastRuntime`, parse: { "name": `last runtime `, "type": "string", "role": "indicator", "read": true, "write": false } },
+        messageDP: { name: `messageDP`, path: `messageDP`, parse: { "name": `messageDP`, "type": "string", "role": "indicator", "read": true, "write": false } },
+        averageConsumption: { name: `averageConsumption`, path: `average consumption`, parse: { "name": `average consumption`, "type": "number", "role": "indicator", "unit": "W", "read": true, "write": false } },
+        alertRuntime: { name: `alertRuntime`, path: `alert runtime`, parse: { "name": `alert runtime`, "type": "boolean", "role": "indicator", "read": true, "write": false } },
+        lastOperations: { name: `lastOperations`, path: `last operations`, parse: { "name": `last operations`, "type": "string", "role": "indicator", "read": true, "write": false } },
+    },
+    config: {
+        doNotDisturb: { name: `doNotDisturb`, path: `do not disturb`, parse: { "name": `do not disturb`, "type": "boolean", "role": "indicator", "read": true, "write": true } },
+        runtimeMax: { name: `runtimeMax`, path: `runtime max`, parse: { "name": `runtime max`, "type": "number", "min": 0, "role": "indicator", "unit": "min", "read": true, "write": true } },
+        // autoOffDP: { name: `autoOff`, path: `auto Off`, parse: { "name": `auto Off`, "type": "boolean", "role": "indicator", "read": true, "write": true } }
+    }
+};
+
 
 /*
 offene Punkte:
@@ -59,7 +76,15 @@ class deviceReminder extends utils.Adapter {
         this.telegramInput = {}; // Array of all telegram users
         this.pushoverInput = {}; // Array of all pushover users
         this.emailInput = {}; // Array of all email addresses
+        this.states = {}; // Array states
+
+        this.adapterDPs = {};
+
         this.poll = null; // polling intervall
+
+        this.alert = ``;
+
+        instAdapter = `${this.name}.${this.instance}`;
 
     };
 
@@ -68,137 +93,183 @@ class deviceReminder extends utils.Adapter {
      */
     async onReady() {
         // Initialize your adapter here
+        this.devicesCompleted = await this.createDevices();
+        this.createDPS();
+        this.pollingData(true);
+    };
 
-        instAdapter = `${this.name}.${this.instance}`;
+    async createDPS() { // auf "DP Leichen" pruefen
+        const objectsAdapter = await this.getAdapterObjectsAsync();
+
+        let arrNames = [];
+
+        for (const i in objectsAdapter) {
+            let arrTemp = [];
+
+            arrTemp = objectsAdapter[i]._id.split('.')
+
+            if (this.adapterDPs[arrTemp[2]] === undefined) {
+                if (!arrNames.includes(arrTemp[2]) && arrTemp[2] !== 'info') {
+                    arrNames.push(arrTemp[2]);
+                };
+            };
+        };
+
+        for (let cntr = 0; cntr < arrNames.length; cntr++) {
+               const name = arrNames[cntr];
+               for (const i in arrDP) {
+                for (const j in arrDP[i]) {
+                    const namePath = arrDP[i][j];
+                    let path = ``;
+                    if (i === 'show') {
+                        path = `${name}.${namePath.path}`;
+                    } else {
+                        path = `${name}.config.${namePath.path}`;
+                    };
+                    await this.delObjectAsync(path); // geloeschte device DPs entfernen
+                };
+            };
+        };
+    };
+
+    async createDevices() {
 
         this.setState('info.connection', false, true);
 
-        try {
+        // try {
+        this.devices = await getDataFromAdmin(this.config.devices !== undefined ? this.config.devices.final || {} : {});
+        this.alexaInput = await getDataFromAdmin(this.config.alexa !== undefined ? this.config.devices.final || {} : {});
+        this.sayitInput = await getDataFromAdmin(this.config.sayit !== undefined ? this.config.devices.final || {} : {});
+        this.whatsappInput = await getDataFromAdmin(this.config.whatsapp !== undefined ? this.config.devices.final || {} : {});
+        this.telegramInput = await getDataFromAdmin(this.config.telegram !== undefined ? this.config.devices.final || {} : {});
+        this.pushoverInput = await getDataFromAdmin(this.config.pushover !== undefined ? this.config.devices.final || {} : {});
+        this.emailInput = await getDataFromAdmin(this.config.email !== undefined ? this.config.devices.final || {} : {});
+        alert = await getDataFromAdmin(this.config.alert !== undefined ? this.config.alert.id[0] || {} : {});
 
-            this.devices = await this.config.devices.final;
-            this.alexaInput = await this.config.alexa.final;
-            this.sayitInput = await this.config.sayit.final;
-            this.whatsappInput = await this.config.whatsapp.final;
-            this.telegramInput = await this.config.telegram.final;
-            this.pushoverInput = await this.config.pushover.final;
-            this.emailInput = await this.config.email.final;
+        this.states.action = this.config.valStates[0].stateAction;
 
-            alert = await this.config.alert.id[0];
+        this.states.standby = this.config.valStates[0].stateStandby;
 
-            // not implemented yet
-            // presence = await this.config.presence[0];
+        this.states.off = this.config.valStates[0].stateOff;
 
-            // const pathPresence = presence.dp_presence;
-            // const presenceObj = await this.getForeignObjectAsync(pathPresence);
-            // if (presenceObj) {
-            //     if (presenceObj.common.type != undefined && presenceObj.common.type != ``) {
-            //         if (presenceObj.common.type != "boolean") {
-            //             this.log.warn(`[WARN] Type of <${pathPresence}> must be a BOOLEAN! Detected Type: <${presenceObj.common.type}> Presence detection disabled`);
-            //             presence = null;
-            //         } else {
-            //             const val = await this.getCheckedState('foreign', pathPresence, false);
-            //             this.trigger[pathPresence] = { id: 'presence', path: pathPresence, target: '', type: "presence" };
-            //             this.values['presence'] = { path: pathPresence, val: false };
-            //             bPresence = val.val;
-            //             this.subscribeForeignStates(this.trigger[pathPresence].path);
-            //         };
-            //     };
-            // } else {
-            //     this.log.warn(`[WARN] <${pathPresence}> does not exist! Presence detection disabled`);
-            // };
-
-            if (this.telegramInput == undefined) {
-                this.telegramInput = null;
+        async function getDataFromAdmin(data) {
+            if (data !== undefined && Object.keys(data).length > 0) {
+                return data;
+            } else {
+                const result = {};
+                return result;
             };
+        };
 
-            stateAction = await this.config.status.id[0].stateAction;
-            if (stateAction === `` || stateAction == undefined) {
-                stateAction = `in action`;
-            };
-            stateStandby = await this.config.status.id[0].stateStandby;
-            if (stateStandby === `` || stateStandby == undefined) {
-                stateStandby = `standby`;
-            };
-            stateOff = await this.config.status.id[0].stateOff;
-            if (stateOff === `` || stateOff == undefined) {
-                stateOff = `switched off`;
-            };
+        // not implemented yet
+        // presence = await this.config.presence[0];
 
-            this.log.debug(`ARR INPUT devices ${JSON.stringify(this.devices)}`);
-            this.log.debug(`ARR INPUT alexa ${JSON.stringify(this.alexaInput)}`);
-            this.log.debug(`ARR INPUT sayit ${JSON.stringify(this.sayitInput)}`);
-            this.log.debug(`ARR INPUT whatsapp ${JSON.stringify(this.whatsappInput)}`);
-            this.log.debug(`ARR INPUT telegram ${JSON.stringify(this.telegramInput)}`);
-            this.log.debug(`ARR INPUT pushover ${JSON.stringify(this.pushoverInput)}`);
-            this.log.debug(`ARR INPUT email ${JSON.stringify(this.emailInput)}`);
+        // const pathPresence = presence.dp_presence;
+        // const presenceObj = await this.getForeignObjectAsync(pathPresence);
+        // if (presenceObj) {
+        //     if (presenceObj.common.type != undefined && presenceObj.common.type != ``) {
+        //         if (presenceObj.common.type != "boolean") {
+        //             this.log.warn(`[WARN] Type of <${pathPresence}> must be a BOOLEAN! Detected Type: <${presenceObj.common.type}> Presence detection disabled`);
+        //             presence = null;
+        //         } else {
+        //             const val = await this.getCheckedState('foreign', pathPresence, false);
+        //             this.trigger[pathPresence] = { id: 'presence', path: pathPresence, target: '', type: "presence" };
+        //             this.values['presence'] = { path: pathPresence, val: false };
+        //             bPresence = val.val;
+        //             this.subscribeForeignStates(this.trigger[pathPresence].path);
+        //         };
+        //     };
+        // } else {
+        //     this.log.warn(`[WARN] <${pathPresence}> does not exist! Presence detection disabled`);
+        // };
 
-            // Input auf Plausibilität prüfen
-            if (this.devices !== "" && this.devices != undefined) {
+        this.log.debug(`ARR INPUT devices ${JSON.stringify(this.devices)}`);
+        this.log.debug(`ARR INPUT alexa ${JSON.stringify(this.alexaInput)}`);
+        this.log.debug(`ARR INPUT sayit ${JSON.stringify(this.sayitInput)}`);
+        this.log.debug(`ARR INPUT whatsapp ${JSON.stringify(this.whatsappInput)}`);
+        this.log.debug(`ARR INPUT telegram ${JSON.stringify(this.telegramInput)}`);
+        this.log.debug(`ARR INPUT pushover ${JSON.stringify(this.pushoverInput)}`);
+        this.log.debug(`ARR INPUT email ${JSON.stringify(this.emailInput)}`);
 
-                for (const id in this.devices) {
-                    this.devicesCompleted[id] = await this.funcCreateObject(id); // create device
-                    const device = this.devicesCompleted[id];
+        // Input auf Plausibilität prüfen
+        if (Object.keys(this.devices).length > 0) {
 
-                    this.trigger[`${instAdapter}.${device.dnd}`] = { id: id, path: device.dnd, target: 'dnd', type: 'value' };
-                    this.trigger[`${instAdapter}.${device.runtimeMaxDP}`] = { id: id, path: device.runtimeMaxDP, target: 'runtimeMax', type: 'value' };
-                    this.trigger[device.currentConsumption] = { id: id, path: device.currentConsumption, target: 'consumption', type: 'value' };
-                    if (device.switchPower !== undefined && device.switchPower !== ``) this.trigger[device.switchPower] = { id: id, path: device.switchPower, target: 'switch', type: 'value' };
+            let objTemp = {};
+            instAdapter = `${this.name}.${this.instance}`;
 
-                    // values
-                    this.values[id] = {
-                        id: id,
-                        consumption: { path: device.currentConsumption, val: 0, type: 'number' },
-                        switch: { path: device.switchPower, val: false, type: 'boolean' },
-                        dnd: { path: device.dnd, val: false, type: 'boolean' },
-                        runtimeMax: { path: device.runtimeMaxDP, val: 0, type: 'number' },
-                        dateJSON: { path: device.lastOperations, val: '' }
-                    };
+            for (const id in this.devices) {
+                objTemp[id] = await this.funcCreateObject(id); // create device
+                const device = objTemp[id];
 
-                    this.log.debug(`[SUBSCRIBE]: ${device.dnd}: ${device.runtimeMaxDP}: ${device.currentConsumption}: ${device.switchPower}`)
+                this.trigger[`${instAdapter}.${device.dnd}`] = { id: id, path: device.dnd, target: 'dnd', type: 'value' };
+                this.trigger[`${instAdapter}.${device.runtimeMaxDP}`] = { id: id, path: device.runtimeMaxDP, target: 'runtimeMax', type: 'value' };
+                this.trigger[device.currentConsumption] = { id: id, path: device.currentConsumption, target: 'consumption', type: 'value' };
+                if (device.switchPower !== undefined && device.switchPower !== ``) this.trigger[device.switchPower] = { id: id, path: device.switchPower, target: 'switch', type: 'value' };
 
-                    //subscribe states
-                    this.subscribeStates(device.dnd);
-                    this.subscribeStates(device.runtimeMaxDP);
-                    this.subscribeForeignStates(device.currentConsumption);
+                // values
+                this.values[id] = {
+                    id: id,
+                    consumption: { path: device.currentConsumption, val: 0, type: 'number' },
+                    switch: { path: device.switchPower, val: false, type: 'boolean' },
+                    dnd: { path: device.dnd, val: false, type: 'boolean' },
+                    runtimeMax: { path: device.runtimeMaxDP, val: 0, type: 'number' },
+                    dateJSON: { path: device.lastOperations, val: '' }
+                };
+
+                // this.log.error(JSON.stringify(device.dnd))
+
+                // this.log.warn(`ID: ${id}, this.values: ${JSON.stringify(this.values)}`)
+
+                this.log.debug(`[SUBSCRIBE]: ${device.dnd}: ${device.runtimeMaxDP}: ${device.currentConsumption}: ${device.switchPower}`)
+
+                // this.log.warn(JSON.stringify(device.dnd))
+                
+                //subscribe states
+                this.subscribeStates(device.dnd);
+                this.subscribeStates(device.runtimeMaxDP);
+                this.subscribeForeignStates(device.currentConsumption);
+                if (device.switchPower !== '' && device.switchPower !== undefined) {
                     this.subscribeForeignStates(device.switchPower);
-
-                    await this.stateIni(id); // first initialisation off all states
-
-                    this.log.debug(`[DEVICES-COMPLETED] ${JSON.stringify(this.devicesCompleted)}`);
-                    this.log.debug(`[THIS.TRIGGER] ${JSON.stringify(this.trigger)}`);
                 };
 
-                this.setState('info.connection', true, true);
+                await this.stateIni(id, objTemp); // first initialisation off all states
 
-                // start cyclical status request
-                if (this.poll != null) {
-                    clearInterval(this.poll);
-                    this.poll = null;
-                };
-                this.poll = setInterval(() => {
-                    for (const i in this.devicesCompleted) {
+            };
+            this.setState('info.connection', true, true);
+            return objTemp;
+        } else {
+            this.log.info(`No devices were created. Please create a device!`);
+        };
+        // } catch (error) {
+        //     this.pollingData(false);
+        //     this.setState('info.connection', false, true);
+        //     this.log.error(`[ERROR] {onReady}: "${error}"`);
+        // };
+    };
+
+    async pollingData(cmd) {
+        // start cyclical status request
+        if (this.poll != null) {
+            clearInterval(this.poll);
+            this.poll = null;
+        };
+        if (cmd) {
+            this.poll = setInterval(() => {
+                for (const i in this.devicesCompleted) {
+                    const enabled = this.devicesCompleted[i].enabled
+                    if (enabled) {
                         this.getValues(i);
                     };
-                }, 10000);
-
-            } else {
-                this.log.error(`No devices were created. Please create a device!`);
-            };
-        } catch (error) {
-            if (this.poll != null) {
-                clearInterval(this.poll);
-                this.poll = null;
-            };
-            this.setState('info.connection', false, true);
-            this.log.error(`[ERROR] {onReady}: "${error}"`);
+                };
+            }, 10000);
         };
     };
 
     /**
     * @param {string} id
     */
-    async stateIni(id) {
-        const device = this.devicesCompleted[id];
+    async stateIni(id, obj) {
+        const device = obj[id];
         const value = this.values[id];
 
         // Event-based states
@@ -249,6 +320,7 @@ class deviceReminder extends utils.Adapter {
                  */
                 constructor(obj, statusDevice, consumpLivePath, runtimePath, runtimeMSPath, lastRuntimePath, runtimeMaxDP, alertRuntimeDP, lastOperations, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal) {
                     // DPs
+                    this.enabled = obj.enabled;
                     this.name = obj.name;
                     this.type = obj.type;
                     this.currentConsumption = obj.pathConsumption;
@@ -391,28 +463,7 @@ class deviceReminder extends utils.Adapter {
 
             const autoOffDP = (`${name}.config.auto Off`);
 
-            const arrDP = {
-                statusDevice: { name: `statusDevice`, path: `${name}.Status`, parse: { "name": `Status ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
-                consumpLive: { name: `consumpLive`, path: `${name}.live consumption`, parse: { "name": `live consumption ${name}`, "type": "number", "role": "indicator", "unit": "W", "read": true, "write": false } },
-                runtime: { name: `runtime`, path: `${name}.runtime`, parse: { "name": `runtime ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
-                runtimeMS: { name: `runtimeMS`, path: `${name}.runtime in ms`, parse: { "name": `runtime in ms ${name}`, "type": "number", "role": "indicator", "read": true, "write": false } },
-                lastRuntime: { name: `lastRuntime`, path: `${name}.lastRuntime`, parse: { "name": `last runtime ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
-                messageDP: { name: `messageDP`, path: `${name}.messageDP`, parse: { "name": `messageDP ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
-                averageConsumption: { name: `averageConsumption`, path: `${name}.average consumption`, parse: { "name": `average consumption ${name}`, "type": "number", "role": "indicator", "unit": "W", "read": true, "write": false } },
-                alertRuntime: { name: `alertRuntime`, path: `${name}.alert runtime`, parse: { "name": `alert runtime ${name}`, "type": "boolean", "role": "indicator", "read": true, "write": false } },
-                lastOperations: { name: `lastOperations`, path: `${name}.last operations`, parse: { "name": `last operations ${name}`, "type": "string", "role": "indicator", "read": true, "write": false } },
-                // config
-                doNotDisturb: { name: `doNotDisturb`, path: `${name}.config.do not disturb`, parse: { "name": `do not disturb ${name}`, "type": "boolean", "role": "indicator", "read": true, "write": true } },
-                runtimeMax: { name: `runtimeMax`, path: `${name}.config.runtime max`, parse: { "name": `runtime max ${name}`, "type": "number", "min": 0, "role": "indicator", "unit": "min", "read": true, "write": true } }
-            };
-
-            for (const i in arrDP) {
-                await this.setObjectNotExistsAsync(arrDP[i].path, {
-                    type: `state`,
-                    common: arrDP[i].parse,
-                    native: {},
-                });
-            };
+            this.adapterDPs[name] = await this.createDP(name);
 
             // device type ermitteln und Objekt bauen
             const devCusType = await this.config.default.id;
@@ -450,26 +501,64 @@ class deviceReminder extends utils.Adapter {
             this.log.debug(`OBJ IN CONSTRUCTOR: ${JSON.stringify(devicesInput)}`);
 
             const device = new classDevice(devicesInput,
-                arrDP.statusDevice.path,
-                arrDP.consumpLive.path,
-                arrDP.runtime.path,
-                arrDP.runtimeMS.path,
-                arrDP.lastRuntime.path,
-                arrDP.runtimeMax.path,
-                arrDP.alertRuntime.path,
-                arrDP.lastOperations.path,
-                arrDP.messageDP.path,
-                autoOffDP,
-                arrDP.averageConsumption.path,
-                arrDP.doNotDisturb.path,
+                this.adapterDPs[name].statusDevice,
+                this.adapterDPs[name].consumpLive,
+                this.adapterDPs[name].runtime,
+                this.adapterDPs[name].runtimeMS,
+                this.adapterDPs[name].lastRuntime,
+                this.adapterDPs[name].runtimeMax,
+                this.adapterDPs[name].alertRuntime,
+                this.adapterDPs[name].lastOperations,
+                this.adapterDPs[name].messageDP,
+                this.adapterDPs[name].autoOffDP,
+                this.adapterDPs[name].averageConsumption,
+                this.adapterDPs[name].doNotDisturb,
                 objVal);
 
             this.log.debug(`RETURN ${JSON.stringify(device)}`);
-            this.log.info(`Device ${JSON.stringify(device.name)} was successfully created`)
+            this.log.info(`Device ${JSON.stringify(device.name)} was successfully created`);
             return device;
         } catch (error) {
             this.log.error(`[ERROR] {funcCreateObject}: "${error}"`);
         };
+    };
+
+    async createDP(name) {
+
+        let objTemp = {};
+
+        for (const i in arrDP.show) {
+            const obj = arrDP.show[i];
+            let path = ``;
+            let parse = ``;
+
+            parse = obj.parse;
+            parse.name = `${obj.path} ${name}`;
+            path = `${name}.${obj.path}`;
+            objTemp[i] = path;
+            await this.setObjectNotExistsAsync(path, {
+                type: `state`,
+                common: parse,
+                native: {},
+            });
+        };
+
+        for (const i in arrDP.config) {
+            const obj = arrDP.config[i];
+            let path = ``;
+            let parse = ``;
+
+            parse = obj.parse;
+            parse.name = `${obj.path} ${name}`;
+            path = `${name}.config.${obj.path}`;
+            objTemp[i] = path;
+            await this.setObjectNotExistsAsync(path, {
+                type: `state`,
+                common: parse,
+                native: {},
+            });
+        };
+        return objTemp;
     };
 
     /**
@@ -481,36 +570,39 @@ class deviceReminder extends utils.Adapter {
         this.log.debug(`[PATH] ${JSON.stringify(state)}`)
         this.log.debug(`[THIS.TRIGGER 482] ${JSON.stringify(this.trigger)}`)
 
-        try {
-            const trigger = this.trigger[id];
-            const valueType = `"${this.values[trigger.id][trigger.target].type}"`;
-            let dpType = `"${typeof state.val}"`;
-            const idPath = id.split('.');
+        this.log.debug(`TRIGGER ${JSON.stringify(this.trigger[id])}`);
+        this.log.debug(`THIS.VALUES ${JSON.stringify(this.values)}`);
 
-            switch (trigger.type) {
-                case 'value':
-                    if (dpType = valueType) {
-                        this.values[trigger.id][trigger.target].val = state.val;
-                        if (!state.ack && (`${this.name}` === `${idPath[0]}`)) {
-                            this.setStateAsync(this.values[trigger.id][trigger.target].path, state.val, true);
-                        };
+        // try {
+        const trigger = this.trigger[id];
+        const valueType = `"${this.values[trigger.id][trigger.target].type}"`;
+        let dpType = `"${typeof state.val}"`;
+        const idPath = id.split('.');
+
+        switch (trigger.type) {
+            case 'value':
+                if (dpType = valueType) {
+                    this.values[trigger.id][trigger.target].val = state.val;
+                    if (!state.ack && (`${this.name}` === `${idPath[0]}`)) {
+                        this.setStateAsync(this.values[trigger.id][trigger.target].path, state.val, true);
                     };
-                    break;
-                case 'presence':
-                    this.values[trigger.id].val = state.val;
-                    break;
-            };
-        } catch (error) {
-            this.log.error(`[onStateChange] <${JSON.stringify(this.trigger[id])}>`);
-            this.log.error(`[onStateChange] <${error}>`);
+                };
+                break;
+            case 'presence':
+                this.values[trigger.id].val = state.val;
+                break;
         };
+        // } catch (error) {
+        //     this.log.error(`[onStateChange] <${JSON.stringify(this.trigger[id])}>`);
+        //     this.log.error(`[onStateChange] <${error}>`);
+        // };
     };
 
     /**
     * @param {string} id
     */
     async getValues(id) {
-        this.log.debug(JSON.stringify(id))
+        this.log.debug(JSON.stringify(id));
         await this.evaluatingInputValue(id);
         await this.evaluateStatus(id);
     };
@@ -734,18 +826,18 @@ class deviceReminder extends utils.Adapter {
         this.log.debug(`[${JSON.stringify(device.name)}]: value status: ${status}`);
         switch (status) {
             case 0: {
-                this.setStateAsync(device.pathStatus, stateOff, true); // setState "off" in DP
-                this.log.debug(`[${JSON.stringify(device.name)}]: ${stateOff} (finished/off)`);
+                this.setStateAsync(device.pathStatus, this.states.off, true); // setState "off" in DP
+                this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.off} (finished/off)`);
                 break;
             };
             case 1: {
-                this.setStateAsync(device.pathStatus, stateAction, true); // setState "action" in DP
-                this.log.debug(`[${JSON.stringify(device.name)}]: ${stateAction} (in action)`);
+                this.setStateAsync(device.pathStatus, this.states.action, true); // setState "action" in DP
+                this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.action} (in action)`);
                 break;
             };
             case 2: {
-                this.setStateAsync(device.pathStatus, stateStandby, true); // setState "standby" in DP
-                this.log.debug(`[${JSON.stringify(device.name)}]: ${stateStandby} (in standby)`);
+                this.setStateAsync(device.pathStatus, this.states.standby, true); // setState "standby" in DP
+                this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.standby} (in standby)`);
                 break;
             };
             case 3: {
@@ -1141,7 +1233,6 @@ class deviceReminder extends utils.Adapter {
         return str.split(":")[0] * 100 + parseInt(str.split(":")[1], 10);
     };
 
-
     /**
     * @param {string} type
     * @param {string} path
@@ -1153,18 +1244,20 @@ class deviceReminder extends utils.Adapter {
         let val = state;
         let result;
         try {
-            if (type === 'foreign') {
-                result = await this.getForeignStateAsync(path);
-            } else {
-                result = await this.getStateAsync(path);
-            };
-            // Evaluation result
-            if (result != null && result != undefined) {
-                val = result.val;
-            } else {
+            if (path !== undefined && path !== '') {
                 if (type === 'foreign') {
-                    this.log.warn(`[WARN] State <${JSON.stringify(result)}> Please check if <${path}> still exists!`);
-                    val = state;
+                    result = await this.getForeignStateAsync(path);
+                } else {
+                    result = await this.getStateAsync(path);
+                };
+                // Evaluation result
+                if (result != null && result != undefined) {
+                    val = result.val;
+                } else {
+                    if (type === 'foreign') {
+                        this.log.warn(`[WARN] State <${JSON.stringify(result)}> Please check if <${path}> still exists!`);
+                        val = state;
+                    };
                 };
             };
             return val;

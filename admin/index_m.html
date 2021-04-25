@@ -436,10 +436,11 @@
 
                                 $('.red').on('click', clickEventDelBtn); // click event auf delete button setzen
 
-                                if (dataGlobal.devices !== undefined && dataGlobal.devices.ids.length >= 1) {
+                                if (checkedUserInput.devices !== undefined && checkedUserInput.devices.length >= 1) {
                                     $('.dynamic-table-devices').fadeIn();
+                                    $('.btn-save, .btn-save-close').fadeIn();
                                 };
-                                $('.btn-save, .btn-save-close').fadeIn();
+                                
                                 onChange(true);
 
                                 return data;
@@ -1473,18 +1474,18 @@
                                     <table id="disableFirstField" class="table-values remove-last-column">
                                         <thead>
                                             <tr>
-                                                <th id="disableFirstField" class="header translate" data-type="text"
-                                                    data-name="name">name 'type'</th>
+                                                <th id="disableFirstField" class="header translate" data-type="text" data-name="name">name 'type'</th>
                                                 <th class="header translate" data-type="number" data-name="startVal">
-                                                    starting value</th>
-                                                <th class="header translate" data-type="number" data-name="endVal">final
-                                                    value</th>
+                                                    threshold 'start' (W)</th>
+                                                <th class="header translate" data-type="number" data-name="endVal">
+                                                    threshold 'end' (W)</th>
+                                                <th class="header translate" data-type="number" data-name="standby">
+                                                    threshold 'standby' (W)</th>
                                                 <th class="header translate" data-type="number" data-name="startCount">
-                                                    number of values 'start'</th>
+                                                    number of 'start' values</th>
                                                 <th class="header translate" data-type="number" data-name="endCount">
-                                                    number of values ​'end'</th>
-                                                <th class="header translate" data-type="number" data-name="id"
-                                                    style="width: 0px; display: none;">id
+                                                    number of ​'end' values</th>
+                                                <th class="header translate" data-type="number" data-name="id" style="width: 0px; display: none;">id
                                                 </th>
                                             </tr>
                                         </thead>
@@ -1536,20 +1537,19 @@
                                     <table id="disableFirstField" class="table-values remove-last-column">
                                         <thead>
                                             <tr>
-                                                <th id="disableFirstField" class="header translate" data-type="text"
-                                                    data-name="name">type name</th>
+                                                <th id="disableFirstField" class="header translate" data-type="text" data-name="name">type name</th>
                                                 <th class="header translate" data-type="number" data-name="startVal">
-                                                    starting value</th>
-                                                <th class="header translate" data-type="number" data-name="endVal">final
-                                                    value</th>
+                                                    threshold 'start' (W)</th>
+                                                <th class="header translate" data-type="number" data-name="endVal">
+                                                    threshold 'end' (W)</th>
+                                                <th class="header translate" data-type="number" data-name="standby">
+                                                    threshold 'standby' (W)</th>
                                                 <th class="header translate" data-type="number" data-name="startCount">
-                                                    number of values 'start'</th>
+                                                    number of 'start' values</th>
                                                 <th class="header translate" data-type="number" data-name="endCount">
-                                                    number of values ​'end'</th>
-                                                <th data-buttons="delete" style="width: 80px"
-                                                    class="header translate del-Btn">delete</th>
-                                                <th class="header translate" data-type="number" data-name="id"
-                                                    style="width: 0px; display: none;">id
+                                                    number of ​'end' values</th>
+                                                <th data-buttons="delete" style="width: 80px" class="header translate del-Btn">delete</th>
+                                                <th class="header translate" data-type="number" data-name="id" style="width: 0px; display: none;">id
                                                 </th>
                                             </tr>
                                         </thead>

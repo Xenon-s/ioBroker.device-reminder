@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "device-reminder",
-    "version": "1.1.1-2",
+    "version": "1.1.2-0",
     "news": {
       "1.1.1-1": {
         "de": "zahlreiche performance Verbesserungen, Admin wurde komplett neu erstellt"
@@ -181,6 +181,7 @@
         "endVal": 15,
         "startCount": 5,
         "endCount": 65,
+        "standby": 1,
         "id": 1
       },
       {
@@ -189,6 +190,7 @@
         "endVal": 15,
         "startCount": 5,
         "endCount": 50,
+        "standby": 1,
         "id": 2
       },
       {
@@ -197,6 +199,7 @@
         "endVal": 4,
         "startCount": 3,
         "endCount": 150,
+        "standby": 1,
         "id": 3
       },
       {
@@ -205,6 +208,7 @@
         "endVal": 5,
         "startCount": 2,
         "endCount": 3,
+        "standby": 1,
         "id": 4
       },
       {
@@ -213,6 +217,7 @@
         "endVal": 5,
         "startCount": 2,
         "endCount": 2,
+        "standby": 1,
         "id": 5
       },
       {
@@ -221,6 +226,7 @@
         "endVal": 20,
         "startCount": 2,
         "endCount": 1,
+        "standby": 1,
         "id": 6
       }
     ],
@@ -231,6 +237,7 @@
         "endVal": 5,
         "startCount": 5,
         "endCount": 10,
+        "standby": 1,
         "id": 21
       },
       {
@@ -239,6 +246,7 @@
         "endVal": 5,
         "startCount": 5,
         "endCount": 10,
+        "standby": 1,
         "id": 22
       },
       {
@@ -247,6 +255,7 @@
         "endVal": 5,
         "startCount": 5,
         "endCount": 10,
+        "standby": 1,
         "id": 23
       },
       {
@@ -255,6 +264,7 @@
         "endVal": 5,
         "startCount": 5,
         "endCount": 10,
+        "standby": 1,
         "id": 24
       },
       {
@@ -263,6 +273,7 @@
         "endVal": 5,
         "startCount": 5,
         "endCount": 10,
+        "standby": 1,
         "id": 25
       }
     ],
