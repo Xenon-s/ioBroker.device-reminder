@@ -172,29 +172,29 @@ systemDictionary = {
         "pl": "zapisać",
         "zh-cn": "保存"
       },
-      "Click here to edit %s": {
-        "en": "Click here to edit %s",
-        "de": "Klicken Sie hier, um %s  zu bearbeiten",
-        "ru": "Нажмите здесь, чтобы отредактировать %s ",
-        "pt": "Clique aqui para editar %s ",
-        "nl": "Klik hier om %s  te bewerken",
-        "fr": "Cliquez ici pour modifier %s ",
-        "it": "Fare clic qui per modificare %s ",
-        "es": "Haga clic aquí para editar %s ",
-        "pl": "Kliknij tutaj, aby edytować %s ",
-        "zh-cn": "点击此处编辑％s"
+      "Edit %s": {
+        "en": "Edit %s",
+        "de": "%s bearbeiten",
+        "ru": "Изменить %s ",
+        "pt": "Editar %s ",
+        "nl": "Bewerk %s ",
+        "fr": "Modifier %s ",
+        "it": "Modifica %s ",
+        "es": "Editar %s ",
+        "pl": "Edytuj %s ",
+        "zh-cn": "编辑％s"
       },
-      "Click here for create %s": {
-        "en": "Click here for create %s",
-        "de": "Klicken Sie hier, um %s zu erstellen",
-        "ru": "Нажмите здесь, чтобы создать %s",
-        "pt": "Clique aqui para criar %s",
-        "nl": "Klik hier om %s  aan te maken",
-        "fr": "Cliquez ici pour créer %s",
-        "it": "Fare clic qui per creare %s",
-        "es": "Haga clic aquí para crear %s",
-        "pl": "Kliknij tutaj, aby utworzyć %s",
-        "zh-cn": "单击此处创建％s"
+      "Create %s": {
+        "en": "Create %s",
+        "de": "%s erstellen ",
+        "ru": "Создать %s ",
+        "pt": "Crie %s ",
+        "nl": "Maak %s  aan",
+        "fr": "Créer %s ",
+        "it": "Crea %s ",
+        "es": "Crear %s ",
+        "pl": "Utwórz %s ",
+        "zh-cn": "创建％s"
       },
       "Error(s) found in configuration": {
         "en": "Error(s) found in configuration",
@@ -365,17 +365,237 @@ systemDictionary = {
         "zh-cn": "删除"
       },
 
-      "Configure your own device status": {
-        "en": "Configure your own device status",
-        "de": "Konfigurieren Sie Ihren eigenen Gerätestatus",
-        "ru": "Настройте свой собственный статус устройства",
-        "pt": "Configure o status do seu próprio dispositivo",
-        "nl": "Configureer uw eigen apparaatstatus",
-        "fr": "Configurez votre propre état de l'appareil",
-        "it": "Configura lo stato del tuo dispositivo",
-        "es": "Configure el estado de su propio dispositivo",
-        "pl": "Skonfiguruj stan swojego urządzenia",
-        "zh-cn": "配置您自己的设备状态"
+      "*name": {
+        "en": "*name",
+        "de": "*Name",
+        "ru": "*название",
+        "pt": "*nome",
+        "nl": "*naam",
+        "fr": "*Nom",
+        "it": "*nome",
+        "es": "*nombre",
+        "pl": "*Nazwa",
+        "zh-cn": "*名称"
+      },
+      "active from hour": {
+        "en": "active from hour",
+        "de": "aktiv ab Stunde",
+        "ru": "активен с часа",
+        "pt": "ativo de hora",
+        "nl": "actief vanaf uur",
+        "fr": "actif à partir de l'heure",
+        "it": "attivo da ora",
+        "es": "activo desde la hora",
+        "pl": "aktywny od godz",
+        "zh-cn": "从小时开始活动"
+      },
+      "active from minute": {
+        "en": "active from minute",
+        "de": "aktiv ab Minute",
+        "ru": "активен с минуты",
+        "pt": "ativo desde o minuto",
+        "nl": "actief vanaf minuut",
+        "fr": "actif de la minute",
+        "it": "attivo dal minuto",
+        "es": "activo desde el minuto",
+        "pl": "aktywny od minuty",
+        "zh-cn": "从分钟开始活跃"
+      },
+      "inactive from hour": {
+        "en": "inactive from hour",
+        "de": "deaktiviert ab Stunde",
+        "ru": "неактивен с часа",
+        "pt": "inativo desde a hora",
+        "nl": "inactief vanaf uur",
+        "fr": "inactif depuis l'heure",
+        "it": "inattivo da ora",
+        "es": "inactivo desde hora",
+        "pl": "nieaktywne od godz",
+        "zh-cn": "从小时开始不活动"
+      },
+      "inactive from minute": {
+        "en": "inactive from minute",
+        "de": "deaktiviert ab Minute",
+        "ru": "неактивен с минуты",
+        "pt": "inativo desde o minuto",
+        "nl": "inactief vanaf minuut",
+        "fr": "inactif de minute",
+        "it": "inattivo dal minuto",
+        "es": "inactivo desde el minuto",
+        "pl": "nieaktywne od minuty",
+        "zh-cn": "从分钟开始无效"
+      },
+
+      "*pushover instance": {
+        "en": "*pushover instance",
+        "de": "* Pushover-Instanz",
+        "ru": "* экземпляр pushover",
+        "pt": "* instância pushover",
+        "nl": "* pushover-instantie",
+        "fr": "* instance pushover",
+        "it": "* istanza pushover",
+        "es": "* instancia fácil",
+        "pl": "* instancja pushover",
+        "zh-cn": "*推送实例"
+      },
+      "*priority": {
+        "en": "*priority",
+        "de": "*Priorität",
+        "ru": "* приоритет",
+        "pt": "*prioridade",
+        "nl": "*prioriteit",
+        "fr": "*priorité",
+        "it": "*priorità",
+        "es": "*prioridad",
+        "pl": "*priorytet",
+        "zh-cn": "*优先事项"
+      },
+      "*sound": {
+        "en": "*sound",
+        "de": "*Ton",
+        "ru": "*звук",
+        "pt": "*som",
+        "nl": "*geluid",
+        "fr": "*sonner",
+        "it": "*suono",
+        "es": "*sonar",
+        "pl": "*dźwięk",
+        "zh-cn": "*声音"
+      },
+
+      "*sender address": {
+        "en": "*sender address",
+        "de": "*Absenderadresse",
+        "ru": "* адрес отправителя",
+        "pt": "*Endereço do remetente",
+        "nl": "*Zender adres",
+        "fr": "*adresse de l'expéditeur",
+        "it": "* indirizzo del mittente",
+        "es": "*dirección del remitente",
+        "pl": "*adres nadawcy",
+        "zh-cn": "*发件人地址"
+      },
+      "*receiver address": {
+        "en": "*receiver address",
+        "de": "*Empfängeradresse",
+        "ru": "* адрес получателя",
+        "pt": "* endereço do receptor",
+        "nl": "* adres ontvanger",
+        "fr": "* adresse du destinataire",
+        "it": "* indirizzo del destinatario",
+        "es": "* dirección del receptor",
+        "pl": "*Odbiorca adres",
+        "zh-cn": "*收货人地址"
+      },
+
+      "default device types": {
+        "en": "default device types",
+        "de": "Standardgerätetypen",
+        "ru": "типы устройств по умолчанию",
+        "pt": "tipos de dispositivo padrão",
+        "nl": "standaard apparaattypen",
+        "fr": "types d'appareils par défaut",
+        "it": "tipi di dispositivi predefiniti",
+        "es": "tipos de dispositivos predeterminados",
+        "pl": "domyślne typy urządzeń",
+        "zh-cn": "默认设备类型"
+      },
+      "custom device types": {
+        "en": "custom device types",
+        "de": "Benutzerdefinierte Gerätetypen",
+        "ru": "пользовательские типы устройств",
+        "pt": "tipos de dispositivos personalizados",
+        "nl": "aangepaste apparaattypen",
+        "fr": "types d'appareils personnalisés",
+        "it": "tipi di dispositivi personalizzati",
+        "es": "tipos de dispositivos personalizados",
+        "pl": "niestandardowe typy urządzeń",
+        "zh-cn": "定制设备类型"
+      },
+      "name": {
+        "en": "name",
+        "de": "Name",
+        "ru": "название",
+        "pt": "nome",
+        "nl": "naam",
+        "fr": "Nom",
+        "it": "nome",
+        "es": "nombre",
+        "pl": "Nazwa",
+        "zh-cn": "名称"
+      },
+      "threshold 'start' (watt)": {
+        "en": "threshold 'start' (watt)",
+        "de": "Schwellwert 'Start' (Watt)",
+        "ru": "порог «старт» (ватт)",
+        "pt": "limite 'início' (watt)",
+        "nl": "drempel 'start' (watt)",
+        "fr": "seuil 'start' (watt)",
+        "it": "soglia 'inizio' (watt)",
+        "es": "umbral 'inicio' (vatios)",
+        "pl": "próg „start” (wat)",
+        "zh-cn": "阈值“开始”（瓦特）"
+      },
+      "threshold 'end' (watt)": {
+        "en": "threshold 'end' (watt)",
+        "de": "Schwellwert 'Ende' (Watt)",
+        "ru": "порог 'конец' (ватт)",
+        "pt": "limite 'fim' (watt)",
+        "nl": "drempel 'einde' (watt)",
+        "fr": "seuil 'fin' (watt)",
+        "it": "soglia 'fine' (watt)",
+        "es": "umbral 'fin' (vatios)",
+        "pl": "próg „koniec” (wat)",
+        "zh-cn": "阈值“结束”（瓦特）"
+      },
+      "threshold 'standby' (watt)": {
+        "en": "threshold 'standby' (watt)",
+        "de": "Schwellwert 'Standby' (Watt)",
+        "ru": "порог ожидания (ватт)",
+        "pt": "limite 'espera' (watt)",
+        "nl": "drempel 'standby' (watt)",
+        "fr": "seuil 'veille' (watt)",
+        "it": "soglia 'standby' (watt)",
+        "es": "umbral 'en espera' (vatios)",
+        "pl": "próg czuwania (wat)",
+        "zh-cn": "阈值“待机”（瓦特）"
+      },
+      "number of 'start' values": {
+        "en": "number of 'start' values",
+        "de": "Anzahl Startwerte",
+        "ru": "количество \"начальных\" значений",
+        "pt": "número de valores 'iniciais'",
+        "nl": "aantal 'start'-waarden",
+        "fr": "nombre de valeurs de «début»",
+        "it": "numero di valori \"iniziali\"",
+        "es": "número de valores de 'inicio'",
+        "pl": "liczba wartości „początkowych”",
+        "zh-cn": "“开始”值的数量"
+      },
+      "number of ​'end' values": {
+        "en": "number of ​'end' values",
+        "de": "Anzahl Endwerte",
+        "ru": "количество \"конечных\" значений",
+        "pt": "número de valores 'finais'",
+        "nl": "aantal 'eind'-waarden",
+        "fr": "nombre de valeurs de «fin»",
+        "it": "numero di valori \"end\"",
+        "es": "número de valores 'finales'",
+        "pl": "liczba wartości „końcowych”",
+        "zh-cn": "``结束''值的数量"
+      },
+
+      "device status": {
+        "en": "device status",
+        "de": "Gerätestatus",
+        "ru": "состояние устройства",
+        "pt": "status do dispositivo",
+        "nl": "Apparaatstatus",
+        "fr": "statut du périphérique",
+        "it": "stato del dispositivo",
+        "es": "estado del dispositivo",
+        "pl": "status urządzenia",
+        "zh-cn": "设备状态"
       },
       "status: 'in action'": {
         "en": "status: 'in action'",
@@ -389,18 +609,29 @@ systemDictionary = {
         "pl": "status: „w akcji”",
         "zh-cn": "状态：“执行中”"
       },
-      "custom devices": {
-        "en": "custom devices",
-        "de": "benutzerdefinierte Geräte",
-        "ru": "кастомные устройства",
-        "pt": "dispositivos personalizados",
-        "nl": "aangepaste apparaten",
-        "fr": "appareils personnalisés",
-        "it": "dispositivi personalizzati",
-        "es": "dispositivos personalizados",
-        "pl": "urządzenia niestandardowe",
-        "zh-cn": "定制设备"
+      "status: 'standby'": {
+        "en": "status: 'standby'",
+        "de": "Status: 'Standby'",
+        "ru": "статус: «в режиме ожидания»",
+        "pt": "status: 'standby'",
+        "nl": "status: 'standby'",
+        "fr": "état: 'veille'",
+        "it": "stato: \"standby\"",
+        "es": "estado: 'en espera'",
+        "pl": "status: 'czuwanie'",
+        "zh-cn": "状态：“待命”"
+      },
+      "status: 'device off'": {
+        "en": "status: 'device off'",
+        "de": "Status: 'Gerät aus'",
+        "ru": "статус: 'устройство выключено'",
+        "pt": "status: 'dispositivo desligado'",
+        "nl": "status: 'apparaat uit'",
+        "fr": "état: 'appareil éteint'",
+        "it": "stato: \"dispositivo spento\"",
+        "es": "estado: 'dispositivo apagado'",
+        "pl": "status: „urządzenie wyłączone”",
+        "zh-cn": "状态：“设备关闭”"
       }
-
 
 };

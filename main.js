@@ -352,7 +352,7 @@ class deviceReminder extends utils.Adapter {
                     // Verbrauchswerte
                     this.startValue = objVal.startVal;
                     this.endValue = objVal.endVal;
-                    this.standby = objVal.standby;
+                    this.standby = objVal.standby != '' ? objVal.standby || 1 : 1;
                     // Zaehler Abbruchbedingungen
                     this.startCount = objVal.startCount;
                     this.endCount = objVal.endCount;
@@ -510,7 +510,7 @@ class deviceReminder extends utils.Adapter {
                 this.adapterDPs[name].doNotDisturb,
                 objVal);
 
-            this.log.debug(`RETURN ${JSON.stringify(device)}`);
+            this.log.warn(`RETURN ${JSON.stringify(device)}`);
             this.log.info(`Device ${JSON.stringify(device.name)} was successfully created`);
             return device;
         } catch (error) {
