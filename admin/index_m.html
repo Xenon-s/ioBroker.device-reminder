@@ -47,19 +47,19 @@
         dataSendTo.devices = {
             name: 'devices',
             // id: 'deviceName',
-            obj: { dataChecked: [], dataFailed: [], err: `err-devices`, header: 'header-device', name: `devices`, anchorEn: `create-device`, anchorGer: `device-anlegen`, anchorName: `device` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-devices`, header: 'header-device', name: `'devices'`, anchorEn: `create-device`, anchorGer: `device-anlegen`, anchorName: `device` },
             objType: { cmd: 'val', 1: 'name', 2: 'consumption', 3: 'switch', cntr: 3 }
         }
         dataSendTo.alexa = {
             name: 'alexa',
             // id: 'idAlexa',
-            obj: { dataChecked: [], dataFailed: [], err: `err-alexa`, header: 'header-alexa', name: `alexa device`, anchorEn: `create-alexa`, anchorGer: `alexa-erstellen`, anchorName: `alexa` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-alexa`, header: 'header-alexa', name: `'alexa devices'`, anchorEn: `create-alexa`, anchorGer: `alexa-erstellen`, anchorName: `alexa` },
             objType: { cmd: 'val', 1: 'name', 2: 'path', cntr: 2 }
         };
         dataSendTo.sayit = {
             name: 'sayit',
             // id: 'idsayit',
-            obj: { dataChecked: [], dataFailed: [], err: `err-sayit`, header: 'header-sayit', name: `sayit device`, anchorEn: `create-sayit-device`, anchorGer: `sayit-device-erstellen`, anchorName: `sayit` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-sayit`, header: 'header-sayit', name: `'sayit devices'`, anchorEn: `create-sayit-device`, anchorGer: `sayit-device-erstellen`, anchorName: `sayit` },
             objType: { cmd: 'val', 1: 'name', 2: 'path', cntr: 2 }
         };
         dataSendTo.whatsapp = {
@@ -73,28 +73,28 @@
         dataSendTo.pushover = {
             name: 'pushover',
             // id: 'idPushover',
-            obj: { dataChecked: [], dataFailed: [], err: `err-pushover`, header: 'header-pushover', name: `pushover user`, anchorEn: `create-pushover-user`, anchorGer: `pushover-user-erstellen`, anchorName: `pushover` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-pushover`, header: 'header-pushover', name: `'pushover user'`, anchorEn: `create-pushover-user`, anchorGer: `pushover-user-erstellen`, anchorName: `pushover` },
             objType: { cmd: 'type', 1: 'name', 2: 'inst', 3: 'prio', 4: 'sound', cntr: 4 }
         };
         dataSendTo.email = {
             name: 'email',
             // id: 'idEmail',
-            obj: { dataChecked: [], dataFailed: [], err: `err-email`, header: 'header-email', name: `email user`, anchorEn: `create-email-user`, anchorGer: `email-user-erstellen`, anchorName: `email` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-email`, header: 'header-email', name: `'email user'`, anchorEn: `create-email-user`, anchorGer: `email-user-erstellen`, anchorName: `email` },
             objType: { cmd: 'email', 1: 'name', 2: 'emailFrom', 3: 'emailTo', cntr: 3 }
         };
         dataSendTo.default = {
             name: 'default',
-            obj: { dataChecked: [], dataFailed: [], err: `err-default`, header: 'header-default', name: `default type config`, anchorEn: `default-devices`, anchorGer: `default-devices`, anchorName: `default-type` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-default`, header: 'header-default', name: `'default type config'`, anchorEn: `default-devices`, anchorGer: `default-devices`, anchorName: `default-type` },
             objType: { cmd: 'type', 1: 'name', 2: 'startVal', 3: 'endVal', 4: 'startCount', 5: 'endCount', cntr: 5 }
         };
         dataSendTo.custom = {
             name: 'custom',
-            obj: { dataChecked: [], dataFailed: [], err: `err-custom`, header: 'header-custom', name: `custom type config`, anchorEn: `custom-devices`, anchorGer: `custom-devices`, anchorName: `create-custom-type` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-custom`, header: 'header-custom', name: `'custom type config'`, anchorEn: `custom-devices`, anchorGer: `custom-devices`, anchorName: `create-custom-type` },
             objType: { cmd: 'type', 1: 'name', 2: 'startVal', 3: 'endVal', 4: 'startCount', 5: 'endCount', cntr: 5 }
         };
         dataSendTo.status = {
             name: 'status',
-            obj: { dataChecked: [], dataFailed: [], err: `err-status`, header: 'header-status', name: `custom device status`, anchorEn: `custom-states`, anchorGer: `eigene-zustaende`, anchorName: `custom-status` }
+            obj: { dataChecked: [], dataFailed: [], err: `err-status`, header: 'header-status', name: `'device status'`, anchorEn: `custom-states`, anchorGer: `eigene-zustaende`, anchorName: `custom-status` }
         };
 
         let showSaveBtn;
@@ -384,7 +384,7 @@
                                         $(btnAdd).on('click', async () => {
                                             $(btnSave).fadeIn();
                                             $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;">
-                                                <b>Pls check input</b> </div>`);
+                                                <span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
                                             $('.btn-save, .btn-save-close').fadeOut();
                                             onChange(false);
                                         });
@@ -756,25 +756,27 @@
             };
 
             async function checked(obj) {
-                if (obj.name !== 'custom device status' && (obj.dataChecked.length <= 0) && (obj.dataFailed.length <= 0)) {
+                if (obj.name !== `'device status'` && (obj.dataChecked.length <= 0) && (obj.dataFailed.length <= 0)) {
                     $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: grey;">
-                            <i class="material-icons">check_circle_outline</i> <b>no entries found</b> </div>`);
+                            <i class="material-icons">check_circle_outline</i><span>${_("no entries found")}</span> </div>`);
                     // Header innen "config devices"
-                    $(`#${obj.header}`).html(`<div class="collapsible-header grey lighten-2 translate"><i class="material-icons">create</i>click here for create your first ${obj.name}</div>`);
+                    $(`#${obj.header}`).html(`<div class="collapsible-header grey lighten-2 translate"><i class="material-icons">create</i><span>${_("Click here for create %s", obj.name)}</span></div>`);
                     showSaveBtn(true); // save button einblenden
                 } else if (obj.dataFailed.length >= 1) {
                     $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: red;">
-                            <i class="large material-icons">error_outline</i><span><b>invalid input detected:</b><br> - ${obj.dataFailed.join('<br> - ')}</span></div>`);
+                            <i class="large material-icons">error_outline</i><span><b>${_("invalid input detected")}:</b><br> - ${obj.dataFailed.join('<br> - ')}</span></div>`);
                     // Header innen "config devices"
-                    $(`#${obj.header}`).html(`<div class="collapsible-header red lighten-2 translate"><i class="material-icons">create</i>${obj.dataFailed.length} error(s) found in ${obj.name}</div>`);
+                    const text = `${obj.dataFailed.length} error(s) found in `
+                    $(`#${obj.header}`).html(`<div class="collapsible-header red lighten-2 translate"><i class="material-icons">create</i><span>${_("Error(s) found in %s", obj.name)}</span></div>`);
                     // Header außen "config devices"
-                    $(`#header-config`).html(`<div class="collapsible-header red lighten-2 translate"><i class="material-icons">create</i>Erros(s) found in configuration</div>`);
+                    $(`#header-config`).html(`<div class="collapsible-header red lighten-2 translate"><i class="material-icons">create</i><span>${_("Error(s) found in configuration")}</span></div>`);
                     $('.btn-save, .btn-save-close').fadeOut();
                 } else {
                     $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: green;">
-                            <i class="material-icons">check_circle_outline</i> <b>Input checked</b> </div>`);
+                            <i class="material-icons">check_circle_outline</i><span class="translate" style="font-weight:bold;">${_("Input checked")}</span></div>`);
                     // Header innen "config devices"
-                    $(`#${obj.header}`).html(`<div class="collapsible-header green lighten-2 translate"><i class="material-icons">create</i>Click here to edit your ${obj.name}</div>`);
+                    $(`#${obj.header}`).html(`<div class="collapsible-header green lighten-2"><i class="material-icons">create</i><span>${_("Click here to edit %s", obj.name)}</span></div>`);
+                    // $(`#${obj.header}`).html(`<div class="collapsible-header green lighten-2"><i class="material-icons">create</i><span class="translate">Click here to edit your ${obj.name}</span></div>`);
                 };
                 $(`#help-${obj.anchorName}`).html(`<div><h4>create ${obj.name}</h4><p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README.md#${obj.anchorEn}" target="_blank">${obj.anchorEn} english</a></p>
                     <p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README_GER.md#${obj.anchorGer}" target="_blank">${obj.anchorGer} deutsch</a></p></div>`);
@@ -1048,27 +1050,18 @@
                                         class="table-values changeOnChangeEvent remove-last-column">
                                         <thead>
                                             <tr>
-                                                <th class="header translate" data-name="enabled" style="width: 60px">
-                                                    active</th>
-                                                <th class="header translate" data-name="name" style="width: 200px">
-                                                    device</th>
+                                                <th class="header translate" data-name="enabled" style="width: 60px">active</th>
+                                                <th class="header translate" data-name="name" style="width: 200px">device</th>
                                                 <th class="header translate" data-name="alexa">alexa</th>
                                                 <th class="header translate" data-name="sayit">SayIt</th>
-                                                <th class="header translate" data-name="telegram">telegram
-                                                </th>
-                                                <th class="header translate" data-name="whatsapp">whatsapp
-                                                </th>
-                                                <th class="header translate" data-name="pushover">pushover
-                                                </th>
+                                                <th class="header translate" data-name="telegram">telegram</th>
+                                                <th class="header translate" data-name="whatsapp">whatsapp</th>
+                                                <th class="header translate" data-name="pushover">pushover</th>
                                                 <th class="header translate" data-name="email">email</th>
-                                                <th class="header translate" data-name="autoOff" style="width: 60px">
-                                                    switch off</th>
-                                                <th class="header translate" data-name="timer" style="width: 60px">
-                                                    switch off after minutes</th>
-                                                <th class="header translate" data-name="abort" style="width: 80px">abort
-                                                    detection</th>
-                                                <th class="header translate" data-name="id"
-                                                    style="width: 0px; display: none;">id</th>
+                                                <th class="header translate" data-name="autoOff" style="width: 110px" data-lang="switch off"></th>
+                                                <th class="header translate" data-name="timer" style="width: 110px" data-lang="switch off after minutes"></th>
+                                                <th class="header translate" data-name="abort" style="width: 100px" data-lang="abort detection"></th>
+                                                <th class="header translate" data-name="id"style="width: 0px; display: none;">id</th>
                                             </tr>
                                         </thead>
                                         <tbody id="dynamic-table-body" class="table-values">
@@ -1085,7 +1078,7 @@
                             <!-- user devices -->
                             <li>
                                 <!-- create device -->
-                                <div id="header-device" class="translate" onclick="selectedHeader('devices')">
+                                <div id="header-device" onclick="selectedHeader('devices')">
                                     <!-- text -->
                                 </div>
                                 <div id="deviceID" class="collapsible-body blue lighten-5">
@@ -1096,7 +1089,7 @@
                                                 <a id='btn-add-devices'
                                                     class="btn-floating waves-effect waves-light blue table-button-add translate">
                                                     <i class="material-icons">add_circle_outline</i></a>
-                                                <b>add device</b>
+                                                    <span class="translate" style="font-weight:bold;" data-lang="add device">add device</span>
                                             </div>
                                             <div class="col s2">
                                                 <a id="btn-check-devices" class="waves-effect waves-teal btn"
@@ -1121,40 +1114,25 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <b>*Required fields</b>
+                                        <span class="translate" style="font-weight:bold;" data-lang="Required fields"></span>
                                         <table class="table-values changeOnChangeEvent remove-last-column">
                                             <thead>
                                                 <tr>
-                                                    <th data-name="_index" style="width: 40px" class="header translate">
-                                                        nr</th>
-                                                    <th data-name="name" style="width: 150px" data-type="text"
-                                                        class="header translate">
-                                                        *device name</th>
-                                                    <th id="deviceTypeID" data-name="type" style="width: 200px;"
-                                                        data-type="select" style="width: 150px" class="header translate"
-                                                        data-options="">*device type
-                                                    </th>
-                                                    <th data-name="consumption" style="width: 100px" data-type="OID"
-                                                        class="header translate">
-                                                        *consumption/<br>energy</th>
-                                                    <th data-name="switch" style="width: 100px" data-type="OID"
-                                                        class="header translate">switch
-                                                        <br>on/off
-                                                    </th>
+                                                    <th data-name="_index" style="width: 40px" class="header translate">nr</th>
+                                                    <th data-name="name" style="width: 150px" data-type="text" class="header translate" data-lang="device name"></th>
+                                                    <th id="deviceTypeID" data-name="type" style="width: 200px;" data-type="select" style="width: 150px"class="header translate" data-options="" data-lang="device type"></th>
+                                                    <th data-name="consumption" style="width: 100px" data-type="OID" class="header translate" data-lang="consumption/energy"></th>
+                                                    <th data-name="switch" style="width: 100px" data-type="OID" class="header translate" data-lang="Power switch"></th>
                                                     <!-- <th data-name="runtimeMax" style="width: 100px" data-type="number" class="header translate">runtime max <br>(minutes)</th> -->
-                                                    <th data-name="startText" data-type="OID" class="header translate">
-                                                        starttext</th>
-                                                    <th data-name="endText" data-type="OID" class="header translate">
-                                                        endtext</th>
-                                                    <th data-buttons="delete" style="width: 80px;"
-                                                        class="header translate del-Btn">delete</th>
-                                                    <th data-name="id" style="width: 0px; display: none;"
-                                                        class="header translate">id</th>
+                                                    <th data-name="startText" data-type="OID" class="header translate" data-lang="starttext"></th>
+                                                    <th data-name="endText" data-type="OID" class="header translate" data-lang="endtext"></th>
+                                                    <th data-buttons="delete" style="width: 80px;" class="header translate del-Btn" data-lang="delete"></th>
+                                                    <th data-name="id" style="width: 0px; display: none;" class="header translate">id</th>
                                                 </tr>
                                             </thead>
                                         </table>
                                     </div>
-                                </div>
+                                </div> 
                             </li>
 
                             <!-- alexa devices -->
@@ -1169,10 +1147,10 @@
                                                 <a id='btn-add-alexa'
                                                     class="btn-floating waves-effect waves-light blue table-button-add">
                                                     <i class="material-icons">add_circle_outline</i></a>
-                                                <b>add device</b>
+                                                <span class="translate" style="font-weight:bold;" data-lang="add device">add device</span>
                                             </div>
                                             <div class="col s2">
-                                                <a id="btn-check-alexa" class="waves-effect waves-light btn">save</a>
+                                                <a id="btn-check-alexa" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                             </div>
                                             <div class="col s8" id="err-alexa">
                                                 <!-- 'text' -->
@@ -1194,11 +1172,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <b>*Required fields</b>
+                                    <span class="translate" style="font-weight:bold;" data-lang="Required fields"></span>
                                     <table class="table-values changeOnChangeEvent remove-last-column">
                                         <thead>
                                             <tr>
-                                                <th data-name="_index" style="width: 40px" class="header translate">nr
+                                                <th data-name="_index" style="width: 40px;" class="header translate">nr
                                                 </th>
                                                 <th data-name="name" data-type="text" class="header translate">
                                                     *name</th>
@@ -1249,10 +1227,10 @@
                                                 <a id='btn-add-sayit'
                                                     class="btn-floating waves-effect waves-light blue table-button-add">
                                                     <i class="material-icons">add_circle_outline</i></a>
-                                                <b>add device</b>
+                                                <span class="translate" style="font-weight:bold;" data-lang="add device">add device</span>
                                             </div>
                                             <div class="col s2">
-                                                <a id="btn-check-sayit" class="waves-effect waves-light btn">save</a>
+                                                <a id="btn-check-sayit" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                             </div>
                                             <div class="col s8" id="err-sayit">
                                                 <!-- 'text' -->
@@ -1274,7 +1252,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <b>*Required fields</b>
+                                    <span class="translate" style="font-weight:bold;" data-lang="Required fields"></span>
                                     <table class="table-values changeOnChangeEvent remove-last-column">
                                         <thead>
                                             <tr>
@@ -1328,10 +1306,10 @@
                                                 <a id='btn-add-pushover'
                                                     class="btn-floating waves-effect waves-light blue table-button-add">
                                                     <i class="material-icons">add_circle_outline</i></a>
-                                                <b>add device</b>
+                                                <span class="translate" style="font-weight:bold;" data-lang="add device">add device</span>
                                             </div>
                                             <div class="col s2">
-                                                <a id="btn-check-pushover" class="waves-effect waves-light btn">save</a>
+                                                <a id="btn-check-pushover" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                             </div>
                                             <div class="col s8" id="err-pushover">
                                                 <!-- 'text' -->
@@ -1353,7 +1331,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <b>*Required fields</b>
+                                    <span class="translate" style="font-weight:bold;" data-lang="Required fields"></span>
                                     <table class="table-values changeOnChangeEvent remove-last-column">
                                         <thead>
                                             <tr>
@@ -1396,10 +1374,10 @@
                                                 <a id='btn-add-email'
                                                     class="btn-floating waves-effect waves-light blue table-button-add">
                                                     <i class="material-icons">add_circle_outline</i></a>
-                                                <b>add device</b>
+                                                <span class="translate" style="font-weight:bold;" data-lang="add device">add device</span>
                                             </div>
                                             <div class="col s2">
-                                                <a id="btn-check-email" class="waves-effect waves-light btn">save</a>
+                                                <a id="btn-check-email" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                             </div>
                                             <div class="col s8" id="err-email">
                                                 <!-- text -->
@@ -1421,7 +1399,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <b>*Required fields</b>
+                                    <span class="translate" style="font-weight:bold;" data-lang="Required fields"></span>
                                     <table class="table-values changeOnChangeEvent remove-last-column">
                                         <thead>
                                             <tr>
@@ -1453,7 +1431,7 @@
                                     <div class="row">
                                         <div style="display: flex; align-items: center;">
                                             <div>
-                                                <a id="btn-check-default" class="waves-effect waves-light btn">save</a>
+                                                <a id="btn-check-default" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                             </div>
                                             <div class="col s10" id="err-default">
                                                 <!-- 'text' -->
@@ -1513,10 +1491,10 @@
                                                 <a id='btn-add-custom'
                                                     class="btn-floating waves-effect waves-light blue table-button-add">
                                                     <i class="material-icons">add_circle_outline</i></a>
-                                                <b>add device</b>
+                                                <span class="translate" style="font-weight:bold;" data-lang="add device">add device</span>
                                             </div>
                                             <div class="col s2">
-                                                <a id="btn-check-custom" class="waves-effect waves-light btn">save</a>
+                                                <a id="btn-check-custom" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                             </div>
                                             <div class="col s8" id="err-custom">
                                                 <!-- 'text' -->
@@ -1532,14 +1510,14 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <a href="#!"
-                                                            class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                            class="modal-close waves-effect waves-green btn-flat translate">close</a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <h3>custom devices</h3>
+                                        <h3><span class="translate">custom devices</span></h3>
                                     </div>
                                     <table id="disableFirstField" class="table-values remove-last-column">
                                         <thead>
@@ -1578,7 +1556,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="translate">
                                         <h5>Configure your own device status</h5>
                                     </div>
                                     <table class="table-values changeOnChangeEvent remove-first-column" id="table-states">
