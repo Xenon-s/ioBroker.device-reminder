@@ -510,7 +510,7 @@ class deviceReminder extends utils.Adapter {
                 this.adapterDPs[name].doNotDisturb,
                 objVal);
 
-            this.log.warn(`RETURN ${JSON.stringify(device)}`);
+            this.log.debug(`RETURN ${JSON.stringify(device)}`);
             this.log.info(`Device ${JSON.stringify(device.name)} was successfully created`);
             return device;
         } catch (error) {
