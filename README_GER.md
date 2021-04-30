@@ -55,8 +55,6 @@ Es gibt für jede Gruppe an devices, alexa etc. den Button "Eingabe Prüfen". Wi
 - **Endtext**: Benachrichtigung die gesendet werden soll, wenn das Gerät seinen Vorgang beendet hat (auch Sonderzeichen sind möglich)
 
 Bei **Starttext** und **Endtext** kann man sich auch eine Nachricht aus einem externen Datenpunkt holen. Diese Nachricht wird mit 1 Sekunde Verzögerung aus dem Datenpunkt gelesen, nachdem sich der Status des Geräts geändert hat. Somit kann man sich per externem Script eine Nachricht erstellen lassen. Der Adapter erkennt automatisch, ob eine Nachricht aus einem Datenpunkt stammt oder ob diese manuell einfach nur eingegeben wurde. Um einen Datenpunkt auszuwählen, einfach auf die Schaltfläche mit den drei weißen Punkten klicken und dann den entsprechenden Datenpunkt auswählen. **Bitte beachten**: es kann nur entweder ein Datenpunkt **oder** eine händisch eingetragene Nachricht verwendet werden!
-<br>
-<br>
 
 ## Alexa erstellen
 ![alexa_ger.png](admin/alexa_ger.png)
@@ -69,8 +67,6 @@ Mit den 4 letzten Feldern kann ein Zeitraum erstellt werden, in dem eure Alexa S
 - **aktiv ab Minute**: Startzeit in Minuten
 - **deaktiviert ab Stunde**: Endzeit in Stunden
 - **deaktiviert ab Minute**: Endzeit in Minuten
-<br>
-<br>
 
 ## SayIt device erstellen
 ![sayit_ger.png](admin/sayit_ger.png)
@@ -82,8 +78,6 @@ Mit den 4 letzten Feldern kann ein Zeitraum erstellt werden, in dem eure Alexa S
 - **aktiv ab Minute**: Startzeit in Minuten
 - **deaktiviert ab Stunde**: Endzeit in Stunden
 - **deaktiviert ab Minute**: Endzeit in Minuten
-<br>
-<br>
 
 ## pushover user erstellen
 ![pushover_ger.png](admin/pushover_ger.png)
