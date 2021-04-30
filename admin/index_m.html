@@ -26,12 +26,12 @@
     <script type="text/javascript">
 
         const warningText = `<h4>Warning:</h4> 
-                                <p>In the new version 1.1 fundamental changes were made to the adapter structure, so that the old settings are migrated automatically!</p> 
+                                <p>In the new version 1.1.x fundamental changes were made to the adapter structure, so that the old settings are <b>automatically migrated </b> and adapted to the new structure! </p>
                                 <p>Note to Whatsapp users: Whatsapp is now automatically detected just like telegram! Here it may happen that the users must be reassigned once! 
                                 <br> Please be sure to click "save and close"!
                                 </p> <p>If there were problems, please create a github issue or report in the forum!</p>
                                 <p>--------------------------------------</p>
-                                <p>In der neuen Version 1.1 wurden grundlegende Veränderung an der Adapterstruktur vorgenommen, so dass die alten Einstellungen automatisch migriert werden! </p>
+                                <p>In der neuen Version 1.1.x wurden grundlegende Veränderung an der Adapterstruktur vorgenommen, so dass die alten Einstellungen <b>automatisch migriert </b> und an die neue Struktur angepasst werden! </p>
                                 <p> Hinweis an die Whatsapp-Nutzer: Whatsapp wird nun genauso automatisch erkannt, wie telegram! Hier kann es passieren, dass die Nutzer einmalig neu zugeordnet werden müssen! </p>
                                 <p>Bitte unbedingt "speichern und schließen" klicken! </p>
                                 <p>Sollte es zu Problemen gekommen sein, bitte ein github issue erstellen oder im Forum melden! </p>`
@@ -177,6 +177,7 @@
                                 const settingsFinal = await ctrlCounter(settingsNew);
 
                                 console.warn('[NOTE]: Data migration were successfully completed')
+                                $('.btn-save, .btn-save-close').fadeIn();
                                 return settingsFinal; // migrierte settings übergeben
 
                                 // counter auslesen und neu schreiben
@@ -394,6 +395,8 @@
                                         if (eventID !== '#valStates') {
                                             $(eventID).on('change keyup', () => {
                                                 $(`#btn-check-${name}`).fadeIn();
+                                                $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;">
+                                                    <span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
                                                 $('.btn-save, .btn-save-close').fadeOut();
                                                 onChange(false);
                                             });
@@ -1092,8 +1095,7 @@
                                                     <span class="translate" style="font-weight:bold;" data-lang="add device">add device</span>
                                             </div>
                                             <div class="col s2">
-                                                <a id="btn-check-devices" class="waves-effect waves-teal btn"
-                                                    class="translate">save</a>
+                                                <a id="btn-check-devices" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                             </div>
                                             <div class="col s8 translate" id="err-devices">
                                                 <!-- 'text' -->
@@ -1236,7 +1238,7 @@
                                             <tr>
                                                 <th data-name="_index" style="width: 40px" class="header translate"></th>
                                                 <th data-name="name" data-type="text" class="header translate" data-lang="*name"></th>
-                                                <th data-name="path" data-type="OID" class="header translate" data-lang="*''../text'"></th>
+                                                <th data-name="path" data-type="OID" class="header translate" data-lang="*'sayit/../text'"></th>
                                                 <th data-name="volume" style="width: 80px" data-type="number" class="header translate" data-lang="*volume 0-100" data-default="50"></th>
                                                 <th data-name="timeMinHour" style="width: 80px" data-type="select" class="header translate" data-lang="active from hour" data-default="0"data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23"></th>
                                                 <th data-name="timeMinMin" style="width: 80px" data-type="select" class="header translate" data-lang="active from minute" data-default="00"data-options="00;15;30;45"></th>
