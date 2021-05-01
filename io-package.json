@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.2.0",
+        "version": "1.2.1",
         "news": {
-            "1.2.0": {
+            "1.2.1": {
                 "en": "Adapter structure redesigned to classes\nAdmin UI design and inputs made more user friendly\nTelegram bug fixed\nFix for js-controller 3.3.*\nnew datapoints added (runtime max, last runs as JSON, last runtime, runtime max, runtime alert)\nadd: runtime-alert",
                 "de": "Adapterstruktur für Klassen neu gestaltet\nDas Design und die Eingaben der Admin-Benutzeroberfläche wurden benutzerfreundlicher\nTelegrammfehler behoben\nFix für js-controller 3.3. *\nNeue Datenpunkte hinzugefügt (Laufzeitmaximum, letzte Ausführung als JSON, letzte Laufzeit, Laufzeitmaximum, Laufzeitwarnung)\nadd: Laufzeitalarm",
                 "ru": "Структура адаптера переработана в классы\nДизайн пользовательского интерфейса администратора и вводимые данные стали более удобными для пользователя\nИсправлена ошибка Telegram\nИсправление для js-controller 3.3. *\nдобавлены новые точки данных (максимальное время выполнения, последние запуски как JSON, последнее время выполнения, максимальное время выполнения, предупреждение времени выполнения)\nдобавить: runtime-alert",
@@ -14,9 +14,6 @@
                 "es": "Estructura adaptadora rediseñada para clases\nEl diseño y las entradas de la interfaz de usuario del administrador se hacen más fáciles de usar\nError de Telegram arreglado\nArreglo para js-controller 3.3. *\nnuevos puntos de datos agregados (tiempo de ejecución máximo, última ejecución como JSON, último tiempo de ejecución, tiempo de ejecución máximo, alerta de tiempo de ejecución)\nagregar: alerta de tiempo de ejecución",
                 "pl": "Struktura adaptera przeprojektowana na klasy\nProjekt interfejsu administratora i wprowadzane dane są bardziej przyjazne dla użytkownika\nNaprawiono błąd telegramu\nPoprawka dla kontrolera js 3.3. *\ndodane nowe punkty danych (maks. czas pracy, ostatnie uruchomienie jako JSON, ostatnie uruchomienie, maksimum czasu wykonania, alert czasu wykonania)\nadd: runtime-alert",
                 "zh-cn": "适配器结构重新设计为类\n管理员界面设计和输入使用户更加友好\n修复了电报错误\n修复js-controller 3.3。*\n添加了新的数据点（最大运行时，上次运行为JSON，最后运行时，最大运行时，运行时警报）\n添加：运行时警报"
-            },
-            "1.1.6": {
-                "de": "zahlreiche performance Verbesserungen, Admin wurde komplett neu erstellt"
             },
             "1.0.6": {
                 "en": "bugfix: removed incorrect status",
