@@ -1016,8 +1016,7 @@
                 style="padding-left:0;padding-right:0; margin-top: 0px; margin-bottom: 1px; background-color:#174475; box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);">
                 <ul class="tabs blue lighten-4">
                     <li class="tab col s3"><a href="#tab-config" class="translate">Config</a></li>
-                    <li class="tab col s3 disabled"><a href="#tab-advanced-settings" class="translate">advanced
-                            settings</a></li>
+                    <!-- <li class="tab col s3 disabled"><a href="#tab-advanced-settings" class="translate">advanced settings</a></li> -->
                 </ul>
             </div>
 
@@ -1123,9 +1122,8 @@
                                                     <th data-name="_index" style="width: 40px" class="header translate"></th>
                                                     <th data-name="name" style="width: 150px" data-type="text" class="header translate" data-lang="device name"></th>
                                                     <th id="deviceTypeID" data-name="type" style="width: 200px;" data-type="select" style="width: 150px"class="header translate" data-options="" data-lang="device type"></th>
-                                                    <th data-name="consumption" style="width: 100px" data-type="OID" class="header translate" data-lang="consumption/energy"></th>
+                                                    <th data-name="consumption" style="width: 100px" data-type="OID" class="header translate" data-lang="consumption"></th>
                                                     <th data-name="switch" style="width: 100px" data-type="OID" class="header translate" data-lang="Power switch"></th>
-                                                    <!-- <th data-name="runtimeMax" style="width: 100px" data-type="number" class="header translate">runtime max <br>(minutes)</th> -->
                                                     <th data-name="startText" data-type="OID" class="header translate" data-lang="starttext"></th>
                                                     <th data-name="endText" data-type="OID" class="header translate" data-lang="endtext"></th>
                                                     <th data-buttons="delete" style="width: 80px;" class="header translate del-Btn" data-lang="delete"></th>
@@ -1514,13 +1512,13 @@
                 </div>
 
                 <!-- Tab with id "advanced-settings" -->
-                <div id="tab-advanced-settings" class="col s12">
+                <!-- <div id="tab-advanced-settings" class="col s12">
                     <div class="row">
                         <div class="row">
                             <div class="input-field col s3">
                                 <img src="icon.png">
                             </div>
-                        </div>
+                        </div> -->
 
                         <!-- <div id="presence" class="card-panel blue lighten-5">
                             <b>Presence detection</b>
@@ -1529,30 +1527,6 @@
                         <!-- <div id="loop" class="card-panel blue lighten-5">
                             <b>Loop announcements</b> 
                         </div> -->
-
-                        <!--runtime alert -->
-                        <div class="card-panel blue lighten-5" id="freqAlert">
-                            <div class="col s12">
-                                <h5>Runtime alert</h5>
-                            </div>
-                            <!-- <div>
-                                <h5>Runtime alert</h5>
-                            </div> -->
-                            <table class="table-values changeOnChangeEvent">
-                                <thead>
-                                    <tr>
-                                        <th class="header translate" data-type="checkbox" data-name="dnd_send"
-                                            style="width:120px">Send when <br>"do not disturb" enabled?</th>
-                                        <th class="header translate" data-type="number" data-name="freq_Alert_in_min"
-                                            style="width:120px;">Intervall in minutes
-                                        </th>
-                                        <!-- <th class="header translate" data-type="select" data-name="pos_device" style="width: 120px;" data-options="ahead; attached">Position <br>device name</th> -->
-                                        <th class="header translate" data-type="text" data-name="text_alert"
-                                            style="text-align: left">Alarm message</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
 
                         <!--presence detection -->
                         <!-- <div class="card-panel blue lighten-5" id="presence">
@@ -1571,8 +1545,8 @@
                         </div> -->
 
 
-                    </div>
-                </div>
+                    <!-- </div>
+                </div> -->
             </div>
         </div>
     </div>

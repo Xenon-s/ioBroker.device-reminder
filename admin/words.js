@@ -304,16 +304,16 @@ systemDictionary = {
         "pl": "*rodzaj urządzenia",
         "zh-cn": "*设备类型"
       },
-      "consumption/energy": {
-        "en": "*consumption/energy",
-        "de": "*Verbrauch / Energie",
-        "ru": "*потребление / энергия",
-        "pt": "*consumo / energia",
-        "nl": "*verbruik / energie",
-        "fr": "*consommation / énergie",
-        "it": "*consumo / energia",
-        "es": "*consumo / energía",
-        "pl": "*zużycie / energia",
+      "consumption": {
+        "en": "*consumption",
+        "de": "*Verbrauch",
+        "ru": "*потребление",
+        "pt": "*consumo",
+        "nl": "*verbruik",
+        "fr": "*consommation",
+        "it": "*consumo",
+        "es": "*consumo",
+        "pl": "*zużycie",
         "zh-cn": "消耗/能源"
       },
       "Power switch": {

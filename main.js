@@ -12,7 +12,6 @@ const {
     create
 } = require("domain");
 
-let alert = {};
 let presence = {};
 let bPresence = false;
 let bufferArr = [];
@@ -156,16 +155,6 @@ const arrDP = {
     }
 };
 
-
-/*
-offene Punkte:
-Anwesenheit: Es muss noch eine Asuwertung eingebracht werden, ob nachrichten gesendet werden sollen (trotz abwesenheit)
-runtime alert: implementieren
-*/
-
-// Load your modules here, e.g.:
-// const fs = require(`fs`);
-
 class deviceReminder extends utils.Adapter {
     /**
      * @param {Partial<utils.AdapterOptions>} [options={}]
@@ -197,8 +186,6 @@ class deviceReminder extends utils.Adapter {
         this.adapterDPs = {};
 
         this.poll = null; // polling intervall
-
-        this.alert = ``;
 
         instAdapter = `${this.name}.${this.instance}`;
 
@@ -268,7 +255,6 @@ class deviceReminder extends utils.Adapter {
             this.telegramInput = await getDataFromAdmin(this.config.telegram !== undefined ? this.config.telegram.final || {} : {});
             this.pushoverInput = await getDataFromAdmin(this.config.pushover !== undefined ? this.config.pushover.final || {} : {});
             this.emailInput = await getDataFromAdmin(this.config.email !== undefined ? this.config.email.final || {} : {});
-            alert = await getDataFromAdmin(this.config.alert !== undefined ? this.config.alert.id[0] || {} : {});
 
             this.states.action = await this.config.status.id[0].stateAction;
 
@@ -487,7 +473,6 @@ class deviceReminder extends utils.Adapter {
                     this.timeTotal = runtimePath;
                     this.timeTotalMs = runtimeMSPath;
                     this.lastRuntime = lastRuntimePath;
-                    this.runtimeMax = parseInt(obj.runtimeMax);
                     this.runtimeMaxDP = runtimeMaxDP;
                     this.alertRuntime = alertRuntimeDP;
                     this.messageDP = messageDP;
@@ -504,7 +489,6 @@ class deviceReminder extends utils.Adapter {
                     this.endMessageSent = false;
                     this.started = false;
                     this.abort = obj.abort;
-                    this.alert = false;
                     // boolean Benutzervorgaben
                     this.autoOff = obj.autoOff;
                     // number
@@ -512,6 +496,7 @@ class deviceReminder extends utils.Adapter {
                     this.resultStart = 0;
                     this.resultEnd = 0;
                     this.resultStandby = 0;
+                    this.alertCounter = 0;
                     // Verbrauchswerte
                     this.startValue = objVal.startVal;
                     this.endValue = objVal.endVal;
@@ -521,7 +506,6 @@ class deviceReminder extends utils.Adapter {
                     this.endCount = objVal.endCount;
                     // timeout
                     this.timeoutMsg = null;
-                    this.timeoutAlert = null;
                     this.startTime = 0;
                     this.endTime = 0;
                     // array
@@ -1108,25 +1092,10 @@ class deviceReminder extends utils.Adapter {
         timeMs = diff;
         // Runtime alert
         if (value.runtimeMax.val > 0) {
-            const runtime = value.runtimeMax.val * 60 * 1000;
+            const runtime = value.runtimeMax.val * 60 * 1000 + 1000;
             if (timeMs >= runtime) {
-                if (!device.alert) {
-                    this.message(id, "alert");
-                    this.setStateAsync(device.alertRuntime, true, true);
-                    device.alert = true;
-                    if (device.timeoutAlert != null) {
-                        clearTimeout(device.timeout);
-                        device.timeoutAlert = null;
-                    };
-                    device.timeoutAlert = setTimeout(() => { //alert reset
-                        device.alert = false;
-                    }, parseInt(alert.freq_Alert_in_min * 60 * 1000));
-                };
+                this.setStateAsync(device.alertRuntime, true, true);
             } else {
-                if (device.timeoutAlert != null) {
-                    clearTimeout(device.timeout);
-                    device.timeoutAlert = null;
-                };
                 this.setStateAsync(device.alertRuntime, false, true);
             };
         };
@@ -1268,11 +1237,6 @@ class deviceReminder extends utils.Adapter {
                     bufferArr.push(objTemp);
                     this.log.debug(`[${device.name}] added in bufferArr`);
                 };
-                break;
-            case 'alert':
-                msg = `[${device.name}]: ${alert.text_alert}`;
-                this.log.debug(`[${JSON.stringify(device.name)}]: message 'alert': ${JSON.stringify(msg)}`);
-                sendMsg(id, msg);
                 break;
         };
     };
@@ -1450,7 +1414,6 @@ class deviceReminder extends utils.Adapter {
             for (const i in this.devicesCompleted) {
                 this.delTimeout(this.devicesCompleted[i].timeout, i);
                 this.delTimeout(this.devicesCompleted[i].timeoutMsg, i);
-                this.delTimeout(this.devicesCompleted[i].timeoutAlert, i);
                 for (const i in this.alexaInput) {
                     this.delTimeout(this.alexaInput[obj.alexaID[i]].timeout, i);
                 };

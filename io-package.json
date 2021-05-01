@@ -284,13 +284,6 @@
         "stateOff": "switched off"
       }
     ],
-    "freqAlert": [
-      {
-        "dnd_send": false,
-        "freq_Alert_in_min": 5,
-        "text_alert": "Attention! Runtime has been exceeded! "
-      }
-    ],
     "presence": [
       {
         "presence_Notification": false,

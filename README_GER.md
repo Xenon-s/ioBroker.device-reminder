@@ -16,11 +16,11 @@
 ## English readme needed? <br>[english readme](https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README.md)
 <br>
 
-# Adapter zur Überwachung von Gerätezuständen Version 1.2
-Dieser Adapter kann anhand von Messsteckdosen erkennen, ob ein Gerät eingeschaltet, in Betrieb ist oder ausgeschaltet wurde und darauf reagieren. Es können dann Nachrichten per Telegram, whatsapp, alexa, sayit, pushover und Email (Mehrfachauswahl pro Gerät möglich) automatisiert ausgegeben werden. Es ist ebenfalls möglich, die Steckdose nach Beendigung des Vorgangs automatisch abzuschalten (auch Zeitverzögert). Auch kann die Laufzeit in Minuten überwacht und bei Überschreiben ein Alarm ausgegeben werden
+# Adapter zur Überwachung von Gerätezuständen Version > 1.1
+Dieser Adapter kann anhand von Messsteckdosen erkennen, ob ein Gerät eingeschaltet, in Betrieb ist oder ausgeschaltet wurde und darauf reagieren. Es können dann Nachrichten per Telegram, whatsapp, alexa, sayit, pushover und Email (Mehrfachauswahl pro Gerät möglich) automatisiert ausgegeben werden. Es ist ebenfalls möglich, die Steckdose nach Beendigung des Vorgangs automatisch abzuschalten (auch Zeitverzögert). Bei vorgegebener Laufzeit ist es möglich, sich per Datenpunkt einen Alarm auszugeben (mit externem Script, der Datenpunkt liefert nur true/false oder als Anzeige in der vis). Hierfür genügt es, die Vorgabelaufzeit einfach in Minuten in den Datenpunkt 'device-reminder.X.XXX.config.runtime max' einzutragen.
 
 # Was sollte beachtet werden?
-Der refresh Intervall vom "Live-Verbrauchswert (heißt bei den meisten Geräten **"_energy"**)" sollte nicht mehr als 10 Sekunden betragen, da es sonst zu sehr stark verzögerten Meldungen kommen kann.
+Der refresh Intervall vom "Live-Verbrauchswert (heißt bei den meisten Geräten **"_energy"**)" sollte nicht mehr als 10 Sekunden betragen, da es sonst zu sehr stark verzögerten Meldungen kommen kann. Der Adapter selber pollt alle 10 Sekunden die Werte und nutzt neue Werte Event-basiert. Das schont das System
 <br>
 Befehl in der Tasmota Konsole : TelePeriod 10
 
@@ -49,7 +49,7 @@ Es gibt für jede Gruppe an devices, alexa etc. den Button "Eingabe Prüfen". Wi
 
 - **Gerätename**: Frei wählbarer Name
 - **Gerätetyp**: hier muss ausgewählt werden, um welches Gerät es sich handelt, damit die Berechnungen im Adapter korrekt ausgeführt werden können
-- **Verbrauch / Energie**: Per Klick auf die Schaltfläche mit den drei weißen Punkten öffnet sich eure Objektverwaltung. Es muss der Datenpunkt ausgewählt werden, welcher den **aktuellen Live-Verbrauch** anzeigt. 
+- **Verbrauch**: Per Klick auf die Schaltfläche mit den drei weißen Punkten öffnet sich eure Objektverwaltung. Es muss der Datenpunkt ausgewählt werden, welcher den **aktuellen Live-Verbrauch** anzeigt. 
 - **Schalter AN/AUS**: Per Klick auf die Schaltfläche mit den drei weißen Punkten öffnet sich eure Objektverwaltung. Es muss der Datenpunkt ausgewählt werden, welcher eure **Steckdose an/aus schaltet** (keine Pflicht)
 - **Starttext**: Benachrichtigung die gesendet werden soll, wenn das Gerät gestartet wird (auch Sonderzeichen sind möglich)
 - **Endtext**: Benachrichtigung die gesendet werden soll, wenn das Gerät seinen Vorgang beendet hat (auch Sonderzeichen sind möglich)
@@ -136,7 +136,7 @@ Es kommen alle 10 Sekunden Verbrauchswerte rein. **Schwellwert 'Ende' (Watt)** s
 
 Nachdem nun auf "**Speichern und schliessen**" geklickt wurde, wird unter *Objekte -> device-reminder* nun für jedes neu angelegte Device ein Ordner erstellt, in dem 
 - do not disturb (wenn aktiviert, werden keine Nachrichten per **Sprachassistent** versendet)
-- runtime max (wird diese Zeit überschritten, wird ein Alarm an die angewählten Messenger gesendet)
+- runtime max
 - der aktuelle Zustand des Gerätes 
 - Laufzeitalarm 
 - averageConsumption (Kann als Hilfe genutzt werden um die eigenen Schwellwerte zu ermitteln)
