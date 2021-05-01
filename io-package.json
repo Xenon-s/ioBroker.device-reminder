@@ -1,8 +1,23 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.0.6",
+        "version": "1.2.0",
         "news": {
+            "1.2.0": {
+                "en": "Adapter structure redesigned to classes\nAdmin UI design and inputs made more user friendly\nTelegram bug fixed\nFix for js-controller 3.3.*\nnew datapoints added (runtime max, last runs as JSON, last runtime, runtime max, runtime alert)\nadd: runtime-alert",
+                "de": "Adapterstruktur für Klassen neu gestaltet\nDas Design und die Eingaben der Admin-Benutzeroberfläche wurden benutzerfreundlicher\nTelegrammfehler behoben\nFix für js-controller 3.3. *\nNeue Datenpunkte hinzugefügt (Laufzeitmaximum, letzte Ausführung als JSON, letzte Laufzeit, Laufzeitmaximum, Laufzeitwarnung)\nadd: Laufzeitalarm",
+                "ru": "Структура адаптера переработана в классы\nДизайн пользовательского интерфейса администратора и вводимые данные стали более удобными для пользователя\nИсправлена ошибка Telegram\nИсправление для js-controller 3.3. *\nдобавлены новые точки данных (максимальное время выполнения, последние запуски как JSON, последнее время выполнения, максимальное время выполнения, предупреждение времени выполнения)\nдобавить: runtime-alert",
+                "pt": "Estrutura do adaptador redesenhada para classes\nDesign de interface de usuário e entradas mais amigáveis ao usuário\nBug do telegrama corrigido\nCorreção para js-controller 3.3. *\nnovos pontos de dados adicionados (tempo de execução máximo, última execução como JSON, último tempo de execução, tempo de execução máximo, alerta de tempo de execução)\nadd: runtime-alert",
+                "nl": "Adapterstructuur opnieuw ontworpen voor klassen\nAdmin UI-ontwerp en invoer gebruiksvriendelijker gemaakt\nTelegram-bug opgelost\nOplossing voor js-controller 3.3. *\nnieuwe datapunten toegevoegd (runtime max, laatste runs als JSON, laatste runtime, runtime max, runtime alert)\nadd: runtime-alert",
+                "fr": "Structure de l'adaptateur repensée pour les classes\nConception et entrées de l'interface utilisateur d'administration plus conviviales\nCorrection d'un bug de télégramme\nCorrection pour js-controller 3.3. *\nnouveaux points de données ajoutés (runtime max, dernières exécutions en JSON, dernier runtime, runtime max, runtime alert)\najouter: alerte d'exécution",
+                "it": "Struttura dell'adattatore ridisegnata alle classi\nProgettazione e input dell'interfaccia utente di amministrazione resi più intuitivi\nBug di Telegram risolto\nCorrezione per js-controller 3.3. *\nnuovi datapoint aggiunti (runtime max, ultima esecuzione come JSON, ultimo runtime, runtime max, avviso runtime)\naggiungi: runtime-alert",
+                "es": "Estructura adaptadora rediseñada para clases\nEl diseño y las entradas de la interfaz de usuario del administrador se hacen más fáciles de usar\nError de Telegram arreglado\nArreglo para js-controller 3.3. *\nnuevos puntos de datos agregados (tiempo de ejecución máximo, última ejecución como JSON, último tiempo de ejecución, tiempo de ejecución máximo, alerta de tiempo de ejecución)\nagregar: alerta de tiempo de ejecución",
+                "pl": "Struktura adaptera przeprojektowana na klasy\nProjekt interfejsu administratora i wprowadzane dane są bardziej przyjazne dla użytkownika\nNaprawiono błąd telegramu\nPoprawka dla kontrolera js 3.3. *\ndodane nowe punkty danych (maks. czas pracy, ostatnie uruchomienie jako JSON, ostatnie uruchomienie, maksimum czasu wykonania, alert czasu wykonania)\nadd: runtime-alert",
+                "zh-cn": "适配器结构重新设计为类\n管理员界面设计和输入使用户更加友好\n修复了电报错误\n修复js-controller 3.3。*\n添加了新的数据点（最大运行时，上次运行为JSON，最后运行时，最大运行时，运行时警报）\n添加：运行时警报"
+            },
+            "1.1.6": {
+                "de": "zahlreiche performance Verbesserungen, Admin wurde komplett neu erstellt"
+            },
             "1.0.6": {
                 "en": "bugfix: removed incorrect status",
                 "de": "Bugfix: Falscher Status entfernt",
@@ -159,14 +174,18 @@
         ]
     },
     "native": {
-        "device_counter": 0,
+        "devices_counter": 0,
         "alexa_counter": 0,
         "sayit_counter": 0,
         "whatsapp_counter": 0,
         "telegram_counter": 0,
         "pushover_counter": 0,
         "email_counter": 0,
-        "custom_device_counter": 0,
+        "custom_counter": 25,
+        "default_counter": 0,
+        "alert_counter": 0,
+        "presence_counter": 0,
+        "status_counter": 0,
         "defaultTypeID": [
             {
                 "name": "washing-machine",
@@ -174,6 +193,7 @@
                 "endVal": 15,
                 "startCount": 5,
                 "endCount": 65,
+                "standby": 1,
                 "id": 1
             },
             {
@@ -182,6 +202,7 @@
                 "endVal": 15,
                 "startCount": 5,
                 "endCount": 50,
+                "standby": 1,
                 "id": 2
             },
             {
@@ -190,6 +211,7 @@
                 "endVal": 4,
                 "startCount": 3,
                 "endCount": 150,
+                "standby": 1,
                 "id": 3
             },
             {
@@ -198,6 +220,7 @@
                 "endVal": 5,
                 "startCount": 2,
                 "endCount": 3,
+                "standby": 1,
                 "id": 4
             },
             {
@@ -206,6 +229,7 @@
                 "endVal": 5,
                 "startCount": 2,
                 "endCount": 2,
+                "standby": 1,
                 "id": 5
             },
             {
@@ -214,6 +238,7 @@
                 "endVal": 20,
                 "startCount": 2,
                 "endCount": 1,
+                "standby": 1,
                 "id": 6
             }
         ],
@@ -224,6 +249,7 @@
                 "endVal": 5,
                 "startCount": 5,
                 "endCount": 10,
+                "standby": 1,
                 "id": 21
             },
             {
@@ -232,6 +258,7 @@
                 "endVal": 5,
                 "startCount": 5,
                 "endCount": 10,
+                "standby": 1,
                 "id": 22
             },
             {
@@ -240,6 +267,7 @@
                 "endVal": 5,
                 "startCount": 5,
                 "endCount": 10,
+                "standby": 1,
                 "id": 23
             },
             {
@@ -248,6 +276,7 @@
                 "endVal": 5,
                 "startCount": 5,
                 "endCount": 10,
+                "standby": 1,
                 "id": 24
             },
             {
@@ -256,6 +285,7 @@
                 "endVal": 5,
                 "startCount": 5,
                 "endCount": 10,
+                "standby": 1,
                 "id": 25
             }
         ],
@@ -265,8 +295,37 @@
                 "stateStandby": "standby",
                 "stateOff": "switched off"
             }
+        ],
+        "presence": [
+            {
+                "presence_Notification": false,
+                "presence_msg": false,
+                "dp_presence": "Only boolean is allowed"
+            }
         ]
     },
     "objects": [],
-    "instanceObjects": []
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
 }

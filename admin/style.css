@@ -73,3 +73,12 @@ width: 200px;
     display: none;
 }
 
+.dont-show {
+    display: none;
+}
+
+.m [type='checkbox']{
+    position: relative;
+    text-align: center;
+}
+
