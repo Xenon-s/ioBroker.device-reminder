@@ -163,7 +163,7 @@ is displayed.
     ### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 1.2.0 (2021-05-01)
 * (xenon-s) Adapter structure redesigned to classes
 * (xenon-s) Admin UI design and inputs made more user friendly
 * (xenon-s) Telegram bug fixed
