@@ -163,12 +163,13 @@ is displayed.
     ### __WORK IN PROGRESS__
 -->
 
-### 1.2.0 (2021-05-01)
+### 1.2.1 (2021-05-01)
 * (xenon-s) Adapter structure redesigned to classes
 * (xenon-s) Admin UI design and inputs made more user friendly
 * (xenon-s) Telegram bug fixed
 * (xenon-s) Fix for js-controller 3.3.*
 * (xenon-s) new datapoints added (runtime max, last runs as JSON, last runtime, runtime max, runtime alert)
+* (xenon-s) add: runtime-alert
 
 ### 1.0.6 (2021-01-19)
 * (xenon-s) bugfix: removed incorrect status
