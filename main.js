@@ -71,7 +71,7 @@ class deviceReminder extends utils.Adapter {
 
         // get language from system
         const strTemp = await this.getForeignObjectAsync('system.config');
-        lang = strTemp.common.language;
+        lang = strTemp.common !== undefined ? strTemp.common.language || 'en' : 'en';
 
         this.log.warn(statesMsg.costs[lang])
 
