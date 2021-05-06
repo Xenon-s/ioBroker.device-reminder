@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.2.1",
+        "version": "2.0.0",
         "news": {
             "1.2.1": {
                 "en": "Adapter structure redesigned to classes\nAdmin UI design and inputs made more user friendly\nTelegram bug fixed\nFix for js-controller 3.3.*\nnew datapoints added (runtime max, last runs as JSON, last runtime, runtime max, runtime alert)\nadd: runtime-alert",
@@ -168,22 +168,25 @@
             {
                 "js-controller": ">=2.0.0"
             }
-        ]
+        ],
+        "installedFrom": "iobroker.device-reminder@1.2.1"
     },
     "native": {
-        "devices_counter": 0,
-        "alexa_counter": 0,
-        "sayit_counter": 0,
-        "whatsapp_counter": 0,
-        "telegram_counter": 0,
-        "pushover_counter": 0,
-        "email_counter": 0,
-        "custom_counter": 25,
-        "default_counter": 0,
-        "alert_counter": 0,
-        "presence_counter": 0,
-        "status_counter": 0,
-        "defaultTypeID": [
+        "counter": {
+            "devices_counter": 0,
+            "alexa_counter": 0,
+            "sayit_counter": 0,
+            "whatsapp_counter": 0,
+            "telegram_counter": 0,
+            "pushover_counter": 0,
+            "email_counter": 0,
+            "types_counter": 0,
+            "alert_counter": 0,
+            "presence_counter": 0,
+            "status_counter": 0,
+            "costs_counter": 0
+        },
+        "types": [
             {
                 "name": "washing-machine",
                 "startVal": 30,
@@ -237,9 +240,7 @@
                 "endCount": 1,
                 "standby": 1,
                 "id": 6
-            }
-        ],
-        "customTypeID": [
+            },
             {
                 "name": "custom1",
                 "startVal": 55,
@@ -247,7 +248,7 @@
                 "startCount": 5,
                 "endCount": 10,
                 "standby": 1,
-                "id": 21
+                "id": 7
             },
             {
                 "name": "custom2",
@@ -256,7 +257,7 @@
                 "startCount": 5,
                 "endCount": 10,
                 "standby": 1,
-                "id": 22
+                "id": 8
             },
             {
                 "name": "custom3",
@@ -265,7 +266,7 @@
                 "startCount": 5,
                 "endCount": 10,
                 "standby": 1,
-                "id": 23
+                "id": 9
             },
             {
                 "name": "custom4",
@@ -274,7 +275,7 @@
                 "startCount": 5,
                 "endCount": 10,
                 "standby": 1,
-                "id": 24
+                "id": 10
             },
             {
                 "name": "custom5",
@@ -283,10 +284,10 @@
                 "startCount": 5,
                 "endCount": 10,
                 "standby": 1,
-                "id": 25
+                "id": 11
             }
         ],
-        "valStates": [
+        "status": [
             {
                 "stateAction": "in action",
                 "stateStandby": "standby",
@@ -298,6 +299,13 @@
                 "presence_Notification": false,
                 "presence_msg": false,
                 "dp_presence": "Only boolean is allowed"
+            }
+        ],
+        "costs": [
+            {
+                "active": false,
+                "currency": "euro",
+                "costs": 0.30
             }
         ]
     },

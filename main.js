@@ -11,6 +11,10 @@ const utils = require(`@iobroker/adapter-core`);
 const {
     create
 } = require("domain");
+const arrDP = require('./lib/stateAttr.js'); // Load attribute library
+const statesMsg = require('./lib/statesMsg.js'); // Load attribute library
+
+let lang = '';
 
 let presence = {};
 let bPresence = false;
@@ -21,139 +25,6 @@ let instAdapter = ``;
 let status = -1;
 
 let id = ``;
-
-const arrDP = {
-    show: {
-        statusDevice: {
-            name: `statusDevice`,
-            path: `Status`,
-            parse: {
-                "name": `Status`,
-                "type": "string",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-        consumpLive: {
-            name: `consumpLive`,
-            path: `live consumption`,
-            parse: {
-                "name": `live consumption`,
-                "type": "number",
-                "role": "indicator",
-                "unit": "W",
-                "read": true,
-                "write": false
-            }
-        },
-        runtime: {
-            name: `runtime`,
-            path: `runtime`,
-            parse: {
-                "name": `runtime`,
-                "type": "string",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-        runtimeMS: {
-            name: `runtimeMS`,
-            path: `runtime in ms`,
-            parse: {
-                "name": `runtime in ms`,
-                "type": "number",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-        lastRuntime: {
-            name: `lastRuntime`,
-            path: `lastRuntime`,
-            parse: {
-                "name": `last runtime `,
-                "type": "string",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-        messageDP: {
-            name: `messageDP`,
-            path: `messageDP`,
-            parse: {
-                "name": `messageDP`,
-                "type": "string",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-        averageConsumption: {
-            name: `averageConsumption`,
-            path: `average consumption`,
-            parse: {
-                "name": `average consumption`,
-                "type": "number",
-                "role": "indicator",
-                "unit": "W",
-                "read": true,
-                "write": false
-            }
-        },
-        alertRuntime: {
-            name: `alertRuntime`,
-            path: `alert runtime`,
-            parse: {
-                "name": `alert runtime`,
-                "type": "boolean",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-        lastOperations: {
-            name: `lastOperations`,
-            path: `last operations`,
-            parse: {
-                "name": `last operations`,
-                "type": "string",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-    },
-    config: {
-        doNotDisturb: {
-            name: `doNotDisturb`,
-            path: `do not disturb`,
-            parse: {
-                "name": `do not disturb`,
-                "type": "boolean",
-                "role": "indicator",
-                "read": true,
-                "write": true
-            }
-        },
-        runtimeMax: {
-            name: `runtimeMax`,
-            path: `runtime max`,
-            parse: {
-                "name": `runtime max`,
-                "type": "number",
-                "min": 0,
-                "role": "indicator",
-                "unit": "min",
-                "read": true,
-                "write": true
-            }
-        },
-        // autoOffDP: { name: `autoOff`, path: `auto Off`, parse: { "name": `auto Off`, "type": "boolean", "role": "indicator", "read": true, "write": true } }
-    }
-};
 
 class deviceReminder extends utils.Adapter {
     /**
@@ -198,11 +69,16 @@ class deviceReminder extends utils.Adapter {
 
         this.setState('info.connection', false, true);
 
+        // get language from system
+        const strTemp = await this.getForeignObjectAsync('system.config');
+        lang = strTemp.common.language;
+
+        this.log.warn(statesMsg.costs[lang])
+
         const migration = await this.config.migration !== undefined ? this.config.migration || false : false;
 
         if (!migration) {
-            this.log.warn('Update detected! Please open the Admin UI (instances -> device-reminder) and follow the instructions!');
-            this.log.warn('Update erkannt! Bitte die Admin UI (Instanzen -> device-reminder) öffnen und den Anweisungen Folgen!');
+            this.log.error(statesMsg.log.update_detected[lang]);
         } else {
             // Initialize your adapter here
             this.devicesCompleted = await this.createDevices();
@@ -335,6 +211,12 @@ class deviceReminder extends utils.Adapter {
                         target: 'switch',
                         type: 'value'
                     };
+                    if (device.consumpTotal !== undefined && device.consumpTotal !== ``) this.trigger[device.consumpTotal] = {
+                        id: id,
+                        path: device.consumpTotal,
+                        target: 'consumpTotal',
+                        type: 'value'
+                    };
 
                     // values
                     this.values[id] = {
@@ -362,6 +244,11 @@ class deviceReminder extends utils.Adapter {
                         dateJSON: {
                             path: device.lastOperations,
                             val: ''
+                        },
+                        consumpTotal: {
+                            path: device.consumpTotal,
+                            val: 0,
+                            type: 'number'
                         }
                     };
 
@@ -420,6 +307,7 @@ class deviceReminder extends utils.Adapter {
         value.dnd.val = await this.getCheckedState(null, value.dnd.path, false);
         value.runtimeMax.val = await this.getCheckedState(null, value.runtimeMax.path, 0);
         value.dateJSON.val = await this.getCheckedState(null, value.dateJSON.path, '[]');
+        value.consumpTotal.val = await this.getCheckedState(null, value.consumpTotal.path, 0);
 
         // setState
         this.setStateAsync(device.runtimeMaxDP, await value.runtimeMax.val, true);
@@ -467,6 +355,7 @@ class deviceReminder extends utils.Adapter {
                     this.type = obj.type;
                     this.currentConsumption = obj.pathConsumption;
                     this.switchPower = obj.pathSwitch;
+                    this.consumpTotal = obj.pathConsumptionTotal;
                     // script intern
                     this.pathStatus = statusDevice;
                     this.pathLiveConsumption = consumpLivePath;
@@ -501,6 +390,9 @@ class deviceReminder extends utils.Adapter {
                     this.startValue = objVal.startVal;
                     this.endValue = objVal.endVal;
                     this.standby = objVal.standby != '' ? objVal.standby || 1 : 1;
+                    this.consumpStart = 0;
+                    this.consumpEnd = 0;
+                    this.price = 0.00;
                     // Zaehler Abbruchbedingungen
                     this.startCount = objVal.startCount;
                     this.endCount = objVal.endCount;
@@ -1483,11 +1375,14 @@ class deviceReminder extends utils.Adapter {
             case 'val': {
                 for (let val = cmd.cntr; val > 0; val--) {
                     for (const i in array) {
+                        this.log.warn(JSON.stringify(array[i]))
                         if (array[i][cmd[val]] != undefined && array[i][cmd[val]] != `` && array[i].check == 'open') {
                             if (cmd[val] != 'name' && array[i][cmd[val]] != undefined && array[i][cmd[val]] != ``) {
                                 if (!await this.getForeignObjectAsync(array[i][cmd[val]])) array[i].check = 'err';
                             };
-                        } else if (cmd[val] !== 'switch') array[i].check = 'err';
+                        } else if (cmd[val] !== 'switch' && cmd[val] !== 'consumptionTotal') {
+                            array[i].check = 'err';
+                        };
                         if (array[i].check == 'open' && val == 1) {
                             checked.push({
                                 name: array[i]['name'],
