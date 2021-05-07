@@ -44,7 +44,7 @@ table.table-values th.header { background-color:#64BfF6; font-size:90%; text-ali
 table.table-values th.mOptional { color:#c9e7fa }
 
 /* format second column of option tables */
-table.table-values tr td:nth-child(1) input { font-weight:bold; }
+/* table.table-values tr td:nth-child(1) input { font-weight:bold; } */
 
 /* to be able to adjust column width accordingly */
 table.table-values { table-layout:fixed; }

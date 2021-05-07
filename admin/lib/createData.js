@@ -3,7 +3,7 @@ function createData(settings) {
     data = {
         devices: {
             name: 'devices',
-            idHTML: 'deviceID',
+            idHTML: 'devicesID',
             ids: settings.devices !== undefined ? settings.devices.id || [] : [],
             idsTable: settings.devices !== undefined ? settings.devices.final || [] : [],
             cntr: settings.devices_counter !== undefined ? settings.devices_counter || 0 : 0,

@@ -35,7 +35,6 @@ async function createDynamicTable(settings, onChange, checked) {
         };
 
         // data fuer dynamic table erstellen
-        // in Version 1.1 haben sich die Namen geaendert!! (das "id" vor dem Namen ist verschwunden!)
         data = [
             { type: 'checkbox', name: "enabled", value: curDevice.enabled },
             { type: 'label', name: "name", value: curDevice.name },

@@ -524,29 +524,17 @@ systemDictionary = {
         "zh-cn": "*收货人地址"
       },
 
-      "default device types": {
-        "en": "default device types",
-        "de": "Standardgerätetypen",
-        "ru": "типы устройств по умолчанию",
-        "pt": "tipos de dispositivo padrão",
-        "nl": "standaard apparaattypen",
-        "fr": "types d'appareils par défaut",
-        "it": "tipi di dispositivi predefiniti",
-        "es": "tipos de dispositivos predeterminados",
-        "pl": "domyślne typy urządzeń",
-        "zh-cn": "默认设备类型"
-      },
-      "custom device types": {
-        "en": "custom device types",
-        "de": "Benutzerdefinierte Gerätetypen",
-        "ru": "пользовательские типы устройств",
-        "pt": "tipos de dispositivos personalizados",
-        "nl": "aangepaste apparaattypen",
-        "fr": "types d'appareils personnalisés",
-        "it": "tipi di dispositivi personalizzati",
-        "es": "tipos de dispositivos personalizados",
-        "pl": "niestandardowe typy urządzeń",
-        "zh-cn": "定制设备类型"
+      "device types": {
+        "en": "device types",
+        "de": "Gerätetypen",
+        "ru": "типы устройств",
+        "pt": "tipos de dispositivos",
+        "nl": "apparaattypen",
+        "fr": "types d'appareils",
+        "it": "tipi di dispositivo",
+        "es": "tipos de dispositivos",
+        "pl": "typy urządzeń",
+        "zh-cn": "设备类型"
       },
       "name": {
         "en": "name",

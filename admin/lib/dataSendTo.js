@@ -15,7 +15,7 @@ const dataSendTo = {
             dataChecked: [],
             dataFailed: [],
             err: `err-devices`,
-            header: 'header-device',
+            header: 'header-devices',
             name: `'devices'`,
             anchorEn: `create-device`,
             anchorGer: `device-anlegen`,
