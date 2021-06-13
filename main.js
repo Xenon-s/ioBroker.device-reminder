@@ -269,7 +269,7 @@ class deviceReminder extends utils.Adapter {
                         this.getValues(i);
                     };
                 };
-            }, 10000);
+            }, 10000); 
         };
     };
 
@@ -285,7 +285,11 @@ class deviceReminder extends utils.Adapter {
         value.switch.val = await this.getCheckedState('foreign', value.switch.path, false);
         value.dnd.val = await this.getCheckedState(null, value.dnd.path, false);
         value.runtimeMax.val = await this.getCheckedState(null, value.runtimeMax.path, 0);
-        value.dateJSON.val = await this.getCheckedState(null, value.dateJSON.path, '[]');
+        value.dateJSON.val = await this.getCheckedState(null, value.dateJSON.path, '');
+
+        if(value.dateJSON.val != '') {
+            device.dateJSON = JSON.parse(value.dateJSON.val);
+        };
 
         // setState
         this.setStateAsync(device.runtimeMaxDP, await value.runtimeMax.val, true);
@@ -737,19 +741,15 @@ class deviceReminder extends utils.Adapter {
             device.started = false; // device started = false ;
             device.endtimeJSON = this.formatDate(new Date(), "DD.MM.YYYY hh:mm:ss");
 
-            const objJSON = {
-                startVal: `${device.startTimeJSON}`,
-                end: `${device.endtimeJSON}`,
-                runtime: `${device.runtimeJSON}`,
+            const strJSON = `{"start":"${device.startTimeJSON}", "end":"${device.endtimeJSON}", "runtime":"${device.runtimeJSON}"}`;
+
+            device.dateJSON.push(JSON.parse(strJSON));
+
+            if (device.dateJSON.length >= 15) {
+                device.dateJSON.shift();
             };
 
-            device.dateJSON.push(JSON.stringify(objJSON));
-
-            if (device.dateJSON.length >= 10) {
-                device.arrStandby.shift();
-            };
-
-            this.setStateAsync(device.lastOperations, `${device.dateJSON}`, true);
+            this.setStateAsync(device.lastOperations, `${JSON.stringify(device.dateJSON)}`, true);
             this.setStateAsync(device.lastRuntime, device.runtimeJSON, true);
             this.setStateAsync(device.alertRuntime, false, true);
 

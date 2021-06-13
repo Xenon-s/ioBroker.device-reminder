@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.2.3",
+        "version": "1.2.4",
         "news": {
+            "1.2.4": {
+                "en": "* bugfix: incorrect JSON format \n<br>**Important! Delete the data point \"last operations\" manually and restart the adapter afterwards!**",
+                "de": "* Bugfix: falsches JSON-Format\n<br>**Wichtig! Löschen Sie den Datenpunkt &quot;letzte Operationen&quot; manuell und starten Sie den Adapter anschließend neu!**",
+                "ru": "* исправление: неверный формат JSON\n<br>**Важный! Удалите точку данных &quot;последние операции&quot; вручную и перезапустите адаптер после этого! **",
+                "pt": "* correção de bug: formato JSON incorreto\n<br>**Importante! Exclua o ponto de dados &quot;últimas operações&quot; manualmente e reinicie o adaptador depois disso! **",
+                "nl": "* bugfix: onjuist JSON-formaat\n<br>**Belangrijk! Wis het datapunt &quot;laatste bewerkingen&quot; handmatig en start de adapter daarna opnieuw op!**",
+                "fr": "* correction de bug : format JSON incorrect\n<br>**Important! Supprimez manuellement le point de données « dernières opérations » et redémarrez l&#39;adaptateur par la suite !**",
+                "it": "* bugfix: formato JSON errato\n<br>**Importante! Eliminare manualmente il punto dati &quot;ultime operazioni&quot; e successivamente riavviare l&#39;adattatore!**",
+                "es": "* corrección de errores: formato JSON incorrecto\n<br>**¡Importante! ¡Elimine el punto de datos &quot;últimas operaciones&quot; manualmente y reinicie el adaptador después! **",
+                "pl": "* poprawka: nieprawidłowy format JSON\n<br>**Ważny! Usuń ręcznie „ostatnie operacje” punktu danych, a następnie uruchom ponownie adapter!**",
+                "zh-cn": "* 修正：错误的 JSON 格式\n<br>**重要的！手动删除数据点“上次操作”，然后重新启动适配器！**"
+            },
             "1.2.3": {
                 "en": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) messages from datapoint were not displayed\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is not a valid state\"",
                 "de": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) Meldungen vom Datenpunkt wurden nicht angezeigt\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined ist kein gültiger Status\"",
