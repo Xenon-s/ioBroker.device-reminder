@@ -1,8 +1,32 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.2.1",
+        "version": "1.2.3",
         "news": {
+            "1.2.3": {
+                "en": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) messages from datapoint were not displayed\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is not a valid state\"",
+                "de": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) Meldungen vom Datenpunkt wurden nicht angezeigt\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined ist kein gültiger Status\"",
+                "ru": "исправление: [проблема № 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) сообщения из точки данных не отображались\nисправление: [проблема № 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) «undefined не является допустимым состоянием»",
+                "pt": "correção de bug: [problema # 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) mensagens do datapoint não foram exibidas\ncorreção de bug: [problema # 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"indefinido não é um estado válido\"",
+                "nl": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) berichten van datapoint werden niet weergegeven\nbugfix: [probleem #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is geen geldige status\"",
+                "fr": "correction de bug : [problème #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) les messages du point de données n'étaient pas affichés\ncorrection de bug : [problème #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined n'est pas un état valide\"",
+                "it": "bugfix: [problema #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) i messaggi da datapoint non venivano visualizzati\nbugfix: [problema #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined non è uno stato valido\"",
+                "es": "corrección de error: [problema n. ° 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) no se mostraban los mensajes del punto de datos\ncorrección de error: [problema n. ° 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined no es un estado válido\"",
+                "pl": "błąd: [problem #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) wiadomości z punktu danych nie były wyświetlane\npoprawka błędu: [problem #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) „undefined nie jest prawidłowym stanem”",
+                "zh-cn": "修正：[问题 #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) 来自数据点的消息未显示\n修正：[问题 #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75)“未定义不是有效状态”"
+            },
+            "1.2.2": {
+                "en": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) messages from datapoint were not displayed\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is not a valid state\"",
+                "de": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) Meldungen vom Datenpunkt wurden nicht angezeigt\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined ist kein gültiger Status\"",
+                "ru": "исправление: [проблема № 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) сообщения из точки данных не отображались\nисправление: [проблема № 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) «undefined не является допустимым состоянием»",
+                "pt": "correção de bug: [problema # 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) mensagens do datapoint não foram exibidas\ncorreção de bug: [problema # 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"indefinido não é um estado válido\"",
+                "nl": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) berichten van datapoint werden niet weergegeven\nbugfix: [probleem #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is geen geldige status\"",
+                "fr": "correction de bug : [problème #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) les messages du point de données n'étaient pas affichés\ncorrection de bug : [problème #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined n'est pas un état valide\"",
+                "it": "bugfix: [problema #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) i messaggi da datapoint non venivano visualizzati\nbugfix: [problema #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined non è uno stato valido\"",
+                "es": "corrección de error: [problema n. ° 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) no se mostraban los mensajes del punto de datos\ncorrección de error: [problema n. ° 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined no es un estado válido\"",
+                "pl": "błąd: [problem #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) wiadomości z punktu danych nie były wyświetlane\npoprawka błędu: [problem #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) „undefined nie jest prawidłowym stanem”",
+                "zh-cn": "修正：[问题 #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) 来自数据点的消息未显示\n修正：[问题 #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75)“未定义不是有效状态”"
+            },
             "1.2.1": {
                 "en": "Adapter structure redesigned to classes\nAdmin UI design and inputs made more user friendly\nTelegram bug fixed\nFix for js-controller 3.3.*\nnew datapoints added (runtime max, last runs as JSON, last runtime, runtime max, runtime alert)\nadd: runtime-alert",
                 "de": "Adapterstruktur für Klassen neu gestaltet\nDas Design und die Eingaben der Admin-Benutzeroberfläche wurden benutzerfreundlicher\nTelegrammfehler behoben\nFix für js-controller 3.3. *\nNeue Datenpunkte hinzugefügt (Laufzeitmaximum, letzte Ausführung als JSON, letzte Laufzeit, Laufzeitmaximum, Laufzeitwarnung)\nadd: Laufzeitalarm",
@@ -168,7 +192,8 @@
             {
                 "js-controller": ">=2.0.0"
             }
-        ]
+        ],
+        "installedFrom": "iobroker.device-reminder@1.2.1"
     },
     "native": {
         "devices_counter": 0,

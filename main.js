@@ -8,9 +8,8 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require(`@iobroker/adapter-core`);
-const {
-    create
-} = require("domain");
+const { create } = require("domain");
+const arrDP = require('./lib/states.js')
 
 let presence = {};
 let bPresence = false;
@@ -21,139 +20,6 @@ let instAdapter = ``;
 let status = -1;
 
 let id = ``;
-
-const arrDP = {
-    show: {
-        statusDevice: {
-            name: `statusDevice`,
-            path: `Status`,
-            parse: {
-                "name": `Status`,
-                "type": "string",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-        consumpLive: {
-            name: `consumpLive`,
-            path: `live consumption`,
-            parse: {
-                "name": `live consumption`,
-                "type": "number",
-                "role": "indicator",
-                "unit": "W",
-                "read": true,
-                "write": false
-            }
-        },
-        runtime: {
-            name: `runtime`,
-            path: `runtime`,
-            parse: {
-                "name": `runtime`,
-                "type": "string",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-        runtimeMS: {
-            name: `runtimeMS`,
-            path: `runtime in ms`,
-            parse: {
-                "name": `runtime in ms`,
-                "type": "number",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-        lastRuntime: {
-            name: `lastRuntime`,
-            path: `lastRuntime`,
-            parse: {
-                "name": `last runtime `,
-                "type": "string",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-        messageDP: {
-            name: `messageDP`,
-            path: `messageDP`,
-            parse: {
-                "name": `messageDP`,
-                "type": "string",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-        averageConsumption: {
-            name: `averageConsumption`,
-            path: `average consumption`,
-            parse: {
-                "name": `average consumption`,
-                "type": "number",
-                "role": "indicator",
-                "unit": "W",
-                "read": true,
-                "write": false
-            }
-        },
-        alertRuntime: {
-            name: `alertRuntime`,
-            path: `alert runtime`,
-            parse: {
-                "name": `alert runtime`,
-                "type": "boolean",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-        lastOperations: {
-            name: `lastOperations`,
-            path: `last operations`,
-            parse: {
-                "name": `last operations`,
-                "type": "string",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            }
-        },
-    },
-    config: {
-        doNotDisturb: {
-            name: `doNotDisturb`,
-            path: `do not disturb`,
-            parse: {
-                "name": `do not disturb`,
-                "type": "boolean",
-                "role": "indicator",
-                "read": true,
-                "write": true
-            }
-        },
-        runtimeMax: {
-            name: `runtimeMax`,
-            path: `runtime max`,
-            parse: {
-                "name": `runtime max`,
-                "type": "number",
-                "min": 0,
-                "role": "indicator",
-                "unit": "min",
-                "read": true,
-                "write": true
-            }
-        },
-        // autoOffDP: { name: `autoOff`, path: `auto Off`, parse: { "name": `auto Off`, "type": "boolean", "role": "indicator", "read": true, "write": true } }
-    }
-};
 
 class deviceReminder extends utils.Adapter {
     /**
@@ -526,7 +392,7 @@ class deviceReminder extends utils.Adapter {
 
                     /*obj Startext erstellen*/
                     this.startMessageText = obj.startText;
-                    if (obj.startText != `` && obj.startText != undefined) {
+                    if (obj.startText != `` && obj.startText != undefined && obj.startText.length > 0) {
                         this.startMessage = true;
                     } else {
                         this.startMessage = false;
@@ -534,7 +400,7 @@ class deviceReminder extends utils.Adapter {
 
                     /*obj Endtext erstellen*/
                     this.endMessageText = obj.endText;
-                    if (obj.endText != `` && obj.endText != undefined) {
+                    if (obj.endText != `` && obj.endText != undefined && obj.endText.length > 0) {
                         this.endMessage = true;
                     } else {
                         this.endMessage = false;
@@ -765,25 +631,25 @@ class deviceReminder extends utils.Adapter {
                 this.log.debug(`[${JSON.stringify(device.name)}]: arrStart gelöscht`);
                 break;
             };
-        case false: {
-            if (this.values[id].consumption.val < device.startValue) {
-                // Startabbruch -> array leeren
-                device.arrStart = [];
-                this.log.debug(`[${JSON.stringify(device.name)}]: arrStart gelöscht`);
-                // standby Berechnung durchfuehren
-                await this.calcStart(id, "standby"); // standby Berechnung
-            } else {
-                // Startphase -> Startwertberechnung
-                await this.calcStart(id, "start"); // Startwert Berechnung
-                // standby Berechnung löschen
-                // this.setStatus(id, 4);
-                device.arrStandby = [];
-                this.log.debug(`[${JSON.stringify(device.name)}]: arrStandby gelöscht`);
+            case false: {
+                if (this.values[id].consumption.val < device.startValue) {
+                    // Startabbruch -> array leeren
+                    device.arrStart = [];
+                    this.log.debug(`[${JSON.stringify(device.name)}]: arrStart gelöscht`);
+                    // standby Berechnung durchfuehren
+                    await this.calcStart(id, "standby"); // standby Berechnung
+                } else {
+                    // Startphase -> Startwertberechnung
+                    await this.calcStart(id, "start"); // Startwert Berechnung
+                    // standby Berechnung löschen
+                    // this.setStatus(id, 4);
+                    device.arrStandby = [];
+                    this.log.debug(`[${JSON.stringify(device.name)}]: arrStandby gelöscht`);
+                };
+                break;
             };
-            break;
-        };
-        default:
-            break;
+            default:
+                break;
         };
         this.log.debug(`[${JSON.stringify(device.name)}]: Berechnung beendet`);
     };
@@ -978,36 +844,36 @@ class deviceReminder extends utils.Adapter {
                 this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.off} (finished/off)`);
                 break;
             };
-        case 1: {
-            this.setStateAsync(device.pathStatus, this.states.action, true); // setState "action" in DP
-            this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.action} (in action)`);
-            break;
-        };
-        case 2: {
-            this.setStateAsync(device.pathStatus, this.states.standby, true); // setState "standby" in DP
-            this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.standby} (in standby)`);
-            break;
-        };
-        case 3: {
-            if (device.autoOff && device.switchPower != null) {
-                if (this.values[id].switch.val) {
-                    await this.setForeignStateAsync(device.switchPower, false);
-                };
+            case 1: {
+                this.setStateAsync(device.pathStatus, this.states.action, true); // setState "action" in DP
+                this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.action} (in action)`);
+                break;
             };
-            this.log.debug(`4`);
-            this.setStatus(id, 0);
-            break;
-        };
-        case 4: {
-            this.setStateAsync(device.pathStatus, `initialize`, true); // setState in DP
-            this.log.debug(`[${JSON.stringify(device.name)}]: initialize`);
-            break;
-        };
-        default: {
-            this.log.debug(`[${JSON.stringify(device.name)}]: unknown status`);
-            this.setStateAsync(device.pathStatus, `unknown status`, true); // setState in DP
-            break;
-        };
+            case 2: {
+                this.setStateAsync(device.pathStatus, this.states.standby, true); // setState "standby" in DP
+                this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.standby} (in standby)`);
+                break;
+            };
+            case 3: {
+                if (device.autoOff && device.switchPower != null) {
+                    if (this.values[id].switch.val) {
+                        await this.setForeignStateAsync(device.switchPower, false);
+                    };
+                };
+                this.log.debug(`4`);
+                this.setStatus(id, 0);
+                break;
+            };
+            case 4: {
+                this.setStateAsync(device.pathStatus, `initialize`, true); // setState in DP
+                this.log.debug(`[${JSON.stringify(device.name)}]: initialize`);
+                break;
+            };
+            default: {
+                this.log.debug(`[${JSON.stringify(device.name)}]: unknown status`);
+                this.setStateAsync(device.pathStatus, `unknown status`, true); // setState in DP
+                break;
+            };
         };
     };
 
@@ -1028,32 +894,32 @@ class deviceReminder extends utils.Adapter {
                 this.setStateAsync(device.averageConsumption, device.resultStart, true);
                 break;
             };
-        case "end": {
-            device.arrEnd.push(value);
-            device.resultEnd = await this.calculation(device.resultEnd, device.arrEnd);
-            this.log.debug(`[${JSON.stringify(device.name)}]: Länge array ende: ${device.arrEnd.length}, Inhalt: [${device.arrEnd}]`);
-            this.log.debug(`[${JSON.stringify(device.name)}]: resultTemp end: ${device.resultEnd}`);
-            if (device.arrEnd.length > device.endCount) {
-                device.arrEnd.shift();
+            case "end": {
+                device.arrEnd.push(value);
+                device.resultEnd = await this.calculation(device.resultEnd, device.arrEnd);
+                this.log.debug(`[${JSON.stringify(device.name)}]: Länge array ende: ${device.arrEnd.length}, Inhalt: [${device.arrEnd}]`);
+                this.log.debug(`[${JSON.stringify(device.name)}]: resultTemp end: ${device.resultEnd}`);
+                if (device.arrEnd.length > device.endCount) {
+                    device.arrEnd.shift();
+                };
+                this.setStateAsync(device.averageConsumption, device.resultEnd, true);
+                break;
             };
-            this.setStateAsync(device.averageConsumption, device.resultEnd, true);
-            break;
-        };
-        case "standby": {
-            device.arrStandby.push(value);
-            device.resultStandby = await this.calculation(device.resultStandby, device.arrStandby);
-            this.log.debug(`[${JSON.stringify(device.name)}]: Länge array standby: ${device.arrStandby.length}, Inhalt: [${device.arrStandby}]`);
-            this.log.debug(`[${JSON.stringify(device.name)}]: resultTemp standby: ${device.resultStandby}`);
-            if (device.arrStandby.length > device.valCancel) {
-                device.arrStandby.shift();
+            case "standby": {
+                device.arrStandby.push(value);
+                device.resultStandby = await this.calculation(device.resultStandby, device.arrStandby);
+                this.log.debug(`[${JSON.stringify(device.name)}]: Länge array standby: ${device.arrStandby.length}, Inhalt: [${device.arrStandby}]`);
+                this.log.debug(`[${JSON.stringify(device.name)}]: resultTemp standby: ${device.resultStandby}`);
+                if (device.arrStandby.length > device.valCancel) {
+                    device.arrStandby.shift();
+                };
+                this.setStateAsync(device.averageConsumption, device.resultStandby, true);
+                break;
             };
-            this.setStateAsync(device.averageConsumption, device.resultStandby, true);
-            break;
-        };
-        default: {
-            this.log.warn(`Calculation could not be completed. Input is wrong. Report this to the developer`);
-            break;
-        };
+            default: {
+                this.log.warn(`Calculation could not be completed. Input is wrong. Report this to the developer`);
+                break;
+            };
         };
     };
 
@@ -1274,19 +1140,19 @@ class deviceReminder extends utils.Adapter {
                 };
                 break;
             };
-        case "sayit": {
-            if (device.sayIt) {
-                for (const i in device.sayItID) {
-                    const strVol = '.volume';
-                    await this.volume(this.sayitInput[device.sayItID[i]], action, strVol)
+            case "sayit": {
+                if (device.sayIt) {
+                    for (const i in device.sayItID) {
+                        const strVol = '.volume';
+                        await this.volume(this.sayitInput[device.sayItID[i]], action, strVol)
+                    };
                 };
+                break;
             };
-            break;
-        };
-        default: {
-            this.log.warn(`Volume could not be set. Input is wrong. Report this to the developer`);
-            break;
-        };
+            default: {
+                this.log.warn(`Volume could not be set. Input is wrong. Report this to the developer`);
+                break;
+            };
         };
     };
 
@@ -1317,7 +1183,7 @@ class deviceReminder extends utils.Adapter {
                 let val = 0;
                 val = await this.getCheckedState('foreign', pathNew, 30);
                 if (val !== null && val !== undefined) {
-                    obj.volOld = val.val;
+                    obj.volOld = val;
                 } else {
                     obj.volOld = null
                 };
@@ -1341,19 +1207,20 @@ class deviceReminder extends utils.Adapter {
      * @param {string} objMsg
      */
     async createObjMsg(objMsg) {
+        this.log.debug(`MESSAGEPATH: ${objMsg}`);
         let msgTemp = ``;
         let length = 0;
         let lengthTotal = 0;
         length = (objMsg.lastIndexOf(".") + 1);
         lengthTotal = objMsg.length;
-        if (objMsg != `` && objMsg != undefined) {
+        if (objMsg != `` && objMsg != undefined && objMsg.length > 0) {
             // message != undefined
             if (length < lengthTotal) {
                 // last digit is a dot TRUE
                 if (await this.getForeignObjectAsync(objMsg) != null) {
                     // msg from DP TRUE
                     const result = await this.getCheckedState('foreign', objMsg, `[ERROR] Object Message not found`);;
-                    msgTemp = result.val;
+                    msgTemp = result;
                 } else {
                     // msg from DP false
                     msgTemp = objMsg;
@@ -1362,7 +1229,8 @@ class deviceReminder extends utils.Adapter {
                 // last digit is a dot FALSE
                 msgTemp = objMsg;
             };
-        }
+        };
+        this.log.debug(`MESSAGE: ${msgTemp}`);
         return msgTemp;
     };
 
@@ -1498,38 +1366,38 @@ class deviceReminder extends utils.Adapter {
                 };
                 break;
             };
-        case 'type': {
-            for (let val = cmd.cntr; val > 0; val--) {
-                for (const i in array) {
-                    if (array[i][cmd[val]] == undefined || array[i][cmd[val]] == `` && array[i].check == 'open') array[i].check = 'err';
-                    if (array[i].check == 'open' && val == 1) {
-                        checked.push({
-                            name: array[i]['name'],
-                            id: array[i].id
-                        });
-                    } else if (array[i].check == 'err' && val == 1) failed.push(array[i]['name']);
+            case 'type': {
+                for (let val = cmd.cntr; val > 0; val--) {
+                    for (const i in array) {
+                        if (array[i][cmd[val]] == undefined || array[i][cmd[val]] == `` && array[i].check == 'open') array[i].check = 'err';
+                        if (array[i].check == 'open' && val == 1) {
+                            checked.push({
+                                name: array[i]['name'],
+                                id: array[i].id
+                            });
+                        } else if (array[i].check == 'err' && val == 1) failed.push(array[i]['name']);
+                    };
                 };
+                break;
             };
-            break;
-        };
-        case 'email': {
-            for (let val = cmd.cntr; val > 0; val--) {
-                for (const i in array) {
-                    const email = array[i][cmd[val]];
-                    // E-Mail-Adresse prüfen
-                    if (cmd[val] !== 'name') {
-                        if (!(await this.validateEmail(email)) && array[i].check == 'open') array[i].check = 'err';
-                    } else if (array[i][cmd[val]] == undefined || array[i][cmd[val]] == `` && array[i].check == 'open') array[i].check = 'err';
-                    if (array[i].check == 'open' && val == 1) {
-                        checked.push({
-                            name: array[i]['name'],
-                            id: array[i].id
-                        });
-                    } else if (array[i].check == 'err' && val == 1) failed.push(array[i]['name']);
+            case 'email': {
+                for (let val = cmd.cntr; val > 0; val--) {
+                    for (const i in array) {
+                        const email = array[i][cmd[val]];
+                        // E-Mail-Adresse prüfen
+                        if (cmd[val] !== 'name') {
+                            if (!(await this.validateEmail(email)) && array[i].check == 'open') array[i].check = 'err';
+                        } else if (array[i][cmd[val]] == undefined || array[i][cmd[val]] == `` && array[i].check == 'open') array[i].check = 'err';
+                        if (array[i].check == 'open' && val == 1) {
+                            checked.push({
+                                name: array[i]['name'],
+                                id: array[i].id
+                            });
+                        } else if (array[i].check == 'err' && val == 1) failed.push(array[i]['name']);
+                    };
                 };
+                break;
             };
-            break;
-        };
         };
 
         const result = {
