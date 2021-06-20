@@ -4,16 +4,16 @@
         "version": "1.2.5",
         "news": {
             "1.2.5": {
-                "en": "bugfix: error catch JSON \"last operations",
-                "de": "Bugfix: Fehler beim Fangen von JSON \"letzte Operationen\"",
-                "ru": "bugfix: ошибка перехвата JSON \"последних операций\"",
-                "pt": "correção de bug: captura de erro JSON \"últimas operações",
-                "nl": "bugfix: error catch JSON \"laatste bewerkingen",
-                "fr": "correction de bug : erreur catch JSON \"dernières opérations",
-                "it": "bugfix: errore catch JSON \"ultime operazioni",
-                "es": "corrección de errores: error de captura JSON \"últimas operaciones",
-                "pl": "bugfix: error catch JSON \"ostatnie operacje\"",
-                "zh-cn": "错误修正：错误捕获 JSON“上次操作"
+                "en": ">>>>>>> Stashed changes\n* bugfix: error catching JSON \"last operations\" doesn't work",
+                "de": ">>>>>>> Gespeicherte Änderungen\n* Bugfix: Fehler beim Abfangen von JSON \"letzte Operationen\" funktioniert nicht",
+                "ru": ">>>>>>> Изменения припрятаны\n* исправление: ошибка при отлове JSON \"последние операции\" не работает",
+                "pt": ">>>>>>> Alterações armazenadas\n* correção de bug: erro ao capturar \"últimas operações\" JSON não funciona",
+                "nl": ">>>>>>> Opgeslagen wijzigingen\n* bugfix: fout bij het vangen van JSON \"laatste bewerkingen\" werkt niet",
+                "fr": ">>>>>>> Modifications cachées\n* correction de bug : l'erreur de capture des \"dernières opérations\" JSON ne fonctionne pas",
+                "it": ">>>>>>> Modifiche nascoste\n* bugfix: errore durante la cattura delle \"ultime operazioni\" JSON non funziona",
+                "es": ">>>>>>> Cambios ocultos\n* corrección de errores: el error al detectar las \"últimas operaciones\" de JSON no funciona",
+                "pl": ">>>>>>> Ukryte zmiany\n* poprawka: błąd przechwycenia \"ostatnich operacji\" JSON nie działa",
+                "zh-cn": ">>>>>>> 隐藏的更改\n* 修正：错误捕获 JSON“上次操作”不起作用"
             },
             "1.2.4": {
                 "en": "* bugfix: incorrect JSON format \n<br>**Important! Delete the data point \"last operations\" manually and restart the adapter afterwards!**",
@@ -217,7 +217,7 @@
                 "js-controller": ">=2.0.0"
             }
         ],
-        "installedFrom": "iobroker.device-reminder@1.2.1"
+        "installedFrom": "iobroker.device-reminder@1.2.4"
     },
     "native": {
         "devices_counter": 0,
