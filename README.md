@@ -163,7 +163,11 @@ is displayed.
     ### __WORK IN PROGRESS__
 -->
 
+<<<<<<< Updated upstream
 ### 1.2.6 (2021-06-20)
+=======
+### __WORK IN PROGRESS__
+>>>>>>> Stashed changes
 * (xenon-s) bugfix: error catching JSON "last operations" doesn't work
 
 ### 1.2.4 (2021-06-13)
