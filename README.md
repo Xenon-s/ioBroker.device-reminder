@@ -164,7 +164,7 @@ is displayed.
 -->
 
 ### 1.2.5 (2021-06-20)
-* (xenon-s) bugfix: error catch JSON "last operations
+* (xenon-s) bugfix: error catching JSON "last operations" doesn't work
 
 ### 1.2.4 (2021-06-13)
 * (xenon-s) bugfix: incorrect JSON format 
