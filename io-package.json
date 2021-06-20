@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.2.4",
+        "version": "1.2.5",
         "news": {
+            "1.2.5": {
+                "en": "bugfix: error catch JSON \"last operations",
+                "de": "Bugfix: Fehler beim Fangen von JSON \"letzte Operationen\"",
+                "ru": "bugfix: ошибка перехвата JSON \"последних операций\"",
+                "pt": "correção de bug: captura de erro JSON \"últimas operações",
+                "nl": "bugfix: error catch JSON \"laatste bewerkingen",
+                "fr": "correction de bug : erreur catch JSON \"dernières opérations",
+                "it": "bugfix: errore catch JSON \"ultime operazioni",
+                "es": "corrección de errores: error de captura JSON \"últimas operaciones",
+                "pl": "bugfix: error catch JSON \"ostatnie operacje\"",
+                "zh-cn": "错误修正：错误捕获 JSON“上次操作"
+            },
             "1.2.4": {
                 "en": "* bugfix: incorrect JSON format \n<br>**Important! Delete the data point \"last operations\" manually and restart the adapter afterwards!**",
                 "de": "* Bugfix: falsches JSON-Format\n<br>**Wichtig! Löschen Sie den Datenpunkt &quot;letzte Operationen&quot; manuell und starten Sie den Adapter anschließend neu!**",

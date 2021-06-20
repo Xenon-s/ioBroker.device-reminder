@@ -269,7 +269,7 @@ class deviceReminder extends utils.Adapter {
                         this.getValues(i);
                     };
                 };
-            }, 10000); 
+            }, 10000);
         };
     };
 
@@ -287,8 +287,12 @@ class deviceReminder extends utils.Adapter {
         value.runtimeMax.val = await this.getCheckedState(null, value.runtimeMax.path, 0);
         value.dateJSON.val = await this.getCheckedState(null, value.dateJSON.path, '');
 
-        if(value.dateJSON.val != '') {
-            device.dateJSON = JSON.parse(value.dateJSON.val);
+        try {
+            if (value.dateJSON.val != '') {
+                device.dateJSON = JSON.parse(value.dateJSON.val);
+            };
+        } catch (error) {
+            device.dateJSON = null;
         };
 
         // setState
@@ -743,6 +747,10 @@ class deviceReminder extends utils.Adapter {
 
             const strJSON = `{"start":"${device.startTimeJSON}", "end":"${device.endtimeJSON}", "runtime":"${device.runtimeJSON}"}`;
 
+            if (device.dateJSON === null) {
+                device.dateJSON = [];
+            };
+ 
             device.dateJSON.push(JSON.parse(strJSON));
 
             if (device.dateJSON.length >= 15) {
