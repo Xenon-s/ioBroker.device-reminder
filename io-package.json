@@ -1,19 +1,19 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.2.5",
+        "version": "1.2.6",
         "news": {
-            "1.2.5": {
-                "en": ">>>>>>> Stashed changes\n* bugfix: error catching JSON \"last operations\" doesn't work",
-                "de": ">>>>>>> Gespeicherte Änderungen\n* Bugfix: Fehler beim Abfangen von JSON \"letzte Operationen\" funktioniert nicht",
-                "ru": ">>>>>>> Изменения припрятаны\n* исправление: ошибка при отлове JSON \"последние операции\" не работает",
-                "pt": ">>>>>>> Alterações armazenadas\n* correção de bug: erro ao capturar \"últimas operações\" JSON não funciona",
-                "nl": ">>>>>>> Opgeslagen wijzigingen\n* bugfix: fout bij het vangen van JSON \"laatste bewerkingen\" werkt niet",
-                "fr": ">>>>>>> Modifications cachées\n* correction de bug : l'erreur de capture des \"dernières opérations\" JSON ne fonctionne pas",
-                "it": ">>>>>>> Modifiche nascoste\n* bugfix: errore durante la cattura delle \"ultime operazioni\" JSON non funziona",
-                "es": ">>>>>>> Cambios ocultos\n* corrección de errores: el error al detectar las \"últimas operaciones\" de JSON no funciona",
-                "pl": ">>>>>>> Ukryte zmiany\n* poprawka: błąd przechwycenia \"ostatnich operacji\" JSON nie działa",
-                "zh-cn": ">>>>>>> 隐藏的更改\n* 修正：错误捕获 JSON“上次操作”不起作用"
+            "1.2.6": {
+                "en": "bugfix: error catching JSON \"last operations\" doesn't work",
+                "de": "Bugfix: Fehler beim Abfangen von JSON \"letzte Operationen\" funktioniert nicht",
+                "ru": "исправление: ошибка при отлове JSON \"последние операции\" не работает",
+                "pt": "correção de bug: erro ao capturar \"últimas operações\" JSON não funciona",
+                "nl": "bugfix: fout bij het vangen van JSON \"laatste bewerkingen\" werkt niet",
+                "fr": "correction de bug : erreur lors de la capture des \"dernières opérations\" JSON ne fonctionne pas",
+                "it": "bugfix: errore durante il rilevamento delle \"ultime operazioni\" JSON non funziona",
+                "es": "corrección de errores: el error al detectar las \"últimas operaciones\" de JSON no funciona",
+                "pl": "bugfix: błąd przechwycenia \"ostatnich operacji\" JSON nie działa",
+                "zh-cn": "错误修正：捕获 JSON“上次操作”的错误不起作用"
             },
             "1.2.4": {
                 "en": "* bugfix: incorrect JSON format \n<br>**Important! Delete the data point \"last operations\" manually and restart the adapter afterwards!**",
@@ -62,30 +62,6 @@
                 "es": "Estructura adaptadora rediseñada para clases\nEl diseño y las entradas de la interfaz de usuario del administrador se hacen más fáciles de usar\nError de Telegram arreglado\nArreglo para js-controller 3.3. *\nnuevos puntos de datos agregados (tiempo de ejecución máximo, última ejecución como JSON, último tiempo de ejecución, tiempo de ejecución máximo, alerta de tiempo de ejecución)\nagregar: alerta de tiempo de ejecución",
                 "pl": "Struktura adaptera przeprojektowana na klasy\nProjekt interfejsu administratora i wprowadzane dane są bardziej przyjazne dla użytkownika\nNaprawiono błąd telegramu\nPoprawka dla kontrolera js 3.3. *\ndodane nowe punkty danych (maks. czas pracy, ostatnie uruchomienie jako JSON, ostatnie uruchomienie, maksimum czasu wykonania, alert czasu wykonania)\nadd: runtime-alert",
                 "zh-cn": "适配器结构重新设计为类\n管理员界面设计和输入使用户更加友好\n修复了电报错误\n修复js-controller 3.3。*\n添加了新的数据点（最大运行时，上次运行为JSON，最后运行时，最大运行时，运行时警报）\n添加：运行时警报"
-            },
-            "1.0.6": {
-                "en": "bugfix: removed incorrect status",
-                "de": "Bugfix: Falscher Status entfernt",
-                "ru": "исправление: убран некорректный статус",
-                "pt": "correção de bug: status incorreto removido",
-                "nl": "bugfix: onjuiste status verwijderd",
-                "fr": "correction de bogue: statut incorrect supprimé",
-                "it": "bugfix: rimosso stato errato",
-                "es": "corrección de errores: eliminado estado incorrecto",
-                "pl": "bugfix: usunięto niepoprawny status",
-                "zh-cn": "错误修正：删除了不正确的状态"
-            },
-            "1.0.5": {
-                "en": "bugfix: no messages were sent",
-                "de": "Bugfix: Es wurden keine Nachrichten gesendet",
-                "ru": "исправление: сообщения не отправлялись",
-                "pt": "correção de bug: nenhuma mensagem foi enviada",
-                "nl": "bugfix: er zijn geen berichten verzonden",
-                "fr": "correction de bogue: aucun message n'a été envoyé",
-                "it": "bugfix: nessun messaggio è stato inviato",
-                "es": "corrección de errores: no se enviaron mensajes",
-                "pl": "poprawka: nie wysłano żadnych wiadomości",
-                "zh-cn": "错误修正：未发送任何消息"
             },
             "1.0.0": {
                 "en": "initial commit version 1.0",
