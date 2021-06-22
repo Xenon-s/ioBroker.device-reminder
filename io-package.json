@@ -1,377 +1,365 @@
 {
-    "common": {
-        "name": "device-reminder",
-        "version": "1.2.5",
-        "news": {
-            "1.2.5": {
-                "en": "bugfix: error catching JSON \"last operations\" doesn't work",
-                "de": "Bugfix: Fehler beim Abfangen von JSON \"letzte Operationen\" funktioniert nicht",
-                "ru": "исправление: ошибка при отлове JSON \"последние операции\" не работает",
-                "pt": "correção de bug: erro ao capturar JSON \"últimas operações\" não funciona",
-                "nl": "bugfix: fout bij het vangen van JSON \"laatste bewerkingen\" werkt niet",
-                "fr": "correction de bug : erreur lors de la capture des \"dernières opérations\" JSON ne fonctionne pas",
-                "it": "bugfix: errore durante il rilevamento delle \"ultime operazioni\" JSON non funziona",
-                "es": "corrección de errores: el error al detectar las \"últimas operaciones\" de JSON no funciona",
-                "pl": "bugfix: błąd przechwycenia \"ostatnich operacji\" JSON nie działa",
-                "zh-cn": "错误修正：捕获 JSON“上次操作”的错误不起作用"
-            },
-            "1.2.4": {
-                "en": "* bugfix: incorrect JSON format \n<br>**Important! Delete the data point \"last operations\" manually and restart the adapter afterwards!**",
-                "de": "* Bugfix: falsches JSON-Format\n<br>**Wichtig! Löschen Sie den Datenpunkt &quot;letzte Operationen&quot; manuell und starten Sie den Adapter anschließend neu!**",
-                "ru": "* исправление: неверный формат JSON\n<br>**Важный! Удалите точку данных &quot;последние операции&quot; вручную и перезапустите адаптер после этого! **",
-                "pt": "* correção de bug: formato JSON incorreto\n<br>**Importante! Exclua o ponto de dados &quot;últimas operações&quot; manualmente e reinicie o adaptador depois disso! **",
-                "nl": "* bugfix: onjuist JSON-formaat\n<br>**Belangrijk! Wis het datapunt &quot;laatste bewerkingen&quot; handmatig en start de adapter daarna opnieuw op!**",
-                "fr": "* correction de bug : format JSON incorrect\n<br>**Important! Supprimez manuellement le point de données « dernières opérations » et redémarrez l&#39;adaptateur par la suite !**",
-                "it": "* bugfix: formato JSON errato\n<br>**Importante! Eliminare manualmente il punto dati &quot;ultime operazioni&quot; e successivamente riavviare l&#39;adattatore!**",
-                "es": "* corrección de errores: formato JSON incorrecto\n<br>**¡Importante! ¡Elimine el punto de datos &quot;últimas operaciones&quot; manualmente y reinicie el adaptador después! **",
-                "pl": "* poprawka: nieprawidłowy format JSON\n<br>**Ważny! Usuń ręcznie „ostatnie operacje” punktu danych, a następnie uruchom ponownie adapter!**",
-                "zh-cn": "* 修正：错误的 JSON 格式\n<br>**重要的！手动删除数据点“上次操作”，然后重新启动适配器！**"
-            },
-            "1.2.3": {
-                "en": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) messages from datapoint were not displayed\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is not a valid state\"",
-                "de": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) Meldungen vom Datenpunkt wurden nicht angezeigt\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined ist kein gültiger Status\"",
-                "ru": "исправление: [проблема № 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) сообщения из точки данных не отображались\nисправление: [проблема № 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) «undefined не является допустимым состоянием»",
-                "pt": "correção de bug: [problema # 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) mensagens do datapoint não foram exibidas\ncorreção de bug: [problema # 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"indefinido não é um estado válido\"",
-                "nl": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) berichten van datapoint werden niet weergegeven\nbugfix: [probleem #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is geen geldige status\"",
-                "fr": "correction de bug : [problème #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) les messages du point de données n'étaient pas affichés\ncorrection de bug : [problème #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined n'est pas un état valide\"",
-                "it": "bugfix: [problema #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) i messaggi da datapoint non venivano visualizzati\nbugfix: [problema #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined non è uno stato valido\"",
-                "es": "corrección de error: [problema n. ° 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) no se mostraban los mensajes del punto de datos\ncorrección de error: [problema n. ° 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined no es un estado válido\"",
-                "pl": "błąd: [problem #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) wiadomości z punktu danych nie były wyświetlane\npoprawka błędu: [problem #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) „undefined nie jest prawidłowym stanem”",
-                "zh-cn": "修正：[问题 #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) 来自数据点的消息未显示\n修正：[问题 #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75)“未定义不是有效状态”"
-            },
-            "1.2.2": {
-                "en": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) messages from datapoint were not displayed\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is not a valid state\"",
-                "de": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) Meldungen vom Datenpunkt wurden nicht angezeigt\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined ist kein gültiger Status\"",
-                "ru": "исправление: [проблема № 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) сообщения из точки данных не отображались\nисправление: [проблема № 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) «undefined не является допустимым состоянием»",
-                "pt": "correção de bug: [problema # 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) mensagens do datapoint não foram exibidas\ncorreção de bug: [problema # 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"indefinido não é um estado válido\"",
-                "nl": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) berichten van datapoint werden niet weergegeven\nbugfix: [probleem #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is geen geldige status\"",
-                "fr": "correction de bug : [problème #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) les messages du point de données n'étaient pas affichés\ncorrection de bug : [problème #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined n'est pas un état valide\"",
-                "it": "bugfix: [problema #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) i messaggi da datapoint non venivano visualizzati\nbugfix: [problema #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined non è uno stato valido\"",
-                "es": "corrección de error: [problema n. ° 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) no se mostraban los mensajes del punto de datos\ncorrección de error: [problema n. ° 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined no es un estado válido\"",
-                "pl": "błąd: [problem #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) wiadomości z punktu danych nie były wyświetlane\npoprawka błędu: [problem #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) „undefined nie jest prawidłowym stanem”",
-                "zh-cn": "修正：[问题 #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) 来自数据点的消息未显示\n修正：[问题 #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75)“未定义不是有效状态”"
-            },
-            "1.2.1": {
-                "en": "Adapter structure redesigned to classes\nAdmin UI design and inputs made more user friendly\nTelegram bug fixed\nFix for js-controller 3.3.*\nnew datapoints added (runtime max, last runs as JSON, last runtime, runtime max, runtime alert)\nadd: runtime-alert",
-                "de": "Adapterstruktur für Klassen neu gestaltet\nDas Design und die Eingaben der Admin-Benutzeroberfläche wurden benutzerfreundlicher\nTelegrammfehler behoben\nFix für js-controller 3.3. *\nNeue Datenpunkte hinzugefügt (Laufzeitmaximum, letzte Ausführung als JSON, letzte Laufzeit, Laufzeitmaximum, Laufzeitwarnung)\nadd: Laufzeitalarm",
-                "ru": "Структура адаптера переработана в классы\nДизайн пользовательского интерфейса администратора и вводимые данные стали более удобными для пользователя\nИсправлена ошибка Telegram\nИсправление для js-controller 3.3. *\nдобавлены новые точки данных (максимальное время выполнения, последние запуски как JSON, последнее время выполнения, максимальное время выполнения, предупреждение времени выполнения)\nдобавить: runtime-alert",
-                "pt": "Estrutura do adaptador redesenhada para classes\nDesign de interface de usuário e entradas mais amigáveis ao usuário\nBug do telegrama corrigido\nCorreção para js-controller 3.3. *\nnovos pontos de dados adicionados (tempo de execução máximo, última execução como JSON, último tempo de execução, tempo de execução máximo, alerta de tempo de execução)\nadd: runtime-alert",
-                "nl": "Adapterstructuur opnieuw ontworpen voor klassen\nAdmin UI-ontwerp en invoer gebruiksvriendelijker gemaakt\nTelegram-bug opgelost\nOplossing voor js-controller 3.3. *\nnieuwe datapunten toegevoegd (runtime max, laatste runs als JSON, laatste runtime, runtime max, runtime alert)\nadd: runtime-alert",
-                "fr": "Structure de l'adaptateur repensée pour les classes\nConception et entrées de l'interface utilisateur d'administration plus conviviales\nCorrection d'un bug de télégramme\nCorrection pour js-controller 3.3. *\nnouveaux points de données ajoutés (runtime max, dernières exécutions en JSON, dernier runtime, runtime max, runtime alert)\najouter: alerte d'exécution",
-                "it": "Struttura dell'adattatore ridisegnata alle classi\nProgettazione e input dell'interfaccia utente di amministrazione resi più intuitivi\nBug di Telegram risolto\nCorrezione per js-controller 3.3. *\nnuovi datapoint aggiunti (runtime max, ultima esecuzione come JSON, ultimo runtime, runtime max, avviso runtime)\naggiungi: runtime-alert",
-                "es": "Estructura adaptadora rediseñada para clases\nEl diseño y las entradas de la interfaz de usuario del administrador se hacen más fáciles de usar\nError de Telegram arreglado\nArreglo para js-controller 3.3. *\nnuevos puntos de datos agregados (tiempo de ejecución máximo, última ejecución como JSON, último tiempo de ejecución, tiempo de ejecución máximo, alerta de tiempo de ejecución)\nagregar: alerta de tiempo de ejecución",
-                "pl": "Struktura adaptera przeprojektowana na klasy\nProjekt interfejsu administratora i wprowadzane dane są bardziej przyjazne dla użytkownika\nNaprawiono błąd telegramu\nPoprawka dla kontrolera js 3.3. *\ndodane nowe punkty danych (maks. czas pracy, ostatnie uruchomienie jako JSON, ostatnie uruchomienie, maksimum czasu wykonania, alert czasu wykonania)\nadd: runtime-alert",
-                "zh-cn": "适配器结构重新设计为类\n管理员界面设计和输入使用户更加友好\n修复了电报错误\n修复js-controller 3.3。*\n添加了新的数据点（最大运行时，上次运行为JSON，最后运行时，最大运行时，运行时警报）\n添加：运行时警报"
-            },
-            "1.0.6": {
-                "en": "bugfix: removed incorrect status",
-                "de": "Bugfix: Falscher Status entfernt",
-                "ru": "исправление: убран некорректный статус",
-                "pt": "correção de bug: status incorreto removido",
-                "nl": "bugfix: onjuiste status verwijderd",
-                "fr": "correction de bogue: statut incorrect supprimé",
-                "it": "bugfix: rimosso stato errato",
-                "es": "corrección de errores: eliminado estado incorrecto",
-                "pl": "bugfix: usunięto niepoprawny status",
-                "zh-cn": "错误修正：删除了不正确的状态"
-            },
-            "1.0.5": {
-                "en": "bugfix: no messages were sent",
-                "de": "Bugfix: Es wurden keine Nachrichten gesendet",
-                "ru": "исправление: сообщения не отправлялись",
-                "pt": "correção de bug: nenhuma mensagem foi enviada",
-                "nl": "bugfix: er zijn geen berichten verzonden",
-                "fr": "correction de bogue: aucun message n'a été envoyé",
-                "it": "bugfix: nessun messaggio è stato inviato",
-                "es": "corrección de errores: no se enviaron mensajes",
-                "pl": "poprawka: nie wysłano żadnych wiadomości",
-                "zh-cn": "错误修正：未发送任何消息"
-            },
-            "1.0.0": {
-                "en": "initial commit version 1.0",
-                "de": "Initial Commit Version 1.0",
-                "ru": "начальная версия фиксации 1.0",
-                "pt": "commit inicial versão 1.0",
-                "nl": "initiële commit versie 1.0",
-                "fr": "commit initial version 1.0",
-                "it": "commit iniziale versione 1.0",
-                "es": "confirmación inicial versión 1.0",
-                "pl": "początkowa zatwierdzona wersja 1.0",
-                "zh-cn": "初始提交版本1.0"
-            },
-            "0.7.4": {
-                "en": "bugfix: telegram instance was not recognised correctly\nbugfix: abort detection prevented sending of notifications",
-                "de": "Bugfix: Telegramminstanz wurde nicht richtig erkannt\nBugfix: Abbrucherkennung verhindert das Senden von Benachrichtigungen",
-                "ru": "исправление: экземпляр телеграммы не распознавался правильно\nисправление: обнаружение прерывания препятствовало отправке уведомлений",
-                "pt": "bugfix: a instância do telegrama não foi reconhecida corretamente\ncorreção de bug: detecção de aborto impediu o envio de notificações",
-                "nl": "bugfix: telegram-instantie werd niet correct herkend\nbugfix: afbreken detectie verhinderde verzending van notificaties",
-                "fr": "correction de bogue: l'instance de télégramme n'était pas reconnue correctement\ncorrection de bogue: la détection d'abandon empêchait l'envoi de notifications",
-                "it": "bugfix: l'istanza di telegram non è stata riconosciuta correttamente\nbugfix: interruzione del rilevamento impediva l'invio di notifiche",
-                "es": "corrección de error: la instancia de telegrama no se reconoció correctamente\ncorrección de errores: la detección de abortos impidió el envío de notificaciones",
-                "pl": "poprawka: instancja telegramu nie została poprawnie rozpoznana\npoprawka: wykrywanie przerwania uniemożliwiło wysyłanie powiadomień",
-                "zh-cn": "错误修正：电报实例无法正确识别\n错误修正：中止检测阻止发送通知"
-            },
-            "0.6.2": {
-                "en": "bugfix index_m",
-                "de": "Bugfix index_m",
-                "ru": "исправление ошибки index_m",
-                "pt": "correção de bug index_m",
-                "nl": "bugfix index_m",
-                "fr": "correction de bogue index_m",
-                "it": "bugfix index_m",
-                "es": "corrección de errores index_m",
-                "pl": "bugfix index_m",
-                "zh-cn": "错误修正index_m"
-            },
-            "0.5.4": {
-                "en": "calculation optimised, custom / default values may have to be adjusted if they have been changed by the user",
-                "de": "Berechnungsoptimiert müssen benutzerdefinierte / Standardwerte möglicherweise angepasst werden, wenn sie vom Benutzer geändert wurden",
-                "ru": "расчет оптимизирован, пользовательские значения / значения по умолчанию, возможно, придется скорректировать, если они были изменены пользователем",
-                "pt": "cálculo otimizado, valores personalizados / padrão podem ter que ser ajustados se tiverem sido alterados pelo usuário",
-                "nl": "berekening geoptimaliseerd, aangepaste / standaardwaarden moeten mogelijk worden aangepast als ze door de gebruiker zijn gewijzigd",
-                "fr": "calcul optimisé, les valeurs personnalisées / par défaut peuvent devoir être ajustées si elles ont été modifiées par l'utilisateur",
-                "it": "ottimizzato per il calcolo, i valori personalizzati / predefiniti potrebbero dover essere modificati se sono stati modificati dall'utente",
-                "es": "cálculo optimizado, los valores personalizados / predeterminados pueden tener que ajustarse si el usuario los ha cambiado",
-                "pl": "zoptymalizowane obliczenia, wartości niestandardowe / domyślne mogą wymagać dostosowania, jeśli zostały zmienione przez użytkownika",
-                "zh-cn": "计算已优化，如果用户更改了自定义/默认值，则可能必须对其进行调整"
-            },
-            "0.4.10": {
-                "en": "bugfix main.js",
-                "de": "Bugfix main.js",
-                "ru": "исправление ошибок main.js",
-                "pt": "bugfix main.js",
-                "nl": "bugfix main.js",
-                "fr": "correction de bogue main.js",
-                "it": "bugfix main.js",
-                "es": "corrección de errores main.js",
-                "pl": "poprawka błędu main.js",
-                "zh-cn": "修正main.js"
-            },
-            "0.2.1": {
-                "en": "readme angepasst",
-                "de": "readme besteht",
-                "ru": "readme angepasst",
-                "pt": "leia-me angepasst",
-                "nl": "readme angepasst",
-                "fr": "readme angepasst",
-                "it": "readme angepasst",
-                "es": "léame angepasst",
-                "pl": "readme angepasst",
-                "zh-cn": "自述"
-            },
-            "0.2.0": {
-                "en": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
-                "de": "Update auf Version 0.2: index_m vollständig behandelt und whatsapp hinzugefügt",
-                "ru": "обновить до версии 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
-                "pt": "atualização auf Versão 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
-                "nl": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
-                "fr": "mise à jour auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
-                "it": "aggiornamento alla versione 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
-                "es": "actualización de auf versión 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
-                "pl": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
-                "zh-cn": "更新auf版本0.2：index_m komplettüberarbeitet和whatsapp提示"
-            }
-        },
-        "title": "device-reminder",
-        "titleLang": {
-            "en": "device-reminder"
-        },
-        "desc": {
-            "en": "Adapter for device reminder and notification when reaching different states",
-            "de": "Adapter für Geräteerinnerung und Benachrichtigung beim Erreichen von verschiedenen Zuständen",
-            "ru": "Адаптер для напоминания и уведомления устройства при достижении разных состояний",
-            "pt": "Adaptador para lembrete e notificação do dispositivo ao atingir diferentes estados",
-            "nl": "Adapter voor apparaatherinnering en melding bij het bereiken van verschillende toestanden",
-            "fr": "Adaptateur pour le rappel de l'appareil et la notification lorsque vous atteignez différents états",
-            "it": "Adattatore per promemoria del dispositivo e notifica al raggiungimento di stati diversi",
-            "es": "Adaptador para recordatorio y notificación del dispositivo al llegar a diferentes estados",
-            "pl": "Adapter do przypomnienia o urządzeniu i powiadomienia po osiągnięciu różnych stanów",
-            "zh-cn": "达到不同状态时用于设备提醒和通知的适配器"
-        },
-        "authors": [
-            "xenon-s <ente_s@hotmail.de>"
-        ],
-        "keywords": [
-            "ioBroker",
-            "device reminder",
-            "Smart Home",
-            "home automation"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "main": "main.js",
-        "icon": "icon.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/xenon-s/ioBroker.device-reminder/master/admin/icon.png",
-        "readme": "https://github.com/xenon-s/ioBroker.device-reminder/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "messagebox": true,
-        "type": "energy",
-        "compact": true,
-        "dataSource": "push",
-        "connectionType": "local",
-        "materialize": true,
-        "dependencies": [
-            {
-                "js-controller": ">=2.0.0"
-            }
-        ],
-        "installedFrom": "iobroker.device-reminder@1.2.4"
+  "common": {
+    "name": "device-reminder",
+    "version": "1.2.4",
+    "news": {
+      "1.2.4": {
+        "en": "* bugfix: incorrect JSON format \n<br>**Important! Delete the data point \"last operations\" manually and restart the adapter afterwards!**",
+        "de": "* Bugfix: falsches JSON-Format\n<br>**Wichtig! Löschen Sie den Datenpunkt &quot;letzte Operationen&quot; manuell und starten Sie den Adapter anschließend neu!**",
+        "ru": "* исправление: неверный формат JSON\n<br>**Важный! Удалите точку данных &quot;последние операции&quot; вручную и перезапустите адаптер после этого! **",
+        "pt": "* correção de bug: formato JSON incorreto\n<br>**Importante! Exclua o ponto de dados &quot;últimas operações&quot; manualmente e reinicie o adaptador depois disso! **",
+        "nl": "* bugfix: onjuist JSON-formaat\n<br>**Belangrijk! Wis het datapunt &quot;laatste bewerkingen&quot; handmatig en start de adapter daarna opnieuw op!**",
+        "fr": "* correction de bug : format JSON incorrect\n<br>**Important! Supprimez manuellement le point de données « dernières opérations » et redémarrez l&#39;adaptateur par la suite !**",
+        "it": "* bugfix: formato JSON errato\n<br>**Importante! Eliminare manualmente il punto dati &quot;ultime operazioni&quot; e successivamente riavviare l&#39;adattatore!**",
+        "es": "* corrección de errores: formato JSON incorrecto\n<br>**¡Importante! ¡Elimine el punto de datos &quot;últimas operaciones&quot; manualmente y reinicie el adaptador después! **",
+        "pl": "* poprawka: nieprawidłowy format JSON\n<br>**Ważny! Usuń ręcznie „ostatnie operacje” punktu danych, a następnie uruchom ponownie adapter!**",
+        "zh-cn": "* 修正：错误的 JSON 格式\n<br>**重要的！手动删除数据点“上次操作”，然后重新启动适配器！**"
+      },
+      "1.2.3": {
+        "en": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) messages from datapoint were not displayed\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is not a valid state\"",
+        "de": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) Meldungen vom Datenpunkt wurden nicht angezeigt\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined ist kein gültiger Status\"",
+        "ru": "исправление: [проблема № 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) сообщения из точки данных не отображались\nисправление: [проблема № 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) «undefined не является допустимым состоянием»",
+        "pt": "correção de bug: [problema # 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) mensagens do datapoint não foram exibidas\ncorreção de bug: [problema # 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"indefinido não é um estado válido\"",
+        "nl": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) berichten van datapoint werden niet weergegeven\nbugfix: [probleem #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is geen geldige status\"",
+        "fr": "correction de bug : [problème #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) les messages du point de données n'étaient pas affichés\ncorrection de bug : [problème #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined n'est pas un état valide\"",
+        "it": "bugfix: [problema #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) i messaggi da datapoint non venivano visualizzati\nbugfix: [problema #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined non è uno stato valido\"",
+        "es": "corrección de error: [problema n. ° 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) no se mostraban los mensajes del punto de datos\ncorrección de error: [problema n. ° 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined no es un estado válido\"",
+        "pl": "błąd: [problem #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) wiadomości z punktu danych nie były wyświetlane\npoprawka błędu: [problem #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) „undefined nie jest prawidłowym stanem”",
+        "zh-cn": "修正：[问题 #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) 来自数据点的消息未显示\n修正：[问题 #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75)“未定义不是有效状态”"
+      },
+      "1.2.2": {
+        "en": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) messages from datapoint were not displayed\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is not a valid state\"",
+        "de": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) Meldungen vom Datenpunkt wurden nicht angezeigt\nbugfix: [issue #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined ist kein gültiger Status\"",
+        "ru": "исправление: [проблема № 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) сообщения из точки данных не отображались\nисправление: [проблема № 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) «undefined не является допустимым состоянием»",
+        "pt": "correção de bug: [problema # 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) mensagens do datapoint não foram exibidas\ncorreção de bug: [problema # 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"indefinido não é um estado válido\"",
+        "nl": "bugfix: [issue #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) berichten van datapoint werden niet weergegeven\nbugfix: [probleem #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined is geen geldige status\"",
+        "fr": "correction de bug : [problème #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) les messages du point de données n'étaient pas affichés\ncorrection de bug : [problème #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined n'est pas un état valide\"",
+        "it": "bugfix: [problema #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) i messaggi da datapoint non venivano visualizzati\nbugfix: [problema #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined non è uno stato valido\"",
+        "es": "corrección de error: [problema n. ° 76] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) no se mostraban los mensajes del punto de datos\ncorrección de error: [problema n. ° 75] (https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) \"undefined no es un estado válido\"",
+        "pl": "błąd: [problem #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) wiadomości z punktu danych nie były wyświetlane\npoprawka błędu: [problem #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75) „undefined nie jest prawidłowym stanem”",
+        "zh-cn": "修正：[问题 #76](https://github.com/Xenon-s/ioBroker.device-reminder/issues/76) 来自数据点的消息未显示\n修正：[问题 #75](https://github.com/Xenon-s/ioBroker.device-reminder/issues/75)“未定义不是有效状态”"
+      },
+      "1.2.1": {
+        "en": "Adapter structure redesigned to classes\nAdmin UI design and inputs made more user friendly\nTelegram bug fixed\nFix for js-controller 3.3.*\nnew datapoints added (runtime max, last runs as JSON, last runtime, runtime max, runtime alert)\nadd: runtime-alert",
+        "de": "Adapterstruktur für Klassen neu gestaltet\nDas Design und die Eingaben der Admin-Benutzeroberfläche wurden benutzerfreundlicher\nTelegrammfehler behoben\nFix für js-controller 3.3. *\nNeue Datenpunkte hinzugefügt (Laufzeitmaximum, letzte Ausführung als JSON, letzte Laufzeit, Laufzeitmaximum, Laufzeitwarnung)\nadd: Laufzeitalarm",
+        "ru": "Структура адаптера переработана в классы\nДизайн пользовательского интерфейса администратора и вводимые данные стали более удобными для пользователя\nИсправлена ошибка Telegram\nИсправление для js-controller 3.3. *\nдобавлены новые точки данных (максимальное время выполнения, последние запуски как JSON, последнее время выполнения, максимальное время выполнения, предупреждение времени выполнения)\nдобавить: runtime-alert",
+        "pt": "Estrutura do adaptador redesenhada para classes\nDesign de interface de usuário e entradas mais amigáveis ao usuário\nBug do telegrama corrigido\nCorreção para js-controller 3.3. *\nnovos pontos de dados adicionados (tempo de execução máximo, última execução como JSON, último tempo de execução, tempo de execução máximo, alerta de tempo de execução)\nadd: runtime-alert",
+        "nl": "Adapterstructuur opnieuw ontworpen voor klassen\nAdmin UI-ontwerp en invoer gebruiksvriendelijker gemaakt\nTelegram-bug opgelost\nOplossing voor js-controller 3.3. *\nnieuwe datapunten toegevoegd (runtime max, laatste runs als JSON, laatste runtime, runtime max, runtime alert)\nadd: runtime-alert",
+        "fr": "Structure de l'adaptateur repensée pour les classes\nConception et entrées de l'interface utilisateur d'administration plus conviviales\nCorrection d'un bug de télégramme\nCorrection pour js-controller 3.3. *\nnouveaux points de données ajoutés (runtime max, dernières exécutions en JSON, dernier runtime, runtime max, runtime alert)\najouter: alerte d'exécution",
+        "it": "Struttura dell'adattatore ridisegnata alle classi\nProgettazione e input dell'interfaccia utente di amministrazione resi più intuitivi\nBug di Telegram risolto\nCorrezione per js-controller 3.3. *\nnuovi datapoint aggiunti (runtime max, ultima esecuzione come JSON, ultimo runtime, runtime max, avviso runtime)\naggiungi: runtime-alert",
+        "es": "Estructura adaptadora rediseñada para clases\nEl diseño y las entradas de la interfaz de usuario del administrador se hacen más fáciles de usar\nError de Telegram arreglado\nArreglo para js-controller 3.3. *\nnuevos puntos de datos agregados (tiempo de ejecución máximo, última ejecución como JSON, último tiempo de ejecución, tiempo de ejecución máximo, alerta de tiempo de ejecución)\nagregar: alerta de tiempo de ejecución",
+        "pl": "Struktura adaptera przeprojektowana na klasy\nProjekt interfejsu administratora i wprowadzane dane są bardziej przyjazne dla użytkownika\nNaprawiono błąd telegramu\nPoprawka dla kontrolera js 3.3. *\ndodane nowe punkty danych (maks. czas pracy, ostatnie uruchomienie jako JSON, ostatnie uruchomienie, maksimum czasu wykonania, alert czasu wykonania)\nadd: runtime-alert",
+        "zh-cn": "适配器结构重新设计为类\n管理员界面设计和输入使用户更加友好\n修复了电报错误\n修复js-controller 3.3。*\n添加了新的数据点（最大运行时，上次运行为JSON，最后运行时，最大运行时，运行时警报）\n添加：运行时警报"
+      },
+      "1.0.6": {
+        "en": "bugfix: removed incorrect status",
+        "de": "Bugfix: Falscher Status entfernt",
+        "ru": "исправление: убран некорректный статус",
+        "pt": "correção de bug: status incorreto removido",
+        "nl": "bugfix: onjuiste status verwijderd",
+        "fr": "correction de bogue: statut incorrect supprimé",
+        "it": "bugfix: rimosso stato errato",
+        "es": "corrección de errores: eliminado estado incorrecto",
+        "pl": "bugfix: usunięto niepoprawny status",
+        "zh-cn": "错误修正：删除了不正确的状态"
+      },
+      "1.0.5": {
+        "en": "bugfix: no messages were sent",
+        "de": "Bugfix: Es wurden keine Nachrichten gesendet",
+        "ru": "исправление: сообщения не отправлялись",
+        "pt": "correção de bug: nenhuma mensagem foi enviada",
+        "nl": "bugfix: er zijn geen berichten verzonden",
+        "fr": "correction de bogue: aucun message n'a été envoyé",
+        "it": "bugfix: nessun messaggio è stato inviato",
+        "es": "corrección de errores: no se enviaron mensajes",
+        "pl": "poprawka: nie wysłano żadnych wiadomości",
+        "zh-cn": "错误修正：未发送任何消息"
+      },
+      "1.0.0": {
+        "en": "initial commit version 1.0",
+        "de": "Initial Commit Version 1.0",
+        "ru": "начальная версия фиксации 1.0",
+        "pt": "commit inicial versão 1.0",
+        "nl": "initiële commit versie 1.0",
+        "fr": "commit initial version 1.0",
+        "it": "commit iniziale versione 1.0",
+        "es": "confirmación inicial versión 1.0",
+        "pl": "początkowa zatwierdzona wersja 1.0",
+        "zh-cn": "初始提交版本1.0"
+      },
+      "0.7.4": {
+        "en": "bugfix: telegram instance was not recognised correctly\nbugfix: abort detection prevented sending of notifications",
+        "de": "Bugfix: Telegramminstanz wurde nicht richtig erkannt\nBugfix: Abbrucherkennung verhindert das Senden von Benachrichtigungen",
+        "ru": "исправление: экземпляр телеграммы не распознавался правильно\nисправление: обнаружение прерывания препятствовало отправке уведомлений",
+        "pt": "bugfix: a instância do telegrama não foi reconhecida corretamente\ncorreção de bug: detecção de aborto impediu o envio de notificações",
+        "nl": "bugfix: telegram-instantie werd niet correct herkend\nbugfix: afbreken detectie verhinderde verzending van notificaties",
+        "fr": "correction de bogue: l'instance de télégramme n'était pas reconnue correctement\ncorrection de bogue: la détection d'abandon empêchait l'envoi de notifications",
+        "it": "bugfix: l'istanza di telegram non è stata riconosciuta correttamente\nbugfix: interruzione del rilevamento impediva l'invio di notifiche",
+        "es": "corrección de error: la instancia de telegrama no se reconoció correctamente\ncorrección de errores: la detección de abortos impidió el envío de notificaciones",
+        "pl": "poprawka: instancja telegramu nie została poprawnie rozpoznana\npoprawka: wykrywanie przerwania uniemożliwiło wysyłanie powiadomień",
+        "zh-cn": "错误修正：电报实例无法正确识别\n错误修正：中止检测阻止发送通知"
+      },
+      "0.6.2": {
+        "en": "bugfix index_m",
+        "de": "Bugfix index_m",
+        "ru": "исправление ошибки index_m",
+        "pt": "correção de bug index_m",
+        "nl": "bugfix index_m",
+        "fr": "correction de bogue index_m",
+        "it": "bugfix index_m",
+        "es": "corrección de errores index_m",
+        "pl": "bugfix index_m",
+        "zh-cn": "错误修正index_m"
+      },
+      "0.5.4": {
+        "en": "calculation optimised, custom / default values may have to be adjusted if they have been changed by the user",
+        "de": "Berechnungsoptimiert müssen benutzerdefinierte / Standardwerte möglicherweise angepasst werden, wenn sie vom Benutzer geändert wurden",
+        "ru": "расчет оптимизирован, пользовательские значения / значения по умолчанию, возможно, придется скорректировать, если они были изменены пользователем",
+        "pt": "cálculo otimizado, valores personalizados / padrão podem ter que ser ajustados se tiverem sido alterados pelo usuário",
+        "nl": "berekening geoptimaliseerd, aangepaste / standaardwaarden moeten mogelijk worden aangepast als ze door de gebruiker zijn gewijzigd",
+        "fr": "calcul optimisé, les valeurs personnalisées / par défaut peuvent devoir être ajustées si elles ont été modifiées par l'utilisateur",
+        "it": "ottimizzato per il calcolo, i valori personalizzati / predefiniti potrebbero dover essere modificati se sono stati modificati dall'utente",
+        "es": "cálculo optimizado, los valores personalizados / predeterminados pueden tener que ajustarse si el usuario los ha cambiado",
+        "pl": "zoptymalizowane obliczenia, wartości niestandardowe / domyślne mogą wymagać dostosowania, jeśli zostały zmienione przez użytkownika",
+        "zh-cn": "计算已优化，如果用户更改了自定义/默认值，则可能必须对其进行调整"
+      },
+      "0.4.10": {
+        "en": "bugfix main.js",
+        "de": "Bugfix main.js",
+        "ru": "исправление ошибок main.js",
+        "pt": "bugfix main.js",
+        "nl": "bugfix main.js",
+        "fr": "correction de bogue main.js",
+        "it": "bugfix main.js",
+        "es": "corrección de errores main.js",
+        "pl": "poprawka błędu main.js",
+        "zh-cn": "修正main.js"
+      },
+      "0.2.1": {
+        "en": "readme angepasst",
+        "de": "readme besteht",
+        "ru": "readme angepasst",
+        "pt": "leia-me angepasst",
+        "nl": "readme angepasst",
+        "fr": "readme angepasst",
+        "it": "readme angepasst",
+        "es": "léame angepasst",
+        "pl": "readme angepasst",
+        "zh-cn": "自述"
+      },
+      "0.2.0": {
+        "en": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+        "de": "Update auf Version 0.2: index_m vollständig behandelt und whatsapp hinzugefügt",
+        "ru": "обновить до версии 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+        "pt": "atualização auf Versão 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+        "nl": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+        "fr": "mise à jour auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+        "it": "aggiornamento alla versione 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+        "es": "actualización de auf versión 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+        "pl": "update auf Version 0.2: index_m komplett überarbeitet und whatsapp hinzugefügt",
+        "zh-cn": "更新auf版本0.2：index_m komplettüberarbeitet和whatsapp提示"
+      }
     },
-    "native": {
-        "devices_counter": 0,
-        "alexa_counter": 0,
-        "sayit_counter": 0,
-        "whatsapp_counter": 0,
-        "telegram_counter": 0,
-        "pushover_counter": 0,
-        "email_counter": 0,
-        "custom_counter": 25,
-        "default_counter": 0,
-        "alert_counter": 0,
-        "presence_counter": 0,
-        "status_counter": 0,
-        "defaultTypeID": [
-            {
-                "name": "washing-machine",
-                "startVal": 30,
-                "endVal": 15,
-                "startCount": 5,
-                "endCount": 65,
-                "standby": 1,
-                "id": 1
-            },
-            {
-                "name": "dryer",
-                "startVal": 120,
-                "endVal": 15,
-                "startCount": 5,
-                "endCount": 50,
-                "standby": 1,
-                "id": 2
-            },
-            {
-                "name": "dishwasher",
-                "startVal": 15,
-                "endVal": 4,
-                "startCount": 3,
-                "endCount": 150,
-                "standby": 1,
-                "id": 3
-            },
-            {
-                "name": "computer",
-                "startVal": 20,
-                "endVal": 5,
-                "startCount": 2,
-                "endCount": 3,
-                "standby": 1,
-                "id": 4
-            },
-            {
-                "name": "electric-kettle",
-                "startVal": 15,
-                "endVal": 5,
-                "startCount": 2,
-                "endCount": 2,
-                "standby": 1,
-                "id": 5
-            },
-            {
-                "name": "microwave",
-                "startVal": 50,
-                "endVal": 20,
-                "startCount": 2,
-                "endCount": 1,
-                "standby": 1,
-                "id": 6
-            }
-        ],
-        "customTypeID": [
-            {
-                "name": "custom1",
-                "startVal": 55,
-                "endVal": 5,
-                "startCount": 5,
-                "endCount": 10,
-                "standby": 1,
-                "id": 21
-            },
-            {
-                "name": "custom2",
-                "startVal": 55,
-                "endVal": 5,
-                "startCount": 5,
-                "endCount": 10,
-                "standby": 1,
-                "id": 22
-            },
-            {
-                "name": "custom3",
-                "startVal": 55,
-                "endVal": 5,
-                "startCount": 5,
-                "endCount": 10,
-                "standby": 1,
-                "id": 23
-            },
-            {
-                "name": "custom4",
-                "startVal": 55,
-                "endVal": 5,
-                "startCount": 5,
-                "endCount": 10,
-                "standby": 1,
-                "id": 24
-            },
-            {
-                "name": "custom5",
-                "startVal": 55,
-                "endVal": 5,
-                "startCount": 5,
-                "endCount": 10,
-                "standby": 1,
-                "id": 25
-            }
-        ],
-        "valStates": [
-            {
-                "stateAction": "in action",
-                "stateStandby": "standby",
-                "stateOff": "switched off"
-            }
-        ],
-        "presence": [
-            {
-                "presence_Notification": false,
-                "presence_msg": false,
-                "dp_presence": "Only boolean is allowed"
-            }
-        ]
+    "title": "device-reminder",
+    "titleLang": {
+      "en": "device-reminder"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
+    "desc": {
+      "en": "Adapter for device reminder and notification when reaching different states",
+      "de": "Adapter für Geräteerinnerung und Benachrichtigung beim Erreichen von verschiedenen Zuständen",
+      "ru": "Адаптер для напоминания и уведомления устройства при достижении разных состояний",
+      "pt": "Adaptador para lembrete e notificação do dispositivo ao atingir diferentes estados",
+      "nl": "Adapter voor apparaatherinnering en melding bij het bereiken van verschillende toestanden",
+      "fr": "Adaptateur pour le rappel de l'appareil et la notification lorsque vous atteignez différents états",
+      "it": "Adattatore per promemoria del dispositivo e notifica al raggiungimento di stati diversi",
+      "es": "Adaptador para recordatorio y notificación del dispositivo al llegar a diferentes estados",
+      "pl": "Adapter do przypomnienia o urządzeniu i powiadomienia po osiągnięciu różnych stanów",
+      "zh-cn": "达到不同状态时用于设备提醒和通知的适配器"
+    },
+    "authors": [
+      "xenon-s <ente_s@hotmail.de>"
+    ],
+    "keywords": [
+      "ioBroker",
+      "device reminder",
+      "Smart Home",
+      "home automation"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "icon.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/xenon-s/ioBroker.device-reminder/master/admin/icon.png",
+    "readme": "https://github.com/xenon-s/ioBroker.device-reminder/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "messagebox": true,
+    "type": "energy",
+    "compact": true,
+    "dataSource": "push",
+    "connectionType": "local",
+    "materialize": true,
+    "dependencies": [
+      {
+        "js-controller": ">=2.0.0"
+      }
+    ],
+    "installedFrom": "iobroker.device-reminder@1.2.4"
+  },
+  "native": {
+    "devices_counter": 0,
+    "alexa_counter": 0,
+    "sayit_counter": 0,
+    "whatsapp_counter": 0,
+    "telegram_counter": 0,
+    "pushover_counter": 0,
+    "email_counter": 0,
+    "custom_counter": 25,
+    "default_counter": 0,
+    "alert_counter": 0,
+    "presence_counter": 0,
+    "status_counter": 0,
+    "defaultTypeID": [
+      {
+        "name": "washing-machine",
+        "startVal": 30,
+        "endVal": 15,
+        "startCount": 5,
+        "endCount": 65,
+        "standby": 1,
+        "id": 1
+      },
+      {
+        "name": "dryer",
+        "startVal": 120,
+        "endVal": 15,
+        "startCount": 5,
+        "endCount": 50,
+        "standby": 1,
+        "id": 2
+      },
+      {
+        "name": "dishwasher",
+        "startVal": 15,
+        "endVal": 4,
+        "startCount": 3,
+        "endCount": 150,
+        "standby": 1,
+        "id": 3
+      },
+      {
+        "name": "computer",
+        "startVal": 20,
+        "endVal": 5,
+        "startCount": 2,
+        "endCount": 3,
+        "standby": 1,
+        "id": 4
+      },
+      {
+        "name": "electric-kettle",
+        "startVal": 15,
+        "endVal": 5,
+        "startCount": 2,
+        "endCount": 2,
+        "standby": 1,
+        "id": 5
+      },
+      {
+        "name": "microwave",
+        "startVal": 50,
+        "endVal": 20,
+        "startCount": 2,
+        "endCount": 1,
+        "standby": 1,
+        "id": 6
+      }
+    ],
+    "customTypeID": [
+      {
+        "name": "custom1",
+        "startVal": 55,
+        "endVal": 5,
+        "startCount": 5,
+        "endCount": 10,
+        "standby": 1,
+        "id": 21
+      },
+      {
+        "name": "custom2",
+        "startVal": 55,
+        "endVal": 5,
+        "startCount": 5,
+        "endCount": 10,
+        "standby": 1,
+        "id": 22
+      },
+      {
+        "name": "custom3",
+        "startVal": 55,
+        "endVal": 5,
+        "startCount": 5,
+        "endCount": 10,
+        "standby": 1,
+        "id": 23
+      },
+      {
+        "name": "custom4",
+        "startVal": 55,
+        "endVal": 5,
+        "startCount": 5,
+        "endCount": 10,
+        "standby": 1,
+        "id": 24
+      },
+      {
+        "name": "custom5",
+        "startVal": 55,
+        "endVal": 5,
+        "startCount": 5,
+        "endCount": 10,
+        "standby": 1,
+        "id": 25
+      }
+    ],
+    "valStates": [
+      {
+        "stateAction": "in action",
+        "stateStandby": "standby",
+        "stateOff": "switched off"
+      }
+    ],
+    "presence": [
+      {
+        "presence_Notification": false,
+        "presence_msg": false,
+        "dp_presence": "Only boolean is allowed"
+      }
     ]
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }
