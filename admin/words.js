@@ -316,42 +316,6 @@ systemDictionary = {
         "pl": "*zużycie",
         "zh-cn": "消耗/能源"
       },
-      "total consumption": {
-        "en": "Total<br>consumption",
-        "de": "Gesamt-<br>verbrauch",
-        "ru": "Общее<br>потребление",
-        "pt": "Consumo<br>total",
-        "nl": "Totaal<br>verbruik",
-        "fr": "Consommation<br>totale",
-        "it": "Consumo<br>totale",
-        "es": "Consumo<br>total",
-        "pl": "Całkowite<br>zużycie",
-        "zh-cn": "总消费"
-      },
-      "unit": {
-        "en": "unit",
-        "de": "Einheit",
-        "ru": "Ед. изм",
-        "pt": "unidade",
-        "nl": "eenheid",
-        "fr": "unité",
-        "it": "unità",
-        "es": "unidad",
-        "pl": "jednostka",
-        "zh-cn": "单元"
-      },
-      "costs": {
-        "en": "costs/kWh",
-        "de": "Kosten/<br>kWh",
-        "ru": "затраты/<br>кВтч",
-        "pt": "custos/<br>kWh",
-        "nl": "kosten/<br>kWh",
-        "fr": "coûts/<br>kWh",
-        "it": "costi/<br>kWh",
-        "es": "costos/<br>kWh",
-        "pl": "koszty/<br>kWh",
-        "zh-cn": "成本/千瓦时"
-      },
       "Power switch": {
         "en": "Power switch",
         "de": "Schalter AN/AUS",
@@ -668,30 +632,6 @@ systemDictionary = {
         "es": "estado: 'dispositivo apagado'",
         "pl": "status: „urządzenie wyłączone”",
         "zh-cn": "状态：“设备关闭”"
-      },
-      "currency": {
-        "en": "Currency",
-        "de": "Währung",
-        "ru": "Валюта",
-        "pt": "Moeda",
-        "nl": "Valuta",
-        "fr": "Devise",
-        "it": "Moneta",
-        "es": "Divisa",
-        "pl": "Waluta",
-        "zh-cn": "货币"
-      },
-      "Costs for the device operation": {
-        "en": "Costs for the device operation",
-        "de": "Kosten für den Gerätebetrieb",
-        "ru": "Затраты на эксплуатацию устройства",
-        "pt": "Custos para a operação do dispositivo",
-        "nl": "Kosten voor de werking van het apparaat",
-        "fr": "Coûts de fonctionnement de l'appareil",
-        "it": "Costi per il funzionamento del dispositivo",
-        "es": "Costos de operación del dispositivo",
-        "pl": "Koszty eksploatacji urządzenia",
-        "zh-cn": "设备操作成本"
       }
 
 };

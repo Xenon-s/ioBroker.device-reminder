@@ -1,27 +1,27 @@
 {
-  "_from": "iobroker.device-reminder@1.2.1",
-  "_id": "iobroker.device-reminder@1.2.1",
+  "_from": "iobroker.device-reminder@1.2.4",
+  "_id": "iobroker.device-reminder@1.2.4",
   "_inBundle": false,
-  "_integrity": "sha512-UuI2Gp9E8CfsqfJLhG96lejaAmcQVo2hvKNS2c11Z+AJ5RjIQBnsfQvaHLrS8Wgylf5qlTyKuuXKojkDq9tE9w==",
+  "_integrity": "sha512-eNvqH3uMHV1zgCWzpI4sxMbiG/1BjQBLcIswC1ndDmpZ6c1GdEAfAJdMujsnfozG41LPOSMTuhEpwkGswMlggg==",
   "_location": "/iobroker.device-reminder",
   "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "iobroker.device-reminder@1.2.1",
+    "raw": "iobroker.device-reminder@1.2.4",
     "name": "iobroker.device-reminder",
     "escapedName": "iobroker.device-reminder",
-    "rawSpec": "1.2.1",
+    "rawSpec": "1.2.4",
     "saveSpec": null,
-    "fetchSpec": "1.2.1"
+    "fetchSpec": "1.2.4"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/iobroker.device-reminder/-/iobroker.device-reminder-1.2.1.tgz",
-  "_shasum": "ea03c750f953cbe1ea48bbaf10f36ba60252b0b3",
-  "_spec": "iobroker.device-reminder@1.2.1",
+  "_resolved": "https://registry.npmjs.org/iobroker.device-reminder/-/iobroker.device-reminder-1.2.4.tgz",
+  "_shasum": "1fab89c58625fa33a553941ff7b84cbe1b658a0d",
+  "_spec": "iobroker.device-reminder@1.2.4",
   "_where": "/opt/iobroker",
   "author": {
     "name": "xenon-s",
@@ -80,5 +80,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "1.2.2"
+  "version": "1.2.5"
 }

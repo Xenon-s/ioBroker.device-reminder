@@ -48,7 +48,7 @@
             name: 'devices',
             // id: 'deviceName',
             obj: { dataChecked: [], dataFailed: [], err: `err-devices`, header: 'header-device', name: `'devices'`, anchorEn: `create-device`, anchorGer: `device-anlegen`, anchorName: `device` },
-            objType: { cmd: 'val', 1: 'name', 2: 'consumption', 3: 'switch', 4: 'consumptionTotal', cntr: 4 }
+            objType: { cmd: 'val', 1: 'name', 2: 'consumption', 3: 'switch', cntr: 3 }
         }
         dataSendTo.alexa = {
             name: 'alexa',
@@ -95,10 +95,6 @@
         dataSendTo.status = {
             name: 'status',
             obj: { dataChecked: [], dataFailed: [], err: `err-status`, header: 'header-status', name: `'device status'`, anchorEn: `custom-states`, anchorGer: `eigene-zustaende`, anchorName: `custom-status` }
-        };
-        dataSendTo.costs = {
-            name: 'costs',
-            obj: { dataChecked: [], dataFailed: [], err: `err-costs`, header: 'header-costs', name: `'costs'`, anchorEn: `costs`, anchorGer: `Kosten`, anchorName: `costs` }
         };
 
         let showSaveBtn;
@@ -363,12 +359,6 @@
                                     ids: settings.status !== undefined ? settings.status.id || [] : [],
                                     cntr: settings.status_counter !== undefined ? settings.status_counter || 0 : 0,
                                 };
-                                data.costs = {
-                                    name: 'costs',
-                                    idHTML: 'valCosts',
-                                    ids: settings.costs.id !== undefined ? settings.costs.id || [] : settings.costs,
-                                    cntr: settings.costs_counter !== undefined ? settings.costs_counter || 0 : 0,
-                                };
 
                                 return data;
                             };
@@ -419,46 +409,17 @@
                                     };
                                 };
 
-                                const checked = await checkInput(data, 'all');
-                                checkedUserInput = checked;
-
-                                values2table(data.devices.idHTML, data.devices.ids, onChange); // create table "devices", warten auf "types"
-                                $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true); // disable "name" in table default-types
-
                                 // trigger im "default table" setzen
                                 // default hat keinen "add button" 
                                 $('#defaultTypeID').find('.values-input').on('change', () => { // default hat keinen "add button"
                                     $('#btn-check-default').removeClass('disabled');
                                 });
 
-                                if(!data.costs.ids[0].active) {
-                                    showCell('none'); // Auswahlfelder fuer Kosten ausblenden
-                                };  
+                                const checked = await checkInput(data, 'all');
+                                checkedUserInput = checked;
 
-                                // Click-Event auf "Kosten aktiv" setzen -> Dann werden zusaetzliche Optionen im Table "devicesID" angezeigt
-                                $('#valCosts').find('.filled-in').on('change', async () => { 
-                                    const resCosts = await table2values(data.costs.idHTML); // Daten aus table "Kosten" holen
-                                    const resDeviceID = await table2values(data.devices.idHTML); // Daten aus table "deviceID" holen
-                                    if(!resCosts[0].active) {
-                                        showCell('none'); // Auswahlfelder fuer Kosten ausblenden
-                                    } else {
-                                        showCell('table-cell'); // Auswahlfelder fuer Kosten einblenden
-                                        values2table(data.devices.idHTML, resDeviceID, onChange); // table "deviceID" neu erstellen
-                                    }
-                                    if (M) M.updateTextFields();
-                                });
-
-                                /**
-                                 * @param {string} action
-                                 */
-                                function showCell(action) {
-                                    $('#create_Devices [data-name="consumptionTotal"]').css('display', action);
-                                    $('#create_Devices [data-name="unit"]').css('display', action);
-                                    if(action === 'none') {
-                                        $('#create_Devices tr td').eq(7).css('display', action);
-                                        $('#create_Devices tr td').eq(8).css('display', action);
-                                    };
-                                };
+                                values2table(data.devices.idHTML, data.devices.ids, onChange); // create table "devices", warten auf "types"
+                                $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true); // disable "name" in table default-types
 
                                 return checked
                             };
@@ -476,7 +437,6 @@
                             };
 
                             async function btnPressed(settings, name) {
-                                console.warn(name)
                                 const actData = await createData(settings)
                                 const data = await createSettings(actData);
                                 // dataGlobal = await createSettings(actData);
@@ -512,8 +472,8 @@
                                     }, 100);
                                 };
                             };
+
                         };
-                        // ----
                     };
                 } catch (e) {
                     console.error(e)
@@ -584,7 +544,6 @@
                                     type: data.type,
                                     pathConsumption: data.consumption,
                                     pathSwitch: data.switch,
-                                    pathConsumptionTotal: data.consumptionTotal,
                                     startText: data.startText,
                                     endText: data.endText,
                                     runtimeMax: data.runtimeMax,
@@ -781,9 +740,9 @@
                         const name = checkData[i].name
                         let obj = checkData[i].obj;
                         let arr = data[i].ids;
-                        if (name == 'status' || name =='costs') { // status wird nicht geprüft, da jede Eingabe erlaubt ist 
+                        if (name == 'status') { // status wird nicht geprüft, da jede Eingabe erlaubt ist [string]
                             checked(checkData[name].obj)
-                            $(`#err-${name}`).css('display', 'none');
+                            $('#err-status').css('display', 'none');
                         } else {
                             result[name] = [];
                             if (name == 'telegram' || name == 'whatsapp') {
@@ -800,7 +759,7 @@
             };
 
             async function checked(obj) {
-                if (obj.name !== `'device status'` && obj.name !== `'costs'` && (obj.dataChecked.length <= 0) && (obj.dataFailed.length <= 0)) {
+                if (obj.name !== `'device status'` && (obj.dataChecked.length <= 0) && (obj.dataFailed.length <= 0)) {
                     $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: grey;">
                             <i class="material-icons">check_circle_outline</i><span>${_("no entries found")}</span> </div>`);
                     // Header innen "config devices"
@@ -1157,7 +1116,7 @@
                                             </div>
                                         </div>
                                         <span class="translate" style="font-weight:bold;" data-lang="Required fields"></span>
-                                        <table class="table-values changeOnChangeEvent remove-last-column" id="create_Devices">
+                                        <table class="table-values changeOnChangeEvent remove-last-column">
                                             <thead>
                                                 <tr>
                                                     <th data-name="_index" style="width: 40px" class="header translate"></th>
@@ -1167,8 +1126,6 @@
                                                     <th data-name="switch" style="width: 100px" data-type="OID" class="header translate" data-lang="Power switch"></th>
                                                     <th data-name="startText" data-type="OID" class="header translate" data-lang="starttext"></th>
                                                     <th data-name="endText" data-type="OID" class="header translate" data-lang="endtext"></th>
-                                                    <th data-name="consumptionTotal" style="width: 100px" data-type="OID" class="header translate" data-lang="total consumption" id="showConsTotal"></th>
-                                                    <th data-name="unit" style="width: 100px" data-type="select" data-options="kWh;wh" data-default="kWh" class="header translate" id="showUnit" data-lang="unit"></th>
                                                     <th data-buttons="delete" style="width: 80px;" class="header translate del-Btn" data-lang="delete"></th>
                                                     <th data-name="id" style="width: 0px; display: none;" class="header translate">id</th>
                                                 </tr>
@@ -1531,41 +1488,12 @@
                                     <table class="table-values changeOnChangeEvent remove-first-column" id="table-states">
                                         <thead>
                                             <tr>
-                                                <th class="header translate" style="width: 0px; display: none;"></th>
+                                                <th class="header translate" style="width: 0px; display: none;">
+                                                </th>
                                                 <th class="header translate" data-type="text" data-name="stateAction" data-lang="status: 'in action'"></th>
                                                 <th class="header translate" data-type="text" data-name="stateStandby" data-lang="status: 'standby'"></th>
                                                 <th class="header translate" data-type="text" data-name="stateOff" data-lang="status: 'device off'"></th>
                                                 </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </li>
-
-                            <!-- costs -->
-
-                            <li>
-                                <div id="header-costs" class="translate" onclick="selectedHeader('costs')">
-                                    <!-- text -->
-                                </div>
-                                <div class="collapsible-body blue lighten-5" id="valCosts">
-                                    <div class="row">
-                                        <div style="display: flex; align-items: center;">
-                                            <div class="col s8" id="err-costs">
-                                                <!-- 'text' -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h5><span class="translate" data-lang="Costs for the device operation"></span></h5>
-                                    </div>
-                                    <table class="table-values changeOnChangeEvent remove-first-column" id="table-costs">
-                                        <thead>
-                                            <tr>
-                                                <th class="header translate" style="width: 0px; display: none;"></th>
-                                                <th class="header translate" data-type="checkbox" data-options="true;false" data-name="active" style="width: 60px" data-lang="active" id="checkCosts"></th>
-                                                <th class="header translate" data-type="number" data-name="costs" style="width: 150px" data-lang="costs"></th>
-                                                <th class="header translate" data-type="text" data-name="currency" style="width: 150px" data-lang="currency"></th>
-                                            </tr>
                                         </thead>
                                     </table>
                                 </div>
