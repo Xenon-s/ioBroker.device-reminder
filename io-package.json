@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.2.7",
+        "version": "1.2.8",
         "news": {
-            "1.2.7": {
+            "1.2.8": {
                 "en": "bugfix: error catching JSON \"last operations\" doesn't work",
                 "de": "Bugfix: Fehler beim Abfangen von JSON \"letzte Operationen\" funktioniert nicht",
                 "ru": "исправление: ошибка при отлове JSON \"последние операции\" не работает",

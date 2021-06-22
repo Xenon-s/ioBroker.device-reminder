@@ -162,7 +162,7 @@ is displayed.
 	Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
-### 1.2.7 (2021-06-22)
+### 1.2.8 (2021-06-22)
 * (xenon-s) bugfix: error catching JSON "last operations" doesn't work
 
 ### 1.2.4 (2021-06-13)
