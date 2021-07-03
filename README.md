@@ -242,7 +242,7 @@ is displayed.
 
 MIT License
 
-Copyright (c) 2021 xenon-s
+Copyright (c) 2021 xenon-s <ente_s@hotmail.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

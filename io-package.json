@@ -216,8 +216,7 @@
             {
                 "js-controller": ">=2.0.0"
             }
-        ],
-        "installedFrom": "iobroker.device-reminder@1.2.4"
+        ]
     },
     "native": {
         "devices_counter": 0,
