@@ -37,7 +37,7 @@
   "deprecated": false,
   "description": "device-reminder",
   "devDependencies": {
-    "@alcalzone/release-script": "^3.4.1",
+    "@alcalzone/release-script": "^3.4.2",
     "@iobroker/testing": "^2.5.2",
     "@types/chai": "^4.2.22",
     "@types/chai-as-promised": "^7.1.3",
