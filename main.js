@@ -330,20 +330,23 @@ class deviceReminder extends utils.Adapter {
                  * @param {string | string} statusDevice
                  * @param {string | number} consumpLive
                  * @param {string | number} averageConsumption
+                 * @param {string | number} startTotalConsumption
                  * @param {string | number} runtime
                  * @param {string | number} lastRuntime
                  * @param {string | string} messageDP
                  */
-                constructor(obj, statusDevice, consumpLivePath, runtimePath, runtimeMSPath, lastRuntimePath, runtimeMaxDP, alertRuntimeDP, lastOperations, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal) {
+                constructor(obj, statusDevice, consumpLivePath, runtimePath, runtimeMSPath, lastRuntimePath, runtimeMaxDP, alertRuntimeDP, lastOperations, messageDP, autoOffDP, averageConsumption, startTotalConsumptionPath, doNotDisturb, objVal) {
                     // DPs
                     this.enabled = obj.enabled;
                     this.name = obj.name;
                     this.type = obj.type;
                     this.currentConsumption = obj.pathConsumption;
+                    this.pathExternalTotalConsumption = obj.pathExternalTotalConsumption;
                     this.switchPower = obj.pathSwitch;
                     // script intern
                     this.pathStatus = statusDevice;
                     this.pathLiveConsumption = consumpLivePath;
+                    this.pathStartTotalConsumption = startTotalConsumptionPath;
                     this.timeTotal = runtimePath;
                     this.timeTotalMs = runtimeMSPath;
                     this.lastRuntime = lastRuntimePath;
@@ -367,6 +370,8 @@ class deviceReminder extends utils.Adapter {
                     this.autoOff = obj.autoOff;
                     // number
                     this.consumption = 0;
+                    this.consumptionTotal = 0;
+                    this.consumptionTotalStart = 0;
                     this.resultStart = 0;
                     this.resultEnd = 0;
                     this.resultStandby = 0;
@@ -528,6 +533,7 @@ class deviceReminder extends utils.Adapter {
                 this.adapterDPs[name].messageDP,
                 this.adapterDPs[name].autoOffDP,
                 this.adapterDPs[name].averageConsumption,
+                this.adapterDPs[name].startTotalConsumption,
                 this.adapterDPs[name].doNotDisturb,
                 objVal);
 
@@ -591,23 +597,25 @@ class deviceReminder extends utils.Adapter {
 
         // try {
         const trigger = this.trigger[id];
-        const valueType = `"${this.values[trigger.id][trigger.target].type}"`;
-        let dpType = `"${typeof state.val}"`;
-        const idPath = id.split('.');
+        if(trigger) {
+            const valueType = `"${this.values[trigger.id][trigger.target].type}"`;
+            let dpType = `"${typeof state.val}"`;
+            const idPath = id.split('.');
 
-        switch (trigger.type) {
-            case 'value':
-                if (dpType = valueType) {
-                    this.values[trigger.id][trigger.target].val = state.val;
-                    if (!state.ack && (`${this.name}` === `${idPath[0]}`)) {
-                        this.setStateAsync(this.values[trigger.id][trigger.target].path, state.val, true);
+            switch (trigger.type) {
+                case 'value':
+                    if (dpType = valueType) {
+                        this.values[trigger.id][trigger.target].val = state.val;
+                        if (!state.ack && (`${this.name}` === `${idPath[0]}`)) {
+                            this.setStateAsync(this.values[trigger.id][trigger.target].path, state.val, true);
+                        };
                     };
-                };
-                break;
-            case 'presence':
-                this.values[trigger.id].val = state.val;
-                break;
-        };
+                    break;
+                case 'presence':
+                    this.values[trigger.id].val = state.val;
+                    break;
+            };
+        }
         // } catch (error) {
         //     this.log.error(`[onStateChange] <${JSON.stringify(this.trigger[id])}>`);
         //     this.log.error(`[onStateChange] <${error}>`);
@@ -726,6 +734,9 @@ class deviceReminder extends utils.Adapter {
 
             device.startMessageSent = true; // startMessage wurde versendet
             device.endMessageSent = false; // Ende Benachrichtigung freigeben
+
+            const totalConsumption = await this.getCheckedState('foreign', device.pathExternalTotalConsumption, 0);
+            this.setStateAsync(device.pathStartTotalConsumption, totalConsumption, true);
         };
 
         // device in Betrieb
@@ -1101,7 +1112,19 @@ class deviceReminder extends utils.Adapter {
                 break;
             case "end":
                 msg = await this.createObjMsg(device.endMessageText);
-                this.log.debug(`[${JSON.stringify(device.name)}]: endmessage: ${JSON.stringify(device.endMessageText)}`);
+
+                const startConsumption = await this.getCheckedState(null, device.pathStartTotalConsumption, 0);
+                const endConsumption = await this.getCheckedState('foreign', device.pathExternalTotalConsumption, 0);
+                const consumption = endConsumption - startConsumption;
+                const consumptionDevided = consumption / 1000.0
+
+                msg = msg.replace("{consumption}", consumption);
+                msg = msg.replace("{consumption in Wh}", consumptionDevided);
+
+                const runtime = await this.getCheckedState(null, device.timeTotal, `00:00:00`)
+                msg = msg.replace("{runtime}", runtime);
+
+                this.log.debug(`[${JSON.stringify(device.name)}]: endmessage: ${JSON.stringify(msg)}`);
                 sendMsg(id, msg);
                 if (!bPresence) {
                     const objTemp = {

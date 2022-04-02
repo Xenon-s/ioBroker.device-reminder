@@ -316,6 +316,18 @@ systemDictionary = {
         "pl": "*zużycie",
         "zh-cn": "消耗/能源"
       },
+      "totalConsumption": {
+        "en": "Total consumption",
+        "de": "Gesamter Verbrauch",
+        "ru": "Total consumption",
+        "pt": "Total consumption",
+        "nl": "Total consumption",
+        "fr": "Total consumption",
+        "it": "Total consumption",
+        "es": "Total consumption",
+        "pl": "Total consumption",
+        "zh-cn": "Total consumption"
+      },
       "Power switch": {
         "en": "Power switch",
         "de": "Schalter AN/AUS",
