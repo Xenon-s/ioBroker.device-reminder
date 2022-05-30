@@ -1,0 +1,13 @@
+{
+  "name": "dev-server.device-reminder",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "iobroker.admin": "latest",
+    "iobroker.device-reminder": "file:../../iobroker.device-reminder-1.2.9.tgz",
+    "iobroker.js-controller": "latest"
+  },
+  "dev-server": {
+    "adminPort": 8081
+  }
+}

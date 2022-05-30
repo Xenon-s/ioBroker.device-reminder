@@ -1,0 +1,69 @@
+{
+  "system": {
+    "memoryLimitMB": 0,
+    "hostname": "dev-device-reminder-iob-template",
+    "instanceStartInterval": 2000,
+    "compact": false,
+    "allowShellCommands": false,
+    "memLimitWarn": 100,
+    "memLimitError": 50
+  },
+  "multihostService": {
+    "enabled": false
+  },
+  "network": {
+    "IPv4": true,
+    "IPv6": false,
+    "bindAddress": "127.0.0.1",
+    "useSystemNpm": true
+  },
+  "objects": {
+    "type": "jsonl",
+    "host": "127.0.0.1",
+    "port": 26426,
+    "noFileCache": false,
+    "maxQueue": 1000,
+    "connectTimeout": 2000,
+    "writeFileInterval": 5000,
+    "dataDir": "",
+    "options": {
+      "auth_pass": null,
+      "retry_max_delay": 5000,
+      "retry_max_count": 19,
+      "db": 0,
+      "family": 0
+    }
+  },
+  "states": {
+    "type": "jsonl",
+    "host": "127.0.0.1",
+    "port": 24426,
+    "connectTimeout": 2000,
+    "writeFileInterval": 30000,
+    "dataDir": "",
+    "options": {
+      "auth_pass": null,
+      "retry_max_delay": 5000,
+      "retry_max_count": 19,
+      "db": 0,
+      "family": 0
+    }
+  },
+  "log": {
+    "level": "debug",
+    "maxDays": 7,
+    "noStdout": false,
+    "transport": {
+      "file1": {
+        "type": "file",
+        "enabled": true,
+        "filename": "log/iobroker",
+        "fileext": ".log",
+        "maxsize": null,
+        "maxFiles": null
+      }
+    }
+  },
+  "plugins": {},
+  "dataDir": "../../iobroker-data/"
+}

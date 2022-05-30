@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+require('/home/sfeldkamp/ioBroker.device-reminder/.dev-server/default/node_modules/iobroker.js-controller/lib/setup').execute();
