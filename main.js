@@ -712,7 +712,7 @@ class deviceReminder extends utils.Adapter {
                     device.timeoutMsg = null;
                 };
                 if (!value.dnd.val) {
-                    await this.setVolume(id, true, "alexa");
+                    await this.set#(id, true, "alexa");
                     await this.setVolume(id, true, "sayit");
                 };
                 device.timeoutMsg = setTimeout(async () => { //timeout starten
@@ -1168,7 +1168,7 @@ class deviceReminder extends utils.Adapter {
      * @param {boolean} action
      * @param {string} strVol
      */
-        async volume(obj, action, strVol) {
+            async volume(obj, action, strVol) {
         /**@type {string}*/
         let pathOld;
         /**@type {string}*/
@@ -1179,8 +1179,8 @@ class deviceReminder extends utils.Adapter {
         let volume;
         /**@type {number}*/
         let volOld;
-        volume = obj.volume;
-        volOld = obj.volOld;
+        volume = parseInt(obj.volume);
+        volOld = parseInt(obj.volOld);
         pathOld = obj.path;
         length = pathOld.lastIndexOf('.');
         pathNew = pathOld.slice(0, length);
@@ -1200,7 +1200,7 @@ class deviceReminder extends utils.Adapter {
                 } else {
                     obj.volOld = null
                 };
-                this.log.info(`[1203]: type volume : <${typeof (volume)}>, val: ${volume}`);
+                this.log.info(`[1214]: type volume : ${typeof (volume)}, val: ${volume}`);
                 await this.setForeignStateAsync(pathNew, volume);
 
             } else {
@@ -1210,7 +1210,7 @@ class deviceReminder extends utils.Adapter {
                 };
                 if (obj.volOld !== null) {
                     obj.timeout = setTimeout(async() => { //timeout starten
-                        this.log.info(`[1213]: type volOld : <${typeof (volOld)}>, val: ${volOld}`);
+                        this.log.info(`[1224]: type volOld : ${typeof (volOld)}, val: ${volOld}`);
                         await this.setForeignStateAsync(pathNew, volOld);
                     }, 2000);
                 };
