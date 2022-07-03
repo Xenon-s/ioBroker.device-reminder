@@ -712,7 +712,7 @@ class deviceReminder extends utils.Adapter {
                     device.timeoutMsg = null;
                 };
                 if (!value.dnd.val) {
-                    await this.set#(id, true, "alexa");
+                    await this.setVolume(id, true, "alexa");
                     await this.setVolume(id, true, "sayit");
                 };
                 device.timeoutMsg = setTimeout(async () => { //timeout starten
