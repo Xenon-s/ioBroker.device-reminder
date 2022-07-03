@@ -1168,12 +1168,17 @@ class deviceReminder extends utils.Adapter {
      * @param {boolean} action
      * @param {string} strVol
      */
-    async volume(obj, action, strVol) {
-        let pathOld = ``;
-        let pathNew = ``;
-        let length = 0;
-        let volume = 0;
-        let volOld = 0;
+        async volume(obj, action, strVol) {
+        /**@type {string}*/
+        let pathOld;
+        /**@type {string}*/
+        let pathNew;
+        /**@type {number}*/
+        let length;
+        /**@type {number}*/
+        let volume;
+        /**@type {number}*/
+        let volOld;
         volume = obj.volume;
         volOld = obj.volOld;
         pathOld = obj.path;
@@ -1195,6 +1200,7 @@ class deviceReminder extends utils.Adapter {
                 } else {
                     obj.volOld = null
                 };
+                this.log.info(`[1203]: type volume : <${typeof (volume)}>, val: ${volume}`);
                 await this.setForeignStateAsync(pathNew, volume);
 
             } else {
@@ -1203,7 +1209,8 @@ class deviceReminder extends utils.Adapter {
                     obj.timeout = null;
                 };
                 if (obj.volOld !== null) {
-                    obj.timeout = setTimeout(async () => { //timeout starten
+                    obj.timeout = setTimeout(async() => { //timeout starten
+                        this.log.info(`[1213]: type volOld : <${typeof (volOld)}>, val: ${volOld}`);
                         await this.setForeignStateAsync(pathNew, volOld);
                     }, 2000);
                 };
