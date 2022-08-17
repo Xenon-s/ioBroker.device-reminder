@@ -8,13 +8,8 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require(`@iobroker/adapter-core`);
-const {
-    create
-} = require("domain");
-const arrDP = require('./lib/stateAttr.js'); // Load attribute library
-const statesMsg = require('./lib/statesMsg.js'); // Load attribute library
-
-let lang = '';
+const { create } = require("domain");
+const arrDP = require('./lib/states.js')
 
 let presence = {};
 let bPresence = false;
@@ -69,16 +64,11 @@ class deviceReminder extends utils.Adapter {
 
         this.setState('info.connection', false, true);
 
-        // get language from system
-        const strTemp = await this.getForeignObjectAsync('system.config');
-        lang = strTemp.common.language;
-
-        this.log.warn(statesMsg.costs[lang])
-
         const migration = await this.config.migration !== undefined ? this.config.migration || false : false;
 
         if (!migration) {
-            this.log.error(statesMsg.log.update_detected[lang]);
+            this.log.warn('Update detected! Please open the Admin UI (instances -> device-reminder) and follow the instructions!');
+            this.log.warn('Update erkannt! Bitte die Admin UI (Instanzen -> device-reminder) öffnen und den Anweisungen Folgen!');
         } else {
             // Initialize your adapter here
             this.devicesCompleted = await this.createDevices();
@@ -211,12 +201,6 @@ class deviceReminder extends utils.Adapter {
                         target: 'switch',
                         type: 'value'
                     };
-                    if (device.consumpTotal !== undefined && device.consumpTotal !== ``) this.trigger[device.consumpTotal] = {
-                        id: id,
-                        path: device.consumpTotal,
-                        target: 'consumpTotal',
-                        type: 'value'
-                    };
 
                     // values
                     this.values[id] = {
@@ -244,11 +228,6 @@ class deviceReminder extends utils.Adapter {
                         dateJSON: {
                             path: device.lastOperations,
                             val: ''
-                        },
-                        consumpTotal: {
-                            path: device.consumpTotal,
-                            val: 0,
-                            type: 'number'
                         }
                     };
 
@@ -306,8 +285,15 @@ class deviceReminder extends utils.Adapter {
         value.switch.val = await this.getCheckedState('foreign', value.switch.path, false);
         value.dnd.val = await this.getCheckedState(null, value.dnd.path, false);
         value.runtimeMax.val = await this.getCheckedState(null, value.runtimeMax.path, 0);
-        value.dateJSON.val = await this.getCheckedState(null, value.dateJSON.path, '[]');
-        value.consumpTotal.val = await this.getCheckedState(null, value.consumpTotal.path, 0);
+        value.dateJSON.val = await this.getCheckedState(null, value.dateJSON.path, '');
+
+        try {
+            if (value.dateJSON.val != '') {
+                device.dateJSON = JSON.parse(value.dateJSON.val);
+            };
+        } catch (error) {
+            device.dateJSON = null;
+        };
 
         // setState
         this.setStateAsync(device.runtimeMaxDP, await value.runtimeMax.val, true);
@@ -355,7 +341,6 @@ class deviceReminder extends utils.Adapter {
                     this.type = obj.type;
                     this.currentConsumption = obj.pathConsumption;
                     this.switchPower = obj.pathSwitch;
-                    this.consumpTotal = obj.pathConsumptionTotal;
                     // script intern
                     this.pathStatus = statusDevice;
                     this.pathLiveConsumption = consumpLivePath;
@@ -390,9 +375,6 @@ class deviceReminder extends utils.Adapter {
                     this.startValue = objVal.startVal;
                     this.endValue = objVal.endVal;
                     this.standby = objVal.standby != '' ? objVal.standby || 1 : 1;
-                    this.consumpStart = 0;
-                    this.consumpEnd = 0;
-                    this.price = 0.00;
                     // Zaehler Abbruchbedingungen
                     this.startCount = objVal.startCount;
                     this.endCount = objVal.endCount;
@@ -418,7 +400,7 @@ class deviceReminder extends utils.Adapter {
 
                     /*obj Startext erstellen*/
                     this.startMessageText = obj.startText;
-                    if (obj.startText != `` && obj.startText != undefined) {
+                    if (obj.startText != `` && obj.startText != undefined && obj.startText.length > 0) {
                         this.startMessage = true;
                     } else {
                         this.startMessage = false;
@@ -426,7 +408,7 @@ class deviceReminder extends utils.Adapter {
 
                     /*obj Endtext erstellen*/
                     this.endMessageText = obj.endText;
-                    if (obj.endText != `` && obj.endText != undefined) {
+                    if (obj.endText != `` && obj.endText != undefined && obj.endText.length > 0) {
                         this.endMessage = true;
                     } else {
                         this.endMessage = false;
@@ -648,34 +630,36 @@ class deviceReminder extends utils.Adapter {
         const device = this.devicesCompleted[id];
         this.log.debug(`[${JSON.stringify(device.name)}]: Berechnung gestartet`);
         switch (device.started) {
-            case true: {
-                // standby Berechnung starten
-                await this.calcStart(id, "standby"); // standby Berechnung
-                // endwert Berechnung durchfuehren
-                await this.calcStart(id, "end"); // Endwert Berechnung
-                device.arrStart = [];
-                this.log.debug(`[${JSON.stringify(device.name)}]: arrStart gelöscht`);
+            case true:
+                {
+                    // standby Berechnung starten
+                    await this.calcStart(id, "standby"); // standby Berechnung
+                    // endwert Berechnung durchfuehren
+                    await this.calcStart(id, "end"); // Endwert Berechnung
+                    device.arrStart = [];
+                    this.log.debug(`[${JSON.stringify(device.name)}]: arrStart gelöscht`);
+                    break;
+                };
+            case false:
+                {
+                    if (this.values[id].consumption.val < device.startValue) {
+                        // Startabbruch -> array leeren
+                        device.arrStart = [];
+                        this.log.debug(`[${JSON.stringify(device.name)}]: arrStart gelöscht`);
+                        // standby Berechnung durchfuehren
+                        await this.calcStart(id, "standby"); // standby Berechnung
+                    } else {
+                        // Startphase -> Startwertberechnung
+                        await this.calcStart(id, "start"); // Startwert Berechnung
+                        // standby Berechnung löschen
+                        // this.setStatus(id, 4);
+                        device.arrStandby = [];
+                        this.log.debug(`[${JSON.stringify(device.name)}]: arrStandby gelöscht`);
+                    };
+                    break;
+                };
+            default:
                 break;
-            };
-        case false: {
-            if (this.values[id].consumption.val < device.startValue) {
-                // Startabbruch -> array leeren
-                device.arrStart = [];
-                this.log.debug(`[${JSON.stringify(device.name)}]: arrStart gelöscht`);
-                // standby Berechnung durchfuehren
-                await this.calcStart(id, "standby"); // standby Berechnung
-            } else {
-                // Startphase -> Startwertberechnung
-                await this.calcStart(id, "start"); // Startwert Berechnung
-                // standby Berechnung löschen
-                // this.setStatus(id, 4);
-                device.arrStandby = [];
-                this.log.debug(`[${JSON.stringify(device.name)}]: arrStandby gelöscht`);
-            };
-            break;
-        };
-        default:
-            break;
         };
         this.log.debug(`[${JSON.stringify(device.name)}]: Berechnung beendet`);
     };
@@ -733,7 +717,7 @@ class deviceReminder extends utils.Adapter {
                     await this.setVolume(id, true, "alexa");
                     await this.setVolume(id, true, "sayit");
                 };
-                device.timeoutMsg = setTimeout(async () => { //timeout starten
+                device.timeoutMsg = setTimeout(async() => { //timeout starten
                     this.message(id, "start");
                     if (!value.dnd.val) {
                         await this.setVolume(id, false, "alexa");
@@ -763,19 +747,19 @@ class deviceReminder extends utils.Adapter {
             device.started = false; // device started = false ;
             device.endtimeJSON = this.formatDate(new Date(), "DD.MM.YYYY hh:mm:ss");
 
-            const objJSON = {
-                startVal: `${device.startTimeJSON}`,
-                end: `${device.endtimeJSON}`,
-                runtime: `${device.runtimeJSON}`,
+            const strJSON = `{"start":"${device.startTimeJSON}", "end":"${device.endtimeJSON}", "runtime":"${device.runtimeJSON}"}`;
+
+            if (device.dateJSON === null) {
+                device.dateJSON = [];
             };
 
-            device.dateJSON.push(JSON.stringify(objJSON));
+            device.dateJSON.push(JSON.parse(strJSON));
 
-            if (device.dateJSON.length >= 10) {
-                device.arrStandby.shift();
+            if (device.dateJSON.length >= 15) {
+                device.dateJSON.shift();
             };
 
-            this.setStateAsync(device.lastOperations, `${device.dateJSON}`, true);
+            this.setStateAsync(device.lastOperations, `${JSON.stringify(device.dateJSON)}`, true);
             this.setStateAsync(device.lastRuntime, device.runtimeJSON, true);
             this.setStateAsync(device.alertRuntime, false, true);
 
@@ -806,7 +790,7 @@ class deviceReminder extends utils.Adapter {
                     await this.setVolume(id, true, "alexa");
                     await this.setVolume(id, true, "sayit");
                 };
-                device.timeoutMsg = setTimeout(async () => { //timeout starten
+                device.timeoutMsg = setTimeout(async() => { //timeout starten
                     this.message(id, "end"); // send message
                     if (!value.dnd.val) {
                         await this.setVolume(id, false, "alexa");
@@ -845,7 +829,7 @@ class deviceReminder extends utils.Adapter {
         /* auto off*/
         if (device.autoOff) { // auto Off aktiv, timeout aktiv 
             if (device.timeout == null) {
-                device.timeout = setTimeout(async () => { //timeout starten
+                device.timeout = setTimeout(async() => { //timeout starten
                     this.setStatus(id, 3);
                     if (device.timeout != null) {
                         clearTimeout(device.timeout);
@@ -865,41 +849,47 @@ class deviceReminder extends utils.Adapter {
         const device = this.devicesCompleted[id];
         this.log.debug(`[${JSON.stringify(device.name)}]: value status: ${status}`);
         switch (status) {
-            case 0: {
-                this.setStateAsync(device.pathStatus, this.states.off, true); // setState "off" in DP
-                this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.off} (finished/off)`);
-                break;
-            };
-        case 1: {
-            this.setStateAsync(device.pathStatus, this.states.action, true); // setState "action" in DP
-            this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.action} (in action)`);
-            break;
-        };
-        case 2: {
-            this.setStateAsync(device.pathStatus, this.states.standby, true); // setState "standby" in DP
-            this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.standby} (in standby)`);
-            break;
-        };
-        case 3: {
-            if (device.autoOff && device.switchPower != null) {
-                if (this.values[id].switch.val) {
-                    await this.setForeignStateAsync(device.switchPower, false);
+            case 0:
+                {
+                    this.setStateAsync(device.pathStatus, this.states.off, true); // setState "off" in DP
+                    this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.off} (finished/off)`);
+                    break;
                 };
-            };
-            this.log.debug(`4`);
-            this.setStatus(id, 0);
-            break;
-        };
-        case 4: {
-            this.setStateAsync(device.pathStatus, `initialize`, true); // setState in DP
-            this.log.debug(`[${JSON.stringify(device.name)}]: initialize`);
-            break;
-        };
-        default: {
-            this.log.debug(`[${JSON.stringify(device.name)}]: unknown status`);
-            this.setStateAsync(device.pathStatus, `unknown status`, true); // setState in DP
-            break;
-        };
+            case 1:
+                {
+                    this.setStateAsync(device.pathStatus, this.states.action, true); // setState "action" in DP
+                    this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.action} (in action)`);
+                    break;
+                };
+            case 2:
+                {
+                    this.setStateAsync(device.pathStatus, this.states.standby, true); // setState "standby" in DP
+                    this.log.debug(`[${JSON.stringify(device.name)}]: ${this.states.standby} (in standby)`);
+                    break;
+                };
+            case 3:
+                {
+                    if (device.autoOff && device.switchPower != null) {
+                        if (this.values[id].switch.val) {
+                            await this.setForeignStateAsync(device.switchPower, false);
+                        };
+                    };
+                    this.log.debug(`4`);
+                    this.setStatus(id, 0);
+                    break;
+                };
+            case 4:
+                {
+                    this.setStateAsync(device.pathStatus, `initialize`, true); // setState in DP
+                    this.log.debug(`[${JSON.stringify(device.name)}]: initialize`);
+                    break;
+                };
+            default:
+                {
+                    this.log.debug(`[${JSON.stringify(device.name)}]: unknown status`);
+                    this.setStateAsync(device.pathStatus, `unknown status`, true); // setState in DP
+                    break;
+                };
         };
     };
 
@@ -912,40 +902,44 @@ class deviceReminder extends utils.Adapter {
         const value = this.values[id].consumption.val;
         this.log.debug(`[${JSON.stringify(device.name)}]: berechnung "${type}" wird ausgefuehrt`);
         switch (type) {
-            case "start": {
-                device.arrStart.push(value);
-                device.resultStart = await this.calculation(device.resultStart, device.arrStart);
-                this.log.debug(`[${JSON.stringify(device.name)}]: resultTemp start: ${device.resultStart}`);
-                this.log.debug(`[${JSON.stringify(device.name)}]: Länge array start: ${device.arrStart.length}, Inhalt: [${device.arrStart}]`);
-                this.setStateAsync(device.averageConsumption, device.resultStart, true);
-                break;
-            };
-        case "end": {
-            device.arrEnd.push(value);
-            device.resultEnd = await this.calculation(device.resultEnd, device.arrEnd);
-            this.log.debug(`[${JSON.stringify(device.name)}]: Länge array ende: ${device.arrEnd.length}, Inhalt: [${device.arrEnd}]`);
-            this.log.debug(`[${JSON.stringify(device.name)}]: resultTemp end: ${device.resultEnd}`);
-            if (device.arrEnd.length > device.endCount) {
-                device.arrEnd.shift();
-            };
-            this.setStateAsync(device.averageConsumption, device.resultEnd, true);
-            break;
-        };
-        case "standby": {
-            device.arrStandby.push(value);
-            device.resultStandby = await this.calculation(device.resultStandby, device.arrStandby);
-            this.log.debug(`[${JSON.stringify(device.name)}]: Länge array standby: ${device.arrStandby.length}, Inhalt: [${device.arrStandby}]`);
-            this.log.debug(`[${JSON.stringify(device.name)}]: resultTemp standby: ${device.resultStandby}`);
-            if (device.arrStandby.length > device.valCancel) {
-                device.arrStandby.shift();
-            };
-            this.setStateAsync(device.averageConsumption, device.resultStandby, true);
-            break;
-        };
-        default: {
-            this.log.warn(`Calculation could not be completed. Input is wrong. Report this to the developer`);
-            break;
-        };
+            case "start":
+                {
+                    device.arrStart.push(value);
+                    device.resultStart = await this.calculation(device.resultStart, device.arrStart);
+                    this.log.debug(`[${JSON.stringify(device.name)}]: resultTemp start: ${device.resultStart}`);
+                    this.log.debug(`[${JSON.stringify(device.name)}]: Länge array start: ${device.arrStart.length}, Inhalt: [${device.arrStart}]`);
+                    this.setStateAsync(device.averageConsumption, device.resultStart, true);
+                    break;
+                };
+            case "end":
+                {
+                    device.arrEnd.push(value);
+                    device.resultEnd = await this.calculation(device.resultEnd, device.arrEnd);
+                    this.log.debug(`[${JSON.stringify(device.name)}]: Länge array ende: ${device.arrEnd.length}, Inhalt: [${device.arrEnd}]`);
+                    this.log.debug(`[${JSON.stringify(device.name)}]: resultTemp end: ${device.resultEnd}`);
+                    if (device.arrEnd.length > device.endCount) {
+                        device.arrEnd.shift();
+                    };
+                    this.setStateAsync(device.averageConsumption, device.resultEnd, true);
+                    break;
+                };
+            case "standby":
+                {
+                    device.arrStandby.push(value);
+                    device.resultStandby = await this.calculation(device.resultStandby, device.arrStandby);
+                    this.log.debug(`[${JSON.stringify(device.name)}]: Länge array standby: ${device.arrStandby.length}, Inhalt: [${device.arrStandby}]`);
+                    this.log.debug(`[${JSON.stringify(device.name)}]: resultTemp standby: ${device.resultStandby}`);
+                    if (device.arrStandby.length > device.valCancel) {
+                        device.arrStandby.shift();
+                    };
+                    this.setStateAsync(device.averageConsumption, device.resultStandby, true);
+                    break;
+                };
+            default:
+                {
+                    this.log.warn(`Calculation could not be completed. Input is wrong. Report this to the developer`);
+                    break;
+                };
         };
     };
 
@@ -1011,7 +1005,7 @@ class deviceReminder extends utils.Adapter {
         let time = `${aHours}:${aMin}`;
         time = await this.str2time(time);
 
-        const sendMsg = async (id, msg) => {
+        const sendMsg = async(id, msg) => {
             // trigger dp
             this.setStateAsync(device.messageDP, msg, true);
             // send telegram
@@ -1157,28 +1151,31 @@ class deviceReminder extends utils.Adapter {
         const device = this.devicesCompleted[id];
         this.log.debug(`[${JSON.stringify(device.name)}]: setVolume `)
         switch (type) {
-            case "alexa": {
-                if (device.alexa) {
-                    for (const i in device.alexaID) {
-                        const strVol = '.speak-volume';
-                        await this.volume(this.alexaInput[device.alexaID[i]], action, strVol)
+            case "alexa":
+                {
+                    if (device.alexa) {
+                        for (const i in device.alexaID) {
+                            const strVol = '.speak-volume';
+                            await this.volume(this.alexaInput[device.alexaID[i]], action, strVol)
+                        };
                     };
+                    break;
                 };
-                break;
-            };
-        case "sayit": {
-            if (device.sayIt) {
-                for (const i in device.sayItID) {
-                    const strVol = '.volume';
-                    await this.volume(this.sayitInput[device.sayItID[i]], action, strVol)
+            case "sayit":
+                {
+                    if (device.sayIt) {
+                        for (const i in device.sayItID) {
+                            const strVol = '.volume';
+                            await this.volume(this.sayitInput[device.sayItID[i]], action, strVol)
+                        };
+                    };
+                    break;
                 };
-            };
-            break;
-        };
-        default: {
-            this.log.warn(`Volume could not be set. Input is wrong. Report this to the developer`);
-            break;
-        };
+            default:
+                {
+                    this.log.warn(`Volume could not be set. Input is wrong. Report this to the developer`);
+                    break;
+                };
         };
     };
 
@@ -1209,7 +1206,7 @@ class deviceReminder extends utils.Adapter {
                 let val = 0;
                 val = await this.getCheckedState('foreign', pathNew, 30);
                 if (val !== null && val !== undefined) {
-                    obj.volOld = val.val;
+                    obj.volOld = val;
                 } else {
                     obj.volOld = null
                 };
@@ -1221,7 +1218,7 @@ class deviceReminder extends utils.Adapter {
                     obj.timeout = null;
                 };
                 if (obj.volOld !== null) {
-                    obj.timeout = setTimeout(async () => { //timeout starten
+                    obj.timeout = setTimeout(async() => { //timeout starten
                         await this.setForeignStateAsync(pathNew, volOld);
                     }, 2000);
                 };
@@ -1233,19 +1230,20 @@ class deviceReminder extends utils.Adapter {
      * @param {string} objMsg
      */
     async createObjMsg(objMsg) {
+        this.log.debug(`MESSAGEPATH: ${objMsg}`);
         let msgTemp = ``;
         let length = 0;
         let lengthTotal = 0;
         length = (objMsg.lastIndexOf(".") + 1);
         lengthTotal = objMsg.length;
-        if (objMsg != `` && objMsg != undefined) {
+        if (objMsg != `` && objMsg != undefined && objMsg.length > 0) {
             // message != undefined
             if (length < lengthTotal) {
                 // last digit is a dot TRUE
                 if (await this.getForeignObjectAsync(objMsg) != null) {
                     // msg from DP TRUE
                     const result = await this.getCheckedState('foreign', objMsg, `[ERROR] Object Message not found`);;
-                    msgTemp = result.val;
+                    msgTemp = result;
                 } else {
                     // msg from DP false
                     msgTemp = objMsg;
@@ -1254,7 +1252,8 @@ class deviceReminder extends utils.Adapter {
                 // last digit is a dot FALSE
                 msgTemp = objMsg;
             };
-        }
+        };
+        this.log.debug(`MESSAGE: ${msgTemp}`);
         return msgTemp;
     };
 
@@ -1332,7 +1331,7 @@ class deviceReminder extends utils.Adapter {
 
     async onMessage(obj) {
         try {
-            this.log.debug(`Data from configuration received : ${JSON.stringify(obj)}`);
+            this.log.warn(`Data from configuration received : ${JSON.stringify(obj)}`);
 
             const counter = await obj.message;
             this.log.debug(`COUNTER ON MESSAGE: ${JSON.stringify(counter)}`);
@@ -1372,59 +1371,59 @@ class deviceReminder extends utils.Adapter {
         };
 
         switch (cmd.cmd) {
-            case 'val': {
-                for (let val = cmd.cntr; val > 0; val--) {
-                    for (const i in array) {
-                        this.log.warn(JSON.stringify(array[i]))
-                        if (array[i][cmd[val]] != undefined && array[i][cmd[val]] != `` && array[i].check == 'open') {
-                            if (cmd[val] != 'name' && array[i][cmd[val]] != undefined && array[i][cmd[val]] != ``) {
-                                if (!await this.getForeignObjectAsync(array[i][cmd[val]])) array[i].check = 'err';
-                            };
-                        } else if (cmd[val] !== 'switch' && cmd[val] !== 'consumptionTotal') {
-                            array[i].check = 'err';
+            case 'val':
+                {
+                    for (let val = cmd.cntr; val > 0; val--) {
+                        for (const i in array) {
+                            if (array[i][cmd[val]] != undefined && array[i][cmd[val]] != `` && array[i].check == 'open') {
+                                if (cmd[val] != 'name' && array[i][cmd[val]] != undefined && array[i][cmd[val]] != ``) {
+                                    if (!await this.getForeignObjectAsync(array[i][cmd[val]])) array[i].check = 'err';
+                                };
+                            } else if (cmd[val] !== 'switch') array[i].check = 'err';
+                            if (array[i].check == 'open' && val == 1) {
+                                checked.push({
+                                    name: array[i]['name'],
+                                    id: array[i].id
+                                });
+                            } else if (array[i].check == 'err' && val == 1) failed.push(array[i]['name']);
                         };
-                        if (array[i].check == 'open' && val == 1) {
-                            checked.push({
-                                name: array[i]['name'],
-                                id: array[i].id
-                            });
-                        } else if (array[i].check == 'err' && val == 1) failed.push(array[i]['name']);
                     };
+                    break;
                 };
-                break;
-            };
-        case 'type': {
-            for (let val = cmd.cntr; val > 0; val--) {
-                for (const i in array) {
-                    if (array[i][cmd[val]] == undefined || array[i][cmd[val]] == `` && array[i].check == 'open') array[i].check = 'err';
-                    if (array[i].check == 'open' && val == 1) {
-                        checked.push({
-                            name: array[i]['name'],
-                            id: array[i].id
-                        });
-                    } else if (array[i].check == 'err' && val == 1) failed.push(array[i]['name']);
+            case 'type':
+                {
+                    for (let val = cmd.cntr; val > 0; val--) {
+                        for (const i in array) {
+                            if (array[i][cmd[val]] == undefined || array[i][cmd[val]] == `` && array[i].check == 'open') array[i].check = 'err';
+                            if (array[i].check == 'open' && val == 1) {
+                                checked.push({
+                                    name: array[i]['name'],
+                                    id: array[i].id
+                                });
+                            } else if (array[i].check == 'err' && val == 1) failed.push(array[i]['name']);
+                        };
+                    };
+                    break;
                 };
-            };
-            break;
-        };
-        case 'email': {
-            for (let val = cmd.cntr; val > 0; val--) {
-                for (const i in array) {
-                    const email = array[i][cmd[val]];
-                    // E-Mail-Adresse prüfen
-                    if (cmd[val] !== 'name') {
-                        if (!(await this.validateEmail(email)) && array[i].check == 'open') array[i].check = 'err';
-                    } else if (array[i][cmd[val]] == undefined || array[i][cmd[val]] == `` && array[i].check == 'open') array[i].check = 'err';
-                    if (array[i].check == 'open' && val == 1) {
-                        checked.push({
-                            name: array[i]['name'],
-                            id: array[i].id
-                        });
-                    } else if (array[i].check == 'err' && val == 1) failed.push(array[i]['name']);
+            case 'email':
+                {
+                    for (let val = cmd.cntr; val > 0; val--) {
+                        for (const i in array) {
+                            const email = array[i][cmd[val]];
+                            // E-Mail-Adresse prüfen
+                            if (cmd[val] !== 'name') {
+                                if (!(await this.validateEmail(email)) && array[i].check == 'open') array[i].check = 'err';
+                            } else if (array[i][cmd[val]] == undefined || array[i][cmd[val]] == `` && array[i].check == 'open') array[i].check = 'err';
+                            if (array[i].check == 'open' && val == 1) {
+                                checked.push({
+                                    name: array[i]['name'],
+                                    id: array[i].id
+                                });
+                            } else if (array[i].check == 'err' && val == 1) failed.push(array[i]['name']);
+                        };
+                    };
+                    break;
                 };
-            };
-            break;
-        };
         };
 
         const result = {
@@ -1441,17 +1440,17 @@ class deviceReminder extends utils.Adapter {
         const a = await this.getObjectViewAsync('system', 'instance', {
             startkey: 'system.adapter.',
             endkey: 'system.adapter.\u9999'
-        }, async (err, state) => {
+        }, async(err, state) => {
             try {
                 if (err) {
                     this.log.error(err);
                 };
                 let result = [];
                 let inst = ``;
-                state.rows.forEach(async (element) => {
+                state.rows.forEach(async(element) => {
                     result.push(element.id);
                 });
-                result.forEach(async (element) => {
+                result.forEach(async(element) => {
                     for (let i = 0; i < 10; i++) {
                         if (element === `system.adapter.${val1}.${i}`) {
                             inst = `${i}`;

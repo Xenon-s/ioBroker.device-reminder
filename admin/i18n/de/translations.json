@@ -59,5 +59,6 @@
     "status: 'in standby'": "Status: 'im Standby'",
     "status: 'device off'": "Status: 'Gerät aus'",
     "switch off after minutes": "nach Minuten ausschalten",
-    "switch off": "ausschalten"
+    "switch off": "ausschalten",
+    "devices": "Geräte"
 }
