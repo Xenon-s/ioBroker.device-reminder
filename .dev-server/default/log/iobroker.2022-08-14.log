@@ -1,0 +1,258 @@
+2022-08-14 10:28:02.601  - [32minfo[39m: host.dev-device-reminder-iob-template iobroker.js-controller version 4.0.23 js-controller starting
+2022-08-14 10:28:02.617  - [32minfo[39m: host.dev-device-reminder-iob-template Copyright (c) 2014-2022 bluefox, 2014 hobbyquaker
+2022-08-14 10:28:02.618  - [32minfo[39m: host.dev-device-reminder-iob-template hostname: dev-device-reminder-iob-template, node: v16.15.0
+2022-08-14 10:28:02.618  - [32minfo[39m: host.dev-device-reminder-iob-template ip addresses: 192.168.0.32 fe80::2c38:a5ff:fe7c:f578
+2022-08-14 10:28:02.628  - [34mdebug[39m: host.dev-device-reminder-iob-template-Server Data File: /home/sfeldkamp/ioBroker.device-reminder/.dev-server/default/iobroker-data/objects.jsonl
+2022-08-14 10:28:03.291  - [34mdebug[39m: device-reminder.0 (6302) Redis Objects: Use Redis connection: 127.0.0.1:26426
+2022-08-14 10:28:03.423  - [34mdebug[39m: host.dev-device-reminder-iob-template-Server  Redis inMem-objects listening on port 9001
+2022-08-14 10:28:03.424  - [34mdebug[39m: host.dev-device-reminder-iob-template Redis Objects: Use Redis connection: 127.0.0.1:26426
+2022-08-14 10:28:03.432  - [34mdebug[39m: host.dev-device-reminder-iob-template Objects client ready ... initialize now
+2022-08-14 10:28:03.433  - [34mdebug[39m: host.dev-device-reminder-iob-template Objects create System PubSub Client
+2022-08-14 10:28:03.440  - [34mdebug[39m: host.dev-device-reminder-iob-template Objects client initialize lua scripts
+2022-08-14 10:28:03.445  - [34mdebug[39m: host.dev-device-reminder-iob-template Objects connected to redis: 127.0.0.1:26426
+2022-08-14 10:28:03.493  - [34mdebug[39m: host.dev-device-reminder-iob-template-Server Data File: /home/sfeldkamp/ioBroker.device-reminder/.dev-server/default/iobroker-data/states.jsonl
+2022-08-14 10:28:03.507  - [34mdebug[39m: host.dev-device-reminder-iob-template-Server  Redis inMem-states listening on port 9000
+2022-08-14 10:28:03.508  - [34mdebug[39m: host.dev-device-reminder-iob-template Redis States: Use Redis connection: 127.0.0.1:24426
+2022-08-14 10:28:03.511  - [34mdebug[39m: host.dev-device-reminder-iob-template States create System PubSub Client
+2022-08-14 10:28:03.513  - [34mdebug[39m: host.dev-device-reminder-iob-template States connected to redis: 127.0.0.1:24426
+2022-08-14 10:28:03.529  - [32minfo[39m: host.dev-device-reminder-iob-template connected to Objects and States
+2022-08-14 10:28:03.529  - [34mdebug[39m: host.dev-device-reminder-iob-template Could not read notifications.json: /home/sfeldkamp/ioBroker.device-reminder/.dev-server/default/iobroker-data/notifications.json: ENOENT: no such file or directory, open '/home/sfeldkamp/ioBroker.device-reminder/.dev-server/default/iobroker-data/notifications.json'
+2022-08-14 10:28:03.534  - [32minfo[39m: host.dev-device-reminder-iob-template added notifications configuration of host
+2022-08-14 10:28:03.536  - [32minfo[39m: host.dev-device-reminder-iob-template Node.js version has changed from unknown to 16.15.0
+2022-08-14 10:28:03.552  - [34mdebug[39m: host.dev-device-reminder-iob-template Plugin sentry Initialize Plugin (enabled=true)
+2022-08-14 10:28:03.556  - [32minfo[39m: host.dev-device-reminder-iob-template Plugin sentry Sentry Plugin disabled for this process because sending of statistic data is disabled for the system
+2022-08-14 10:28:03.652  - [34mdebug[39m: device-reminder.0 (6302) Objects client ready ... initialize now
+2022-08-14 10:28:03.654  - [34mdebug[39m: device-reminder.0 (6302) Objects create System PubSub Client
+2022-08-14 10:28:03.655  - [34mdebug[39m: device-reminder.0 (6302) Objects create User PubSub Client
+2022-08-14 10:28:03.657  - [32minfo[39m: host.dev-device-reminder-iob-template 2 instances found
+2022-08-14 10:28:03.658  - [34mdebug[39m: host.dev-device-reminder-iob-template check instance "system.adapter.admin.0" for host "dev-device-reminder-iob-template"
+2022-08-14 10:28:03.659  - [34mdebug[39m: host.dev-device-reminder-iob-template check instance "system.adapter.device-reminder.0" for host "dev-device-reminder-iob-template"
+2022-08-14 10:28:03.660  - [32minfo[39m: host.dev-device-reminder-iob-template starting 1 instance
+2022-08-14 10:28:03.670  - [34mdebug[39m: device-reminder.0 (6302) Objects client initialize lua scripts
+2022-08-14 10:28:03.683  - [34mdebug[39m: device-reminder.0 (6302) Objects connected to redis: 127.0.0.1:26426
+2022-08-14 10:28:03.691  - [34mdebug[39m: device-reminder.0 (6302) Redis States: Use Redis connection: 127.0.0.1:24426
+2022-08-14 10:28:03.693  - [34mdebug[39m: host.dev-device-reminder-iob-template added notifications configuration of system.adapter.admin.0
+2022-08-14 10:28:03.693  - [34mdebug[39m: host.dev-device-reminder-iob-template startInstance admin.0 loglevel=info, compact=false
+2022-08-14 10:28:03.696  - [34mdebug[39m: device-reminder.0 (6302) States create System PubSub Client
+2022-08-14 10:28:03.697  - [34mdebug[39m: device-reminder.0 (6302) States create User PubSub Client
+2022-08-14 10:28:03.707  - [32minfo[39m: host.dev-device-reminder-iob-template instance system.adapter.admin.0 started with pid 6323
+2022-08-14 10:28:03.712  - [34mdebug[39m: device-reminder.0 (6302) States connected to redis: 127.0.0.1:24426
+2022-08-14 10:28:03.719  - [31merror[39m: device-reminder.0 (6302) adapter disabled
+2022-08-14 10:28:03.806  - [32minfo[39m: device-reminder.0 (6302) starting. Version 1.2.9 in /home/sfeldkamp/ioBroker.device-reminder/.dev-server/default/node_modules/iobroker.device-reminder, node: v16.15.0, js-controller: 4.0.23
+2022-08-14 10:28:03.825  - [33mwarn[39m: device-reminder.0 (6302) Update detected! Please open the Admin UI (instances -> device-reminder) and follow the instructions!
+2022-08-14 10:28:03.825  - [33mwarn[39m: device-reminder.0 (6302) Update erkannt! Bitte die Admin UI (Instanzen -> device-reminder) öffnen und den Anweisungen Folgen!
+2022-08-14 10:28:04.207  - [31merror[39m: admin.0 (6323) admin.0 already running
+2022-08-14 10:28:04.208  - [33mwarn[39m: admin.0 (6323) Terminated (ADAPTER_ALREADY_RUNNING): Without reason
+2022-08-14 10:28:04.731  - [31merror[39m: host.dev-device-reminder-iob-template instance system.adapter.admin.0 terminated with code 7 (ADAPTER_ALREADY_RUNNING)
+2022-08-14 10:28:04.731  - [34mdebug[39m: host.dev-device-reminder-iob-template Reset crash count of system.adapter.admin.0, because non-crash exit
+2022-08-14 10:28:04.731  - [32minfo[39m: host.dev-device-reminder-iob-template Restart adapter system.adapter.admin.0 because enabled
+2022-08-14 10:28:34.735  - [34mdebug[39m: host.dev-device-reminder-iob-template added notifications configuration of system.adapter.admin.0
+2022-08-14 10:28:34.735  - [34mdebug[39m: host.dev-device-reminder-iob-template startInstance admin.0 loglevel=info, compact=false
+2022-08-14 10:28:34.739  - [32minfo[39m: host.dev-device-reminder-iob-template instance system.adapter.admin.0 started with pid 6340
+2022-08-14 10:28:35.165  - [32minfo[39m: admin.0 (6340) Plugin sentry Sentry Plugin disabled for this process because sending of statistic data is disabled for the system
+2022-08-14 10:28:35.201  - [32minfo[39m: admin.0 (6340) starting. Version 5.4.9 in /home/sfeldkamp/ioBroker.device-reminder/.dev-server/default/node_modules/iobroker.admin, node: v16.15.0, js-controller: 4.0.23
+2022-08-14 10:28:35.213  - [32minfo[39m: admin.0 (6340) requesting all states
+2022-08-14 10:28:35.214  - [32minfo[39m: admin.0 (6340) requesting all objects
+2022-08-14 10:28:35.376  - [32minfo[39m: admin.0 (6340) received all objects
+2022-08-14 10:28:35.449  - [32minfo[39m: admin.0 (6340) Request actual repository...
+2022-08-14 10:28:35.451  - [34mdebug[39m: host.dev-device-reminder-iob-template Incoming Host message getRepository
+2022-08-14 10:28:35.514  - [32minfo[39m: admin.0 (6340) http server listening on port 20426
+2022-08-14 10:28:35.514  - [32minfo[39m: admin.0 (6340) Use link "http://localhost:20426" to configure.
+2022-08-14 10:28:35.516  - [32minfo[39m: admin.0 (6340) socket.io server listening on port 20426
+2022-08-14 10:28:35.546  - [32minfo[39m: host.dev-device-reminder-iob-template Updating repository "beta" under "http://download.iobroker.net/sources-dist-latest.json"
+2022-08-14 10:28:36.050  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:28:42.239  - [32minfo[39m: admin.0 (6340) Repository received successfully.
+2022-08-14 10:28:51.051  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:28:52.058  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:29:07.059  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:29:08.062  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:29:23.065  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:29:24.069  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:29:39.071  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:29:40.075  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:29:55.078  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:29:56.087  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:30:11.089  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:30:12.093  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:30:27.095  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:30:28.098  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:30:43.101  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:30:44.104  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:30:59.106  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:31:00.119  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:31:15.121  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:31:16.125  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:31:31.127  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:31:32.131  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:31:47.132  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:31:48.135  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:32:03.138  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:32:04.141  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:32:19.144  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:32:20.146  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:32:35.148  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:32:36.151  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:32:51.154  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:32:52.157  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:33:07.160  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:33:08.163  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:33:23.163  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:33:24.167  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:33:44.167  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:33:45.170  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:34:00.171  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:34:01.173  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:34:16.176  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:34:17.179  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:34:32.181  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:34:32.362  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:34:32.402  - [34mdebug[39m: host.dev-device-reminder-iob-template Incoming Host message getRepository
+2022-08-14 10:34:32.894  - [34mdebug[39m: host.dev-device-reminder-iob-template Incoming Host message getInstalled
+2022-08-14 10:34:32.983  - [34mdebug[39m: host.dev-device-reminder-iob-template Incoming Host message getNotifications
+2022-08-14 10:34:33.041  - [34mdebug[39m: host.dev-device-reminder-iob-template Incoming Host message getHostInfo
+2022-08-14 10:34:33.184  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:34:33.897  - [34mdebug[39m: host.dev-device-reminder-iob-template Incoming Host message readBaseSettings
+2022-08-14 10:34:33.934  - [34mdebug[39m: host.dev-device-reminder-iob-template Incoming Host message getLogs
+2022-08-14 10:34:35.169  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:34:48.187  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:34:49.190  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:35:04.193  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:35:05.195  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:35:25.195  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:35:26.197  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:35:39.420  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 
+2022-08-14 10:35:39.684  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:35:41.199  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:35:42.202  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:35:57.205  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:35:58.209  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:36:04.701  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 
+2022-08-14 10:36:04.927  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:36:13.211  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:36:14.213  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:36:29.215  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:36:30.217  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:36:45.218  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:36:46.221  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:36:46.266  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 
+2022-08-14 10:36:46.585  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:37:01.222  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:37:02.233  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:37:17.235  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:37:18.243  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:37:33.244  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:37:34.247  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:37:49.250  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:37:50.252  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:38:05.254  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:38:06.257  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:38:21.259  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:38:22.267  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:38:42.268  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:38:43.271  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:38:58.273  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:38:59.278  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:39:14.279  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:39:15.283  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:39:16.054  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 
+2022-08-14 10:39:16.345  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:39:35.282  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:39:36.285  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:39:56.286  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:39:57.289  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:40:12.292  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:40:13.295  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:40:28.298  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:40:29.302  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:40:44.303  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:40:45.307  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:41:00.307  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:41:01.311  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:41:16.311  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:41:17.315  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:41:32.315  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:41:33.318  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:41:48.319  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:41:49.321  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:41:54.015  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 
+2022-08-14 10:41:54.294  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:42:09.322  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:42:10.330  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:42:13.717  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 
+2022-08-14 10:42:13.953  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:42:25.332  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:42:26.335  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:42:41.338  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:42:42.341  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:42:56.873  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 
+2022-08-14 10:42:57.066  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:42:57.343  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:42:57.403  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 
+2022-08-14 10:42:57.633  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:42:58.346  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:43:13.347  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:43:14.350  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:43:29.352  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:43:30.355  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:43:45.357  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:43:46.359  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:44:01.360  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:44:02.362  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:44:17.364  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:44:18.367  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:44:33.368  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:44:34.371  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:44:49.373  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:44:50.376  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:45:05.378  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:45:06.382  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:45:21.383  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:45:22.385  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:45:37.387  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:45:38.390  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:45:53.391  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:45:54.393  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:46:09.395  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:46:10.397  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:46:25.398  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:46:26.401  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:46:41.402  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:46:42.406  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:46:57.408  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:46:58.410  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:47:13.412  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:47:14.415  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:47:29.418  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:47:30.421  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:47:45.421  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:47:46.424  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:48:01.426  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:48:02.429  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:48:17.430  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:48:18.433  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:48:33.434  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:48:34.446  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:48:49.448  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:48:50.451  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:49:05.452  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:49:06.455  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:49:21.456  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:49:22.459  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:49:38.738  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 
+2022-08-14 10:49:39.112  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:49:42.460  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:49:43.463  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:49:58.465  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:49:59.467  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:50:14.469  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:50:15.471  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:50:30.473  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:50:31.475  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:50:51.476  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:50:52.480  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:51:12.480  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:51:13.489  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:51:28.491  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
+2022-08-14 10:51:29.493  - [32minfo[39m: admin.0 (6340) ==> Connected system.user.admin from 127.0.0.1
+2022-08-14 10:51:31.164  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 
+2022-08-14 10:51:31.173  - [32minfo[39m: admin.0 (6340) <== Disconnect system.user.admin from 127.0.0.1 admin
