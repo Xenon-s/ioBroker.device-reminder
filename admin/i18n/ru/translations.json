@@ -59,5 +59,6 @@
     "status: 'in standby'": "статус: «в режиме ожидания»",
     "status: 'device off'": "статус: «устройство выключено»",
     "switch off after minutes": "выключить через несколько минут",
-    "switch off": "выключить"
+    "switch off": "выключить",
+    "devices": "устройства"
 }
