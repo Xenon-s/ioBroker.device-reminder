@@ -1,4 +1,4 @@
-/*global systemDictionary:true */
+/global systemDictionary:true /
 "use strict";
 
 // @ts-ignore
@@ -159,17 +159,17 @@ systemDictionary = {
         "pl": "Wsparcie",
         "zh-cn": "帮助"
     },
-    "*Required fields": {
-        "en": "*Required fields",
-        "de": "*Felder erforderlich",
-        "ru": "*Обязательные поля",
-        "pt": "*Os campos obrigatórios",
-        "nl": "*Verplichte velden",
-        "fr": "*Champs obligatoires",
-        "it": "*Campi richiesti",
-        "es": "*Campos requeridos",
-        "pl": "*Wymagane pola",
-        "zh-cn": "*必填字段"
+    "Required fields": {
+        "en": "Required fields",
+        "de": "Felder erforderlich",
+        "ru": "Обязательные поля",
+        "pt": "Os campos obrigatórios",
+        "nl": "Verplichte velden",
+        "fr": "Champs obligatoires",
+        "it": "Campi richiesti",
+        "es": "Campos requeridos",
+        "pl": "Wymagane pola",
+        "zh-cn": "必填字段"
     },
     "device name": {
         "en": "device name",
@@ -279,17 +279,17 @@ systemDictionary = {
         "pl": "wykryto nieprawidłowe dane wejściowe",
         "zh-cn": "检测到无效输入"
     },
-    "*volume 0-100": {
-        "en": "*volume 0-100",
-        "de": "*Lautstärke 0-100",
-        "ru": "*громкость 0-100",
-        "pt": "*volume 0-100",
-        "nl": "*volume 0-100",
-        "fr": "*volume 0-100",
-        "it": "*volume 0-100",
-        "es": "*volumen 0-100",
-        "pl": "*objętość 0-100",
-        "zh-cn": "*音量 0-100"
+    "volume 0-100": {
+        "en": "volume 0-100",
+        "de": "Lautstärke 0-100",
+        "ru": "громкость 0-100",
+        "pt": "volume 0-100",
+        "nl": "volume 0-100",
+        "fr": "volume 0-100",
+        "it": "volume 0-100",
+        "es": "volumen 0-100",
+        "pl": "objętość 0-100",
+        "zh-cn": "音量 0-100"
     },
     "active from": {
         "en": "Active from",
@@ -327,53 +327,41 @@ systemDictionary = {
         "pl": "nie znaleziono wpisów",
         "zh-cn": "未找到条目"
     },
-    "*pushover instance": {
-        "en": "*pushover instance",
-        "de": "*Pushover-Instanz",
-        "ru": "* пуш-овер экземпляр",
-        "pt": "*instância de pushover",
-        "nl": "*pushover-instantie",
-        "fr": "*instance de transfert",
-        "it": "*istanza pushover",
-        "es": "*instancia pushover",
-        "pl": "*instancja pushover",
-        "zh-cn": "*推送实例"
+    "pushover instance": {
+        "en": "pushover instance",
+        "de": "Pushover-Instanz",
+        "ru": " пуш-овер экземпляр",
+        "pt": "instância de pushover",
+        "nl": "pushover-instantie",
+        "fr": "instance de transfert",
+        "it": "istanza pushover",
+        "es": "instancia pushover",
+        "pl": "instancja pushover",
+        "zh-cn": "推送实例"
     },
-    "*priority": {
-        "en": "*priority",
-        "de": "*Priorität",
-        "ru": "* приоритет",
-        "pt": "*prioridade",
-        "nl": "*prioriteit",
-        "fr": "*priorité",
-        "it": "*priorità",
-        "es": "*prioridad",
-        "pl": "*priorytet",
-        "zh-cn": "*优先事项"
+    "priority": {
+        "en": "priority",
+        "de": "Priorität",
+        "ru": " приоритет",
+        "pt": "prioridade",
+        "nl": "prioriteit",
+        "fr": "priorité",
+        "it": "priorità",
+        "es": "prioridad",
+        "pl": "priorytet",
+        "zh-cn": "优先事项"
     },
-    "*sound": {
-        "en": "*sound",
-        "de": "*Klang",
-        "ru": "*звук",
-        "pt": "*som",
-        "nl": "*geluid",
-        "fr": "*son",
-        "it": "*suono",
-        "es": "*sonar",
-        "pl": "*dźwięk",
-        "zh-cn": "*声音"
-    },
-    "*name": {
-        "en": "*name",
-        "de": "*Name",
-        "ru": "*название",
-        "pt": "*nome",
-        "nl": "*naam",
-        "fr": "*Nom",
-        "it": "*nome",
-        "es": "*nombre",
-        "pl": "*nazwać",
-        "zh-cn": "*姓名"
+    "sound": {
+        "en": "sound",
+        "de": "Klang",
+        "ru": "звук",
+        "pt": "som",
+        "nl": "geluid",
+        "fr": "son",
+        "it": "suono",
+        "es": "sonar",
+        "pl": "dźwięk",
+        "zh-cn": "声音"
     },
     "name": {
         "en": "name",
@@ -387,29 +375,29 @@ systemDictionary = {
         "pl": "nazwać",
         "zh-cn": "姓名"
     },
-    "*sender address": {
-        "en": "*sender address",
-        "de": "*Absenderadresse",
-        "ru": "*адрес отправителя",
-        "pt": "*Endereço do remetente",
-        "nl": "*Zender adres",
-        "fr": "*adresse de l'expéditeur",
-        "it": "*indirizzo del mittente",
-        "es": "*dirección del remitente",
-        "pl": "*adres nadawcy",
-        "zh-cn": "*发件人地址"
+    "sender address": {
+        "en": "sender address",
+        "de": "Absenderadresse",
+        "ru": "адрес отправителя",
+        "pt": "Endereço do remetente",
+        "nl": "Zender adres",
+        "fr": "adresse de l'expéditeur",
+        "it": "indirizzo del mittente",
+        "es": "dirección del remitente",
+        "pl": "adres nadawcy",
+        "zh-cn": "发件人地址"
     },
-    "*receiver address": {
-        "en": "*receiver address",
-        "de": "*Empfängeradresse",
-        "ru": "*адрес получателя",
-        "pt": "*endereço do destinatário",
-        "nl": "*ontvanger adres",
-        "fr": "*adresse du destinataire",
-        "it": "*indirizzo del destinatario",
-        "es": "*dirección del destinatario",
-        "pl": "*Odbiorca adres",
-        "zh-cn": "*收件人地址"
+    "receiver address": {
+        "en": "receiver address",
+        "de": "Empfängeradresse",
+        "ru": "адрес получателя",
+        "pt": "endereço do destinatário",
+        "nl": "ontvanger adres",
+        "fr": "adresse du destinataire",
+        "it": "indirizzo del destinatario",
+        "es": "dirección del destinatario",
+        "pl": "Odbiorca adres",
+        "zh-cn": "收件人地址"
     },
     "default type config": {
         "en": "default type config",
@@ -567,6 +555,30 @@ systemDictionary = {
         "pl": "telegram",
         "zh-cn": "telegram"
     },
+    "signal": {
+        "en": "Signal-cmb",
+        "de": "Signal-cmb",
+        "ru": "Signal-cmb",
+        "pt": "Signal-cmb",
+        "nl": "Signal-cmb",
+        "fr": "Signal-cmb",
+        "it": "Signal-cmb",
+        "es": "Signal-cmb",
+        "pl": "Signal-cmb",
+        "zh-cn": "Signal-cmb"
+    },
+    "phone": {
+        "en": "phone",
+        "de": "Telefon",
+        "ru": "телефон",
+        "pt": "telefone",
+        "nl": "telefoon telefoon telefoon",
+        "fr": "téléphone",
+        "it": "telefono",
+        "es": "teléfono",
+        "pl": "telefon",
+        "zh-cn": "电话"
+    },
     "whatsapp user": {
         "en": "whatsapp user",
         "de": "WhatsApp-Benutzer",
@@ -580,16 +592,16 @@ systemDictionary = {
         "zh-cn": "whatsapp用户"
     },
     "whatsapp": {
-        "en": "whatsapp",
-        "de": "WhatsApp",
-        "ru": "WhatsApp",
-        "pt": "Whatsapp",
-        "nl": "whatsapp",
-        "fr": "WhatsApp",
-        "it": "WhatsApp",
-        "es": "whatsapp",
-        "pl": "whatsapp",
-        "zh-cn": "whatsapp"
+        "en": "whatsapp-cmb",
+        "de": "WhatsApp-cmb",
+        "ru": "WhatsApp-cmb",
+        "pt": "Whatsapp-cmb",
+        "nl": "whatsapp-cmb",
+        "fr": "WhatsApp-cmb",
+        "it": "WhatsApp-cmb",
+        "es": "whatsapp-cmb",
+        "pl": "whatsapp-cmb",
+        "zh-cn": "whatsapp-cmb"
     },
     "alexa": {
         "en": "alexa",
@@ -626,6 +638,18 @@ systemDictionary = {
         "es": "pushover",
         "pl": "pushover",
         "zh-cn": "pushover"
+    },
+    "title": {
+        "en": "title",
+        "de": "Betreff",
+        "ru": "название",
+        "pt": "título",
+        "nl": "titel",
+        "fr": "titre",
+        "it": "titolo",
+        "es": "título",
+        "pl": "tytuł",
+        "zh-cn": "标题"
     },
     "email account": {
         "en": "email account",
@@ -747,29 +771,4 @@ systemDictionary = {
         "pl": "Instancja",
         "zh-cn": "实例"
     },
-    "priority": {
-        "en": "priority",
-        "de": "Priorität",
-        "ru": "приоритет",
-        "pt": "prioridade",
-        "nl": "prioriteit",
-        "fr": "priorité",
-        "it": "priorità",
-        "es": "prioridad",
-        "pl": "priorytet priorytetowy",
-        "zh-cn": "优先重点"
-    },
-    "sound": {
-        "en": "sound",
-        "de": "Ton",
-        "ru": "звук",
-        "pt": "som",
-        "nl": "klinkt goed",
-        "fr": "sonore",
-        "it": "suono",
-        "es": "sonido",
-        "pl": "dźwięk",
-        "zh-cn": "健全"
-    }
-
 };

@@ -1,3 +1,5 @@
+// hier wird die komplette GUI des Adapters im Admin erstellt
+
 let headerOpened = ``;
 let lastHeaderOpened = '';
 let dataGlobal = {}; // alle native Daten aus "settings" werden hier gespeichert
@@ -6,56 +8,39 @@ let cntrRow = {}; // Zaehler fuer Tabellenzeilen
 
 // This will be called by the admin adapter when the settings page loads
 async function load(settings, onChange) {
-
-    $('.btn-save, .btn-save-close').css("display", "none");
+    // try {
 
     if (!settings) return;
-    let namespace = `${adapter}.${instance}`;
-    // instance alive?
-    socket.emit('getState', `system.adapter.${namespace}.alive`, async(err, state) => {
-        // try {
-        const active = (state && state.val);
-        if (!active) {
-            $(`#gui`).html(`<div class="collapsible-header red lighten-1"><i class="large material-icons">error_outline</i>Please activate the device-reminder.${instance} instance!</div>`);
-        } else {
+    const dataTable = await createData(settings)
+    showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
 
-            // create GUI
-            createData(settings) // Settings aus der Konfig holen
-                .then(async data => {
-                    await createGUI(dataTable, data, onChange); // html der GUI erstellen (inklusive Tabellen)
-                    return data;
-                }).then(async data => {
-                    const result = await staticTable(data, settings, onChange); // Inhalt der staticTable (values2table) erstellen
-                    return { result, data };
-                }).then(async(data) => {
-                    await dynamicTable(data.data, onChange);
-                })
-                // .catch(error => {
-                //     console.error(`Error while creating GUI: ${error}`);
-                // })
-                .finally(() => {
-                    // console.info('finally');;
-                    $('.collapsible').collapsible();
-                    $('.modal').modal();
-                    $('.timepicker').timepicker();
-                    $('.select').formSelect();
-                    showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
+    // create GUI
+    createData(settings) // Settings aus der Konfig holen
+        .then(async() => {
+            await createTableHeader(dataTable); // html der GUI erstellen (inklusive Tabellen)
+        }).then(async() => {
+            await staticTable(dataTable, settings, onChange); // Inhalt der staticTable (values2table) erstellen
+        }).finally(() => {
+            // console.info('finally');;
+            $('.collapsible').collapsible();
+            $('.modal').modal();
+            $('.timepicker').timepicker();
+            $('.select').formSelect();
+            showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
 
-                    for (const name of Object.keys(dataTable)) { // tabellenattribute setzen
-                        setTableParam(settings, name, onChange);
-                    };
-                });
-            // };
-        };
-
-        // } catch (e) {
-        //     console.error(e)
-        // };
-    });
+            for (const name of Object.keys(dataTable)) { // tabellenattribute setzen
+                setTableParam(settings, name, onChange);
+            };
+        });
+    // };
 };
 
-// createGUI
-async function createGUI(tableHead, settings, onChange) {
+// } catch (e) {
+//     console.error(e)
+// };
+
+// createTableHeader
+async function createTableHeader(tableHead) {
 
     let html = "";
 
@@ -113,23 +98,23 @@ async function createGUI(tableHead, settings, onChange) {
                         <div class="row">
                             <div style="display: flex; align-items: center;">`
 
-            // if (name !== "linked-devices") { // linked-devices benötigt keinen add button und keine Preufung
             if (tableHead[i].table.addbtn) {
-
                 html += `<!-- Add btn -->
                             <div>
                                 <a id="btn-add-${key}"
                                     class="btn-floating waves-effect waves-light blue table-button-add">
                                     <i class="material-icons">add_circle_outline</i></a>
                                 <span class="translate" style="font-weight:bold;" data-lang="add">${_("add")}</span>
-                                <a id="btn-check-${key}" class="waves-effect waves-light btn translate"
-                                data-lang="check">${_("check")}</a>
+                                <!-- submit button-->
+                                <button id="btn-check-${key}" class="btn waves-effect waves-light" type="submit" name="action">Submit
+                                    <i class="material-icons right">send</i>
+                                </button>
                             </div>
                             <!-- Add btn End-->
                             <!-- Input Check -->
                             <div class="col left s2">
-                            <!-- Help btn -->
-                            <a class="waves-effect waves-light btn modal-trigger translate" href="#modal-${key}"
+                                <!-- Help btn -->
+                                <a class="waves-effect waves-light btn modal-trigger translate" href="#modal-${key}"
                                 data-lang="help">${_("help")}</a>
                             <!-- Help btn End-->
                             </div>`
@@ -168,11 +153,9 @@ async function createGUI(tableHead, settings, onChange) {
 
                 html += `<th class="${th.class}">${_(th.dataLang)}</th></th>`
             };
-
             html += `</tr></thead>`
 
             // Table Body erstellen
-
             html += `<!-- Table head End -->
                         <tbody id="${key}-body" class="table-lines"></tbody>
                         <!-- Table End -->
@@ -185,203 +168,46 @@ async function createGUI(tableHead, settings, onChange) {
     html += `</ul>
     </div>
     <!-- Tab Config End-->`;
-
     $(`#gui`).html(html)
 
     return true;
-
-};
-
-async function dynamicTable(settings, onChange) {
-
-    for (const i of Object.keys(settings)) {
-        if (settings[i].ids.length > 0) {
-            for (const j of Object.keys(settings[i].ids)) {};
-        };
-    };
-
-    let curDevice = null;
-    const settingsTable = settings.linkedDevices.idsTable;
-    let inputTable = {}; // Daten aus den einzelnen tables für den linkedDevice table
-
-    for (const i of Object.keys(settings)) {
-        const name = i;
-        inputTable[name] = settings[i].ids
-        showHeader('linkedDevicesID', name, settings[i].ids)
-    };
-
-    const devices = inputTable.measuringDevice;
-
-    $('#linkedDevicesID .table-lines').html("");
-
-    for (const i in devices) {
-
-        curDevice = null;
-
-        let data = [];
-        const ID = devices[i].name;
-        let deviceId = devices[i].id;
-
-        const resultCurDevice = await createCurDevice();
-
-        if (resultCurDevice == null || resultCurDevice == undefined) {
-            curDevice = {
-                enabled: true,
-                name: devices[i].name,
-                alexa: -1,
-                sayit: -1,
-                whatsapp: -1,
-                telegram: -1,
-                pushover: -1,
-                email: -1,
-                autoOff: false,
-                timer: 0,
-                abort: false,
-                id: -1
-            };
-        } else {
-            curDevice = resultCurDevice;
-        };
-
-        async function createCurDevice() {
-            let objTemp = null;
-            for (const j in settingsTable) {
-                if (settingsTable[j].deviceName == ID || settingsTable[j].name == ID) { // in Version 1.1 hat sich der ".deviceName" in ".name" geaendert!
-                    objTemp = settingsTable[j];
-                };
-            };
-            return objTemp;
-        };
-
-        // data fuer dynamic table erstellen
-        data = [
-            { type: 'checkbox', name: "enabled", value: curDevice.enabled },
-            { type: 'label', name: "name", value: curDevice.name },
-            { type: 'multiple', data: inputTable.alexa, name: "alexa", value: curDevice.alexa },
-            { type: 'multiple', data: inputTable.sayit, name: "sayit", value: curDevice.sayit },
-            { type: 'multiple', data: inputTable.telegram, name: "telegram", value: curDevice.telegram },
-            { type: 'multiple', data: inputTable.whatsapp, name: "whatsapp", value: curDevice.whatsapp },
-            { type: 'multiple', data: inputTable.pushover, name: "pushover", value: curDevice.pushover },
-            { type: 'multiple', data: inputTable.email, name: "email", value: curDevice.email },
-            { type: 'checkbox', name: "autoOff", value: curDevice.autoOff },
-            { type: 'timer', name: "timer", value: parseInt(curDevice.timer) },
-            { type: 'checkbox', name: "abort", value: curDevice.abort },
-            { type: 'id', name: "id", value: parseInt(deviceId) }
-        ];
-
-        let col = "<tr>";
-        for (const j in data) {
-            if (data[j].data == undefined || data[j].data.length > 0) {
-                let style = 'style="text-align:center;"';
-                if (data[j].name == "name") {
-                    style = 'style="font-weight:bold; text-align:center;"';
-                };
-                col += `<td data-type=${data[j].type} data-name="${data[j].name}" ${style}>`;
-                switch (data[j].type) {
-                    case 'checkbox':
-                        let checked = '';
-                        if (data[j].value == true || data[j].value == 'on') {
-                            checked = 'checked="checked"';
-                        }
-                        col += `<label><input type="checkbox" class="values-input filled-in" ${checked} data-old-value="${data[j].value}"><span></span></label>`;
-                        break;
-                    case 'label':
-                        col += `<span class="values-input" data-old-value="${data[j].value}">${data[j].value}</span>`;
-                        break;
-                    case 'multiple':
-                        if (data[j].data != undefined && data[j].data.length > 0) {
-                            col += `<select multiple class="values-input" data-old-value="${data[j].value}">`;
-                            data[j].data.forEach(name => {
-                                let checked = '';
-                                if ($.inArray(name, data[j].value))
-                                    checked = 'selected';
-                                col += `<option ${checked} value='${name.id}'>${name.name}</option>`
-                            });
-                            col += `</select>`;
-                        };
-                        break;
-                    case 'timer':
-                        col += `<input type="number" min="0" class="values-input" data-old-value="${data[j].value}" style="text-align:center">`;
-                        break;
-                    case 'id':
-                        col += `<span class="values-input" data-old-value="${data[j].value}">${data[j].value}</span>`;
-                        break;
-                    default:
-                        col += `Test`;
-                        break;
-                };
-                col += `</td>`;
-            };
-        };
-
-        col += "</tr>";
-        $('#linkedDevicesID .table-lines').append(col);
-
-        // vom User gesetzte "multiple options" in der Tabelle anzeigen
-        $('#linkedDevicesID .table-lines').children().eq(i).children().each(function() {
-            if ($(this).data('type') == 'multiple') {
-                $(this).find('select').val(curDevice[$(this).data('name')]);
-            } else {
-                $(this).find('input').val(curDevice[$(this).data('name')]);
-            };
-        });
-
-        // trigger im dynamic table setzen
-        $('#linkedDevicesID .table-lines').find('.values-input').on('change', function() {
-            showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
-        });
-    };
-
-    if (curDevice != null) {
-        const selectInstance = M.FormSelect.getInstance($('select'));
-        instances = M.FormSelect.init($('select'));
-        M.updateTextFields();
-    };
-
-    if (M) M.updateTextFields();
-    dataGlobal = settings;
 };
 
 // create table input
-function staticTable(data, settings, onChange) {
+async function staticTable(data, settings, onChange) {
 
-    // console.info(data)
-    // console.info(settings)
-
-
-    let strNames = '';
     for (const i in data) {
-        const name = data[i].name;
+        const name = data[i].head.name; // Name des table
+        const idHTML = data[i].data.idHTML; // html id table
+        const dataIds = data[i].data.ids // Inhalt der Tabelle (User Input)
 
-        // values2table(data[i].idHTML, data[i].ids, onChange); // create table
-        $('#table-default').find('td:first-child .values-input').prop('disabled', true); // disable "name" in table default-types
-
-        // create click event "disable save button"
-        const btnSave = `#btn-check-${name}`;
-        showBtns(btnSave, false, onChange); // save buttons deaktivieren bis events auf "add button" erkannt
-        $(btnSave).on('click', async() => {
-
-            btnPressed(settings, onChange);
-            showBtns(btnSave, false, onChange);
-        });
+        // create Table
+        if (dataIds.length > 0) {
+            dynamicTableNew(data[i], null, onChange);
+        };
 
         // create click event "add button"
-        const btnAdd = `#btn-add-${name}`;
+        const btnAdd = `#btn-add-${name}`
         $(btnAdd).on('click', async() => {
-
-            dynamicTableNew(name, settings, onChange);
-
+            dynamicTableNew(data[i], null, onChange);
             showBtns(btnSave, true, onChange);
             setTableParam(settings, name, onChange);
             showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
         });
 
+        // create click event "disable save button"
+        const btnSave = `#btn-check-${name}`;
+        showBtns(btnSave, false, onChange); // save buttons deaktivieren bis events auf "add button" erkannt
+        $(btnSave).on('click', async() => {
+            btnPressed(settings, onChange);
+            showBtns(btnSave, false, onChange);
+        });
+
         // create event "change" on table
-        const eventID = `#${data[i].idHTML}`;
+        const eventID = `#${idHTML}`;
         if (eventID !== '#linkedDevicesID' && eventID !== '#statusID') {
             $(eventID).on('change keyup', () => {
                 showBtns(`#btn-check-${name}`, true, onChange);
-                // $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
                 showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
             });
         } else {
@@ -391,22 +217,13 @@ function staticTable(data, settings, onChange) {
         };
     };
 
-    // trigger im "default table" setzen
-    // default hat keinen "add button" 
-    $('#defaultTypeID').find('.values-input').on('change', () => { // default hat keinen "add button"
-        $('#btn-check-default').removeClass('disabled');
-    });
-
-    $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true); // disable "name" in table default-types
+    return true;
 };
 
 function setTableParam(settings, /**@type{string}*/ name, onChange) {
 
-    // console.info('setTableParam')
-    // console.info(name)
     // attribute setzen
     setTimeout(() => {
-
         // zusatz klassen setzen
         $(`#table-${name} .table-lines .red`).on('click', async() => { // Wenn Zeile geloescht wird, muss "linkedDevices" neu erstellt werden
             setTimeout(async() => {
@@ -414,17 +231,7 @@ function setTableParam(settings, /**@type{string}*/ name, onChange) {
                 btnPressed(settings, onChange); // Daten neu auslesen und in 'linkedDevices' schreiben
             }, 100);
         });
-
-        // Min / Max setzen
-        // $(`#table-${name} .table-lines [data-name="volume"]`).attr('min', 0).attr('max', 100); // Eingabe Volume 0 - 100
-        // $(`#table-${name} .table-lines [data-name="inst"]`).attr('min', 0); // Intanz mind 0
-
-        // Attribute aendern
-        $(`#table-${name} .table-lines [data-name="activeFrom"]`).attr('class', 'timepicker');
-        $(`#table-${name} .table-lines [data-name="activeUntil"]`).attr('class', 'timepicker');
-
         $('.timepicker').timepicker({ "twelveHour": false });
-
     }, 200);
 };
 
@@ -437,35 +244,17 @@ function selectOID(data) {
     showSelectIdDialog(val, function(newValue, oldValue) {
         if (newValue !== oldValue) {
             $input.val(newValue).trigger('change');
-        }
+        };
     });
-    // });
-}
+};
 
 
 // 
 async function btnPressed(settings, onChange) {
     const data = await createSettings(await createData(settings));
-    dynamicTable(data, onChange);
+    // dynamicTable(data, onChange);
     showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
     dataGlobal = data;
-};
-
-// create click event "delete device (delete button)"
-function clickEventDelBtn(settings, onChange) {
-
-    if (headerOpened !== ``) { // Abfrage welcher button geklickt wurde
-        clearTimeout;
-        setTimeout(() => {
-            btnPressed(settings, onChange)
-            showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
-            if (dataGlobal.devices !== undefined && dataGlobal.devices.ids.length >= 1) {
-                showBtns('.dynamic-table-devices, .btn-save, .btn-save-close', true, onChange);
-            } else {
-                showBtns('.dynamic-table-devices', false, onChange);
-            };
-        }, 100);
-    };
 };
 
 function showBtns( /**@type {string}*/ id, /**@type {boolean}*/ cmd, onChange) {
@@ -759,16 +548,16 @@ async function createSettings(data, /**@type {string}*/ type) {
 };
 
 
-async function dynamicTableNew( /**@type{string}*/ id, cmd, onChange) {
+async function dynamicTableNew(data, nix, onChange) {
 
-    let index = cntrRow[id] !== undefined ? cntrRow[id] || 0 : 0;
+    const id = data.head.name; // Name des table
+    const th = data.table.th; // <th> Daten des table
 
-    const th = dataTable[id].table.th;
 
+    let index = cntrRow[id] || 0;
     let html = '';
 
     html += `<tr data-index"${index}">`
-
     for (const i of Object.keys(th)) {
         switch (th[i].dataType) {
             case 'text':
@@ -792,7 +581,6 @@ async function dynamicTableNew( /**@type{string}*/ id, cmd, onChange) {
                 break;
 
             case 'number':
-                // console.info('number');
                 html += `
                 <td data-index="${index}">
                     <div>
@@ -809,7 +597,6 @@ async function dynamicTableNew( /**@type{string}*/ id, cmd, onChange) {
                 break;
 
             case 'select':
-                // console.info('select');
                 html += `
                 <td data-index="${index}">
                     <div class="select-wrapper">
@@ -826,7 +613,6 @@ async function dynamicTableNew( /**@type{string}*/ id, cmd, onChange) {
                 break;
 
             case 'delete':
-                // console.info('delete');
                 html += `
                 <td data-index"=${index}" onclick="$(this).closest('tr').remove()">
                     <a data-command="delete" class="values-buttons btn-floating btn-small waves-effect waves-light red">
@@ -844,7 +630,7 @@ async function dynamicTableNew( /**@type{string}*/ id, cmd, onChange) {
                 break;
 
             default:
-                // console.info(`wrong Input: <${th[i]}>`)
+                console.error(`wrong Input: <${th[i]}>`)
                 break;
         }
     };
@@ -863,15 +649,17 @@ async function dynamicTableNew( /**@type{string}*/ id, cmd, onChange) {
 
     M.updateTextFields();
 
-    // Select ID (OID)
+    // Click events OID loeschen und neu setzen
+    $(`.oid`).off('click');
     $(`.oid`).on('click', function() {
+        console.warn('OID Click')
         const nameData = $(this).data('name');
         const index = $(this).data('index');
         const $input = $('.values-input[data-name="' + nameData + '"][data-index="' + index + '"]');
         const val = $input.val() || '';
-        console.warn(this)
+        // console.warn(this) -> noch offen
         showSelectIdDialog(val, function(newValue, oldValue) {
-            console.warn(newValue)
+            // console.warn(newValue) -> noch offen
             if (newValue !== oldValue) {
                 // if ()
                 $input.val(newValue).trigger('change');
@@ -880,8 +668,8 @@ async function dynamicTableNew( /**@type{string}*/ id, cmd, onChange) {
     });
 
     index++
-
     cntrRow[id] = index;
+
 
     // let curDevice = null;
     // const settingsTable = settings.linkedDevices.idsTable;
