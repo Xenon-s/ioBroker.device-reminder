@@ -19,12 +19,12 @@ async function load(settings, onChange) {
         .then(async() => {
             await createTableHeader(dataTable); // html der GUI erstellen (inklusive Tabellen)
         }).then(async() => {
-            await staticTable(dataTable, settings, onChange); // Inhalt der staticTable (values2table) erstellen
+            await createTable(dataTable, settings, onChange); // Inhalt der createTable (values2table) erstellen
         }).finally(() => {
             // console.info('finally');;
             $('.collapsible').collapsible();
             $('.modal').modal();
-            $('.timepicker').timepicker();
+            // $('.timepicker').timepicker();
             $('.select').formSelect();
             showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
 
@@ -174,22 +174,18 @@ async function createTableHeader(tableHead) {
 };
 
 // create table input
-async function staticTable(data, settings, onChange) {
+async function createTable(data, settings, onChange) {
 
     for (const i in data) {
         const name = data[i].head.name; // Name des table
         const idHTML = data[i].data.idHTML; // html id table
-        const dataIds = data[i].data.ids // Inhalt der Tabelle (User Input)
 
-        // create Table
-        if (dataIds.length > 0) {
-            dynamicTableNew(data[i], null, onChange);
-        };
+        dynamicTableNew(data[i], null, onChange);
 
         // create click event "add button"
         const btnAdd = `#btn-add-${name}`
         $(btnAdd).on('click', async() => {
-            dynamicTableNew(data[i], null, onChange);
+            dynamicTableNew(data[i], 'btn', onChange);
             showBtns(btnSave, true, onChange);
             setTableParam(settings, name, onChange);
             showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
@@ -252,7 +248,8 @@ function selectOID(data) {
 // 
 async function btnPressed(settings, onChange) {
     const data = await createSettings(await createData(settings));
-    // dynamicTable(data, onChange);
+
+    console.warn(data)
     showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
     dataGlobal = data;
 };
@@ -547,92 +544,115 @@ async function createSettings(data, /**@type {string}*/ type) {
     return obj; // settings zurueckgeben
 };
 
+// Tabellen html erstellen
+async function dynamicTableNew(data, cmd, onChange) {
 
-async function dynamicTableNew(data, nix, onChange) {
+    // console.warn(data)
 
     const id = data.head.name; // Name des table
     const th = data.table.th; // <th> Daten des table
+    const dataInput = data.data.ids
 
-
+    let cntrData = 1;
     let index = cntrRow[id] || 0;
     let html = '';
 
-    html += `<tr data-index"${index}">`
-    for (const i of Object.keys(th)) {
-        switch (th[i].dataType) {
-            case 'text':
-                if (th[i].tdClass !== undefined && th[i].tdClass.includes('oid-select')) {
-                    html += `<td data-index="${index}">
+    if (cmd === null) { // cmd === null : Tabelle wurde durch load aufgerufen
+        cntrData = dataInput.length;
+    };
+
+    for (let j = 0; j < cntrData; j++) { // Userinput aus dem native in die Tabelle schreiben
+        html += `<tr data-index"${index}">`
+        for (const i of Object.keys(th)) { // <th> der Tabellen erstellen
+            let value;
+            if (dataInput[j] !== undefined && cmd === null) { // Wenn load aufgerufen wird, Daten aus den settings in die Tabellen schreiben
+                if (dataInput[j][th[i].name] !== undefined) {
+                    value = dataInput[j][th[i].name]
+                };
+            };
+
+            switch (th[i].dataType) {
+                case 'text':
+                    if (th[i].tdClass !== undefined && th[i].tdClass.includes('oid-select')) {
+                        html += `
+                <td data-index="${index}">
                     <div style="width: calc(100% - 40px)" >
-                        <input data-index="${index}" style="width: calc(100% - 40px)" class="${th[i].tdClass || 'values-input'}" type="text" data-name="${th[i].name}"`
-                    if (th[i].disabled !== undefined) {
-                        html += `readonly=true`
-                    };
-                    html += `><a data-index="${index}" id="${id}-${th[i].name}" style="max-width: 30px" class="values-buttons btn-floating btn-small waves-effect waves-light blue oid" data-name="${th[i].name}">
+                        <input data-index="${index}" style="width: calc(100% - 40px)" class="${th[i].tdClass || 'values-input'}" type="text" data-name="${th[i].name}" value="${value || ''}"`
+                        if (th[i].disabled !== undefined) {
+                            html += `readonly=true`
+                        };
+                        html += `><a data-index="${index}" id="${id}-${th[i].name}" style="max-width: 30px" class="values-buttons btn-floating btn-small waves-effect waves-light blue oid" data-name="${th[i].name}">
                         <i class="material-icons" data-name="${th[i].name}">edit</i></a>
                     </div>`
-                } else {
-                    html += `<td data-index="${index}">
-                    <div>
-                    <input data-index="${index}" class="${th[i].tdClass || 'values-input'}" type="text" data-name="${th[i].name}">
-                </div>`
-                };
-                html += `</td>`
-                break;
-
-            case 'number':
-                html += `
+                    } else {
+                        html += `
                 <td data-index="${index}">
                     <div>
-                        <input data-index="${index}" class="${th[i].tdClass || 'values-input'}" type="number" data-name="${th[i].name}"`
-                if (th[i].min !== undefined) {
-                    html += `min="${th[i].min}"`
-                };
-                if (th[i].max !== undefined) {
-                    html += `max="${th[i].max}"`
-                };
-                html += `>
+                        <input data-index="${index}" class="${th[i].tdClass || 'values-input'}" type="text" data-name="${th[i].name}" value="${value || ''}">
+                    </div>`
+                    };
+                    html += `
+                </td>`
+                    break;
+
+                case 'number':
+                    html += `
+                <td data-index="${index}">
+                    <div>
+                        <input data-index="${index}" class="${th[i].tdClass || 'values-input'}" type="number" data-name="${th[i].name}" value="${value || ''}"`
+                    if (th[i].min !== undefined) {
+                        html += `min="${th[i].min}"`
+                    };
+                    if (th[i].max !== undefined) {
+                        html += `max="${th[i].max}"`
+                    };
+                    html += `>
                     </div>
                 </td>`
-                break;
+                    break;
 
-            case 'select':
-                html += `
+                case 'select':
+                    html += `
                 <td data-index="${index}">
                     <div class="select-wrapper">
                         <select data-index="${index}" class="values-input" data-name="type">
                             <option value="" disabled selected>Choose your option</option>`
-                let cntr = 0;
-                for (const j of Object.keys(th[i].dataOptions)) {
-                    html += `<option value="${cntr}">${th[i].dataOptions[j]}</option>`
-                    cntr++
-                }
-                html += `</select>
+                    let cntr = 0;
+                    for (const option of Object.keys(th[i].dataOptions)) { // Alle Input Optionen durchgehen [und selektierte Option rausfinden]
+                        let checked = '';
+                        if (value === th[i].dataOptions[option]) {
+                            checked = 'selected'
+                        };
+                        html += `<option ${checked} value="${cntr}">${th[i].dataOptions[option]}</option>`
+                        cntr++
+                    }
+                    html += `</select>
                     </div>
                 </td>`
-                break;
+                    break;
 
-            case 'delete':
-                html += `
+                case 'delete':
+                    html += `
                 <td data-index"=${index}" onclick="$(this).closest('tr').remove()">
                     <a data-command="delete" class="values-buttons btn-floating btn-small waves-effect waves-light red">
                     <i class="material-icons">delete</i></a>
                 </td>`
-                break;
+                    break;
 
-            case 'hidden':
-                html += `
+                case 'hidden':
+                    html += `
                 <td data-index"=${index}">
                     <div class="input-field" style="text-align: center">
                         <input data-index="${index}" class="${th[i].tdClass || 'values-input'}" type="text" data-name="id"/>
                     </div>
                 </td>`
-                break;
+                    break;
 
-            default:
-                console.error(`wrong Input: <${th[i]}>`)
-                break;
-        }
+                default:
+                    console.error(`wrong Input: <${th[i]}>`)
+                    break;
+            }
+        };
     };
 
     html += `</tr>`

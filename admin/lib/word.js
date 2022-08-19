@@ -399,7 +399,7 @@ systemDictionary = {
         "pl": "Odbiorca adres",
         "zh-cn": "收件人地址"
     },
-    "default type config": {
+    "default": {
         "en": "default type config",
         "de": "Gerätewerte Standard",
         "ru": "конфигурация типа по умолчанию",
@@ -411,7 +411,7 @@ systemDictionary = {
         "pl": "domyślna konfiguracja typu",
         "zh-cn": "默认类型配置"
     },
-    "custom type config": {
+    "custom": {
         "en": "custom type config",
         "de": "Gerätewerte User",
         "ru": "конфигурация пользовательского типа",

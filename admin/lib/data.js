@@ -168,7 +168,7 @@ async function createData(settings) {
         },
         "default": {
             "head": {
-                "name": "default type config",
+                "name": "default",
                 "id": "header-default-type",
                 "class": "translate collapsible-inactive"
             },
@@ -228,7 +228,7 @@ async function createData(settings) {
         },
         "custom": {
             "head": {
-                "name": "custom type config",
+                "name": "custom",
                 "id": "header-custom-type",
                 "class": "translate collapsible-inactive"
             },
@@ -675,10 +675,9 @@ async function createData(settings) {
     // Daten aus dem Adapter native holen und ins Objekt schreiben [wenn vorhanden]
     for (const name of Object.keys(dataTable)) {
         dataTable[name].data = {
-            name: [name],
             idHTML: `${name}ID`,
             ids: settings[name] !== undefined ? settings[name].id || [] : [],
-            cntr: settings[name] || 0,
+            // cntr: settings[name]. || 0,
         };
     };
     return dataTable;
