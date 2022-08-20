@@ -4,33 +4,35 @@ let headerOpened = ``;
 let lastHeaderOpened = '';
 let dataGlobal = {}; // alle native Daten aus "settings" werden hier gespeichert
 
-let cntrRow = {}; // Zaehler fuer Tabellenzeilen 
+let cntrRow = {}; // Zaehler fuer Tabellenzeilen
+
+console.error('todo beachten')
+
+/*
+
+-ids werden mal als number, mal als string vergeben
+
+*/
 
 // This will be called by the admin adapter when the settings page loads
 async function load(settings, onChange) {
     // try {
 
     if (!settings) return;
-    const dataTable = await createData(settings)
+
     showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
 
     // create GUI
     createData(settings) // Settings aus der Konfig holen
-        .then(async() => {
-            await createTableHeader(dataTable); // html der GUI erstellen (inklusive Tabellen)
-        }).then(async() => {
-            await createTable(dataTable, settings, onChange); // Inhalt der createTable (values2table) erstellen
+        .then(async dataTable => {
+            await createTableHeader(dataTable); // html der GUI erstellen (inklusive Tabellenhed)
+            console.warn(dataTable)
+            for (const i of Object.keys(dataTable)) {
+                await createTableBody(dataTable[i], i, settings, null, onChange); // Tabellen erstellen
+            };
         }).finally(() => {
-            // console.info('finally');;
             $('.collapsible').collapsible();
             $('.modal').modal();
-            // $('.timepicker').timepicker();
-            $('.select').formSelect();
-            showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
-
-            for (const name of Object.keys(dataTable)) { // tabellenattribute setzen
-                setTableParam(settings, name, onChange);
-            };
         });
     // };
 };
@@ -41,6 +43,8 @@ async function load(settings, onChange) {
 
 // createTableHeader
 async function createTableHeader(tableHead) {
+
+    console.warn(tableHead)
 
     let html = "";
 
@@ -73,11 +77,10 @@ async function createTableHeader(tableHead) {
         const key = i; // Objekt key
         const data = tableHead[i]; // Daten des Tables
         const classHead = data.head.class; // Class des Headers
-        const name = tableHead[i].head.name; // Bezeichnung des Table Inhaltes (Alexa, Devices, etc...)
         const tableClass = tableHead[i].table.class; // Class des Tables
 
         // table head
-        if (name !== "header-linked-devices") {
+        if (key !== "header-linked-devices") {
 
             html += `
                 <li>
@@ -86,7 +89,7 @@ async function createTableHeader(tableHead) {
                         onclick="selectedHeader('header-${key}')">
                         <div class="collapsible-header blue lighten-2 tabs translate">
                             <i class="material-icons">create</i>
-                            <span>${_(name)}</span>
+                            <span>${_(key)}</span>
                         </div>
                     </div>
                     <!-- Header Collapsible End-->
@@ -96,38 +99,40 @@ async function createTableHeader(tableHead) {
                             <p></p>
                         </div>
                         <div class="row">
-                            <div style="display: flex; align-items: center;">`
+                            <div style="display: flex; align-items: center;">
+                            <div>`
 
             if (tableHead[i].table.addbtn) {
-                html += `<!-- Add btn -->
-                            <div>
+                html += `
+                                <!-- Add btn -->
                                 <a id="btn-add-${key}"
                                     class="btn-floating waves-effect waves-light blue table-button-add">
                                     <i class="material-icons">add_circle_outline</i></a>
-                                <span class="translate" style="font-weight:bold;" data-lang="add">${_("add")}</span>
+                                <span class="translate" style="font-weight:bold;" data-lang="add">${_("add")}</span>`
+            };
+            html += ` 
                                 <!-- submit button-->
                                 <button id="btn-check-${key}" class="btn waves-effect waves-light" type="submit" name="action">Submit
                                     <i class="material-icons right">send</i>
                                 </button>
                             </div>
-                            <!-- Add btn End-->
-                            <!-- Input Check -->
+                                <!-- Add btn End-->
+                                <!-- Input Check -->
                             <div class="col left s2">
                                 <!-- Help btn -->
                                 <a class="waves-effect waves-light btn modal-trigger translate" href="#modal-${key}"
                                 data-lang="help">${_("help")}</a>
-                            <!-- Help btn End-->
+                                <!-- Help btn End-->
                             </div>`
-            };
             html += `
                         <!-- Modal Structure Help-->
                         <div id="modal-${key}" class="modal">
                             <div id="help-${key}" class="modal-content translate">
                                 <div>
                                     <div>
-                                        <h4>create ${_(name)}</h4>
-                                        <!-- <p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README.md#${name}" target="_blank">${name} english</a></p>
-                                        <p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README_GER.md#${name}" target="_blank">${name} deutsch</a></p> -->
+                                        <h4>create ${_(key)}</h4>
+                                        <!-- <p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README.md#${key}" target="_blank">${key} english</a></p>
+                                        <p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README_GER.md#${key}" target="_blank">${key} deutsch</a></p> -->
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -174,82 +179,72 @@ async function createTableHeader(tableHead) {
 };
 
 // create table input
-async function createTable(data, settings, onChange) {
+async function eventHandler(data, /**@type{string}*/ name, settings, onChange) {
 
-    for (const i in data) {
-        const name = data[i].head.name; // Name des table
-        const idHTML = data[i].data.idHTML; // html id table
+    const idHTML = data.data.idHTML; // html id table
 
-        dynamicTableNew(data[i], null, onChange);
+    // create click event "add button"
+    const btnAdd = `#btn-add-${name}`
+    $(btnAdd).off('click').on('click', async() => {
+        createTableBody(data, name, settings, 'btn', onChange); // eine Tabellenzeile hinzufuegen
+        showBtns(btnSave, true, onChange);
+        showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
+    });
 
-        // create click event "add button"
-        const btnAdd = `#btn-add-${name}`
-        $(btnAdd).on('click', async() => {
-            dynamicTableNew(data[i], 'btn', onChange);
-            showBtns(btnSave, true, onChange);
-            setTableParam(settings, name, onChange);
+    // submit button einblenden
+    const btnSave = `#btn-check-${name}`;
+    showBtns(btnSave, false, onChange); // save buttons deaktivieren bis events auf "add button" erkannt
+    $(btnSave).off('click').on('click', async() => {
+        btnPressed(settings, onChange);
+        showBtns(btnSave, false, onChange);
+    });
+
+    // create event "change" on table
+    const eventID = `#${idHTML}`;
+    if (eventID !== '#linkedDevicesID') {
+        $(eventID).off('click').on('change keyup', () => {
+            console.warn(`change: ${eventID}`)
+            showBtns(`#btn-check-${name}`, true, onChange);
             showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
         });
-
-        // create click event "disable save button"
-        const btnSave = `#btn-check-${name}`;
-        showBtns(btnSave, false, onChange); // save buttons deaktivieren bis events auf "add button" erkannt
-        $(btnSave).on('click', async() => {
-            btnPressed(settings, onChange);
-            showBtns(btnSave, false, onChange);
+    } else {
+        $('#linkedDevicesID').find('.table-lines .values-input').on('change', () => {
+            showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
         });
-
-        // create event "change" on table
-        const eventID = `#${idHTML}`;
-        if (eventID !== '#linkedDevicesID' && eventID !== '#statusID') {
-            $(eventID).on('change keyup', () => {
-                showBtns(`#btn-check-${name}`, true, onChange);
-                showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
-            });
-        } else {
-            $('#statusID').find('.table-lines .values-input').on('change', () => {
-                showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
-            });
-        };
     };
 
-    return true;
-};
+    // Click events OID neu setzen
+    $(`.oid`).off('click').on('click', function() {
+        const nameData = $(this).data('name');
+        const index = $(this).data('index');
+        const $input = $('.values-input[data-name="' + nameData + '"][data-index="' + index + '"]');
+        const val = $input.val() || '';
+        // console.warn(this) -> noch offen
+        showSelectIdDialog(val, function(newValue, oldValue) {
+            // console.warn(newValue) -> noch offen
+            if (newValue !== oldValue) {
+                // if ()
+                $input.val(newValue).trigger('change');
+            }
+        });
+    });
 
-function setTableParam(settings, /**@type{string}*/ name, onChange) {
-
-    // attribute setzen
     setTimeout(() => {
         // zusatz klassen setzen
-        $(`#table-${name} .table-lines .red`).on('click', async() => { // Wenn Zeile geloescht wird, muss "linkedDevices" neu erstellt werden
+        $(`#table-${name} .table-lines .red`).off('click').on('click', async() => { // Wenn Zeile geloescht wird, muss "linkedDevices" neu erstellt werden
             setTimeout(async() => {
-                // setTableParam(settings, name, onChange); // Klick Event neu setzen, wenn Zeile geloescht wurde
-                btnPressed(settings, onChange); // Daten neu auslesen und in 'linkedDevices' schreiben
+                btnPressed(data, settings, onChange); // Daten neu auslesen und in 'linkedDevices' schreiben
             }, 100);
         });
         $('.timepicker').timepicker({ "twelveHour": false });
     }, 200);
-};
 
-// Select ID
-function selectOID(data) {
-    const nameData = $(data).data('name');
-    const index = $(data).data('index');
-    const $input = $('.values-input[data-name="' + nameData + '"][data-index="' + index + '"]');
-    const val = $input.val() || '';
-    showSelectIdDialog(val, function(newValue, oldValue) {
-        if (newValue !== oldValue) {
-            $input.val(newValue).trigger('change');
-        };
-    });
+    return true;
 };
-
 
 // 
 async function btnPressed(settings, onChange) {
     const data = await createSettings(await createData(settings));
-
-    console.warn(data)
     showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
     dataGlobal = data;
 };
@@ -479,6 +474,8 @@ async function save(callback) {
 // settings neu erstellen und an die table schicken
 async function createSettings(data, /**@type {string}*/ type) {
 
+    console.warn(data)
+
     let obj = {};
     obj = data;
 
@@ -487,32 +484,42 @@ async function createSettings(data, /**@type {string}*/ type) {
 
         const result = await getDataFromTable(); // daten für jedes device holen
 
-        for (const name in result) { // jedes device aus der tabelle aktualieren und ID vergeben
-            obj[name].ids = await createId(result[name], data[name].cntr, `${name}_counter`, name);
+        for (const i in result) { // jedes device aus der tabelle aktualieren und ID vergeben
+            if (result[i].length > 0) {
+                // console.warn(data[i])
+                console.warn(result[i])
+                    // console.warn(data[i].cntr)
+                    // console.warn(`${i}_counter`)
+                    // console.warn(i)
+                obj[i].ids = await createId(result[i], data[i].data.counter, `${i}_counter`, i);
+            };
         };
 
         async function getDataFromTable() { // daten aus tabellen holen
             let objTemp = {};
             for (const i in data) {
-                const name = data[i].name;
-                const idHTML = data[i].idHTML;
-
-                objTemp[name] = await table2values(idHTML);
+                objTemp[i] = await table2values(data[i].data.idHTML);
+                // console.warn(objTemp[i])
             };
             return objTemp;
         };
 
-        function createId(array, counter, counter_name, name) { // jedem device eine ID zuweisen
+        function createId(array, /**@type{number}*/ counter, counter_name, name) { // jedem device eine ID zuweisen
             for (const i in array) {
-                if (array[i].id == "") {
+                // console.warn(counter)
+                if (array[i].id == "" || array[i].id === undefined) {
                     array[i].id = counter;
                     counter++;
                 };
             };
             obj[name].cntr = counter;
+            console.warn(array)
+
             return array;
         };
     };
+
+    console.warn(obj)
 
     let body = $('#linkedDevicesID .table-lines');
     let devices = [];
@@ -545,17 +552,16 @@ async function createSettings(data, /**@type {string}*/ type) {
 };
 
 // Tabellen html erstellen
-async function dynamicTableNew(data, cmd, onChange) {
+async function createTableBody(data, name, settings, cmd, onChange) {
 
-    // console.warn(data)
-
-    const id = data.head.name; // Name des table
+    const id = name; // Name des table
     const th = data.table.th; // <th> Daten des table
     const dataInput = data.data.ids
 
     let cntrData = 1;
     let index = cntrRow[id] || 0;
     let html = '';
+    let value;
 
     if (cmd === null) { // cmd === null : Tabelle wurde durch load aufgerufen
         cntrData = dataInput.length;
@@ -564,7 +570,6 @@ async function dynamicTableNew(data, cmd, onChange) {
     for (let j = 0; j < cntrData; j++) { // Userinput aus dem native in die Tabelle schreiben
         html += `<tr data-index"${index}">`
         for (const i of Object.keys(th)) { // <th> der Tabellen erstellen
-            let value;
             if (dataInput[j] !== undefined && cmd === null) { // Wenn load aufgerufen wird, Daten aus den settings in die Tabellen schreiben
                 if (dataInput[j][th[i].name] !== undefined) {
                     value = dataInput[j][th[i].name]
@@ -596,6 +601,7 @@ async function dynamicTableNew(data, cmd, onChange) {
                     break;
 
                 case 'number':
+                    console.warn(`${th[i].name} : ${value}`)
                     html += `
                 <td data-index="${index}">
                     <div>
@@ -633,7 +639,7 @@ async function dynamicTableNew(data, cmd, onChange) {
 
                 case 'delete':
                     html += `
-                <td data-index"=${index}" onclick="$(this).closest('tr').remove()">
+                <td data-index="${index}" onclick="$(this).closest('tr').remove()">
                     <a data-command="delete" class="values-buttons btn-floating btn-small waves-effect waves-light red">
                     <i class="material-icons">delete</i></a>
                 </td>`
@@ -669,26 +675,12 @@ async function dynamicTableNew(data, cmd, onChange) {
 
     M.updateTextFields();
 
-    // Click events OID loeschen und neu setzen
-    $(`.oid`).off('click');
-    $(`.oid`).on('click', function() {
-        console.warn('OID Click')
-        const nameData = $(this).data('name');
-        const index = $(this).data('index');
-        const $input = $('.values-input[data-name="' + nameData + '"][data-index="' + index + '"]');
-        const val = $input.val() || '';
-        // console.warn(this) -> noch offen
-        showSelectIdDialog(val, function(newValue, oldValue) {
-            // console.warn(newValue) -> noch offen
-            if (newValue !== oldValue) {
-                // if ()
-                $input.val(newValue).trigger('change');
-            }
-        });
-    });
-
     index++
     cntrRow[id] = index;
+
+    eventHandler(data, id, settings, onChange)
+
+    return true;
 
 
     // let curDevice = null;

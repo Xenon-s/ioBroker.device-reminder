@@ -61,10 +61,6 @@ table.table-values th.none {
     display: none;
 }
 
-.remove-first-column td:first-child {
-    display: none;
-}
-
 .remove-last-column td:last-child {
     display: none;
 }
@@ -116,13 +112,6 @@ table.table-values th.header {
     text-align: center;
     line-height: 1em;
     padding: 6px 2px;
-}
-
-
-/* format second column of option tables */
-
-table.table-values tr td:nth-child(1) input {
-    font-weight: bold;
 }
 
 
@@ -305,10 +294,6 @@ table.table-values {
 
 .m label {
     color: #2196f3;
-}
-
-.remove-first-column td:first-child {
-    display: none;
 }
 
 .remove-last-column td:last-child {

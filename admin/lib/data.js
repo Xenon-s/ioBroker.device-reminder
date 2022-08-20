@@ -10,8 +10,6 @@ async function createData(settings) {
     let dataTable = {
         "linkedDevices": {
             "head": {
-                "name": "linked devices",
-                "id": "header-linked-devices",
                 "class": "translate collapsible-inactive"
             },
             "table": {
@@ -28,6 +26,7 @@ async function createData(settings) {
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "device name",
+                        "disabled": true,
                     },
                     "3": {
                         "name": "alexa",
@@ -86,7 +85,106 @@ async function createData(settings) {
                     "12": {
                         "name": "id",
                         "class": "none",
+                        "dataType": "number",
+                        "dataLang": "id",
+                    },
+                }
+            }
+        },
+        "status": {
+            "head": {
+                "class": "translate collapsible-inactive"
+            },
+            "table": {
+                "class": "table-values changeOnChangeEvent remove-last-column",
+                "th": {
+                    "1": {
+                        "name": "stateAction",
+                        "class": "header translate",
                         "dataType": "text",
+                        "dataLang": "in action",
+                    },
+                    "2": {
+                        "name": "stateStandby",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "standby",
+                    },
+                    "3": {
+                        "name": "stateOff",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "device off",
+                    },
+                    "4": {
+                        "name": "id",
+                        "class": "none",
+                        "dataType": "number",
+                        "dataLang": "id",
+                    },
+                }
+            }
+        },
+        "deviceValues": {
+            "head": {
+                "class": "translate collapsible-inactive"
+            },
+            "table": {
+                "class": "table-values changeOnChangeEvent remove-last-column",
+                "addbtn": true,
+                "th": {
+                    "1": {
+                        "name": "name",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "name",
+                        "disabled": true,
+                    },
+                    "2": {
+                        "name": "startVal",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "threshold start (watt)",
+                        "min": 0,
+                    },
+                    "3": {
+                        "name": "endVal",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "threshold end (watt)",
+                        "min": 0,
+                    },
+                    "4": {
+                        "name": "standby",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "threshold standby (watt)",
+                        "min": 0,
+                    },
+                    "5": {
+                        "name": "startCount",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "number of start values",
+                        "min": 0,
+                    },
+                    "6": {
+                        "name": "endCount",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "number of end values",
+                        "min": 0,
+                    },
+                    "7": {
+                        "name": "delete",
+                        "class": "header10 translate",
+                        "dataType": "delete",
+                        "dataLang": "delete",
+                    },
+                    "8": {
+                        "name": "id",
+                        "class": "none",
+                        "dataType": "number",
                         "dataLang": "id",
                     },
                 }
@@ -94,8 +192,6 @@ async function createData(settings) {
         },
         "measuringDevice": {
             "head": {
-                "name": "measuringDevice",
-                "id": "header-measuring-device",
                 "class": "translate collapsible-inactive"
             },
             "table": {
@@ -160,142 +256,14 @@ async function createData(settings) {
                     "8": {
                         "name": "id",
                         "class": "none",
-                        "dataType": "text",
+                        "dataType": "number",
                         "dataLang": "id"
-                    },
-                }
-            }
-        },
-        "default": {
-            "head": {
-                "name": "default",
-                "id": "header-default-type",
-                "class": "translate collapsible-inactive"
-            },
-            "table": {
-                "class": "table-values changeOnChangeEvent remove-last-column",
-                "th": {
-                    "1": {
-                        "name": "name",
-                        "class": "header translate",
-                        "dataType": "text",
-                        "dataLang": "name",
-                        "disabled": true,
-                    },
-                    "2": {
-                        "name": "startVal",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "threshold 'start' (watt)",
-                        "min": 0,
-                    },
-                    "3": {
-                        "name": "endVal",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "threshold 'end' (watt)",
-                        "min": 0,
-                    },
-                    "4": {
-                        "name": "standby",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "threshold 'standby' (watt)",
-                        "min": 0,
-                    },
-                    "5": {
-                        "name": "startCount",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "number of 'start' values",
-                        "min": 0,
-                    },
-                    "6": {
-                        "name": "endCount",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "number of 'end' values",
-                        "min": 0,
-                    },
-                    "7": {
-                        "name": "id",
-                        "class": "none",
-                        "dataType": "text",
-                        "dataLang": "id",
-                    },
-                }
-            }
-        },
-        "custom": {
-            "head": {
-                "name": "custom",
-                "id": "header-custom-type",
-                "class": "translate collapsible-inactive"
-            },
-            "table": {
-                "class": "table-values changeOnChangeEvent remove-last-column",
-                "addbtn": true,
-                "th": {
-                    "1": {
-                        "name": "name",
-                        "class": "header translate",
-                        "dataType": "text",
-                        "dataLang": "name",
-                    },
-                    "2": {
-                        "name": "startVal",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "threshold 'start' (watt)",
-                        "min": 0,
-                    },
-                    "3": {
-                        "name": "endVal",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "threshold 'end' (watt)",
-                        "min": 0,
-                    },
-                    "4": {
-                        "name": "standby",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "threshold 'standby' (watt)",
-                        "min": 0,
-                    },
-                    "5": {
-                        "name": "startCount",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "number of 'start' values",
-                        "min": 0,
-                    },
-                    "6": {
-                        "name": "endCount",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "number of 'end' values",
-                        "min": 0,
-                    },
-                    "7": {
-                        "name": "delete",
-                        "class": "header10 translate",
-                        "dataType": "delete",
-                        "dataLang": "delete",
-                    },
-                    "8": {
-                        "name": "id",
-                        "class": "none",
-                        "dataType": "text",
-                        "dataLang": "id",
                     },
                 }
             }
         },
         "alexa": {
             "head": {
-                "name": "alexa",
-                "id": "header-alexa",
                 "class": "translate collapsible-inactive"
             },
             "table": {
@@ -350,7 +318,7 @@ async function createData(settings) {
                     "7": {
                         "name": "id",
                         "class": "none",
-                        "dataType": "text",
+                        "dataType": "number",
                         "dataLang": "id",
                     },
                 }
@@ -358,8 +326,6 @@ async function createData(settings) {
         },
         "sayit": {
             "head": {
-                "name": "sayit",
-                "id": "header-sayit",
                 "class": "translate collapsible-inactive"
             },
             "table": {
@@ -413,7 +379,7 @@ async function createData(settings) {
                     "7": {
                         "name": "id",
                         "class": "none",
-                        "dataType": "text",
+                        "dataType": "number",
                         "dataLang": "id",
                     },
                 }
@@ -421,8 +387,6 @@ async function createData(settings) {
         },
         "telegram": {
             "head": {
-                "name": "telegram",
-                "id": "header-telegram",
                 "class": "translate collapsible-inactive"
             },
             "table": {
@@ -456,7 +420,7 @@ async function createData(settings) {
                     "5": {
                         "name": "id",
                         "class": "none",
-                        "dataType": "text",
+                        "dataType": "number",
                         "dataLang": "id",
                     },
                 }
@@ -464,8 +428,6 @@ async function createData(settings) {
         },
         "whatsapp": {
             "head": {
-                "name": "whatsapp",
-                "id": "header-whatsapp",
                 "class": "translate collapsible-inactive"
             },
             "table": {
@@ -495,7 +457,7 @@ async function createData(settings) {
                     "4": {
                         "name": "id",
                         "class": "none",
-                        "dataType": "text",
+                        "dataType": "number",
                         "dataLang": "id",
 
                     },
@@ -504,8 +466,6 @@ async function createData(settings) {
         },
         "pushover": {
             "head": {
-                "name": "pushover",
-                "id": "header-pushover",
                 "class": "translate collapsible-inactive"
             },
             "table": {
@@ -548,7 +508,7 @@ async function createData(settings) {
                     "6": {
                         "name": "id",
                         "class": "none",
-                        "dataType": "text",
+                        "dataType": "number",
                         "dataLang": "id",
                     },
                 }
@@ -556,8 +516,6 @@ async function createData(settings) {
         },
         "signal": {
             "head": {
-                "name": "signal",
-                "id": "header-signal",
                 "class": "translate collapsible-inactive"
             },
             "table": {
@@ -585,7 +543,7 @@ async function createData(settings) {
                     "4": {
                         "name": "id",
                         "class": "none",
-                        "dataType": "text",
+                        "dataType": "number",
                         "dataLang": "id",
                     },
                 }
@@ -593,8 +551,6 @@ async function createData(settings) {
         },
         "email": {
             "head": {
-                "name": "email",
-                "id": "header-email",
                 "class": "translate collapsible-inactive"
             },
             "table": {
@@ -628,44 +584,8 @@ async function createData(settings) {
                     "5": {
                         "name": "id",
                         "class": "none",
-                        "dataType": "text",
+                        "dataType": "number",
                         "dataLang": "id",
-                    },
-                }
-            }
-        },
-        "status": {
-            "head": {
-                "name": "device status",
-                "id": "header-device-status",
-                "class": "translate collapsible-inactive"
-            },
-            "table": {
-                "class": "table-values changeOnChangeEvent remove-first-column",
-                "th": {
-                    "1": {
-                        "name": "id",
-                        "class": "none",
-                        "dataType": "text",
-                        "dataLang": "id",
-                    },
-                    "2": {
-                        "name": "stateAction",
-                        "class": "header translate",
-                        "dataType": "text",
-                        "dataLang": "status: 'in action'",
-                    },
-                    "3": {
-                        "name": "stateStandby",
-                        "class": "header translate",
-                        "dataType": "text",
-                        "dataLang": "status: 'standby'",
-                    },
-                    "4": {
-                        "name": "stateOff",
-                        "class": "header translate",
-                        "dataType": "text",
-                        "dataLang": "status: 'device off'",
                     },
                 }
             }
@@ -674,11 +594,28 @@ async function createData(settings) {
 
     // Daten aus dem Adapter native holen und ins Objekt schreiben [wenn vorhanden]
     for (const name of Object.keys(dataTable)) {
+
         dataTable[name].data = {
             idHTML: `${name}ID`,
-            ids: settings[name] !== undefined ? settings[name].id || [] : [],
-            // cntr: settings[name]. || 0,
         };
+
+        if (settings[name] !== undefined) {
+            if (settings[name].data !== undefined) {
+                dataTable[name].data.ids = settings[name].data
+            } else {
+                dataTable[name].data.ids = [];
+            }
+            if (settings[name].counter !== undefined) {
+                dataTable[name].data.counter = settings[name].counter
+            } else {
+                dataTable[name].data.counter = 0;
+            };
+        } else {
+            dataTable[name].data.ids = [];
+            dataTable[name].data.counter = 0;
+        }
     };
+
+    console.warn(dataTable)
     return dataTable;
 };
