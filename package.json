@@ -39,7 +39,7 @@
   "devDependencies": {
     "@alcalzone/release-script": "^3.5.9",
     "@iobroker/testing": "^2.6.0",
-    "@types/chai": "^4.3.3",
+    "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.5",
     "@types/gulp": "^4.0.10",
     "@types/mocha": "^9.1.1",
@@ -48,7 +48,7 @@
     "@types/sinon": "^10.0.11",
     "@types/sinon-chai": "^3.2.9",
     "axios": "^0.27.2",
-    "chai": "^4.3.6",
+    "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
     "eslint": "^8.35.0",
     "gulp": "^4.0.2",
