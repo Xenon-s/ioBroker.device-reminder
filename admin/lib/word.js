@@ -51,7 +51,7 @@ systemDictionary = {
         "pl": "dodać",
         "zh-cn": "增 编"
     },
-    "linkedDevices": {
+    "linkedDevice": {
         "en": "Linked devices",
         "de": "Verknüpfte Geräte",
         "ru": "Связанные устройства",

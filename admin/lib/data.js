@@ -8,19 +8,19 @@ In dataTable stehen alle Daten, um die HTML der einzelnen Tabellen erstellen zu 
 async function createData(settings) {
 
     let dataTable = {
-        "linkedDevices": {
+        "linkedDevice": {
             "head": {
                 "class": "translate collapsible-inactive"
             },
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "th": {
-                    "1": {
-                        "name": "enabled",
-                        "class": "header translate header10",
-                        "dataType": "checkbox",
-                        "dataLang": "active",
-                    },
+                    // "1": {
+                    //     "name": "enabled",
+                    //     "class": "header translate header10",
+                    //     "dataType": "checkbox",
+                    //     "dataLang": "active",
+                    // },
                     "2": {
                         "name": "name",
                         "class": "header translate",
@@ -37,52 +37,58 @@ async function createData(settings) {
                     "4": {
                         "name": "sayit",
                         "class": "header translate",
-                        "dataType": "text",
+                        "dataType": "multiple",
                         "dataLang": "sayit",
                     },
                     "5": {
                         "name": "telegram",
                         "class": "header translate",
-                        "dataType": "text",
+                        "dataType": "multiple",
                         "dataLang": "telegram",
                     },
                     "6": {
                         "name": "whatsapp",
                         "class": "header translate",
-                        "dataType": "text",
+                        "dataType": "multiple",
                         "dataLang": "whatsapp",
                     },
                     "7": {
                         "name": "pushover",
                         "class": "header translate",
-                        "dataType": "text",
+                        "dataType": "multiple",
                         "dataLang": "pushover",
                     },
                     "8": {
-                        "name": "email",
+                        "name": "signal",
                         "class": "header translate",
-                        "dataType": "text",
-                        "dataLang": "email",
+                        "dataType": "multiple",
+                        "dataLang": "signal",
                     },
                     "9": {
+                        "name": "email",
+                        "class": "header translate",
+                        "dataType": "multiple",
+                        "dataLang": "email",
+                    },
+                    "10": {
                         "name": "autoOff",
                         "class": "header translate header10",
                         "dataType": "checkbox",
                         "dataLang": "switch off",
                     },
-                    "10": {
+                    "11": {
                         "name": "timer",
                         "class": "header translate",
                         "dataType": "number",
                         "dataLang": "switch off after minutes",
                     },
-                    "11": {
+                    "12": {
                         "name": "abort",
                         "class": "header translate header10",
                         "dataType": "checkbox",
                         "dataLang": "abort detection",
                     },
-                    "12": {
+                    "13": {
                         "name": "id",
                         "class": "none",
                         "dataType": "number",
@@ -138,7 +144,8 @@ async function createData(settings) {
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
-                        "disabled": true,
+                        "data_default": "new device",
+                        // "disabled": true,
                     },
                     "2": {
                         "name": "startVal",
@@ -146,6 +153,7 @@ async function createData(settings) {
                         "dataType": "number",
                         "dataLang": "threshold start (watt)",
                         "min": 0,
+                        "data_default": 10,
                     },
                     "3": {
                         "name": "endVal",
@@ -153,6 +161,7 @@ async function createData(settings) {
                         "dataType": "number",
                         "dataLang": "threshold end (watt)",
                         "min": 0,
+                        "data_default": 1,
                     },
                     "4": {
                         "name": "standby",
@@ -160,20 +169,23 @@ async function createData(settings) {
                         "dataType": "number",
                         "dataLang": "threshold standby (watt)",
                         "min": 0,
+                        "data_default": 5,
                     },
                     "5": {
                         "name": "startCount",
                         "class": "header translate",
                         "dataType": "number",
                         "dataLang": "number of start values",
-                        "min": 0,
+                        "min": 1,
+                        "data_default": 1,
                     },
                     "6": {
                         "name": "endCount",
                         "class": "header translate",
                         "dataType": "number",
                         "dataLang": "number of end values",
-                        "min": 0,
+                        "min": 1,
+                        "data_default": 3,
                     },
                     "7": {
                         "name": "delete",
@@ -207,10 +219,9 @@ async function createData(settings) {
                     },
                     "2": {
                         "name": "type",
-                        "class": "header translate",
+                        "class": "header translate select",
                         "dataType": "select",
                         "dataLang": "device type",
-                        "dataOptions": ["washing-machine", "dryer", "dishwasher"],
                         "tdClass": "validate values-input select",
                     },
                     "3": {
@@ -276,6 +287,7 @@ async function createData(settings) {
                         "dataType": "text",
                         "dataLang": "name",
                         "tdClass": "validate values-input",
+                        "data_default": "new device",
                     },
                     "2": {
                         "name": "path",
@@ -291,7 +303,8 @@ async function createData(settings) {
                         "dataType": "number",
                         "dataLang": "volume 0-100",
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "data_default": 25,
                     },
                     "4": {
                         "name": "activeFrom",
@@ -300,6 +313,7 @@ async function createData(settings) {
                         "dataLang": "active from",
                         "tdClass": "validate values-input timepicker",
                         "disabled": true,
+                        "data_default": "00:00",
                     },
                     "5": {
                         "name": "activeUntil",
@@ -308,6 +322,7 @@ async function createData(settings) {
                         "dataLang": "active until",
                         "tdClass": "validate values-input timepicker",
                         "disabled": true,
+                        "data_default": "23:59",
                     },
                     "6": {
                         "name": "delete",
@@ -337,6 +352,7 @@ async function createData(settings) {
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
+                        "data_default": "new device",
                     },
                     "2": {
                         "name": "path",
@@ -352,7 +368,8 @@ async function createData(settings) {
                         "dataType": "number",
                         "dataLang": "volume 0-100",
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "data_default": 25
                     },
                     "4": {
                         "name": "activeFrom",
@@ -361,6 +378,7 @@ async function createData(settings) {
                         "dataLang": "active from",
                         "tdClass": "validate values-input timepicker",
                         "disabled": true,
+                        "data_default": "00:00"
                     },
                     "5": {
                         "name": "activeUntil",
@@ -369,6 +387,7 @@ async function createData(settings) {
                         "dataLang": "active until",
                         "tdClass": "validate values-input timepicker",
                         "disabled": true,
+                        "data_default": "23:59"
                     },
                     "6": {
                         "name": "delete",
@@ -398,18 +417,21 @@ async function createData(settings) {
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
+                        "data_default": "new user"
                     },
                     "2": {
                         "name": "username",
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "username",
+                        "data_default": "username"
                     },
                     "3": {
                         "name": "Chat ID",
                         "class": "header translate",
                         "dataType": "number",
                         "dataLang": "Chat ID",
+                        "data_default": "0123456789"
                     },
                     "4": {
                         "name": "delete",
@@ -439,6 +461,7 @@ async function createData(settings) {
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
+                        "data_default": "new user"
                     },
                     "2": {
                         "name": "path",
@@ -477,19 +500,25 @@ async function createData(settings) {
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
+                        "data_default": "new user"
                     },
                     "2": {
                         "name": "title",
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "title",
+                        "data_default": "new title"
                     },
                     "3": {
                         "name": "prio",
                         "class": "header translate",
                         "dataType": "select",
                         "dataLang": "priority",
-                        "dataOptions": ["normal", "high", "quiet"],
+                        "dataOptions": [
+                            { "name": "normal", "id": 0 },
+                            { "name": "high", "id": 1 },
+                            { "name": "quiet", "id": 2 }
+                        ],
                         "tdClass": "validate values-input select",
                     },
                     "4": {
@@ -497,7 +526,30 @@ async function createData(settings) {
                         "class": "header translate",
                         "dataType": "select",
                         "dataLang": "sound",
-                        "dataOptions": ["pushover", "bike", "bugle", "cashregister", "classical", "cosmic", "falling", "gamelan", "incoming", "intermission", "magic", "mechanical", "pianobar", "siren", "spacealarm", "tugboat", "alien", "climb", "persistent", "echo", "updown", "none"]
+                        "dataOptions": [
+                            { "name": "pushover", "id": 0 },
+                            { "name": "bike", "id": 1 },
+                            { "name": "bugle", "id": 2 },
+                            { "name": "cashregister", "id": 3 },
+                            { "name": "classical", "id": 4 },
+                            { "name": "cosmic", "id": 5 },
+                            { "name": "falling", "id": 6 },
+                            { "name": "gamelan", "id": 7 },
+                            { "name": "incoming", "id": 8 },
+                            { "name": "intermission", "id": 9 },
+                            { "name": "magic", "id": 10 },
+                            { "name": "mechanical", "id": 11 },
+                            { "name": "pianobar", "id": 12 },
+                            { "name": "siren", "id": 13 },
+                            { "name": "spacealarm", "id": 14 },
+                            { "name": "tugboat", "id": 15 },
+                            { "name": "alien", "id": 16 },
+                            { "name": "climb", "id": 17 },
+                            { "name": "persistent", "id": 18 },
+                            { "name": "echo", "id": 19 },
+                            { "name": "updown", "id": 20 },
+                            { "name": "none", "id": 21 }
+                        ]
                     },
                     "5": {
                         "name": "delete",
@@ -601,21 +653,20 @@ async function createData(settings) {
 
         if (settings[name] !== undefined) {
             if (settings[name].data !== undefined) {
-                dataTable[name].data.ids = settings[name].data
+                dataTable[name].ids = settings[name].data
             } else {
-                dataTable[name].data.ids = [];
+                dataTable[name].ids = [];
             }
             if (settings[name].counter !== undefined) {
-                dataTable[name].data.counter = settings[name].counter
+                dataTable[name].counter = settings[name].counter
             } else {
-                dataTable[name].data.counter = 0;
+                dataTable[name].counter = 0;
             };
         } else {
-            dataTable[name].data.ids = [];
-            dataTable[name].data.counter = 0;
+            dataTable[name].ids = [];
+            dataTable[name].counter = 0;
         }
     };
 
-    console.warn(dataTable)
     return dataTable;
 };
