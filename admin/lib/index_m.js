@@ -1,7 +1,15 @@
 /*
 offene Punkte
 -> Geraetetyp muss in Measuring Device aktualiert werden, wenn User einen neuen deviceValue hinzufuegt 
-    -> Tabelle Meausering per rebuild neu erstellen !! Zeile 706 weiter 
+    -> Tabelle Meausering per rebuild neu erstellen !! Zeile 706 weiter, erl
+
+    -> tableHead umschreiben, damit nur vorhandene Ids auch als Header angelegt werden (wenn Alexa = 0, dann keinen Alexa Header erstellen) erl
+
+    -> bei rebuild von linkedDevices sorgt data-old-value dafuer, dass die namen falsch sind, erl
+        -> außerdem werden die Zeilen nicht immer wieder neu aufgebaut, erl
+
+-> linkedDevice Table wird ordentlich aufgebaut und uebernimmt auch Aenderungen aus den anderen Table (zb Alexa). Jetzt muss die save gebaut werden und der Tabelleninhalt
+    als ID und nicht mehr als gesamtes Objekt zurueck gegeben werden
 */
 
 
@@ -10,6 +18,8 @@ offene Punkte
 let headerOpened = ``;
 let lastHeaderOpened = '';
 let dataGlobal = {}; // alle native Daten aus "settings" werden hier gespeichert
+let settingsGlobal;
+let onChangeGlobal;
 
 let dataGlobalNew = {};
 
@@ -17,21 +27,23 @@ let cntrRow = {}; // Zaehler fuer Tabellenzeilen
 
 // This will be called by the admin adapter when the settings page loads
 async function load(settings, onChange) {
-    // try {
 
     if (!settings) return;
+    settingsGlobal = settings;
+    onChangeGlobal = onChange;
     showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
 
     // create GUI
-    const dataTable = await createSettings(await createData(settings))
+    const dataTable = await createData(settingsGlobal)
+    console.warn(dataTable)
     await createTableHeader(dataTable); // html der GUI erstellen (inklusive Tabellenhed)
     for (const i of Object.keys(dataTable)) {
         if (!i.toLowerCase().includes('linked') && !i.toLowerCase().includes('measuring')) {
-            createDataTable(onChange, settings, dataTable, 'load', i);
+            await createDataTable(onChange, 'load', i);
         };
     };
-    createDataTable(onChange, settings, dataTable, 'load', 'measuringDevice');
-    createDataTable(onChange, settings, dataTable, 'linked', 'linkedDevice');
+    await createDataTable(onChange, 'load', 'measuringDevice'); // "Table measuringDevice erstellen"
+    createDataTable(onChange, 'load', 'linkedDevice');  // Ganz zum Schluss "table linkedDevice" erstellen, da erst alle anderen Tabellen fertig sein muessen
 
     setTimeout(() => {
         $('.collapsible').collapsible();
@@ -80,9 +92,9 @@ async function createTableHeader(tableHead) {
         const tableClass = tableHead[i].table.class; // Class des Tables
 
         // table head
-        if (key !== "header-linked-devices") {
+        // if (key != "header-linked-devices") {
 
-            html += `
+        html += `
                 <li>
                     <!-- Header Collapsible -->
                     <div id="header-${key}" class="${classHead}"
@@ -102,15 +114,15 @@ async function createTableHeader(tableHead) {
                             <div style="display: flex; align-items: center;">
                             <div>`
 
-            if (tableHead[i].table.addbtn) {
-                html += `
+        if (tableHead[i].table.addbtn) {
+            html += `
                                 <!-- Add btn -->
                                 <a id="btn-add-${key}"
                                     class="btn-floating waves-effect waves-light blue table-button-add">
                                     <i class="material-icons">add_circle_outline</i></a>
                                 <span class="translate" style="font-weight:bold;" data-lang="add">${_("add")}</span>`
-            };
-            html += ` 
+        };
+        html += ` 
                                 <!-- submit button-->
                                 <button id="btn-check-${key}" class="btn waves-effect waves-light" type="submit" name="action">Submit
                                     <i class="material-icons right">send</i>
@@ -124,7 +136,7 @@ async function createTableHeader(tableHead) {
                                 data-lang="help">${_("help")}</a>
                                 <!-- Help btn End-->
                             </div>`
-            html += `
+        html += `
                         <!-- Modal Structure Help-->
                         <div id="modal-${key}" class="modal">
                             <div id="help-${key}" class="modal-content translate">
@@ -152,23 +164,39 @@ async function createTableHeader(tableHead) {
                 <thead>
                 <tr>`
 
-            for (const j of Object.keys(data.table.th)) {
 
-                const th = data.table.th[j]; // Inhalt des gesamten Table Head
+        for (const j of Object.keys(data.table.th)) {
+            /* Hier wird geprueft, ob der ueberhaupt Daten aus der jeweiligen Tabelle (zB Alexa) vorliegen
+                Wenn keine Daten, dann wird der Head auch nicht in "linkedDevices" erstellt
+            */
+            // if (i.toLocaleLowerCase().includes('linked')) {
+            //     const dataTable = await createSettings(await createData(settingsGlobal))
+            //     let dataHead = {};
+            //     dataHead = dataTable[data.table.th[j].name];
+            //     // if (data.table.th[j].name.toLocaleLowerCase() == 'name' || data.table.th[j].name.toLocaleLowerCase() == 'autooff' || data.table.th[j].name.toLocaleLowerCase() == 'timer' || data.table.th[j].name.toLocaleLowerCase() == 'abort' || data.table.th[j].name.toLocaleLowerCase() == 'id') {
+            //     if (data.table.th[j].name.toLocaleLowerCase() == 'name' || data.table.th[j].name.toLocaleLowerCase() == 'autooff' || data.table.th[j].name.toLocaleLowerCase() == 'timer' || data.table.th[j].name.toLocaleLowerCase() == 'abort' || data.table.th[j].name.toLocaleLowerCase() == 'id') {
+            //         html += `<th class="${data.table.th[j].class}">${_(data.table.th[j].dataLang)}</th></th>`
+            //     } else if (dataHead != undefined && dataHead.ids.length > 0) {
+            //         // console.warn(data.table.th[j].name)
+            //         html += `<th class="${data.table.th[j].class}">${_(data.table.th[j].dataLang)}</th></th>`
+            //     };
+            //     // };
+            // } else {
+            const th = data.table.th[j]; // Inhalt des gesamten Table Head
+            html += `<th class="${th.class}">${_(th.dataLang)}</th></th>`
+            // };
+        };
+        html += `</tr></thead>`
 
-                html += `<th class="${th.class}">${_(th.dataLang)}</th></th>`
-            };
-            html += `</tr></thead>`
-
-            // Table Body erstellen
-            html += `<!-- Table head End -->
+        // Table Body erstellen
+        html += `<!-- Table head End -->
                         <tbody id="${key}-body" class="table-lines"></tbody>
                         <!-- Table End -->
                         </table>
                     </div>
                 </li>
                 <!-- Body Collapsible End-->`
-        };
+        // }; <_
     };
     html += `</ul>
     </div>
@@ -179,31 +207,30 @@ async function createTableHeader(tableHead) {
 };
 
 // create table input
-async function eventHandler(data, /**@type{string}*/ name, settings, onChange) {
+async function eventHandler(data, /**@type{string}*/ name, onChange) {
 
     const idHTML = data.data.idHTML; // html id table
 
     // create click event "add button"
     const btnAdd = `#btn-add-${name}`
     $(btnAdd).off('click').on('click', async () => {
-        if (btnAdd.toLowerCase().includes('measuringdevice')) data = await createSettings(await createData(settings));
-        createDataTable(onChange, settings, data, 'add', name); // eine Tabellenzeile hinzufuegen
+        if (btnAdd.toLowerCase().includes('measuringdevice')) data = await createSettings(await createData(settingsGlobal));
+        createDataTable(onChange, 'add', name); // eine Tabellenzeile hinzufuegen
         showBtns(btnSave, true, onChange);
         showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
     });
 
     // submit button einblenden
-    // const btnSave = `#${name}`;
     const btnSave = `#btn-check-${name}`;
     showBtns(btnSave, false, onChange); // save buttons deaktivieren bis events auf "add button" erkannt
     $(btnSave).off('click').on('click', async () => {
-        btnPressed(settings, onChange, name);
+        btnPressed(onChange, name);
         showBtns(btnSave, false, onChange);
     });
 
     // create event "change" on table
     const eventID = `#${idHTML}`;
-    if (eventID !== '#linkedDevicesID') {
+    if (eventID != '#linkedDevicesID') {
         $(eventID).off('click').on('change keyup', () => {
             showBtns(`#btn-check-${name}`, true, onChange);
             showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
@@ -221,7 +248,7 @@ async function eventHandler(data, /**@type{string}*/ name, settings, onChange) {
         const $input = $('.values-input[data-name="' + nameData + '"][data-index="' + index + '"]');
         const val = $input.val() || '';
         showSelectIdDialog(val, function (newValue, oldValue) {
-            if (newValue !== oldValue) {
+            if (newValue != oldValue) {
                 // if ()
                 $input.val(newValue).trigger('change');
             }
@@ -232,7 +259,7 @@ async function eventHandler(data, /**@type{string}*/ name, settings, onChange) {
         // zusatz klassen setzen
         $(`#table-${name} .table-lines .red`).off('click').on('click', async () => { // Wenn Zeile geloescht wird, muss "linkedDevices" neu erstellt werden
             setTimeout(async () => {
-                btnPressed(settings, onChange, 'red'); // Daten neu auslesen und in 'linkedDevices' schreiben
+                btnPressed(onChange, 'red'); // Daten neu auslesen und in 'linkedDevices' schreiben
             }, 100);
         });
         $('.timepicker').timepicker({ "twelveHour": false });
@@ -242,20 +269,19 @@ async function eventHandler(data, /**@type{string}*/ name, settings, onChange) {
 };
 
 // Wenn add-Button, check-Button oder delete-Button gedrueckt wurde, Zeilen oder Tabellen neu bauen
-async function btnPressed(settings, onChange, name) {
-    const data = await createSettings(await createData(settings));
-    console.warn(data)
+async function btnPressed(onChange, name) {
     if (name != 'red') {
-        createTableBody(onChange, settings, data[name], 'btn', 'linkedDevice');    // <- Pruefen, ob das funktioniert!!
         if (name.toLowerCase().includes('devicevalues')) {  // Wenn Daten in "deviceValues" geaendert wurde, muss die Tabelle von "measuringDevice" neu erstellt werden, damit der Dropdown passt
-            // createTableBody(onChange, settings, data['measuringDevice'], 'btn', 'linkedDevice');
-            createDataTable(onChange, settings, data, 'rebuild', 'measuringDevice'); // eine Tabellenzeile hinzufuegen
+            cntrRow['measuringDevice'] = 0;
+            await createDataTable(onChange, 'rebuild', 'measuringDevice'); // eine Tabellenzeile hinzufuegen
         };
-    }
+        if (name.toLowerCase().includes('link')) {
+            console.warn(await createSettings(await createData(settingsGlobal)));
+        }
+    };
 
-    // createTableBody(onChange, settings, data, 'btn', 'linkdesDevices');
     showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
-    dataGlobal = data;
+    // dataGlobal = data;
 };
 
 function showBtns( /**@type {string}*/ id, /**@type {boolean}*/ cmd, onChange) {
@@ -268,15 +294,15 @@ function showBtns( /**@type {string}*/ id, /**@type {boolean}*/ cmd, onChange) {
 };
 
 // Collapsible Header oeffnen / schliessen
-function selectedHeader( /**@type {string}*/ id) {
+async function selectedHeader( /**@type {string}*/ id) {
 
-    if (headerOpened === ``) {
+    if (headerOpened == ``) {
         headerOpened = id;
         $(`#${id}`).addClass('collapsible-active');
         $(`#${id}`).removeClass('collapsible-inactive');
     } else {
-        headerOpened = headerOpened === id ? `` : id;
-        if (lastHeaderOpened !== id) {
+        headerOpened = headerOpened == id ? `` : id;
+        if (lastHeaderOpened != id) {
             $(`#${lastHeaderOpened}`).addClass('collapsible-inactive');
             $(`#${lastHeaderOpened}`).removeClass('collapsible-active');
             $(`#${id}`).addClass('collapsible-active');
@@ -287,61 +313,75 @@ function selectedHeader( /**@type {string}*/ id) {
         };
     };
 
+    // Pruefen, ob "Table linkedDevice" geoeffnet wurde, um Inhalt neu zu generieren
+    if (headerOpened != `` && id.toLocaleLowerCase().includes('linked')) {
+        console.warn('Table linkedDevice neu generieren');
+        createDataTable(onChangeGlobal, 'linked', 'linkedDevice');
+    };
     lastHeaderOpened = id;
 };
 
 // Header im "linkedDevices table" anzeigen, wenn Daten vorhanden (zb. alexa)
-function showHeader( /**@type {string}*/ tblId, /**@type {string}*/ columnName, arr) {
-    if (columnName !== undefined) {
-        if (arr.length > 0 && columnName !== undefined) {
-            $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'table-cell');
-        } else {
-            $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'none');
-        };
-    };
+function showHeader( /**@type {string}*/ tblId, /**@type {Boolean}*/ cmd, arr) {
+
+    // console.warn(tblId)
+    // if (cmd) {
+    //         $(`${tblId}`).css('display', 'table-cell');
+    //     } else {
+    //         $(`${tblId}`).css('display', 'none');
+    //         // $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'none');
+    //     };
+    // if (columnName != undefined) {
+    //     if (arr.length > 0 && columnName != undefined) {
+    //         $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'table-cell');
+    //     } else {
+    //         $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'none');
+    //     };
+    // };
 };
 
 // settings neu erstellen und an die table schicken
-async function createSettings(data, /**@type {string}*/ type) {
+async function createSettings(data) {
 
     let obj = {};
     obj = data;
 
     // Daten aus tabellen nur holen, wenn neues device erzeugt wurde
-    if (type !== 'save') {
+    // if (type != 'save') {
 
-        const result = await getDataFromTable(); // daten für jedes device holen
-        for (const i of Object.keys(result)) {
-            if (result[i].length) {
-                obj[i].ids = await createId(result[i], data[i].counter, i);
-            };
-        };
+    const result = await getDataFromTable(); // daten für jedes device holen
 
-        // Daten aus jeder einzelnen Tabelle holen und in Objekt abspeichern
-        async function getDataFromTable() { // daten aus tabellen holen
-            let dataReturn = {};
-            for (const i in data) {
-                dataReturn[i] = await table2values(data[i].data.idHTML);
-            };
-            return dataReturn;
-        };
-
-        // jedem einzelnen device pro Tabelle eine eindeutige ID zuweisen
-        function createId(array, /**@type{number}*/ counter, /**@type{string}*/ name) { // jedem device eine ID zuweisen
-            for (const i in array) {
-                if (array[i].id == "" || array[i].id === undefined) {
-                    array[i].id = counter;
-                    counter++;
-                };
-            };
-            obj[name].data.counter = counter;
-            return array;
+    for (const i of Object.keys(result)) {
+        if (result[i].length) {
+            obj[i].ids = await createId(result[i], data[i].counter, i);
         };
     };
 
-    let body = $('#linkedDevicesID .table-lines');
-    let devices = [];
+    // Daten aus jeder einzelnen Tabelle holen und in Objekt abspeichern
+    async function getDataFromTable() { // daten aus tabellen holen
+        let dataReturn = {};
+        for (const i in data) {
+            dataReturn[i] = await table2values(data[i].data.idHTML);
+        };
+        return dataReturn;
+    };
 
+    // jedem einzelnen device pro Tabelle eine eindeutige ID zuweisen
+    function createId(array, /**@type{number}*/ counter, /**@type{string}*/ name) { // jedem device eine ID zuweisen
+        for (const i in array) {
+            if (array[i].id == "" || array[i].id == undefined) {
+                array[i].id = counter;
+                counter++;
+            };
+        };
+        cntrRow[name] = counter
+        // obj[name].data.counter = counter;
+        return array;
+    };
+    // };
+
+    let body = $('#linkedDeviceID .table-lines');
+    let devices = [];
     body.children().each(function () { // daten aus dyn. tabelle sichern
         let data = {};
         $(this).children().each(function () {
@@ -366,11 +406,13 @@ async function createSettings(data, /**@type {string}*/ type) {
     });
 
     obj.linkedDevice.ids = devices; // dynamische daten in devices sichern
+
+    // console.warn(obj)
     return obj; // settings zurueckgeben
 };
 
 // Tabellen html erstellen
-async function createTableBody(onChange, settings, data, /**@type{string}*/ cmd, /**@type{string}*/ name, /**@type{number}*/ dataLength) {
+async function createTableBody(onChange, data, /**@type{string}*/ cmd, /**@type{string}*/ name, /**@type{number}*/ dataLength) {
 
     const id = name; // Name des table
     const th = data.table.th; // <th> Daten des table
@@ -385,104 +427,101 @@ async function createTableBody(onChange, settings, data, /**@type{string}*/ cmd,
         html += `<tr data-index"${index}">`
         for (const i of Object.keys(th)) { // <th> der Tabellen erstellen
 
-            if (data.ids[j] !== undefined && (cmd === 'load' || cmd == 'rebuild')) { // Wenn load aufgerufen wird, Daten aus den settings in die Tabellen schreiben
-                if (data.ids[j][th[i].name] !== undefined) { // dataInput[j] = th Daten des Table; [th[i].name] : Attribut; dataInput[j][th[i].name] : input Wert (value)
+            // console.warn(th)
+
+            if (data.ids[j] != undefined && (cmd == 'load' || cmd == 'rebuild')) { // Wenn load aufgerufen wird, Daten aus den settings in die Tabellen schreiben
+                if (data.ids[j][th[i].name] != undefined) { // dataInput[j] = th Daten des Table; [th[i].name] : Attribut; dataInput[j][th[i].name] : input Wert (value)
                     value = data.ids[j][th[i].name];
                     valueId = data.ids[j][th[i].id];
 
                 };
             };
 
-            if (cmd == 'add' && th[i].dataType != 'select' && th[i].dataType != 'multiple') value = th[i].data_default || '';
+            // if (cmd == 'add' && th[i].dataType != 'select' && th[i].dataType != 'multiple') value = th[i].data_default || '';
 
-            if(th[i].name.toLowerCase() == 'id') value = index; // Wenn Name "id", dann index als Value setzen, damit jede Tabellenzeile eine eindeutige ID zugewiesen bekommt
+            // if (th[i].name.toLowerCase() == 'id') value = index; // Wenn Name "id", dann index als Value setzen, damit jede Tabellenzeile eine eindeutige ID zugewiesen bekommt
 
             switch (th[i].dataType) {
                 case 'text':
-                    if (th[i].tdClass !== undefined && th[i].tdClass.includes('oid-select')) {
+                    if (th[i].tdClass != undefined && th[i].tdClass.includes('oid-select')) {
                         html += `
                 <td data-index="${index}">
                     <div style="width: calc(100% - 40px)" >
-                        <input data-index="${index}" style="width: calc(100% - 40px)" class="${th[i].tdClass || 'values-input'}" type="text" data-name="${th[i].name}" data-old-value="${value || ''}" value="${value}"`
-                        if (th[i].disabled !== undefined) {
-                            html += `readonly=true`
+                        <input data-index="${index}" style="width: calc(100% - 40px)" class="${th[i].tdClass || 'values-input'}" type="text" data-name="${th[i].name}" data-old-value="${value || ''}" value="${value}"`;
+                        if (th[i].disabled != undefined) {
+                            html += `readonly=true`;
                         };
                         html += `><a data-index="${index}" id="${id}-${th[i].name}" style="max-width: 30px" class="values-buttons btn-floating btn-small waves-effect waves-light blue oid" data-name="${th[i].name}">
                         <i class="material-icons" data-name="${th[i].name}">edit</i></a>
-                    </div>`
+                    </div>`;
                     } else {
                         html += `
                 <td data-index="${index}">
                     <div>
-                        <input data-index="${index}" class="${th[i].tdClass || 'values-input'}" type="text" data-name="${th[i].name}" data-old-value="${value || ''}" value="${value}"`
-                        if (th[i].disabled !== undefined) {
-                            html += `readonly=true`
+                        <input data-index="${index}" class="${th[i].tdClass || 'values-input'}" type="text" data-name="${th[i].name}" data-old-value="${value || ''}" value="${value}"`;
+                        if (th[i].disabled != undefined) {
+                            html += `readonly=true`;
                         };
                         html += `
                         >
-                    </div>`
+                    </div>`;
                     };
                     html += `
-                </td>`
+                </td>`;
                     break;
 
                 case 'number':
                     html += `
                 <td data-index="${index}">
                     <div>
-                        <input data-index="${index}" class="${th[i].tdClass || 'values-input'}" type="number" data-name="${th[i].name}" data-old-value="${value || ''}"  value="${value}"`
-                    if (th[i].min !== undefined) {
+                        <input data-index="${index}" class="${th[i].tdClass || 'values-input'}" type="number" data-name="${th[i].name}" data-old-value="${value || ''}"  value="${value}"`;
+                    if (th[i].min != undefined) {
                         html += `min="${th[i].min}"`
                     };
-                    if (th[i].max !== undefined) {
+                    if (th[i].max != undefined) {
                         html += `max="${th[i].max}"`
                     };
                     html += `>
                     </div>
-                </td>`
+                </td>`;
                     break;
 
                 case 'select':
                     html += `
                 <td data-index="${index}">
                     <div class="select-wrapper">
-                        <select data-index="${index}" class="values-input" data-name="type">
-                            <option data-old-value="" disabled selected>Choose your option</option>`
+                        <select data-index="${index}" class="values-input" data-name="type">`;
                     for (const option of Object.keys(th[i].dataOptions)) { // Alle Input Optionen durchgehen [und selektierte Option rausfinden]
                         let checked = '';
-                        if (value === th[i].dataOptions[option].id) {
-                            checked = 'selected'
+                        if (value == th[i].dataOptions[option].id) {
+                            checked = 'selected';
                         };
-                        html += `<option ${checked} value="${th[i].dataOptions[option].id}">${th[i].dataOptions[option].name}</option>`
-                    }
+                        html += `<option ${checked} value="${th[i].dataOptions[option].id}">${th[i].dataOptions[option].name}</option>`;
+                    };
                     html += `</select>
                     </div>
-                </td>`
+                </td>`;
                     break;
 
                 case 'multiple':
                     html += `
                 <td data-index="${index}">
-                    <div class="select-wrapper">
-                    `
-                    if (value !== undefined && value.length > 0) {
+                    <div class="select-wrapper">`;
+                    if (value != undefined && value.length > 0) {
+                        // console.warn(name)
+                        // console.warn(value)
+                    }
+                    if (value != undefined && value.length > 0) {
                         html += `<select data-index="${index}" class="values-input" multiple data-name="${name}" data-old-value="${value}">`;
                         for (const option of Object.keys(value)) {
+                            let checked = '';
                             html += `
-                            <option value="${value[option].id}">${value[option].name}</option>`
+                            <option selected value="${value[option].id}">${value[option].name}</option>`;
                         };
                         html += `</select>
                     </div>
-                </td>`
+                </td>`;
                     };
-                    break;
-
-                case 'checkbox':
-                    let checked = '';
-                    if (value == true || value == 'on') {
-                        checked = 'checked="checked"';
-                    }
-                    html += `<label><input type="checkbox" class="values-input filled-in" ${checked} data-old-value="${value}"><span></span></label>`;
                     break;
 
                 case 'delete':
@@ -490,7 +529,7 @@ async function createTableBody(onChange, settings, data, /**@type{string}*/ cmd,
                 <td data-index="${index}" onclick="$(this).closest('tr').remove()">
                     <a data-command="delete" class="values-buttons btn-floating btn-small waves-effect waves-light red">
                     <i class="material-icons">delete</i></a>
-                </td>`
+                </td>`;
                     break;
 
                 case 'hidden':
@@ -499,25 +538,33 @@ async function createTableBody(onChange, settings, data, /**@type{string}*/ cmd,
                     <div class="input-field" style="text-align: center">
                         <input data-index="${index}" class="${th[i].tdClass || 'values-input'}" type="text" data-name="id"/>
                     </div>
-                </td>`
+                </td>`;
                     break;
 
                 default:
 
                     break;
-            }
+            };
         };
         index++
     };
 
-    html += `</tr>`
+    html += `</tr>`;
 
     // Wenn deviceValue geaendert wurde, muss die Tabelle von "measuringDevice" neu erstellt werden, damit die Auswahloptionen von "type" vorhanden sind
-    if (cmd == 'rebuild') {
+    // / Table "linkedDevice" wird jedes Mal neu erstellt
+    if (cmd == 'rebuild' || name.toLowerCase().includes('linked')) {
         $(`#${idHTML} .table-lines`).html('').append(html);
     } else {
         $(`#${idHTML} .table-lines`).append(html);
     };
+
+    if (data.ids.length > 0) {
+        showHeader(`#${idHTML}`, true);
+    } else {
+        showHeader(`#${idHTML}`, false);
+    };
+
 
     // select fuer device-type neu initialisieren
     try {
@@ -530,9 +577,9 @@ async function createTableBody(onChange, settings, data, /**@type{string}*/ cmd,
     M.updateTextFields();
 
     // index++
-    cntrRow[id] = index;
+    // cntrRow[id] = index;
 
-    eventHandler(data, id, settings, onChange)
+    eventHandler(data, id, onChange)
 
     return true;
 
@@ -679,10 +726,14 @@ async function createTableBody(onChange, settings, data, /**@type{string}*/ cmd,
     // dataGlobal = settings;
 };
 
-async function createDataTable(onChange, settings, data, /**@type{string}*/ cmd, /**@type{string}*/ name) {
+async function createDataTable(onChange, /**@type{string}*/ cmd, /**@type{string}*/ name) {
 
-    console.warn(name)
-    console.warn(name)
+    let data = await createSettings(await createData(settingsGlobal))
+
+    // console.warn(data)
+
+    let deviceData = [];
+    let arrName = []; // Wird benoetigt um doppelte Namen bei "linkedDevice" auszuschließen
 
     // measuringDevice bildet eine Ausnahme, da hier zuvor die Daten aus "device Values" benoetigt werden, damit der Dropdown verfuegbar ist
     if (name.toLowerCase().includes('measuring')) { // Auswahloptionen fuer Geraetetyp aktualisieren
@@ -694,40 +745,60 @@ async function createDataTable(onChange, settings, data, /**@type{string}*/ cmd,
         if (cmd == 'add') data = data['measuringDevice']; // wenn add button geklickt wurde, darf data nur noch die Daten von "measuringDevice" enthalten und nicht mehr von allen Tabellen wie in "load"
     };
 
+    /*
+    Hier wird der linkedDevice Table Inhalt erstellt (aus settings und Table "measuringDevice")
+    */
     if (name.toLowerCase().includes('linked')) {
-
-        let deviceData = {};
-
-        if (data['measuringDevice'] !== undefined) {
-            if (data['measuringDevice'].ids.length > 0) {
-                for (const i of Object.keys(data['measuringDevice'].ids)) { // Fuer jedes device unter "Messgeraet"
-                    deviceData[data['measuringDevice'].ids[i].id] = {
-                        name: data['measuringDevice'].ids[i].name,
-                        id: data['measuringDevice'].ids[i].id
-                    };
-                };
+        const createDataLinkedDevice = async (dataTable, dataLoop) => {
+            for (const i of Object.keys(dataLoop.ids)) {
+                if (!arrName.includes(dataLoop.ids[i].name)) {
+                    deviceData.push({
+                        name: dataLoop.ids[i].name,
+                        alexa: dataTable.alexa.ids || {},
+                        sayit: dataTable.sayit.ids,
+                        telegram: dataTable.telegram.ids,
+                        whatsapp: dataTable.whatsapp.ids,
+                        pushover: dataTable.pushover.ids,
+                        signal: dataTable.signal.ids,
+                        email: dataTable.email.ids,
+                        autoOff: dataLoop.ids[i].autoOff || false,
+                        timer: dataLoop.ids[i].timer || 0,
+                        abort: dataLoop.ids[i].abort || false,
+                        id: dataLoop.ids[i].id || 0,
+                    });
+                    arrName.push(dataLoop.ids[i].name); // Namen jedes einzelnen devices in arrName schreiben
+                }
             };
+            return deviceData;
         };
+
+        const dataTable = await createSettings(await createData(settingsGlobal));
+        await createDataLinkedDevice(dataTable, data.linkedDevice);
+        data[name].ids = await createDataLinkedDevice(dataTable, data.measuringDevice);
     };
 
     switch (cmd) {
         case 'load':
-            createTableBody(onChange, settings, data[name], "load", name, data[name].ids.length > 0 ? data[name].ids.length || 0 : 0);
+            createTableBody(onChange, data[name], "load", name, Object.keys(data[name].ids).length > 0 ? Object.keys(data[name].ids).length || 0 : 0);
             break;
 
         case 'rebuild':
-            createTableBody(onChange, settings, data[name], "rebuild", name, data[name].ids.length > 0 ? data[name].ids.length || 0 : 0);
+            createTableBody(onChange, data[name], "rebuild", name, Object.keys(data[name].ids).length > 0 ? Object.keys(data[name].ids).length || 0 : 0);
             break;
 
         case "add":
             // Wenn Zeile hinzugefuegt werden soll, nur data senden, da hier alle Zeilen informationen enthalten sind
-            createTableBody(onChange, settings, data, "add", name, 1);
+            console.warn(data)
+            createTableBody(onChange, data[name], "add", name, 1);
             break;
 
         case "linked":
-            createTableBody(onChange, settings, data[name], 'load', name, Object.keys(data[name].ids).length);
+            console.error(data[name]);
+            createTableBody(onChange, data[name], 'load', name, Object.keys(data[name].ids).length);
             break;
     };
+
+    return true;
 };
 
 // Daten ins native schreiben
@@ -771,9 +842,9 @@ async function save(callback) {
 
         let objTemp = {};
         for (const i in obj.ids) {
-            if (i !== undefined) {
+            if (i != undefined) {
                 const data = obj.ids[i];
-                if (name === 'measuringDevice') { // ????
+                if (name == 'measuringDevice') { // ????
                     const dataTable = obj.idsTable[i]; // devices hat zwei daten arrays
 
                     // prüfen ob data in dataTable vorhanden ist
@@ -804,14 +875,14 @@ async function save(callback) {
                     };
                 };
 
-                if (name === "alexa" || name === "sayit") {
+                if (name == "alexa" || name == "sayit") {
                     timeMin = "";
                     timeMax = "";
                     let timeMinHourTemp = ``;
                     let timeMinMinTemp = ``;
                     let timeMaxHourTemp = ``;
                     let timeMaxMinTemp = ``;
-                    if (data.timeMinHour !== `` && data.timeMinMin !== `` && data.timeMaxHour !== `` && data.timeMaxMin !== ``) {
+                    if (data.timeMinHour != `` && data.timeMinMin != `` && data.timeMaxHour != `` && data.timeMaxMin != ``) {
                         timeMinHourTemp = data.timeMinHour;
                         timeMinMinTemp = data.timeMinMin;
                         timeMaxHourTemp = data.timeMaxHour;
@@ -819,7 +890,7 @@ async function save(callback) {
                         timeMin = `${timeMinHourTemp}:${timeMinMinTemp}`;
                         timeMax = `${timeMaxHourTemp}:${timeMaxMinTemp}`;
                     };
-                    if (data.volume < 0 || data.volume > 100 || data.volume === undefined || data.volume === '') {
+                    if (data.volume < 0 || data.volume > 100 || data.volume == undefined || data.volume == '') {
                         data.volume = 50;
                     };
                 };

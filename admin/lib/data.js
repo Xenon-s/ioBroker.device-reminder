@@ -21,74 +21,93 @@ async function createData(settings) {
                     //     "dataType": "checkbox",
                     //     "dataLang": "active",
                     // },
-                    "2": {
+                    "0": {
                         "name": "name",
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "device name",
                         "disabled": true,
+                        "data_default": '',
                     },
-                    "3": {
+                    "1": {
                         "name": "alexa",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "alexa",
+                        "data_default": {},
                     },
-                    "4": {
+                    "2": {
                         "name": "sayit",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "sayit",
+                        "data_default": {},
                     },
-                    "5": {
+                    "3": {
                         "name": "telegram",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "telegram",
+                        "data_default": {},
                     },
-                    "6": {
+                    "4": {
                         "name": "whatsapp",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "whatsapp",
+                        "data_default": {},
                     },
-                    "7": {
+                    "5": {
                         "name": "pushover",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "pushover",
+                        "data_default": {},
                     },
-                    "8": {
+                    "6": {
                         "name": "signal",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "signal",
+                        "data_default": {},
                     },
-                    "9": {
+                    "7": {
                         "name": "email",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "email",
+                        "data_default": {},
                     },
-                    "10": {
+                    "8": {
                         "name": "autoOff",
                         "class": "header translate header10",
-                        "dataType": "checkbox",
+                        "dataType": "select",
                         "dataLang": "switch off",
+                        "data_default": "false",
+                        "dataOptions": [
+                            { "name": "false", "id": false },
+                            { "name": "true", "id": true },
+                        ]
                     },
-                    "11": {
+                    "9": {
                         "name": "timer",
                         "class": "header translate",
                         "dataType": "number",
                         "dataLang": "switch off after minutes",
+                        "data_default": 0,
                     },
-                    "12": {
+                    "10": {
                         "name": "abort",
                         "class": "header translate header10",
-                        "dataType": "checkbox",
+                        "dataType": "select",
                         "dataLang": "abort detection",
+                        "data_default": "false",
+                        "dataOptions": [
+                            { "name": "false", "id": false },
+                            { "name": "true", "id": true },
+                        ]
                     },
-                    "13": {
+                    "11": {
                         "name": "id",
                         "class": "none",
                         "dataType": "number",
