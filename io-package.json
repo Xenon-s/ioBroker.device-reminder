@@ -172,146 +172,61 @@
         "installedFrom": "iobroker.device-reminder@1.2.1"
     },
     "native": {
-        "counter": {
-            "devices_counter": 0,
-            "alexa_counter": 0,
-            "sayit_counter": 0,
-            "whatsapp_counter": 0,
-            "telegram_counter": 0,
-            "pushover_counter": 0,
-            "email_counter": 0,
-            "types_counter": 0,
-            "alert_counter": 0,
-            "presence_counter": 0,
-            "status_counter": 0,
-            "costs_counter": 0
+        "measuringDevice": {
+            "data": [{
+                "name": "test",
+                "type": "washing-machine",
+                "consumption": "link1",
+                "switch": "link2",
+                "startText": "start",
+                "endText": "ende",
+                "id": 0
+            }],
+            "counter": 1
         },
-        "types": [
-            {
-                "name": "washing-machine",
-                "startVal": 30,
-                "endVal": 15,
-                "startCount": 5,
-                "endCount": 65,
-                "standby": 1,
-                "id": 1
-            },
-            {
-                "name": "dryer",
-                "startVal": 120,
-                "endVal": 15,
-                "startCount": 5,
-                "endCount": 50,
-                "standby": 1,
-                "id": 2
-            },
-            {
-                "name": "dishwasher",
-                "startVal": 15,
-                "endVal": 4,
-                "startCount": 3,
-                "endCount": 150,
-                "standby": 1,
-                "id": 3
-            },
-            {
-                "name": "computer",
-                "startVal": 20,
-                "endVal": 5,
-                "startCount": 2,
-                "endCount": 3,
-                "standby": 1,
-                "id": 4
-            },
-            {
-                "name": "electric-kettle",
-                "startVal": 15,
-                "endVal": 5,
-                "startCount": 2,
-                "endCount": 2,
-                "standby": 1,
-                "id": 5
-            },
-            {
-                "name": "microwave",
-                "startVal": 50,
-                "endVal": 20,
-                "startCount": 2,
-                "endCount": 1,
-                "standby": 1,
-                "id": 6
-            },
-            {
-                "name": "custom1",
-                "startVal": 55,
-                "endVal": 5,
-                "startCount": 5,
-                "endCount": 10,
-                "standby": 1,
-                "id": 7
-            },
-            {
-                "name": "custom2",
-                "startVal": 55,
-                "endVal": 5,
-                "startCount": 5,
-                "endCount": 10,
-                "standby": 1,
-                "id": 8
-            },
-            {
-                "name": "custom3",
-                "startVal": 55,
-                "endVal": 5,
-                "startCount": 5,
-                "endCount": 10,
-                "standby": 1,
-                "id": 9
-            },
-            {
-                "name": "custom4",
-                "startVal": 55,
-                "endVal": 5,
-                "startCount": 5,
-                "endCount": 10,
-                "standby": 1,
-                "id": 10
-            },
-            {
-                "name": "custom5",
-                "startVal": 55,
-                "endVal": 5,
-                "startCount": 5,
-                "endCount": 10,
-                "standby": 1,
-                "id": 11
-            }
-        ],
-        "status": [
-            {
+        "deviceValues": {
+            "data": [{
+                    "name": "washing-machine",
+                    "startVal": 30,
+                    "endVal": 15,
+                    "standby": 1,
+                    "startCount": 2,
+                    "endCount": 50,
+                    "id": 0
+                },
+                {
+                    "name": "dryer",
+                    "startVal": 120,
+                    "endVal": 15,
+                    "standby": 1,
+                    "startCount": 2,
+                    "endCount": 20,
+                    "id": 1
+                },
+                {
+                    "name": "dishwasher",
+                    "startVal": 15,
+                    "endVal": 0.25,
+                    "standby": 0.5,
+                    "startCount": 2,
+                    "endCount": 120,
+                    "id": 2
+                }
+            ],
+            "counter": 3
+        },
+        "status": {
+            "data": [{
                 "stateAction": "in action",
                 "stateStandby": "standby",
-                "stateOff": "switched off"
-            }
-        ],
-        "presence": [
-            {
-                "presence_Notification": false,
-                "presence_msg": false,
-                "dp_presence": "Only boolean is allowed"
-            }
-        ],
-        "costs": [
-            {
-                "active": false,
-                "currency": "euro",
-                "costs": 0.30
-            }
-        ]
+                "stateOff": "switched off",
+                "id": 0
+            }],
+            "counter": 1
+        }
     },
     "objects": [],
-    "instanceObjects": [
-        {
+    "instanceObjects": [{
             "_id": "info",
             "type": "channel",
             "common": {
