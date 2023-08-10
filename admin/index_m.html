@@ -696,7 +696,7 @@
                             if (name !== 'telegram' && name !== 'whatsapp') { // telegram / whatsapp hat kein Auswahlfeld 
                                 checked(obj);   // Auswahlfelder erstellen
                             };
-                            showHeader('dynamicTable', name, res.checked); // erkannte Geraete in "dynamicTable" einblenden
+                            showHeader('dynamicTable', name, res.checked || {}); // erkannte Geraete in "dynamicTable" einblenden
                             successCallback(res.checked);
                         };
                     });
