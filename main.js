@@ -1201,7 +1201,7 @@ class deviceReminder extends utils.Adapter {
                 } else {
                     obj.volOld = null
                 };
-                this.log.info(`[1214]: type volume : ${typeof (volume)}, val: ${volume}`);
+                this.log.debug(`[1214]: type volume : ${typeof (volume)}, val: ${volume}`);
                 await this.setForeignStateAsync(pathNew, volume);
 
             } else {
@@ -1211,7 +1211,7 @@ class deviceReminder extends utils.Adapter {
                 };
                 if (obj.volOld !== null) {
                     obj.timeout = setTimeout(async() => { //timeout starten
-                        this.log.info(`[1224]: type volOld : ${typeof (volOld)}, val: ${volOld}`);
+                        this.log.debug(`[1224]: type volOld : ${typeof (volOld)}, val: ${volOld}`);
                         await this.setForeignStateAsync(pathNew, volOld);
                     }, 2000);
                 };
