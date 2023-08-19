@@ -676,6 +676,7 @@
                 };
 
                 try {
+<<<<<<< HEAD
                 sendTo(`device-reminder.${instance}`, name, arr, async result => {
                     const res = await result;
                     if (res != undefined) {
@@ -686,6 +687,24 @@
                                 deviceTypes.push(`${element.name}`);
                             });
                             $('#deviceTypeID').attr("data-options", deviceTypes.join(';'));
+=======
+                    sendTo(null, objType, arr, async result => {
+                        const res = await result;
+                        if (res != undefined) {
+                            obj.dataChecked = res.checked || [];
+                            obj.dataFailed = res.failed || [];
+                            if (name === 'default' || name === 'custom') { // device types erstellen
+                                $.each(res.checked, async (index, element) => {
+                                    deviceTypes.push(`${element.name}`);
+                                });
+                                $('#deviceTypeID').attr("data-options", deviceTypes.join(';'));
+                            };
+                            if (name !== 'telegram' && name !== 'whatsapp') { // telegram / whatsapp hat kein Auswahlfeld 
+                                checked(obj);   // Auswahlfelder erstellen
+                            };
+                            showHeader('dynamicTable', name, res.checked || {}); // erkannte Geraete in "dynamicTable" einblenden
+                            successCallback(res.checked);
+>>>>>>> master
                         };
                         if (name !== 'telegram' && name !== 'whatsapp') { // telegram / whatsapp hat kein Auswahlfeld 
                             await checked(obj);   // Auswahlfelder erstellen
@@ -1351,6 +1370,7 @@
                                     <table class="table-values changeOnChangeEvent remove-last-column">
                                         <thead>
                                             <tr>
+<<<<<<< HEAD
                                                 <th data-name="_index" style="width: 40px" class="header translate">
                                                 </th>
                                                 <th data-name="name" data-type="text" class="header translate"
@@ -1369,6 +1389,15 @@
                                                     class="header translate del-Btn" data-lang="delete"></th>
                                                 <th data-name="id" style="width: 0px; display: none;"
                                                     class="header translate">id </th>
+=======
+                                                <th data-name="_index" style="width: 40px" class="header translate"></th>
+                                                <th data-name="name" data-type="text" class="header translate" data-lang="*name"></th>
+                                                <th data-name="inst" data-type="select" class="header translate" data-lang="*pushover instance" data-default=".0" data-options=".0;.1;.2;.3;.4;.5"></th>
+                                                <th data-name="prio" data-type="select" class="header translate" data-lang="*priority" data-default="normal" data-options="normal;high;quiet"></th>
+                                                <th data-name="sound" data-type="select" class="header translate" data-lang="*sound" data-default="pushover"data-options="pushover;bike;bugle;cashregister;classical;cosmic;falling;gamelan;incoming;intermission;magic;mechanical;pianobar;siren;spacealarm;tugboat;alien;climb;persistent;echo;updown;none"></th>
+                                                <th data-buttons="delete" style="width: 80px" class="header translate del-Btn" data-lang="delete"></th>
+                                                <th data-name="id" style="width: 0px; display: none;" class="header translate">id </th>
+>>>>>>> master
                                             </tr>
                                         </thead>
                                     </table>
