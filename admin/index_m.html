@@ -676,7 +676,6 @@
                 };
 
                 try {
-<<<<<<< HEAD
                 sendTo(`device-reminder.${instance}`, name, arr, async result => {
                     const res = await result;
                     if (res != undefined) {
@@ -687,7 +686,6 @@
                                 deviceTypes.push(`${element.name}`);
                             });
                             $('#deviceTypeID').attr("data-options", deviceTypes.join(';'));
-=======
                     sendTo(null, objType, arr, async result => {
                         const res = await result;
                         if (res != undefined) {
@@ -704,7 +702,6 @@
                             };
                             showHeader('dynamicTable', name, res.checked || {}); // erkannte Geraete in "dynamicTable" einblenden
                             successCallback(res.checked);
->>>>>>> master
                         };
                         if (name !== 'telegram' && name !== 'whatsapp') { // telegram / whatsapp hat kein Auswahlfeld 
                             await checked(obj);   // Auswahlfelder erstellen
