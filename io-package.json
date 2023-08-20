@@ -226,49 +226,110 @@
         }]
     },
     "native": {
-        "default": {
-            "id": [{
-                    "name": "washing-machine",
-                    "startVal": "30",
-                    "endVal": "15",
-                    "standby": "1",
-                    "startCount": "2",
-                    "endCount": "50",
-                    "id": "1"
-                },
-                {
-                    "name": "dryer",
-                    "startVal": "120",
-                    "endVal": "15",
-                    "standby": "1",
-                    "startCount": "2",
-                    "endCount": "20",
-                    "id": "2"
-                },
-                {
-                    "name": "dishwasher",
-                    "startVal": "15",
-                    "endVal": "0.25",
-                    "standby": "0.5",
-                    "startCount": "2",
-                    "endCount": "120",
-                    "id": "3"
-                }
+        "device_counter": 0,
+        "alexa_counter": 0,
+        "sayit_counter": 0,
+        "whatsapp_counter": 0,
+        "telegram_counter": 0,
+        "pushover_counter": 0,
+        "email_counter": 0,
+        "custom_device_counter": 0,
+        "custom": {
+            "id": [
+              {
+                "name": "custom1",
+                "startVal": 30,
+                "endVal": 5,
+                "standby": 1,
+                "startCount": 1,
+                "endCount": 20,
+                "id": 21
+              },
+              {
+                "name": "custom2",
+                "startVal": 30,
+                "endVal": 5,
+                "standby": 1,
+                "startCount": 1,
+                "endCount": 20,
+                "id": 22
+              },
+              {
+                "name": "custom3",
+                "startVal": 30,
+                "endVal": 5,
+                "standby": 1,
+                "startCount": 1,
+                "endCount": 20,
+                "id": 23
+              },
+              {
+                "name": "custom4",
+                "startVal": 30,
+                "endVal": 5,
+                "standby": 1,
+                "startCount": 1,
+                "endCount": 20,
+                "id": 24
+              },
+              {
+                "name": "custom5",
+                "startVal": 30,
+                "endVal": 5,
+                "standby": 1,
+                "startCount": 1,
+                "endCount": 20,
+                "id": 25
+              }
             ],
             "final": {}
-        },
-        "status": {
-            "id": [{
+          },
+          "default": {
+            "id": [
+              {
+                "name": "washing-machine",
+                "startVal": 30,
+                "endVal": 15,
+                "standby": 1,
+                "startCount": 2,
+                "endCount": 50,
+                "id": 1
+              },
+              {
+                "name": "dryer",
+                "startVal": 120,
+                "endVal": 15,
+                "standby": 1,
+                "startCount": 2,
+                "endCount": 20,
+                "id": 2
+              },
+              {
+                "name": "dishwasher",
+                "startVal": 15,
+                "endVal": 0.25,
+                "standby": 0.5,
+                "startCount": 2,
+                "endCount": 120,
+                "id": 3
+              }
+            ],
+            "final": {}
+          },
+          "alert": {
+            "id": [],
+            "final": {}
+          },
+          "status": {
+            "id": [
+              {
                 "stateAction": "in action",
                 "stateStandby": "standby",
                 "stateOff": "switched off"
-            }]
-        },
-        "presence": [{
-            "presence_Notification": false,
-            "presence_msg": false,
-            "dp_presence": "Only boolean is allowed"
-        }]
+              }
+            ],
+            "final": {}
+          }
     },
     "objects": [],
     "instanceObjects": [{
