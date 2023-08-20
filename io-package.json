@@ -222,7 +222,7 @@
         "connectionType": "local",
         "materialize": true,
         "dependencies": [{
-            "js-controller": ">=4.0.0"
+            "js-controller": ">=5.0.0"
         }]
     },
     "native": {
