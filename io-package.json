@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "2.0.0",
+        "version": "2.0.1",
         "news": {
-            "2.0.0" : {
+            "2.0.1": {
                 "en": "JS Controller V 5.x fix \nMany bugs fixed",
                 "de": "JS Controller V 5.x fix\nViele Fehler behoben",
                 "ru": "JS контроллер V 5.x исправить\nМногие ошибки исправлены",
@@ -15,7 +15,7 @@
                 "pl": "JS Controller V 5.x (ang.)\nWiele błędów ustalono",
                 "uk": "JS контролер V 5.x виправити\nБагато помилок фіксовані",
                 "zh-cn": "联合主计长\n许多固定装置"
-              },
+            },
             "1.2.9": {
                 "en": "bugfix: error catching JSON \"last operations\" doesn't work",
                 "de": "Bugfix: Fehler beim Abfangen von JSON \"letzte Operationen\" funktioniert nicht",
@@ -234,11 +234,9 @@
         "dataSource": "push",
         "connectionType": "local",
         "materialize": true,
-        "dependencies": [
-            {
-                "js-controller": ">=5.0.0"
-            }
-        ]
+        "dependencies": [{
+            "js-controller": ">=5.0.0"
+        }]
     },
     "native": {
         "device_counter": 0,
@@ -250,105 +248,100 @@
         "email_counter": 0,
         "custom_device_counter": 0,
         "custom": {
-            "id": [
-              {
-                "name": "custom1",
-                "startVal": 30,
-                "endVal": 5,
-                "standby": 1,
-                "startCount": 1,
-                "endCount": 20,
-                "id": 21
-              },
-              {
-                "name": "custom2",
-                "startVal": 30,
-                "endVal": 5,
-                "standby": 1,
-                "startCount": 1,
-                "endCount": 20,
-                "id": 22
-              },
-              {
-                "name": "custom3",
-                "startVal": 30,
-                "endVal": 5,
-                "standby": 1,
-                "startCount": 1,
-                "endCount": 20,
-                "id": 23
-              },
-              {
-                "name": "custom4",
-                "startVal": 30,
-                "endVal": 5,
-                "standby": 1,
-                "startCount": 1,
-                "endCount": 20,
-                "id": 24
-              },
-              {
-                "name": "custom5",
-                "startVal": 30,
-                "endVal": 5,
-                "standby": 1,
-                "startCount": 1,
-                "endCount": 20,
-                "id": 25
-              }
+            "id": [{
+                    "name": "custom1",
+                    "startVal": 30,
+                    "endVal": 5,
+                    "standby": 1,
+                    "startCount": 1,
+                    "endCount": 20,
+                    "id": 21
+                },
+                {
+                    "name": "custom2",
+                    "startVal": 30,
+                    "endVal": 5,
+                    "standby": 1,
+                    "startCount": 1,
+                    "endCount": 20,
+                    "id": 22
+                },
+                {
+                    "name": "custom3",
+                    "startVal": 30,
+                    "endVal": 5,
+                    "standby": 1,
+                    "startCount": 1,
+                    "endCount": 20,
+                    "id": 23
+                },
+                {
+                    "name": "custom4",
+                    "startVal": 30,
+                    "endVal": 5,
+                    "standby": 1,
+                    "startCount": 1,
+                    "endCount": 20,
+                    "id": 24
+                },
+                {
+                    "name": "custom5",
+                    "startVal": 30,
+                    "endVal": 5,
+                    "standby": 1,
+                    "startCount": 1,
+                    "endCount": 20,
+                    "id": 25
+                }
             ],
             "final": {}
-          },
-          "default": {
-            "id": [
-              {
-                "name": "washing-machine",
-                "startVal": 30,
-                "endVal": 15,
-                "standby": 1,
-                "startCount": 2,
-                "endCount": 50,
-                "id": 1
-              },
-              {
-                "name": "dryer",
-                "startVal": 120,
-                "endVal": 15,
-                "standby": 1,
-                "startCount": 2,
-                "endCount": 20,
-                "id": 2
-              },
-              {
-                "name": "dishwasher",
-                "startVal": 15,
-                "endVal": 0.25,
-                "standby": 0.5,
-                "startCount": 2,
-                "endCount": 120,
-                "id": 3
-              }
+        },
+        "default": {
+            "id": [{
+                    "name": "washing-machine",
+                    "startVal": 30,
+                    "endVal": 15,
+                    "standby": 1,
+                    "startCount": 2,
+                    "endCount": 50,
+                    "id": 1
+                },
+                {
+                    "name": "dryer",
+                    "startVal": 120,
+                    "endVal": 15,
+                    "standby": 1,
+                    "startCount": 2,
+                    "endCount": 20,
+                    "id": 2
+                },
+                {
+                    "name": "dishwasher",
+                    "startVal": 15,
+                    "endVal": 0.25,
+                    "standby": 0.5,
+                    "startCount": 2,
+                    "endCount": 120,
+                    "id": 3
+                }
             ],
             "final": {}
-          },
-          "alert": {
+        },
+        "alert": {
             "id": [],
             "final": {}
-          },
-          "status": {
-            "id": [
-              {
+        },
+        "status": {
+            "id": [{
                 "stateAction": "in action",
                 "stateStandby": "standby",
                 "stateOff": "switched off"
-              }
-            ],
+            }],
             "final": {}
-          }
+        }
     },
     "objects": [],
-    "instanceObjects": [
-        {
+    "instanceObjects": [{
             "_id": "info",
             "type": "channel",
             "common": {
