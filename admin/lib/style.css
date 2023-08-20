@@ -1,5 +1,3 @@
-/* You can delete those if you want. I just found them very helpful */
-
 * {
     box-sizing: border-box;
 }
@@ -11,8 +9,8 @@
 
 .m.adapter-container {
     /* Fix layout/scrolling issues with tabs */
-    height: 100%;
-    width: 100%;
+    /* height: 100%; */
+    /* width: 100%; */
     position: relative;
 }
 
@@ -60,10 +58,6 @@ label>i[title] {
 /* dont show th */
 
 table.table-values th.none {
-    display: none;
-}
-
-.remove-first-column td:first-child {
     display: none;
 }
 
@@ -118,13 +112,6 @@ table.table-values th.header {
     text-align: center;
     line-height: 1em;
     padding: 6px 2px;
-}
-
-
-/* format second column of option tables */
-
-table.table-values tr td:nth-child(1) input {
-    font-weight: bold;
 }
 
 
@@ -251,32 +238,6 @@ table.table-values {
 }
 
 
-/* value input (static table) */
-
-
-/* .m .table-values .table-lines .values-input {
-    opacity: 0.8;
-} */
-
-
-/* .m .table-values .table-lines .values-input:hover {
-    opacity: 1;
-    font-weight: bold !important;
-    font-size: large !important;
-} */
-
-
-/* .m .table-values .table-lines .select-dropdown {
-    opacity: 0.8;
-}
-
-.m .table-values .table-lines .select-dropdown:hover {
-    opacity: 1;
-    font-weight: bold !important;
-    font-size: large !important;
-} */
-
-
 /* collapsible */
 
 .m .collapsible-active {
@@ -333,10 +294,6 @@ table.table-values {
 
 .m label {
     color: #2196f3;
-}
-
-.remove-first-column td:first-child {
-    display: none;
 }
 
 .remove-last-column td:last-child {

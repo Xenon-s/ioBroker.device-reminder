@@ -47,19 +47,19 @@
         dataSendTo.devices = {
             name: 'devices',
             // id: 'deviceName',
-            obj: { dataChecked: [], dataFailed: [], err: `err-devices`, header: 'header-device', name: `'devices'`, anchorEn: `create-device`, anchorGer: `device-anlegen`, anchorName: `device` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-devices`, header: 'header-device', name: 'devices', anchorEn: `create-device`, anchorGer: `device-anlegen`, anchorName: `device` },
             objType: { cmd: 'val', 1: 'name', 2: 'consumption', 3: 'switch', cntr: 3 }
         }
         dataSendTo.alexa = {
             name: 'alexa',
             // id: 'idAlexa',
-            obj: { dataChecked: [], dataFailed: [], err: `err-alexa`, header: 'header-alexa', name: `'alexa devices'`, anchorEn: `create-alexa`, anchorGer: `alexa-erstellen`, anchorName: `alexa` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-alexa`, header: 'header-alexa', name: 'alexa', anchorEn: `create-alexa`, anchorGer: `alexa-erstellen`, anchorName: `alexa` },
             objType: { cmd: 'val', 1: 'name', 2: 'path', cntr: 2 }
         };
         dataSendTo.sayit = {
             name: 'sayit',
             // id: 'idsayit',
-            obj: { dataChecked: [], dataFailed: [], err: `err-sayit`, header: 'header-sayit', name: `'sayit devices'`, anchorEn: `create-sayit-device`, anchorGer: `sayit-device-erstellen`, anchorName: `sayit` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-sayit`, header: 'header-sayit', name: 'sayit', anchorEn: `create-sayit-device`, anchorGer: `sayit-device-erstellen`, anchorName: `sayit` },
             objType: { cmd: 'val', 1: 'name', 2: 'path', cntr: 2 }
         };
         dataSendTo.whatsapp = {
@@ -73,28 +73,28 @@
         dataSendTo.pushover = {
             name: 'pushover',
             // id: 'idPushover',
-            obj: { dataChecked: [], dataFailed: [], err: `err-pushover`, header: 'header-pushover', name: `'pushover user'`, anchorEn: `create-pushover-user`, anchorGer: `pushover-user-erstellen`, anchorName: `pushover` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-pushover`, header: 'header-pushover', name: 'pushover', anchorEn: `create-pushover-user`, anchorGer: `pushover-user-erstellen`, anchorName: `pushover` },
             objType: { cmd: 'type', 1: 'name', 2: 'inst', 3: 'prio', 4: 'sound', cntr: 4 }
         };
         dataSendTo.email = {
             name: 'email',
             // id: 'idEmail',
-            obj: { dataChecked: [], dataFailed: [], err: `err-email`, header: 'header-email', name: `'email user'`, anchorEn: `create-email-user`, anchorGer: `email-user-erstellen`, anchorName: `email` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-email`, header: 'header-email', name: 'email', anchorEn: `create-email-user`, anchorGer: `email-user-erstellen`, anchorName: `email` },
             objType: { cmd: 'email', 1: 'name', 2: 'emailFrom', 3: 'emailTo', cntr: 3 }
         };
         dataSendTo.default = {
             name: 'default',
-            obj: { dataChecked: [], dataFailed: [], err: `err-default`, header: 'header-default', name: `'default type config'`, anchorEn: `default-devices`, anchorGer: `default-devices`, anchorName: `default-type` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-default`, header: 'header-default', name: 'default type config', anchorEn: `default-devices`, anchorGer: `default-devices`, anchorName: `default-type` },
             objType: { cmd: 'type', 1: 'name', 2: 'startVal', 3: 'endVal', 4: 'startCount', 5: 'endCount', cntr: 5 }
         };
         dataSendTo.custom = {
             name: 'custom',
-            obj: { dataChecked: [], dataFailed: [], err: `err-custom`, header: 'header-custom', name: `'custom type config'`, anchorEn: `custom-devices`, anchorGer: `custom-devices`, anchorName: `create-custom-type` },
+            obj: { dataChecked: [], dataFailed: [], err: `err-custom`, header: 'header-custom', name: 'custom type config', anchorEn: `custom-devices`, anchorGer: `custom-devices`, anchorName: `create-custom-type` },
             objType: { cmd: 'type', 1: 'name', 2: 'startVal', 3: 'endVal', 4: 'startCount', 5: 'endCount', cntr: 5 }
         };
         dataSendTo.status = {
             name: 'status',
-            obj: { dataChecked: [], dataFailed: [], err: `err-status`, header: 'header-status', name: `'device status'`, anchorEn: `custom-states`, anchorGer: `eigene-zustaende`, anchorName: `custom-status` }
+            obj: { dataChecked: [], dataFailed: [], err: `err-status`, header: 'header-status', name: 'device status', anchorEn: `custom-states`, anchorGer: `eigene-zustaende`, anchorName: `custom-status` }
         };
 
         let showSaveBtn;
@@ -146,7 +146,7 @@
                 try {
                     const active = (state && state.val);
                     if (!active) {
-                        $(`#test`).html(`<div class="collapsible-header red lighten-1"><i class="large material-icons">error_outline</i>Please activate the device-reminder.${instance} instance!</div>`);
+                        $(`#html_Input`).html(`<div class="collapsible-header red lighten-1"><i class="large material-icons">error_outline</i>Please activate the device-reminder.${instance} instance!</div>`);
                     } else {
                         showSaveBtn = onChange;
                         createGUI(settings);
@@ -160,6 +160,7 @@
 
                             await dynamicTable(dataGlobal, resChecked);
                             $('.red').on('click', clickEventDelBtn); // click event auf delete button setzen
+                            $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true); // disable "name" in table default-types
                             onChange(false);
 
                             function createData(settings) {
@@ -517,7 +518,7 @@
                                 } else {
                                     delete objTemp[data.id].prio;
                                 };
-                                break;deviceID
+                                break; deviceID
                             };
                             case "email": {
                                 objTemp[data.id] = {
@@ -556,24 +557,24 @@
                 };
 
                 try {
-                sendTo(`device-reminder.${instance}`, name, arr, async result => {
-                    const res = await result;
-                    if (res != undefined) {
-                        obj.dataChecked = res.checked || [];
-                        obj.dataFailed = res.failed || [];
-                        if (name === 'default' || name === 'custom') { // device types erstellen
-                            $.each(res.checked, async (index, element) => {
-                                deviceTypes.push(`${element.name}`);
-                            });
-                            $('#deviceTypeID').attr("data-options", deviceTypes.join(';'));
+                    sendTo(`device-reminder.${instance}`, name, arr, async result => {
+                        const res = await result;
+                        if (res != undefined) {
+                            obj.dataChecked = res.checked || [];
+                            obj.dataFailed = res.failed || [];
+                            if (name === 'default' || name === 'custom') { // device types erstellen
+                                $.each(res.checked, async (index, element) => {
+                                    deviceTypes.push(`${element.name}`);
+                                });
+                                $('#deviceTypeID').attr("data-options", deviceTypes.join(';'));
+                            };
+                            if (name !== 'telegram' && name !== 'whatsapp') { // telegram / whatsapp hat kein Auswahlfeld 
+                                await checked(obj);   // Auswahlfelder erstellen
+                            };
+                            showHeader('dynamicTable', name, res.checked || {}); // erkannte Geraete in "dynamicTable" einblenden
+                            successCallback(res.checked);
                         };
-                        if (name !== 'telegram' && name !== 'whatsapp') { // telegram / whatsapp hat kein Auswahlfeld 
-                            await checked(obj);   // Auswahlfelder erstellen
-                        };
-                        showHeader('dynamicTable', name, res.checked || {}); // erkannte Geraete in "dynamicTable" einblenden
-                        successCallback(res.checked);
-                    };
-                });
+                    });
                 } catch (error) {
                     errorCallback(error);
                 };
@@ -633,11 +634,13 @@
             };
 
             async function checked(obj) {
-                if (obj.name !== `'device status'` && (obj.dataChecked.length <= 0) && (obj.dataFailed.length <= 0)) {
+                $(`#${obj.header}`).html(`<div class="collapsible-header translate"><i class="material-icons">create</i><span>${_(obj.name)}</span></div>`);
+                if (obj.name !== `device status` && (obj.dataChecked.length <= 0) && (obj.dataFailed.length <= 0)) {
                     $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: grey;">
                             <i class="material-icons">check_circle_outline</i><span>${_("no entries found")}</span> </div>`);
                     // Header innen "config devices"
-                    $(`#${obj.header}`).html(`<div class="collapsible-header translate"><i class="material-icons">create</i><span>${_("Create %s", obj.name)}</span></div>`);
+                    // $(`#${obj.header}`).html(`<div class="collapsible-header translate"><i class="material-icons">create</i><span>${_(obj.name)}</span></div>`);
+
                     showSaveBtn(true); // save button einblenden
                 } else if (obj.dataFailed.length >= 1) {
                     $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: red;">
@@ -652,8 +655,7 @@
                     $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: green;">
                             <i class="material-icons">check_circle_outline</i><span class="translate" style="font-weight:bold;">${_("Input checked")}</span></div>`);
                     // Header innen "config devices"
-                    $(`#${obj.header}`).html(`<div class="collapsible-header"><i class="material-icons">create</i><span>${_("Edit %s", obj.name)}</span></div>`);
-                    // $(`#${obj.header}`).html(`<div class="collapsible-header"><i class="material-icons">create</i><span class="translate">Click here to edit your ${obj.name}</span></div>`);
+                    // $(`#${obj.header}`).html(`<div class="collapsible-header"><i class="material-icons">create</i><span>${_(obj.name)}</span></div>`);
                 };
                 $(`#help-${obj.anchorName}`).html(`<div><h4>create ${obj.name}</h4><p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README.md#${obj.anchorEn}" target="_blank">${obj.anchorEn} english</a></p>
                     <p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README_GER.md#${obj.anchorGer}" target="_blank">${obj.anchorGer} deutsch</a></p></div>`);
@@ -886,611 +888,588 @@
 
 <body>
     <div class="m adapter-container">
-        <div class="row" id="test">
-            <!-- Tabs: Menu -->
-            <div class="col s12 .tabs-fixed-width"
-                style="padding-left:0;padding-right:0; margin-top: 0px; margin-bottom: 1px; background-color:#174475; box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);">
-                <ul class="tabs blue lighten-4">
-                    <li class="tab col s3"><a href="#tab-config" class="translate">Config</a></li>
-                    <!-- <li class="tab col s3 disabled"><a href="#tab-advanced-settings" class="translate">advanced settings</a></li> -->
-                </ul>
+        <div id="header-area" class="row">
+            <div id="header-logo-title" class="col s6">
+                <img class="logo" src="icon.png">
+                <p>
+                    <span class="translate h-title" data-lang="device-reminder"></span><br>
+                    <span class="translate h-sub-title" data-lang="Monitoring of devices based on consumption"></span>
+                </p>
             </div>
-
+        </div>
+        <div class="row" id="html_Input">
             <div class="row">
-                <!-- Tab with id "config" -->
-                <div id="tab-config" class="col s12">
-                    <div class="row">
-                        <div class="row">
-                            <div class="input-field col s3">
-                                <img src="icon.png">
-                            </div>
+                <!-- Modal Structure -->
+                <div id="modal-warning" class="modal">
+                    <div class="modal-content">
+
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">understand</a>
+                    </div>
+                </div>
+
+                <div class="dynamic-table-devices">
+                    <div id="header-link-device">
+                        <!-- text -->
+                    </div>
+                    <div id="device">
+                        <table id="dynamicTable" class="table-values changeOnChangeEvent remove-last-column">
+                            <thead>
+                                <tr>
+                                    <th class="header translate" data-name="enabled" style="width: 60px"
+                                        data-lang="active">
+                                        active</th>
+                                    <th class="header translate" data-name="name" style="width: 200px"
+                                        data-lang="device">
+                                        device</th>
+                                    <th class="header translate" data-name="alexa">alexa</th>
+                                    <th class="header translate" data-name="sayit">SayIt</th>
+                                    <th class="header translate" data-name="telegram">telegram</th>
+                                    <th class="header translate" data-name="whatsapp">whatsapp</th>
+                                    <th class="header translate" data-name="pushover">pushover</th>
+                                    <th class="header translate" data-name="email">email</th>
+                                    <th class="header translate" data-name="autoOff" style="width: 110px"
+                                        data-lang="switch off"></th>
+                                    <th class="header translate" data-name="timer" style="width: 110px"
+                                        data-lang="switch off after minutes"></th>
+                                    <th class="header translate" data-name="abort" style="width: 100px"
+                                        data-lang="abort detection"></th>
+                                    <th class="header translate" data-name="id" style="width: 0px; display: none;">id
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="dynamic-table-body" class="table-values">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- collapsible table -->
+
+                <ul class="collapsible expandable">
+
+                    <!-- user devices -->
+                    <li>
+                        <!-- create device -->
+                        <div id="header-device" onclick="selectedHeader('devices')">
+                            <!-- text -->
                         </div>
-
-
-                        <!-- Modal Structure -->
-                        <div id="modal-warning" class="modal">
-                            <div class="modal-content">
-
-                            </div>
-                            <div class="modal-footer">
-                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">understand</a>
-                            </div>
-                        </div>
-
-                        <div class="dynamic-table-devices">
-                            <div id="header-link-device">
-                                <!-- text -->
-                            </div>
-                            <div id="device">
-                                    <table id="dynamicTable"
-                                        class="table-values changeOnChangeEvent remove-last-column">
-                                        <thead>
-                                            <tr>
-                                                <th class="header translate" data-name="enabled" style="width: 60px">
-                                                    active</th>
-                                                <th class="header translate" data-name="name" style="width: 200px">
-                                                    device</th>
-                                                <th class="header translate" data-name="alexa">alexa</th>
-                                                <th class="header translate" data-name="sayit">SayIt</th>
-                                                <th class="header translate" data-name="telegram">telegram</th>
-                                                <th class="header translate" data-name="whatsapp">whatsapp</th>
-                                                <th class="header translate" data-name="pushover">pushover</th>
-                                                <th class="header translate" data-name="email">email</th>
-                                                <th class="header translate" data-name="autoOff" style="width: 110px"
-                                                    data-lang="switch off"></th>
-                                                <th class="header translate" data-name="timer" style="width: 110px"
-                                                    data-lang="switch off after minutes"></th>
-                                                <th class="header translate" data-name="abort" style="width: 100px"
-                                                    data-lang="abort detection"></th>
-                                                <th class="header translate" data-name="id"
-                                                    style="width: 0px; display: none;">id</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="dynamic-table-body" class="table-values">
-                                        </tbody>
-                                    </table>
-                            </div>
-                        </div>
-
-                        <!-- collapsible table -->
-
-                        <ul class="collapsible expandable">
-
-                            <!-- user devices -->
-                            <li>
-                                <!-- create device -->
-                                <div id="header-device" onclick="selectedHeader('devices')">
-                                    <!-- text -->
-                                </div>
-                                <div id="deviceID" class="collapsible-body">
-                                    <!-- <div id="deviceID" class="collapsible-body" onChange="$('#btn-check-devices').removeClass('disabled')" > -->
-                                    <div class="row">
-                                        <div style="display: flex; align-items: center;">
-                                            <div class="col left s2">
-                                                <a id='btn-add-devices'
-                                                    class="btn-floating waves-effect waves-light blue table-button-add translate">
-                                                    <i class="material-icons">add_circle_outline</i></a>
-                                                <span class="translate" style="font-weight:bold;"
-                                                    data-lang="add device">add device</span>
-                                            </div>
-                                            <div class="col s2">
-                                                <a id="btn-check-devices" class="waves-effect waves-light btn translate"
-                                                    data-lang="save"></a>
-                                            </div>
-                                            <div class="col s8 translate" id="err-devices">
-                                                <!-- 'text' -->
-                                            </div>
-                                            <!-- Modal Trigger -->
-                                            <a class="waves-effect waves-light btn modal-trigger translate"
-                                                href="#modal1">help</a>
-                                            <!-- Modal Structure -->
-                                            <div id="modal1" class="modal">
-                                                <div id="help-device" class="modal-content translate">
-                                                    <div>
-                                                        <!-- text -->
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a href="#!"
-                                                            class="modal-close waves-effect waves-green btn-flat">close</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <span class="translate" style="font-weight:bold;"
-                                            data-lang="Required fields"></span>
-                                        <table class="table-values changeOnChangeEvent remove-last-column">
-                                            <thead>
-                                                <tr>
-                                                    <th data-name="_index" style="width: 40px" class="header translate">
-                                                    </th>
-                                                    <th data-name="name" style="width: 150px" data-type="text"
-                                                        class="header translate" data-lang="device name"></th>
-                                                    <th id="deviceTypeID" data-name="type" style="width: 200px;"
-                                                        data-type="select" style="width: 150px" class="header translate"
-                                                        data-options="" data-lang="device type"></th>
-                                                    <th data-name="consumption" style="width: 100px" data-type="OID"
-                                                        class="header translate" data-lang="consumption"></th>
-                                                    <th data-name="switch" style="width: 100px" data-type="OID"
-                                                        class="header translate" data-lang="Power switch"></th>
-                                                    <th data-name="startText" data-type="OID" class="header translate"
-                                                        data-lang="starttext"></th>
-                                                    <th data-name="endText" data-type="OID" class="header translate"
-                                                        data-lang="endtext"></th>
-                                                    <th data-buttons="delete" style="width: 80px;"
-                                                        class="header translate del-Btn" data-lang="delete"></th>
-                                                    <th data-name="id" style="width: 0px; display: none;"
-                                                        class="header translate">id</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
+                        <div id="deviceID" class="collapsible-body">
+                            <!-- <div id="deviceID" class="collapsible-body" onChange="$('#btn-check-devices').removeClass('disabled')" > -->
+                            <div class="row">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="col left s2">
+                                        <a id='btn-add-devices'
+                                            class="btn-floating waves-effect waves-light blue table-button-add translate">
+                                            <i class="material-icons">add_circle_outline</i></a>
+                                        <span class="translate" style="font-weight:bold;" data-lang="add device">add
+                                            device</span>
                                     </div>
-                                </div>
-                            </li>
-
-                            <!-- alexa devices -->
-                            <li>
-                                <div id="header-alexa" class="translate" onclick="selectedHeader('alexa')">
-                                    <!-- text -->
-                                </div>
-                                <div class="collapsible-body" id="alexaID">
-                                    <div class="row">
-                                        <div style="display: flex; align-items: center;">
-                                            <div class="col left s2">
-                                                <a id='btn-add-alexa'
-                                                    class="btn-floating waves-effect waves-light blue table-button-add">
-                                                    <i class="material-icons">add_circle_outline</i></a>
-                                                <span class="translate" style="font-weight:bold;"
-                                                    data-lang="add device">add device</span>
-                                            </div>
-                                            <div class="col s2">
-                                                <a id="btn-check-alexa" class="waves-effect waves-light btn translate"
-                                                    data-lang="save"></a>
-                                            </div>
-                                            <div class="col s8" id="err-alexa">
-                                                <!-- 'text' -->
-                                            </div>
-                                            <!-- Modal Trigger -->
-                                            <a class="waves-effect waves-light btn modal-trigger translate"
-                                                href="#modal2">help</a>
-                                            <!-- Modal Structure -->
-                                            <div id="modal2" class="modal">
-                                                <div id="help-alexa" class="modal-content translate">
-                                                    <div>
-                                                        <!-- text -->
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a href="#!"
-                                                            class="modal-close waves-effect waves-green btn-flat">close</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="col s2">
+                                        <a id="btn-check-devices" class="waves-effect waves-light btn translate"
+                                            data-lang="save"></a>
                                     </div>
-                                    <span class="translate" style="font-weight:bold;"
-                                        data-lang="Required fields"></span>
-                                    <table class="table-values changeOnChangeEvent remove-last-column">
-                                        <thead>
-                                            <tr>
-                                                <th data-name="_index" style="width: 40px;" class="header translate">
-                                                </th>
-                                                <th data-name="name" data-type="text" class="header translate"
-                                                    data-lang="name"></th>
-                                                <th data-name="path" data-type="OID" class="header translate"
-                                                    data-lang="'alexa2/../announcement'/'speak'"></th>
-                                                <th data-name="volume" style="width: 80px" data-type="number"
-                                                    class="header translate" data-lang="*volume 0-100"
-                                                    data-default="50"></th>
-                                                <th data-name="timeMinHour" style="width: 80px" data-type="select"
-                                                    class="header translate" data-lang="active from hour"
-                                                    data-default="0"
-                                                    data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
-                                                </th>
-                                                <th data-name="timeMinMin" style="width: 80px" data-type="select"
-                                                    class="header translate" data-lang="active from minute"
-                                                    data-default="00" data-options="00;15;30;45"></th>
-                                                <th data-name="timeMaxHour" style="width: 80px" data-type="select"
-                                                    class="header translate" data-lang="inactive from hour"
-                                                    data-default="23"
-                                                    data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
-                                                </th>
-                                                <th data-name="timeMaxMin" style="width: 80px" data-type="select"
-                                                    class="header translate" data-lang="inactive from minute"
-                                                    data-default="59" data-options="00;15;30;45;59"></th>
-                                                <th data-buttons="delete" style="width: 80px"
-                                                    class="header translate del-Btn" data-lang="delete"></th>
-                                                <th data-name="id" style="width: 0px; display: none;"
-                                                    class="header translate">id</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </li>
-
-                            <!-- sayit -->
-
-                            <li>
-                                <div id="header-sayit" class="translate" onclick="selectedHeader('sayit')">
-                                    <!-- text -->
-                                </div>
-                                <div class="collapsible-body" id="sayitID">
-                                    <div class="row">
-                                        <div style="display: flex; align-items: center;">
-                                            <div class="col left s2">
-                                                <a id='btn-add-sayit'
-                                                    class="btn-floating waves-effect waves-light blue table-button-add">
-                                                    <i class="material-icons">add_circle_outline</i></a>
-                                                <span class="translate" style="font-weight:bold;"
-                                                    data-lang="add device">add device</span>
-                                            </div>
-                                            <div class="col s2">
-                                                <a id="btn-check-sayit" class="waves-effect waves-light btn translate"
-                                                    data-lang="save"></a>
-                                            </div>
-                                            <div class="col s8" id="err-sayit">
-                                                <!-- 'text' -->
-                                            </div>
-                                            <!-- Modal Trigger -->
-                                            <a class="waves-effect waves-light btn modal-trigger translate"
-                                                href="#modal3">help</a>
-                                            <!-- Modal Structure -->
-                                            <div id="modal3" class="modal">
-                                                <div id="help-sayit" class="modal-content translate">
-                                                    <div>
-                                                        <!-- text -->
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a href="#!"
-                                                            class="modal-close waves-effect waves-green btn-flat">close</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="col s8 translate" id="err-devices">
+                                        <!-- 'text' -->
                                     </div>
-                                    <span class="translate" style="font-weight:bold;"
-                                        data-lang="Required fields"></span>
-                                    <table class="table-values changeOnChangeEvent remove-last-column">
-                                        <thead>
-                                            <tr>
-                                                <th data-name="_index" style="width: 40px" class="header translate">
-                                                </th>
-                                                <th data-name="name" data-type="text" class="header translate"
-                                                    data-lang="*name"></th>
-                                                <th data-name="path" data-type="OID" class="header translate"
-                                                    data-lang="*'sayit/../text'"></th>
-                                                <th data-name="volume" style="width: 80px" data-type="number"
-                                                    class="header translate" data-lang="*volume 0-100"
-                                                    data-default="50"></th>
-                                                <th data-name="timeMinHour" style="width: 80px" data-type="select"
-                                                    class="header translate" data-lang="active from hour"
-                                                    data-default="0"
-                                                    data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
-                                                </th>
-                                                <th data-name="timeMinMin" style="width: 80px" data-type="select"
-                                                    class="header translate" data-lang="active from minute"
-                                                    data-default="00" data-options="00;15;30;45"></th>
-                                                <th data-name="timeMaxHour" style="width: 80px" data-type="select"
-                                                    class="header translate" data-lang="inactive from hour"
-                                                    data-default="23"
-                                                    data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
-                                                </th>
-                                                <th data-name="timeMaxMin" style="width: 80px" data-type="select"
-                                                    class="header translate" data-lang="inactive from minute"
-                                                    data-default="59" data-options="00;15;30;45;59"></th>
-                                                <th data-buttons="delete" style="width: 80px"
-                                                    class="header translate del-Btn" data-lang="delete"></th>
-                                                <th data-name="id" style="width: 0px; display: none;"
-                                                    class="header translate">id</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </li>
-
-                            <!-- pushover -->
-
-                            <li>
-                                <div id="header-pushover" class="translate" onclick="selectedHeader('pushover')">
-                                    <!-- text -->
-                                </div>
-                                <div class="collapsible-body" id="pushoverID">
-                                    <div class="row">
-                                        <div style="display: flex; align-items: center;">
-                                            <div class="col left s2">
-                                                <a id='btn-add-pushover'
-                                                    class="btn-floating waves-effect waves-light blue table-button-add">
-                                                    <i class="material-icons">add_circle_outline</i></a>
-                                                <span class="translate" style="font-weight:bold;"
-                                                    data-lang="add device">add device</span>
-                                            </div>
-                                            <div class="col s2">
-                                                <a id="btn-check-pushover"
-                                                    class="waves-effect waves-light btn translate" data-lang="save"></a>
-                                            </div>
-                                            <div class="col s8" id="err-pushover">
-                                                <!-- 'text' -->
-                                            </div>
-                                            <!-- Modal Trigger -->
-                                            <a class="waves-effect waves-light btn modal-trigger translate"
-                                                href="#modal5">help</a>
-                                            <!-- Modal Structure -->
-                                            <div id="modal5" class="modal">
-                                                <div id="help-pushover" class="modal-content translate">
-                                                    <div>
-                                                        <!-- text -->
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a href="#!"
-                                                            class="modal-close waves-effect waves-green btn-flat">close</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="translate" style="font-weight:bold;"
-                                        data-lang="Required fields"></span>
-                                    <table class="table-values changeOnChangeEvent remove-last-column">
-                                        <thead>
-                                            <tr>
-                                                <th data-name="_index" style="width: 40px" class="header translate">
-                                                </th>
-                                                <th data-name="name" data-type="text" class="header translate"
-                                                    data-lang="*name"></th>
-                                                <th data-name="inst" data-type="select" class="header translate"
-                                                    data-lang="*pushover instance" data-default=".0"
-                                                    data-options=".0;.1;.2;.3;.4;.5"></th>
-                                                <th data-name="prio" data-type="select" class="header translate"
-                                                    data-lang="*priority" data-default="normal"
-                                                    data-options="normal;high;quiet"></th>
-                                                <th data-name="sound" data-type="select" class="header translate"
-                                                    data-lang="*sound" data-default="pushover"
-                                                    data-options="pushover; bike; bugle; cashregister; classical; cosmic; falling; gamelan; incoming; intermission; magic; mechanical; pianobar; siren; spacealarm; tugboat; alien; climb; persistent; echo; updown; none">
-                                                </th>
-                                                <th data-buttons="delete" style="width: 80px"
-                                                    class="header translate del-Btn" data-lang="delete"></th>
-                                                <th data-name="id" style="width: 0px; display: none;"
-                                                    class="header translate">id </th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </li>
-
-                            <!-- email -->
-
-                            <li>
-                                <div id="header-email" class="translate" onclick="selectedHeader('email')">
-
-                                </div>
-                                <div class="collapsible-body" id="emailID">
-                                    <div class="row">
-                                        <div style="display: flex; align-items: center;">
-                                            <div class="col left s2">
-                                                <a id='btn-add-email'
-                                                    class="btn-floating waves-effect waves-light blue table-button-add">
-                                                    <i class="material-icons">add_circle_outline</i></a>
-                                                <span class="translate" style="font-weight:bold;"
-                                                    data-lang="add device">add device</span>
-                                            </div>
-                                            <div class="col s2">
-                                                <a id="btn-check-email" class="waves-effect waves-light btn translate"
-                                                    data-lang="save"></a>
-                                            </div>
-                                            <div class="col s8" id="err-email">
+                                    <!-- Modal Trigger -->
+                                    <a class="waves-effect waves-light btn modal-trigger translate"
+                                        href="#modal1">help</a>
+                                    <!-- Modal Structure -->
+                                    <div id="modal1" class="modal">
+                                        <div id="help-device" class="modal-content translate">
+                                            <div>
                                                 <!-- text -->
                                             </div>
-                                            <!-- Modal Trigger -->
-                                            <a class="waves-effect waves-light btn modal-trigger translate"
-                                                href="#modal6">help</a>
-                                            <!-- Modal Structure -->
-                                            <div id="modal6" class="modal">
-                                                <div id="help-email" class="modal-content translate">
-                                                    <div>
-                                                        <!-- text -->
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a href="#!"
-                                                            class="modal-close waves-effect waves-green btn-flat">close</a>
-                                                    </div>
-                                                </div>
+                                            <div class="modal-footer">
+                                                <a href="#!"
+                                                    class="modal-close waves-effect waves-green btn-flat">close</a>
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="translate" style="font-weight:bold;"
-                                        data-lang="Required fields"></span>
-                                    <table class="table-values changeOnChangeEvent remove-last-column">
-                                        <thead>
-                                            <tr>
-                                                <th data-name="_index" style="width: 40px" class="header translate">
-                                                </th>
-                                                <th data-name="name" data-type="text" class="header translate"
-                                                    data-lang="*name"></th>
-                                                <th data-name="emailFrom" data-type="text" class="header translate"
-                                                    data-lang="*sender address"></th>
-                                                <th data-name="emailTo" data-type="text" class="header translate"
-                                                    data-lang="*receiver address"></th>
-                                                <th data-buttons="delete" style="width: 80px"
-                                                    class="header translate del-Btn" data-lang="delete"></th>
-                                                <th data-name="id" style="width: 0px; display: none;"
-                                                    class="header translate">id</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
                                 </div>
-                            </li>
+                                <span class="translate" style="font-weight:bold;" data-lang="Required fields"></span>
+                                <table class="table-values changeOnChangeEvent remove-last-column">
+                                    <thead>
+                                        <tr>
+                                            <th data-name="_index" style="width: 40px" class="header translate">
+                                            </th>
+                                            <th data-name="name" style="width: 150px" data-type="text"
+                                                class="header translate" data-lang="device name"></th>
+                                            <th id="deviceTypeID" data-name="type" style="width: 200px;"
+                                                data-type="select" style="width: 150px" class="header translate"
+                                                data-options="" data-lang="device type"></th>
+                                            <th data-name="consumption" style="width: 100px" data-type="OID"
+                                                class="header translate" data-lang="consumption"></th>
+                                            <th data-name="switch" style="width: 100px" data-type="OID"
+                                                class="header translate" data-lang="Power switch"></th>
+                                            <th data-name="startText" data-type="OID" class="header translate"
+                                                data-lang="starttext"></th>
+                                            <th data-name="endText" data-type="OID" class="header translate"
+                                                data-lang="endtext"></th>
+                                            <th data-buttons="delete" style="width: 80px;"
+                                                class="header translate del-Btn" data-lang="delete"></th>
+                                            <th data-name="id" style="width: 0px; display: none;"
+                                                class="header translate">id</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </li>
 
-                            <!-- default devices -->
-
-                            <li>
-                                <div id="header-default" class="translate" onclick="selectedHeader('default')">
-                                    <!-- text -->
-                                </div>
-                                <div class="collapsible-body" id="defaultTypeID">
-                                    <div class="row">
-                                        <div style="display: flex; align-items: center;">
+                    <!-- alexa devices -->
+                    <li>
+                        <div id="header-alexa" class="translate" onclick="selectedHeader('alexa')">
+                            <!-- text -->
+                        </div>
+                        <div class="collapsible-body" id="alexaID">
+                            <div class="row">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="col left s2">
+                                        <a id='btn-add-alexa'
+                                            class="btn-floating waves-effect waves-light blue table-button-add">
+                                            <i class="material-icons">add_circle_outline</i></a>
+                                        <span class="translate" style="font-weight:bold;" data-lang="add device">add
+                                            device</span>
+                                    </div>
+                                    <div class="col s2">
+                                        <a id="btn-check-alexa" class="waves-effect waves-light btn translate"
+                                            data-lang="save"></a>
+                                    </div>
+                                    <div class="col s8" id="err-alexa">
+                                        <!-- 'text' -->
+                                    </div>
+                                    <!-- Modal Trigger -->
+                                    <a class="waves-effect waves-light btn modal-trigger translate"
+                                        href="#modal2">help</a>
+                                    <!-- Modal Structure -->
+                                    <div id="modal2" class="modal">
+                                        <div id="help-alexa" class="modal-content translate">
                                             <div>
-                                                <a id="btn-check-default" class="waves-effect waves-light btn translate"
-                                                    data-lang="save"></a>
+                                                <!-- text -->
                                             </div>
-                                            <div class="col s10" id="err-default">
-                                                <!-- 'text' -->
-                                            </div>
-                                            <!-- Modal Trigger -->
-                                            <a class="waves-effect waves-light btn modal-trigger translate"
-                                                href="#modal7">help</a>
-                                            <!-- Modal Structure -->
-                                            <div id="modal7" class="modal">
-                                                <div id="help-default-type" class="modal-content translate">
-                                                    <div>
-                                                        <!-- text -->
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a href="#!"
-                                                            class="modal-close waves-effect waves-green btn-flat">close</a>
-                                                    </div>
-                                                </div>
+                                            <div class="modal-footer">
+                                                <a href="#!"
+                                                    class="modal-close waves-effect waves-green btn-flat">close</a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <h3><span class="translate" data-lang="default device types"></span></h3>
+                                </div>
+                            </div>
+                            <span class="translate" style="font-weight:bold;" data-lang="Required fields"></span>
+                            <table class="table-values changeOnChangeEvent remove-last-column">
+                                <thead>
+                                    <tr>
+                                        <th data-name="_index" style="width: 40px;" class="header translate">
+                                        </th>
+                                        <th data-name="name" data-type="text" class="header translate" data-lang="name">
+                                        </th>
+                                        <th data-name="path" data-type="OID" class="header translate"
+                                            data-lang="'alexa2/../announcement'/'speak'"></th>
+                                        <th data-name="volume" style="width: 80px" data-type="number"
+                                            class="header translate" data-lang="volume 0-100" data-default="50"></th>
+                                        <th data-name="timeMinHour" style="width: 80px" data-type="select"
+                                            class="header translate" data-lang="active from hour" data-default="0"
+                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                        </th>
+                                        <th data-name="timeMinMin" style="width: 80px" data-type="select"
+                                            class="header translate" data-lang="active from minute" data-default="00"
+                                            data-options="00;15;30;45"></th>
+                                        <th data-name="timeMaxHour" style="width: 80px" data-type="select"
+                                            class="header translate" data-lang="inactive from hour" data-default="23"
+                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                        </th>
+                                        <th data-name="timeMaxMin" style="width: 80px" data-type="select"
+                                            class="header translate" data-lang="inactive from minute" data-default="59"
+                                            data-options="00;15;30;45;59"></th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate del-Btn"
+                                            data-lang="delete"></th>
+                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
+                                            id</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </li>
+
+                    <!-- sayit -->
+
+                    <li>
+                        <div id="header-sayit" class="translate" onclick="selectedHeader('sayit')">
+                            <!-- text -->
+                        </div>
+                        <div class="collapsible-body" id="sayitID">
+                            <div class="row">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="col left s2">
+                                        <a id='btn-add-sayit'
+                                            class="btn-floating waves-effect waves-light blue table-button-add">
+                                            <i class="material-icons">add_circle_outline</i></a>
+                                        <span class="translate" style="font-weight:bold;" data-lang="add device">add
+                                            device</span>
                                     </div>
-                                    <table id="disableFirstField" class="table-values remove-last-column">
-                                        <thead>
-                                            <tr>
-                                                <th id="disableFirstField" class="header translate" data-type="text"
-                                                    data-name="name" data-lang="name"></th>
-                                                <th class="header translate" data-type="number" data-name="startVal"
-                                                    data-lang="threshold 'start' (watt)"></th>
-                                                <th class="header translate" data-type="number" data-name="endVal"
-                                                    data-lang="threshold 'end' (watt)"></th>
-                                                <th class="header translate" data-type="number" data-name="standby"
-                                                    data-lang="threshold 'standby' (watt)"></th>
-                                                <th class="header translate" data-type="number" data-name="startCount"
-                                                    data-lang="number of 'start' values"></th>
-                                                <th class="header translate" data-type="number" data-name="endCount"
-                                                    data-lang="number of ​'end' values"></th>
-                                                <th class="header translate" data-type="number" data-name="id"
-                                                    style="width: 0px; display: none;">id</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                    <div class="col s2">
+                                        <a id="btn-check-sayit" class="waves-effect waves-light btn translate"
+                                            data-lang="save"></a>
+                                    </div>
+                                    <div class="col s8" id="err-sayit">
+                                        <!-- 'text' -->
+                                    </div>
+                                    <!-- Modal Trigger -->
+                                    <a class="waves-effect waves-light btn modal-trigger translate"
+                                        href="#modal3">help</a>
+                                    <!-- Modal Structure -->
+                                    <div id="modal3" class="modal">
+                                        <div id="help-sayit" class="modal-content translate">
+                                            <div>
+                                                <!-- text -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="#!"
+                                                    class="modal-close waves-effect waves-green btn-flat">close</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </li>
+                            </div>
+                            <span class="translate" style="font-weight:bold;" data-lang="Required fields"></span>
+                            <table class="table-values changeOnChangeEvent remove-last-column">
+                                <thead>
+                                    <tr>
+                                        <th data-name="_index" style="width: 40px" class="header translate">
+                                        </th>
+                                        <th data-name="name" data-type="text" class="header translate" data-lang="name">
+                                        </th>
+                                        <th data-name="path" data-type="OID" class="header translate"
+                                            data-lang="'sayit/../text'"></th>
+                                        <th data-name="volume" style="width: 80px" data-type="number"
+                                            class="header translate" data-lang="volume 0-100" data-default="50"></th>
+                                        <th data-name="timeMinHour" style="width: 80px" data-type="select"
+                                            class="header translate" data-lang="active from hour" data-default="0"
+                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                        </th>
+                                        <th data-name="timeMinMin" style="width: 80px" data-type="select"
+                                            class="header translate" data-lang="active from minute" data-default="00"
+                                            data-options="00;15;30;45"></th>
+                                        <th data-name="timeMaxHour" style="width: 80px" data-type="select"
+                                            class="header translate" data-lang="inactive from hour" data-default="23"
+                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                        </th>
+                                        <th data-name="timeMaxMin" style="width: 80px" data-type="select"
+                                            class="header translate" data-lang="inactive from minute" data-default="59"
+                                            data-options="00;15;30;45;59"></th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate del-Btn"
+                                            data-lang="delete"></th>
+                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
+                                            id</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </li>
 
-                            <!-- custom devices -->
+                    <!-- pushover -->
 
-                            <li>
-                                <div id="header-custom" class="translate" onclick="selectedHeader('custom')">
-                                    <!-- text -->
+                    <li>
+                        <div id="header-pushover" class="translate" onclick="selectedHeader('pushover')">
+                            <!-- text -->
+                        </div>
+                        <div class="collapsible-body" id="pushoverID">
+                            <div class="row">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="col left s2">
+                                        <a id='btn-add-pushover'
+                                            class="btn-floating waves-effect waves-light blue table-button-add">
+                                            <i class="material-icons">add_circle_outline</i></a>
+                                        <span class="translate" style="font-weight:bold;" data-lang="add device">add
+                                            device</span>
+                                    </div>
+                                    <div class="col s2">
+                                        <a id="btn-check-pushover" class="waves-effect waves-light btn translate"
+                                            data-lang="save"></a>
+                                    </div>
+                                    <div class="col s8" id="err-pushover">
+                                        <!-- 'text' -->
+                                    </div>
+                                    <!-- Modal Trigger -->
+                                    <a class="waves-effect waves-light btn modal-trigger translate"
+                                        href="#modal5">help</a>
+                                    <!-- Modal Structure -->
+                                    <div id="modal5" class="modal">
+                                        <div id="help-pushover" class="modal-content translate">
+                                            <div>
+                                                <!-- text -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="#!"
+                                                    class="modal-close waves-effect waves-green btn-flat">close</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="collapsible-body" id="customTypeID">
-                                    <div class="row">
-                                        <div style="display: flex; align-items: center;">
-                                            <!-- <div class="col left s2">
+                            </div>
+                            <span class="translate" style="font-weight:bold;" data-lang="Required fields"></span>
+                            <table class="table-values changeOnChangeEvent remove-last-column">
+                                <thead>
+                                    <tr>
+                                        <th data-name="_index" style="width: 40px" class="header translate">
+                                        </th>
+                                        <th data-name="name" data-type="text" class="header translate" data-lang="name">
+                                        </th>
+                                        <th data-name="inst" data-type="select" class="header translate"
+                                            data-lang="pushover instance" data-default=".0"
+                                            data-options=".0;.1;.2;.3;.4;.5"></th>
+                                        <th data-name="prio" data-type="select" class="header translate"
+                                            data-lang="priority" data-default="normal" data-options="normal;high;quiet">
+                                        </th>
+                                        <th data-name="sound" data-type="select" class="header translate"
+                                            data-lang="sound" data-default="pushover"
+                                            data-options="pushover; bike; bugle; cashregister; classical; cosmic; falling; gamelan; incoming; intermission; magic; mechanical; pianobar; siren; spacealarm; tugboat; alien; climb; persistent; echo; updown; none">
+                                        </th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate del-Btn"
+                                            data-lang="delete"></th>
+                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
+                                            id </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </li>
+
+                    <!-- email -->
+
+                    <li>
+                        <div id="header-email" class="translate" onclick="selectedHeader('email')">
+
+                        </div>
+                        <div class="collapsible-body" id="emailID">
+                            <div class="row">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="col left s2">
+                                        <a id='btn-add-email'
+                                            class="btn-floating waves-effect waves-light blue table-button-add">
+                                            <i class="material-icons">add_circle_outline</i></a>
+                                        <span class="translate" style="font-weight:bold;" data-lang="add device">add
+                                            device</span>
+                                    </div>
+                                    <div class="col s2">
+                                        <a id="btn-check-email" class="waves-effect waves-light btn translate"
+                                            data-lang="save"></a>
+                                    </div>
+                                    <div class="col s8" id="err-email">
+                                        <!-- text -->
+                                    </div>
+                                    <!-- Modal Trigger -->
+                                    <a class="waves-effect waves-light btn modal-trigger translate"
+                                        href="#modal6">help</a>
+                                    <!-- Modal Structure -->
+                                    <div id="modal6" class="modal">
+                                        <div id="help-email" class="modal-content translate">
+                                            <div>
+                                                <!-- text -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="#!"
+                                                    class="modal-close waves-effect waves-green btn-flat">close</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="translate" style="font-weight:bold;" data-lang="Required fields"></span>
+                            <table class="table-values changeOnChangeEvent remove-last-column">
+                                <thead>
+                                    <tr>
+                                        <th data-name="_index" style="width: 40px" class="header translate">
+                                        </th>
+                                        <th data-name="name" data-type="text" class="header translate" data-lang="name">
+                                        </th>
+                                        <th data-name="emailFrom" data-type="text" class="header translate"
+                                            data-lang="sender address"></th>
+                                        <th data-name="emailTo" data-type="text" class="header translate"
+                                            data-lang="receiver address"></th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate del-Btn"
+                                            data-lang="delete"></th>
+                                        <th data-name="id" style="width: 0px; display: none;" class="header translate">
+                                            id</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </li>
+
+                    <!-- default devices -->
+
+                    <li>
+                        <div id="header-default" class="translate" onclick="selectedHeader('default')">
+                            <!-- text -->
+                        </div>
+                        <div class="collapsible-body" id="defaultTypeID">
+                            <div class="row">
+                                <div style="display: flex; align-items: center;">
+                                    <div>
+                                        <a id="btn-check-default" class="waves-effect waves-light btn translate"
+                                            data-lang="save"></a>
+                                    </div>
+                                    <div class="col s10" id="err-default">
+                                        <!-- 'text' -->
+                                    </div>
+                                    <!-- Modal Trigger -->
+                                    <a class="waves-effect waves-light btn modal-trigger translate"
+                                        href="#modal7">help</a>
+                                    <!-- Modal Structure -->
+                                    <div id="modal7" class="modal">
+                                        <div id="help-default-type" class="modal-content translate">
+                                            <div>
+                                                <!-- text -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="#!"
+                                                    class="modal-close waves-effect waves-green btn-flat">close</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3><span class="translate" data-lang="default device types"></span></h3>
+                            </div>
+                            <table id="disableFirstField" class="table-values remove-last-column">
+                                <thead>
+                                    <tr>
+                                        <th id="disableFirstField" class="header translate" data-type="text"
+                                            data-name="name" data-lang="name"></th>
+                                        <th class="header translate" data-type="number" data-name="startVal"
+                                            data-lang="threshold start (watt)"></th>
+                                        <th class="header translate" data-type="number" data-name="endVal"
+                                            data-lang="threshold end (watt)"></th>
+                                        <th class="header translate" data-type="number" data-name="standby"
+                                            data-lang="threshold standby (watt)"></th>
+                                        <th class="header translate" data-type="number" data-name="startCount"
+                                            data-lang="number of start values"></th>
+                                        <th class="header translate" data-type="number" data-name="endCount"
+                                            data-lang="number of end values"></th>
+                                        <th class="header translate" data-type="number" data-name="id"
+                                            style="width: 0px; display: none;">id</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </li>
+
+                    <!-- custom devices -->
+
+                    <li>
+                        <div id="header-custom" class="translate" onclick="selectedHeader('custom')">
+                            <!-- text -->
+                        </div>
+                        <div class="collapsible-body" id="customTypeID">
+                            <div class="row">
+                                <div style="display: flex; align-items: center;">
+                                    <!-- <div class="col left s2">
                                                 <a id='btn-add-custom'
                                                     class="btn-floating waves-effect waves-light blue table-button-add">
                                                     <i class="material-icons">add_circle_outline</i></a>
                                                 <span class="translate" style="font-weight:bold;"
                                                     data-lang="add device">add device</span>
                                             </div> -->
-                                            <div class="col s2">
-                                                <a id="btn-check-custom" class="waves-effect waves-light btn translate"
-                                                    data-lang="save"></a>
+                                    <div class="col s2">
+                                        <a id="btn-check-custom" class="waves-effect waves-light btn translate"
+                                            data-lang="save"></a>
+                                    </div>
+                                    <div class="col s8" id="err-custom">
+                                        <!-- 'text' -->
+                                    </div>
+                                    <!-- Modal Trigger -->
+                                    <a class="waves-effect waves-light btn modal-trigger translate"
+                                        href="#modal8">help</a>
+                                    <!-- Modal Structure -->
+                                    <div id="modal8" class="modal">
+                                        <div id="help-custom-type" class="modal-content translate">
+                                            <div>
+                                                <!-- text -->
                                             </div>
-                                            <div class="col s8" id="err-custom">
-                                                <!-- 'text' -->
-                                            </div>
-                                            <!-- Modal Trigger -->
-                                            <a class="waves-effect waves-light btn modal-trigger translate"
-                                                href="#modal8">help</a>
-                                            <!-- Modal Structure -->
-                                            <div id="modal8" class="modal">
-                                                <div id="help-custom-type" class="modal-content translate">
-                                                    <div>
-                                                        <!-- text -->
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a href="#!"
-                                                            class="modal-close waves-effect waves-green btn-flat translate">close</a>
-                                                    </div>
-                                                </div>
+                                            <div class="modal-footer">
+                                                <a href="#!"
+                                                    class="modal-close waves-effect waves-green btn-flat translate">close</a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <h3><span class="translate" data-lang="custom device types"></span></h3>
-                                    </div>
-                                    <table id="disableFirstField" class="table-values remove-last-column">
-                                        <thead>
-                                            <tr>
-                                                <th id="disableFirstField" class="header translate" data-type="text"
-                                                    data-name="name" data-lang="name"></th>
-                                                <th class="header translate" data-type="number" data-name="startVal"
-                                                    data-lang="threshold 'start' (watt)"></th>
-                                                <th class="header translate" data-type="number" data-name="endVal"
-                                                    data-lang="threshold 'end' (watt)"></th>
-                                                <th class="header translate" data-type="number" data-name="standby"
-                                                    data-lang="threshold 'standby' (watt)"></th>
-                                                <th class="header translate" data-type="number" data-name="startCount"
-                                                    data-lang="number of 'start' values"></th>
-                                                <th class="header translate" data-type="number" data-name="endCount"
-                                                    data-lang="number of ​'end' values"></th>
-                                                <th data-buttons="delete" style="width: 80px"
-                                                    class="header translate del-Btn" data-lang="delete"></th>
-                                                <th class="header translate" data-type="number" data-name="id"
-                                                    style="width: 0px; display: none;">id</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
                                 </div>
-                            </li>
+                            </div>
+                            <div>
+                                <h3><span class="translate" data-lang="custom device types"></span></h3>
+                            </div>
+                            <table id="disableFirstField" class="table-values remove-last-column">
+                                <thead>
+                                    <tr>
+                                        <th id="disableFirstField" class="header translate" data-type="text"
+                                            data-name="name" data-lang="name"></th>
+                                        <th class="header translate" data-type="number" data-name="startVal"
+                                            data-lang="threshold 'start' (watt)"></th>
+                                        <th class="header translate" data-type="number" data-name="endVal"
+                                            data-lang="threshold 'end' (watt)"></th>
+                                        <th class="header translate" data-type="number" data-name="standby"
+                                            data-lang="threshold 'standby' (watt)"></th>
+                                        <th class="header translate" data-type="number" data-name="startCount"
+                                            data-lang="number of 'start' values"></th>
+                                        <th class="header translate" data-type="number" data-name="endCount"
+                                            data-lang="number of ​'end' values"></th>
+                                        <th class="header translate" data-type="number" data-name="id"
+                                            style="width: 0px; display: none;">id</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </li>
 
-                            <!-- status -->
+                    <!-- status -->
 
-                            <li>
-                                <div id="header-status" class="translate" onclick="selectedHeader('status')">
-                                    <!-- text -->
-                                </div>
-                                <div class="collapsible-body" id="valStates">
-                                    <div class="row">
-                                        <div style="display: flex; align-items: center;">
-                                            <div class="col s8" id="err-status">
-                                                <!-- 'text' -->
-                                            </div>
-                                        </div>
+                    <li>
+                        <div id="header-status" class="translate" onclick="selectedHeader('status')">
+                            <!-- text -->
+                        </div>
+                        <div class="collapsible-body" id="valStates">
+                            <div class="row">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="col s8" id="err-status">
+                                        <!-- 'text' -->
                                     </div>
-                                    <div>
-                                        <h5><span class="translate" data-lang="device status"></span></h5>
-                                    </div>
-                                    <table class="table-values changeOnChangeEvent remove-first-column"
-                                        id="table-states">
-                                        <thead>
-                                            <tr>
-                                                <th class="header translate" style="width: 0px; display: none;">
-                                                </th>
-                                                <th class="header translate" data-type="text" data-name="stateAction"
-                                                    data-lang="status: 'in action'"></th>
-                                                <th class="header translate" data-type="text" data-name="stateStandby"
-                                                    data-lang="status: 'standby'"></th>
-                                                <th class="header translate" data-type="text" data-name="stateOff"
-                                                    data-lang="status: 'device off'"></th>
-                                            </tr>
-                                        </thead>
-                                    </table>
                                 </div>
-                            </li>
+                            </div>
+                            <div>
+                                <h5><span class="translate" data-lang="device status"></span></h5>
+                            </div>
+                            <table class="table-values changeOnChangeEvent remove-first-column" id="table-states">
+                                <thead>
+                                    <tr>
+                                        <th class="header translate" style="width: 0px; display: none;">
+                                        </th>
+                                        <th class="header translate" data-type="text" data-name="stateAction"
+                                            data-lang="status: in action"></th>
+                                        <th class="header translate" data-type="text" data-name="stateStandby"
+                                            data-lang="status: standby"></th>
+                                        <th class="header translate" data-type="text" data-name="stateOff"
+                                            data-lang="status: device off"></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </li>
 
-                            <!-- collapsible end -->
+                    <!-- collapsible end -->
 
-                        </ul>
-
-
+                </ul>
 
 
 
 
-                    </div>
-                </div>
+
+
+                <!-- </div> -->
+                <!-- </div> -->
 
                 <!-- Tab with id "advanced-settings" -->
                 <!-- <div id="tab-advanced-settings" class="col s12">

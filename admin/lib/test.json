@@ -1,0 +1,151 @@
+{
+    "common": {
+        "name": "device-reminder",
+        "version": "1.2.9",
+        "title": "device-reminder",
+        "titleLang": {
+            "en": "device-reminder",
+            "de": "Geräteerinnerung",
+            "ru": "устройство-напоминание",
+            "pt": "lembrete de dispositivo",
+            "nl": "apparaat-herinnering",
+            "fr": "rappel d'appareil",
+            "it": "dispositivo-promemoria",
+            "es": "recordatorio del dispositivo",
+            "pl": "przypomnienie o urządzeniu",
+            "zh-cn": "设备提醒"
+        },
+        "desc": {
+            "en": "Adapter for device reminder and notification when reaching different states",
+            "de": "Adapter für Geräteerinnerung und Benachrichtigung beim Erreichen von verschiedenen Zuständen",
+            "ru": "Адаптер для напоминания и уведомления устройства при достижении разных состояний",
+            "pt": "Adaptador para lembrete e notificação do dispositivo ao atingir diferentes estados",
+            "nl": "Adapter voor apparaatherinnering en melding bij het bereiken van verschillende toestanden",
+            "fr": "Adaptateur pour le rappel de l'appareil et la notification lorsque vous atteignez différents états",
+            "it": "Adattatore per promemoria del dispositivo e notifica al raggiungimento di stati diversi",
+            "es": "Adaptador para recordatorio y notificación del dispositivo al llegar a diferentes estados",
+            "pl": "Adapter do przypomnienia o urządzeniu i powiadomienia po osiągnięciu różnych stanów",
+            "zh-cn": "达到不同状态时用于设备提醒和通知的适配器"
+        },
+        "authors": [
+            "xenon-s <ente_s@hotmail.de>"
+        ],
+        "keywords": [
+            "ioBroker",
+            "device reminder",
+            "Smart Home",
+            "home automation"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "icon.png",
+        "enabled": false,
+        "extIcon": "https://raw.githubusercontent.com/xenon-s/ioBroker.device-reminder/master/admin/icon.png",
+        "readme": "https://github.com/xenon-s/ioBroker.device-reminder/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "messagebox": true,
+        "type": "energy",
+        "compact": true,
+        "dataSource": "push",
+        "connectionType": "local",
+        "materialize": true,
+        "dependencies": [{
+            "js-controller": ">=2.0.0"
+        }],
+        "installedVersion": "1.2.9",
+        "host": "dev-device-reminder-iob-template",
+        "adminUI": {
+            "config": "materialize"
+        }
+    },
+    "native": {
+        "measuringDevice": {
+            "id": [{
+                "name": "test",
+                "type": "washing-machine",
+                "consumption": "link1",
+                "switch": "link2",
+                "startText": "start",
+                "endText": "ende"
+            }]
+        },
+        "deviceValues": {
+            "id": [{
+                    "name": "washing-machine",
+                    "startVal": "30",
+                    "endVal": "15",
+                    "standby": "1",
+                    "startCount": "2",
+                    "endCount": "50",
+                    "id": "1"
+                },
+                {
+                    "name": "dryer",
+                    "startVal": "120",
+                    "endVal": "15",
+                    "standby": "1",
+                    "startCount": "2",
+                    "endCount": "20",
+                    "id": "2"
+                },
+                {
+                    "name": "dishwasher",
+                    "startVal": "15",
+                    "endVal": "0.25",
+                    "standby": "0.5",
+                    "startCount": "2",
+                    "endCount": "120",
+                    "id": "3"
+                }
+            ]
+        },
+        "status": {
+            "id": [{
+                "stateAction": "in action",
+                "stateStandby": "standby",
+                "stateOff": "switched off",
+                "id": 0
+            }]
+        }
+    },
+    "protectedNative": [],
+    "encryptedNative": [],
+    "notifications": [],
+    "instanceObjects": [{
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ],
+    "objects": [],
+    "type": "instance",
+    "_id": "system.adapter.device-reminder.0",
+    "acl": {
+        "object": 1636,
+        "state": 1636,
+        "file": 1632,
+        "owner": "system.user.admin",
+        "ownerGroup": "system.group.administrator"
+    },
+    "from": "system.adapter.admin.0",
+    "user": "system.user.admin",
+    "ts": 1660988802831
+}
