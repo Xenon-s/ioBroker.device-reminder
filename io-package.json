@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "1.2.9",
+        "version": "2.0.0",
         "news": {
+            "2.0.0" : {
+                "en": "JS Controller V 5.x fix \nMany bugs fixed",
+                "de": "JS Controller V 5.x fix\nViele Fehler behoben",
+                "ru": "JS контроллер V 5.x исправить\nМногие ошибки исправлены",
+                "pt": "JS Controller V 5.x correção\nMuitos bugs corrigidos",
+                "nl": "JS Controller V5\nVeel insecten gerepareerd",
+                "fr": "JS Controller V 5.x fix\nBeaucoup de bugs corrigés",
+                "it": "JS Controller V 5.x fix\nMolti bug fissi",
+                "es": "JS Controller V 5.x fix\nMuchos errores fijos",
+                "pl": "JS Controller V 5.x (ang.)\nWiele błędów ustalono",
+                "uk": "JS контролер V 5.x виправити\nБагато помилок фіксовані",
+                "zh-cn": "联合主计长\n许多固定装置"
+              },
             "1.2.9": {
                 "en": "bugfix: error catching JSON \"last operations\" doesn't work",
                 "de": "Bugfix: Fehler beim Abfangen von JSON \"letzte Operationen\" funktioniert nicht",
@@ -221,9 +234,11 @@
         "dataSource": "push",
         "connectionType": "local",
         "materialize": true,
-        "dependencies": [{
-            "js-controller": ">=5.0.0"
-        }]
+        "dependencies": [
+            {
+                "js-controller": ">=5.0.0"
+            }
+        ]
     },
     "native": {
         "device_counter": 0,
@@ -332,7 +347,8 @@
           }
     },
     "objects": [],
-    "instanceObjects": [{
+    "instanceObjects": [
+        {
             "_id": "info",
             "type": "channel",
             "common": {

@@ -163,8 +163,9 @@ is displayed.
     ### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
-* (xenon-s) : !!! BREAKING CHANGE !!! Reinstallation is strongly recommended !
+### 2.0.0 (2023-08-20)
+* (xenon-s) : !!! BREAKING CHANGE ! Reinstallation is strongly recommended !!!
+* (xenon-s) Fixes for js-controller 5.*
 * (xenon-s) bugfix: [issue #278](https://github.com/Xenon-s/ioBroker.device-reminder/issues/278)
 * (xenon-s) bugfix: [issue #273](https://github.com/Xenon-s/ioBroker.device-reminder/issues/273)
 * (xenon-s) bugfix: [issue #267](https://github.com/Xenon-s/ioBroker.device-reminder/issues/267)
