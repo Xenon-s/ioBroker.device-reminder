@@ -155,9 +155,9 @@
                         $('.modal').modal();
 
                         async function createGUI(settings) {
-
                             dataGlobal = await createData(settings);
                             const resChecked = await staticTable(dataGlobal);
+
                             await dynamicTable(dataGlobal, resChecked);
                             $('.red').on('click', clickEventDelBtn); // click event auf delete button setzen
                             onChange(false);
@@ -301,7 +301,7 @@
                                 values2table(data.devices.idHTML, data.devices.ids, onChange); // create table "devices", warten auf "types"
                                 $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true); // disable "name" in table default-types
 
-                                return checked
+                                return checked;
                             };
 
                             async function dynamicTable(data, checked) {
@@ -517,7 +517,7 @@
                                 } else {
                                     delete objTemp[data.id].prio;
                                 };
-                                break;
+                                break;deviceID
                             };
                             case "email": {
                                 objTemp[data.id] = {
@@ -1386,13 +1386,13 @@
                                 <div class="collapsible-body" id="customTypeID">
                                     <div class="row">
                                         <div style="display: flex; align-items: center;">
-                                            <div class="col left s2">
+                                            <!-- <div class="col left s2">
                                                 <a id='btn-add-custom'
                                                     class="btn-floating waves-effect waves-light blue table-button-add">
                                                     <i class="material-icons">add_circle_outline</i></a>
                                                 <span class="translate" style="font-weight:bold;"
                                                     data-lang="add device">add device</span>
-                                            </div>
+                                            </div> -->
                                             <div class="col s2">
                                                 <a id="btn-check-custom" class="waves-effect waves-light btn translate"
                                                     data-lang="save"></a>
