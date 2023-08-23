@@ -24,7 +24,6 @@
     <link rel="stylesheet" type="text/css" href="./lib/style.css" />
 
     <script type="text/javascript">
-
         const warningText = `<h4>Warning:</h4> 
                                 <p>In the new version 1.1.x fundamental changes were made to the adapter structure, so that the old settings are <b>automatically migrated </b> and adapted to the new structure! </p>
                                 <p>Note to Whatsapp users: Whatsapp is now automatically detected just like telegram! Here it may happen that the users must be reassigned once! 
@@ -41,60 +40,187 @@
         dataSendTo.telegram = {
             name: 'telegram',
             // id: 'idTelegram',
-            obj: { dataChecked: [], dataFailed: [] },
-            objType: { cmd: 'telegram' }
+            obj: {
+                dataChecked: [],
+                dataFailed: []
+            },
+            objType: {
+                cmd: 'telegram'
+            }
         };
         dataSendTo.devices = {
             name: 'devices',
             // id: 'deviceName',
-            obj: { dataChecked: [], dataFailed: [], err: `err-devices`, header: 'header-device', name: 'devices', anchorEn: `create-device`, anchorGer: `device-anlegen`, anchorName: `device` },
-            objType: { cmd: 'val', 1: 'name', 2: 'consumption', 3: 'switch', cntr: 3 }
+            obj: {
+                dataChecked: [],
+                dataFailed: [],
+                err: `err-devices`,
+                header: 'header-device',
+                name: 'devices',
+                anchorEn: `create-device`,
+                anchorGer: `device-anlegen`,
+                anchorName: `device`
+            },
+            objType: {
+                cmd: 'val',
+                1: 'name',
+                2: 'consumption',
+                3: 'switch',
+                cntr: 3
+            }
         }
         dataSendTo.alexa = {
             name: 'alexa',
             // id: 'idAlexa',
-            obj: { dataChecked: [], dataFailed: [], err: `err-alexa`, header: 'header-alexa', name: 'alexa', anchorEn: `create-alexa`, anchorGer: `alexa-erstellen`, anchorName: `alexa` },
-            objType: { cmd: 'val', 1: 'name', 2: 'path', cntr: 2 }
+            obj: {
+                dataChecked: [],
+                dataFailed: [],
+                err: `err-alexa`,
+                header: 'header-alexa',
+                name: 'alexa',
+                anchorEn: `create-alexa`,
+                anchorGer: `alexa-erstellen`,
+                anchorName: `alexa`
+            },
+            objType: {
+                cmd: 'val',
+                1: 'name',
+                2: 'path',
+                cntr: 2
+            }
         };
         dataSendTo.sayit = {
             name: 'sayit',
             // id: 'idsayit',
-            obj: { dataChecked: [], dataFailed: [], err: `err-sayit`, header: 'header-sayit', name: 'sayit', anchorEn: `create-sayit-device`, anchorGer: `sayit-device-erstellen`, anchorName: `sayit` },
-            objType: { cmd: 'val', 1: 'name', 2: 'path', cntr: 2 }
+            obj: {
+                dataChecked: [],
+                dataFailed: [],
+                err: `err-sayit`,
+                header: 'header-sayit',
+                name: 'sayit',
+                anchorEn: `create-sayit-device`,
+                anchorGer: `sayit-device-erstellen`,
+                anchorName: `sayit`
+            },
+            objType: {
+                cmd: 'val',
+                1: 'name',
+                2: 'path',
+                cntr: 2
+            }
         };
         dataSendTo.whatsapp = {
             name: 'whatsapp',
             // id: 'idWhatsapp',
-            obj: { dataChecked: [], dataFailed: [] },
-            objType: { cmd: 'whatsapp-cmb' }
+            obj: {
+                dataChecked: [],
+                dataFailed: []
+            },
+            objType: {
+                cmd: 'whatsapp-cmb'
+            }
             // obj: { dataChecked: [], dataFailed: [], err: `errWhatsapp`, header: 'header-whatsapp', name: `whatsapp user`, anchorEn: `create-whatsapp-user`, anchorGer: `whatsapp-user-erstellen`, anchorName: `whatsapp` },
             // objType: { cmd: 'val', 1: 'name', 2: 'path', cntr: 2 }
         };
         dataSendTo.pushover = {
             name: 'pushover',
             // id: 'idPushover',
-            obj: { dataChecked: [], dataFailed: [], err: `err-pushover`, header: 'header-pushover', name: 'pushover', anchorEn: `create-pushover-user`, anchorGer: `pushover-user-erstellen`, anchorName: `pushover` },
-            objType: { cmd: 'type', 1: 'name', 2: 'inst', 3: 'prio', 4: 'sound', cntr: 4 }
+            obj: {
+                dataChecked: [],
+                dataFailed: [],
+                err: `err-pushover`,
+                header: 'header-pushover',
+                name: 'pushover',
+                anchorEn: `create-pushover-user`,
+                anchorGer: `pushover-user-erstellen`,
+                anchorName: `pushover`
+            },
+            objType: {
+                cmd: 'type',
+                1: 'name',
+                2: 'inst',
+                3: 'prio',
+                4: 'sound',
+                cntr: 4
+            }
         };
         dataSendTo.email = {
             name: 'email',
             // id: 'idEmail',
-            obj: { dataChecked: [], dataFailed: [], err: `err-email`, header: 'header-email', name: 'email', anchorEn: `create-email-user`, anchorGer: `email-user-erstellen`, anchorName: `email` },
-            objType: { cmd: 'email', 1: 'name', 2: 'emailFrom', 3: 'emailTo', cntr: 3 }
+            obj: {
+                dataChecked: [],
+                dataFailed: [],
+                err: `err-email`,
+                header: 'header-email',
+                name: 'email',
+                anchorEn: `create-email-user`,
+                anchorGer: `email-user-erstellen`,
+                anchorName: `email`
+            },
+            objType: {
+                cmd: 'email',
+                1: 'name',
+                2: 'emailFrom',
+                3: 'emailTo',
+                cntr: 3
+            }
         };
         dataSendTo.default = {
             name: 'default',
-            obj: { dataChecked: [], dataFailed: [], err: `err-default`, header: 'header-default', name: 'default type config', anchorEn: `default-devices`, anchorGer: `default-devices`, anchorName: `default-type` },
-            objType: { cmd: 'type', 1: 'name', 2: 'startVal', 3: 'endVal', 4: 'startCount', 5: 'endCount', cntr: 5 }
+            obj: {
+                dataChecked: [],
+                dataFailed: [],
+                err: `err-default`,
+                header: 'header-default',
+                name: 'default type config',
+                anchorEn: `default-devices`,
+                anchorGer: `default-devices`,
+                anchorName: `default-type`
+            },
+            objType: {
+                cmd: 'type',
+                1: 'name',
+                2: 'startVal',
+                3: 'endVal',
+                4: 'startCount',
+                5: 'endCount',
+                cntr: 5
+            }
         };
         dataSendTo.custom = {
             name: 'custom',
-            obj: { dataChecked: [], dataFailed: [], err: `err-custom`, header: 'header-custom', name: 'custom type config', anchorEn: `custom-devices`, anchorGer: `custom-devices`, anchorName: `create-custom-type` },
-            objType: { cmd: 'type', 1: 'name', 2: 'startVal', 3: 'endVal', 4: 'startCount', 5: 'endCount', cntr: 5 }
+            obj: {
+                dataChecked: [],
+                dataFailed: [],
+                err: `err-custom`,
+                header: 'header-custom',
+                name: 'custom type config',
+                anchorEn: `custom-devices`,
+                anchorGer: `custom-devices`,
+                anchorName: `create-custom-type`
+            },
+            objType: {
+                cmd: 'type',
+                1: 'name',
+                2: 'startVal',
+                3: 'endVal',
+                4: 'startCount',
+                5: 'endCount',
+                cntr: 5
+            }
         };
         dataSendTo.status = {
             name: 'status',
-            obj: { dataChecked: [], dataFailed: [], err: `err-status`, header: 'header-status', name: 'device status', anchorEn: `custom-states`, anchorGer: `eigene-zustaende`, anchorName: `custom-status` }
+            obj: {
+                dataChecked: [],
+                dataFailed: [],
+                err: `err-status`,
+                header: 'header-status',
+                name: 'device status',
+                anchorEn: `custom-states`,
+                anchorGer: `eigene-zustaende`,
+                anchorName: `custom-status`
+            }
         };
 
         let showSaveBtn;
@@ -106,27 +232,24 @@
 
         let deviceTypes = [];
 
-        let checkedUserInput = {};  // alle geprueften User Inputs werden hier gespeichert
-        let dataGlobal = {};        // alle native Daten aus "settings" werden hier gespeichert
-        let migration = true;  // abfrage ob Datenmigration nach update auf 1.1 durchgefuhrt wurde
+        let checkedUserInput = {}; // alle geprueften User Inputs werden hier gespeichert
+        let dataGlobal = {}; // alle native Daten aus "settings" werden hier gespeichert
+        let migration = true; // abfrage ob Datenmigration nach update auf 1.1 durchgefuhrt wurde
 
         function loadUser(settings, onChange) {
 
-            $('.value').each(function () {
+            $('.value').each(function() {
                 const $key = $(this);
                 const id = $key.attr('id');
                 if ($key.attr('type') === 'checkbox') {
                     // do not call onChange direct, because onChange could expect some arguments
                     $key.prop('checked', settings[id])
-                        .on('change', () => onChange(), $('.btn-save, .btn-save-close').fadeIn());
-                    ;
-                }
-                else {
+                        .on('change', () => onChange(), $('.btn-save, .btn-save-close').fadeIn());;
+                } else {
                     // do not call onChange direct, because onChange could expect some arguments
                     $key.val(settings[id])
                         .on('change', () => onChange(), $('.btn-save, .btn-save-close').fadeIn())
-                        .on('keyup', () => onChange(), $('.btn-save, .btn-save-close').fadeIn())
-                        ;
+                        .on('keyup', () => onChange(), $('.btn-save, .btn-save-close').fadeIn());
                 };
             });
         };
@@ -142,7 +265,7 @@
             if (!settings) return;
             let namespace = `${adapter}.${instance}`;
             // instance alive?
-            socket.emit('getState', `system.adapter.${namespace}.alive`, async (err, state) => {
+            socket.emit('getState', `system.adapter.${namespace}.alive`, async(err, state) => {
                 try {
                     const active = (state && state.val);
                     if (!active) {
@@ -256,14 +379,14 @@
                                         // create click event "disable save button"
                                         const btnSave = `#btn-check-${name}`;
                                         $(btnSave).fadeOut(); // save buttons deaktivieren bis events auf "add button" erkannt
-                                        $(btnSave).on('click', async () => {
+                                        $(btnSave).on('click', async() => {
                                             dataGlobal = await btnPressed(settings, i);
                                             $(btnSave).fadeOut();
                                         });
 
                                         // create click event "add button"
                                         const btnAdd = `#btn-add-${name}`;
-                                        $(btnAdd).on('click', async () => {
+                                        $(btnAdd).on('click', async() => {
                                             $(btnSave).fadeIn();
                                             $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;">
                                                 <span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
@@ -335,7 +458,7 @@
                             async function clickEventDelBtn() {
                                 if (headerOpened !== ``) { // Abfrage welcher button geklickt wurde
                                     clearTimeout;
-                                    setTimeout(async () => {
+                                    setTimeout(async() => {
                                         dataGlobal = await btnPressed(settings, headerOpened)
                                         onChange(true);
                                         if (dataGlobal.devices !== undefined && dataGlobal.devices.ids.length >= 1) {
@@ -368,7 +491,7 @@
 
             const actData = await createSettings(dataGlobal, 'save'); // aktuelle settings holen
 
-            const cntr = await saveCntr(actData);   // counter fuer save obj erstellen
+            const cntr = await saveCntr(actData); // counter fuer save obj erstellen
 
             const result = await loopArr(cntr) // devices, messenger, etc "final" erstellen
 
@@ -460,74 +583,81 @@
                         };
 
                         switch (name) {
-                            case "alexa": {
-                                objTemp[data.id] = {
-                                    name: data.name,
-                                    path: data.path,
-                                    volume: data.volume,
-                                    timeMin: timeMin,
-                                    timeMax: timeMax
+                            case "alexa":
+                                {
+                                    objTemp[data.id] = {
+                                        name: data.name,
+                                        path: data.path,
+                                        volume: data.volume,
+                                        timeMin: timeMin,
+                                        timeMax: timeMax
+                                    };
+                                    break;
                                 };
-                                break;
-                            };
-                            case "sayit": {
-                                objTemp[data.id] = {
-                                    name: data.name,
-                                    path: data.path,
-                                    timeMin: timeMin,
-                                    timeMax: timeMax,
-                                    volume: data.volume
+                            case "sayit":
+                                {
+                                    objTemp[data.id] = {
+                                        name: data.name,
+                                        path: data.path,
+                                        timeMin: timeMin,
+                                        timeMax: timeMax,
+                                        volume: data.volume
+                                    };
+                                    break;
                                 };
-                                break;
-                            };
-                            case "whatsapp": {
-                                objTemp[data.id] = {
-                                    name: data.name,
-                                    path: `whatsapp-cmb${data.inst}.sendMessage`,
+                            case "whatsapp":
+                                {
+                                    objTemp[data.id] = {
+                                        name: data.name,
+                                        path: `whatsapp-cmb${data.inst}.sendMessage`,
+                                    };
+                                    break;
                                 };
-                                break;
-                            };
-                            case "typeID": {
-                                objTemp[data.id] = {
-                                    name: data.name,
-                                    startVal: data.startVal,
-                                    endVal: data.endVal,
-                                    startCount: data.startCount,
-                                    endCount: data.endCount
+                            case "typeID":
+                                {
+                                    objTemp[data.id] = {
+                                        name: data.name,
+                                        startVal: data.startVal,
+                                        endVal: data.endVal,
+                                        startCount: data.startCount,
+                                        endCount: data.endCount
+                                    };
+                                    break;
                                 };
-                                break;
-                            };
-                            case "telegram": {
-                                objTemp[data.id] = {
-                                    name: data.nameFinal,
-                                    inst: data.inst
+                            case "telegram":
+                                {
+                                    objTemp[data.id] = {
+                                        name: data.nameFinal,
+                                        inst: data.inst
+                                    };
+                                    break;
                                 };
-                                break;
-                            };
-                            case "pushover": {
-                                objTemp[data.id] = {
-                                    name: data.name,
-                                    inst: data.inst,
-                                    prio: data.prio,
-                                    sound: data.sound,
+                            case "pushover":
+                                {
+                                    objTemp[data.id] = {
+                                        name: data.name,
+                                        inst: data.inst,
+                                        prio: data.prio,
+                                        sound: data.sound,
+                                    };
+                                    if (objTemp[data.id].prio == 'high') {
+                                        objTemp[data.id].prio = 1;
+                                    } else if (objTemp[data.id].prio == 'quiet') {
+                                        objTemp[data.id].prio = -1;
+                                    } else {
+                                        delete objTemp[data.id].prio;
+                                    };
+                                    break;deviceID
                                 };
-                                if (objTemp[data.id].prio == 'high') {
-                                    objTemp[data.id].prio = 1;
-                                } else if (objTemp[data.id].prio == 'quiet') {
-                                    objTemp[data.id].prio = -1;
-                                } else {
-                                    delete objTemp[data.id].prio;
+                            case "email":
+                                {
+                                    objTemp[data.id] = {
+                                        name: data.name,
+                                        emailFrom: data.emailFrom,
+                                        emailTo: data.emailTo
+                                    };
+                                    break;
                                 };
-                                break; deviceID
-                            };
-                            case "email": {
-                                objTemp[data.id] = {
-                                    name: data.name,
-                                    emailFrom: data.emailFrom,
-                                    emailTo: data.emailTo
-                                };
-                                break;
-                            };
                         };
                     };
                 };
@@ -548,7 +678,7 @@
                 let objType = `${dataSendTo.objType}`
                 let obj = dataSendTo.obj;
 
-                if (name != 'telegram' && name != 'whatsapp') {   // telegram / whatsapp uebergibt nur einen counter
+                if (name != 'telegram' && name != 'whatsapp') { // telegram / whatsapp uebergibt nur einen counter
                     var arr = {}
                     arr = data.ids;
                 } else {
@@ -563,13 +693,13 @@
                             obj.dataChecked = res.checked || [];
                             obj.dataFailed = res.failed || [];
                             if (name === 'default' || name === 'custom') { // device types erstellen
-                                $.each(res.checked, async (index, element) => {
+                                $.each(res.checked, async(index, element) => {
                                     deviceTypes.push(`${element.name}`);
                                 });
                                 $('#deviceTypeID').attr("data-options", deviceTypes.join(';'));
                             };
                             if (name !== 'telegram' && name !== 'whatsapp') { // telegram / whatsapp hat kein Auswahlfeld 
-                                await checked(obj);   // Auswahlfelder erstellen
+                                await checked(obj); // Auswahlfelder erstellen
                             };
                             showHeader('dynamicTable', name, res.checked || {}); // erkannte Geraete in "dynamicTable" einblenden
                             successCallback(res.checked);
@@ -634,6 +764,7 @@
             };
 
             async function checked(obj) {
+                // console.warn(obj)
                 $(`#${obj.header}`).html(`<div class="collapsible-header translate"><i class="material-icons">create</i><span>${_(obj.name)}</span></div>`);
                 if (obj.name !== `device status` && (obj.dataChecked.length <= 0) && (obj.dataFailed.length <= 0)) {
                     $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: grey;">
@@ -684,7 +815,18 @@
 
                 if (resultCurDevice == null || resultCurDevice == undefined) {
                     curDevice = {
-                        enabled: true, name: devices[i].name, alexa: -1, sayit: -1, whatsapp: -1, telegram: -1, pushover: -1, email: -1, autoOff: false, timer: 0, abort: false, id: -1
+                        enabled: true,
+                        name: devices[i].name,
+                        alexa: -1,
+                        sayit: -1,
+                        whatsapp: -1,
+                        telegram: -1,
+                        pushover: -1,
+                        email: -1,
+                        autoOff: false,
+                        timer: 0,
+                        abort: false,
+                        id: -1
                     };
                 } else {
                     curDevice = resultCurDevice;
@@ -702,20 +844,74 @@
 
                 // data fuer dynamic table erstellen
                 // in Version 1.1 haben sich die Namen geaendert!! (das "id" vor dem Namen ist verschwunden!)
-                data = [
-                    { type: 'checkbox', name: "enabled", value: curDevice.enabled },
-                    { type: 'label', name: "name", value: curDevice.name },
-                    { type: 'multiple', data: checked.alexa, name: "alexa", value: curDevice.alexa },
-                    { type: 'multiple', data: checked.sayit, name: "sayit", value: curDevice.sayit },
-                    { type: 'multiple', data: checked.telegram, name: "telegram", value: curDevice.telegram },
-                    { type: 'multiple', data: checked.whatsapp, name: "whatsapp", value: curDevice.whatsapp },
-                    { type: 'multiple', data: checked.pushover, name: "pushover", value: curDevice.pushover },
-                    { type: 'multiple', data: checked.email, name: "email", value: curDevice.email },
-                    { type: 'checkbox', name: "autoOff", value: curDevice.autoOff },
-                    { type: 'timer', name: "timer", value: parseInt(curDevice.timer) },
-                    { type: 'checkbox', name: "abort", value: curDevice.abort },
-                    { type: 'id', name: "id", value: parseInt(deviceId) }
-                ];
+                // console.warn(curDevice)
+                data = [{
+                    type: 'checkbox',
+                    name: "enabled",
+                    value: curDevice.enabled,
+                    disable: false
+                }, {
+                    type: 'label',
+                    name: "name",
+                    value: curDevice.name,
+                    disable: false
+                }, {
+                    type: 'multiple',
+                    data: checked.alexa,
+                    name: "alexa",
+                    value: curDevice.alexa,
+                    disable: false
+                }, {
+                    type: 'multiple',
+                    data: checked.sayit,
+                    name: "sayit",
+                    value: curDevice.sayit,
+                    disable: false
+                }, {
+                    type: 'multiple',
+                    data: checked.telegram,
+                    name: "telegram",
+                    value: curDevice.telegram,
+                    disable: false
+                }, {
+                    type: 'multiple',
+                    data: checked.whatsapp,
+                    name: "whatsapp",
+                    value: curDevice.whatsapp,
+                    disable: false
+                }, {
+                    type: 'multiple',
+                    data: checked.pushover,
+                    name: "pushover",
+                    value: curDevice.pushover,
+                    disable: false
+                }, {
+                    type: 'multiple',
+                    data: checked.email,
+                    name: "email",
+                    value: curDevice.email,
+                    disable: false
+                }, {
+                    type: 'checkbox',
+                    name: "autoOff",
+                    value: curDevice.autoOff,
+                    disable: devices[i].autoOff
+                }, {
+                    type: 'timer',
+                    name: "timer",
+                    value: parseInt(curDevice.timer),
+                    disable: devices[i].autoOff
+                }, {
+                    type: 'checkbox',
+                    name: "abort",
+                    value: curDevice.abort,
+                    disable: false
+                }, {
+                    type: 'id',
+                    name: "id",
+                    value: parseInt(deviceId),
+                    disable: false
+                }];
 
                 let col = "<tr>";
                 for (const j in data) {
@@ -728,10 +924,12 @@
                         switch (data[j].type) {
                             case 'checkbox':
                                 let checked = '';
-                                if (data[j].value == true || data[j].value == 'on') {
+                                let disableCheckbox = '';
+                                if (data[j].disable) disableCheckbox = `disabled`;
+                                if ((data[j].value == true || data[j].value == 'on') && !data[j].disable) {
                                     checked = 'checked="checked"';
-                                }
-                                col += `<label><input type="checkbox" class="values-input" ${checked} data-old-value="${data[j].value}"><span></span></label>`;
+                                };
+                                col += `<label><input type="checkbox" class="values-input" ${checked} data-old-value="${data[j].value}" ${disableCheckbox}><span></span></label>`;
                                 break;
                             case 'label':
                                 col += `<span class="values-input" data-old-value="${data[j].value}">${data[j].value}</span>`;
@@ -749,7 +947,11 @@
                                 };
                                 break;
                             case 'timer':
-                                col += `<input type="number" min="0" class="values-input" data-old-value="${data[j].value}" style="text-align:center">`;
+                                let disableTimer = '';
+                                if (data[j].disable) {
+                                    disableTimer = `disabled`;
+                                };
+                                col += `<input type="number" min="0" class="values-input" data-old-value="${data[j].value}" style="text-align:center" ${disableTimer}>`;
                                 break;
                             case 'id':
                                 col += `<span class="values-input" data-old-value="${data[j].value}">${data[j].value}</span>`;
@@ -766,17 +968,16 @@
                 $('#dynamic-table-body').append(col);
 
                 // vom User gesetzte "multiple options" in der Tabelle anzeigen
-                $('#dynamic-table-body').children().eq(i).children().each(function () {
+                $('#dynamic-table-body').children().eq(i).children().each(function() {
                     if ($(this).data('type') == 'multiple') {
                         $(this).find('select').val(curDevice[$(this).data('name')]);
-                    }
-                    else {
+                    } else {
                         $(this).find('input').val(curDevice[$(this).data('name')]);
                     };
                 });
 
                 // trigger im dynamic table setzen
-                $('#dynamic-table-body').find('.values-input').on('change', function () {
+                $('#dynamic-table-body').find('.values-input').on('change', function() {
                     $('.btn-save, .btn-save-close').fadeIn();
                     onChange(true);
                 });
@@ -838,9 +1039,9 @@
             let body = $('#dynamic-table-body');
             let geraete = [];
 
-            body.children().each(function () {  // daten aus dyn. tabelle sichern
+            body.children().each(function() { // daten aus dyn. tabelle sichern
                 let data = {};
-                $(this).children().each(function () {
+                $(this).children().each(function() {
                     let value;
                     if ($(this).data('type') == 'multiple') {
                         value = $(this).find('select').val();
@@ -868,8 +1069,7 @@
             if (columnName !== undefined) {
                 if (arr.length > 0 && columnName !== undefined) {
                     $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'table-cell');
-                }
-                else {
+                } else {
                     $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'none');
                 };
             };
@@ -882,7 +1082,6 @@
                 headerOpened = headerOpened === str ? `` : str;
             };
         };
-
     </script>
 </head>
 
@@ -917,11 +1116,9 @@
                         <table id="dynamicTable" class="table-values changeOnChangeEvent remove-last-column">
                             <thead>
                                 <tr>
-                                    <th class="header translate" data-name="enabled" style="width: 60px"
-                                        data-lang="active">
+                                    <th class="header translate" data-name="enabled" style="width: 60px" data-lang="active">
                                         active</th>
-                                    <th class="header translate" data-name="name" style="width: 200px"
-                                        data-lang="device">
+                                    <th class="header translate" data-name="name" style="width: 200px" data-lang="device">
                                         device</th>
                                     <th class="header translate" data-name="alexa">alexa</th>
                                     <th class="header translate" data-name="sayit">SayIt</th>
@@ -929,12 +1126,9 @@
                                     <th class="header translate" data-name="whatsapp">whatsapp</th>
                                     <th class="header translate" data-name="pushover">pushover</th>
                                     <th class="header translate" data-name="email">email</th>
-                                    <th class="header translate" data-name="autoOff" style="width: 110px"
-                                        data-lang="switch off"></th>
-                                    <th class="header translate" data-name="timer" style="width: 110px"
-                                        data-lang="switch off after minutes"></th>
-                                    <th class="header translate" data-name="abort" style="width: 100px"
-                                        data-lang="abort detection"></th>
+                                    <th class="header translate" data-name="autoOff" style="width: 110px" data-lang="switch off"></th>
+                                    <th class="header translate" data-name="timer" style="width: 110px" data-lang="switch off after minutes"></th>
+                                    <th class="header translate" data-name="abort" style="width: 100px" data-lang="abort detection"></th>
                                     <th class="header translate" data-name="id" style="width: 0px; display: none;">id
                                     </th>
                                 </tr>
@@ -960,22 +1154,19 @@
                             <div class="row">
                                 <div style="display: flex; align-items: center;">
                                     <div class="col left s2">
-                                        <a id='btn-add-devices'
-                                            class="btn-floating waves-effect waves-light blue table-button-add translate">
+                                        <a id='btn-add-devices' class="btn-floating waves-effect waves-light blue table-button-add translate">
                                             <i class="material-icons">add_circle_outline</i></a>
                                         <span class="translate" style="font-weight:bold;" data-lang="add device">add
                                             device</span>
                                     </div>
                                     <div class="col s2">
-                                        <a id="btn-check-devices" class="waves-effect waves-light btn translate"
-                                            data-lang="save"></a>
+                                        <a id="btn-check-devices" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                     </div>
                                     <div class="col s8 translate" id="err-devices">
                                         <!-- 'text' -->
                                     </div>
                                     <!-- Modal Trigger -->
-                                    <a class="waves-effect waves-light btn modal-trigger translate"
-                                        href="#modal1">help</a>
+                                    <a class="waves-effect waves-light btn modal-trigger translate" href="#modal1">help</a>
                                     <!-- Modal Structure -->
                                     <div id="modal1" class="modal">
                                         <div id="help-device" class="modal-content translate">
@@ -983,8 +1174,7 @@
                                                 <!-- text -->
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="#!"
-                                                    class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
                                             </div>
                                         </div>
                                     </div>
@@ -995,23 +1185,14 @@
                                         <tr>
                                             <th data-name="_index" style="width: 40px" class="header translate">
                                             </th>
-                                            <th data-name="name" style="width: 150px" data-type="text"
-                                                class="header translate" data-lang="device name"></th>
-                                            <th id="deviceTypeID" data-name="type" style="width: 200px;"
-                                                data-type="select" style="width: 150px" class="header translate"
-                                                data-options="" data-lang="device type"></th>
-                                            <th data-name="consumption" style="width: 100px" data-type="OID"
-                                                class="header translate" data-lang="consumption"></th>
-                                            <th data-name="switch" style="width: 100px" data-type="OID"
-                                                class="header translate" data-lang="Power switch"></th>
-                                            <th data-name="startText" data-type="OID" class="header translate"
-                                                data-lang="starttext"></th>
-                                            <th data-name="endText" data-type="OID" class="header translate"
-                                                data-lang="endtext"></th>
-                                            <th data-buttons="delete" style="width: 80px;"
-                                                class="header translate del-Btn" data-lang="delete"></th>
-                                            <th data-name="id" style="width: 0px; display: none;"
-                                                class="header translate">id</th>
+                                            <th data-name="name" style="width: 150px" data-type="text" class="header translate" data-lang="device name"></th>
+                                            <th id="deviceTypeID" data-name="type" style="width: 200px;" data-type="select" style="width: 150px" class="header translate" data-options="" data-lang="device type"></th>
+                                            <th data-name="consumption" style="width: 100px" data-type="OID" class="header translate" data-lang="consumption"></th>
+                                            <th data-name="switch" style="width: 100px" data-type="OID" class="header translate" data-lang="Power switch"></th>
+                                            <th data-name="startText" data-type="OID" class="header translate" data-lang="starttext"></th>
+                                            <th data-name="endText" data-type="OID" class="header translate" data-lang="endtext"></th>
+                                            <th data-buttons="delete" style="width: 80px;" class="header translate del-Btn" data-lang="delete"></th>
+                                            <th data-name="id" style="width: 0px; display: none;" class="header translate">id</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -1028,22 +1209,19 @@
                             <div class="row">
                                 <div style="display: flex; align-items: center;">
                                     <div class="col left s2">
-                                        <a id='btn-add-alexa'
-                                            class="btn-floating waves-effect waves-light blue table-button-add">
+                                        <a id='btn-add-alexa' class="btn-floating waves-effect waves-light blue table-button-add">
                                             <i class="material-icons">add_circle_outline</i></a>
                                         <span class="translate" style="font-weight:bold;" data-lang="add device">add
                                             device</span>
                                     </div>
                                     <div class="col s2">
-                                        <a id="btn-check-alexa" class="waves-effect waves-light btn translate"
-                                            data-lang="save"></a>
+                                        <a id="btn-check-alexa" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                     </div>
                                     <div class="col s8" id="err-alexa">
                                         <!-- 'text' -->
                                     </div>
                                     <!-- Modal Trigger -->
-                                    <a class="waves-effect waves-light btn modal-trigger translate"
-                                        href="#modal2">help</a>
+                                    <a class="waves-effect waves-light btn modal-trigger translate" href="#modal2">help</a>
                                     <!-- Modal Structure -->
                                     <div id="modal2" class="modal">
                                         <div id="help-alexa" class="modal-content translate">
@@ -1051,8 +1229,7 @@
                                                 <!-- text -->
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="#!"
-                                                    class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
                                             </div>
                                         </div>
                                     </div>
@@ -1066,26 +1243,15 @@
                                         </th>
                                         <th data-name="name" data-type="text" class="header translate" data-lang="name">
                                         </th>
-                                        <th data-name="path" data-type="OID" class="header translate"
-                                            data-lang="'alexa2/../announcement'/'speak'"></th>
-                                        <th data-name="volume" style="width: 80px" data-type="number"
-                                            class="header translate" data-lang="volume 0-100" data-default="50"></th>
-                                        <th data-name="timeMinHour" style="width: 80px" data-type="select"
-                                            class="header translate" data-lang="active from hour" data-default="0"
-                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                        <th data-name="path" data-type="OID" class="header translate" data-lang="'alexa2/../announcement'/'speak'"></th>
+                                        <th data-name="volume" style="width: 80px" data-type="number" class="header translate" data-lang="volume 0-100" data-default="50"></th>
+                                        <th data-name="timeMinHour" style="width: 80px" data-type="select" class="header translate" data-lang="active from hour" data-default="0" data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
                                         </th>
-                                        <th data-name="timeMinMin" style="width: 80px" data-type="select"
-                                            class="header translate" data-lang="active from minute" data-default="00"
-                                            data-options="00;15;30;45"></th>
-                                        <th data-name="timeMaxHour" style="width: 80px" data-type="select"
-                                            class="header translate" data-lang="inactive from hour" data-default="23"
-                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                        <th data-name="timeMinMin" style="width: 80px" data-type="select" class="header translate" data-lang="active from minute" data-default="00" data-options="00;15;30;45"></th>
+                                        <th data-name="timeMaxHour" style="width: 80px" data-type="select" class="header translate" data-lang="inactive from hour" data-default="23" data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
                                         </th>
-                                        <th data-name="timeMaxMin" style="width: 80px" data-type="select"
-                                            class="header translate" data-lang="inactive from minute" data-default="59"
-                                            data-options="00;15;30;45;59"></th>
-                                        <th data-buttons="delete" style="width: 80px" class="header translate del-Btn"
-                                            data-lang="delete"></th>
+                                        <th data-name="timeMaxMin" style="width: 80px" data-type="select" class="header translate" data-lang="inactive from minute" data-default="59" data-options="00;15;30;45;59"></th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate del-Btn" data-lang="delete"></th>
                                         <th data-name="id" style="width: 0px; display: none;" class="header translate">
                                             id</th>
                                     </tr>
@@ -1104,22 +1270,19 @@
                             <div class="row">
                                 <div style="display: flex; align-items: center;">
                                     <div class="col left s2">
-                                        <a id='btn-add-sayit'
-                                            class="btn-floating waves-effect waves-light blue table-button-add">
+                                        <a id='btn-add-sayit' class="btn-floating waves-effect waves-light blue table-button-add">
                                             <i class="material-icons">add_circle_outline</i></a>
                                         <span class="translate" style="font-weight:bold;" data-lang="add device">add
                                             device</span>
                                     </div>
                                     <div class="col s2">
-                                        <a id="btn-check-sayit" class="waves-effect waves-light btn translate"
-                                            data-lang="save"></a>
+                                        <a id="btn-check-sayit" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                     </div>
                                     <div class="col s8" id="err-sayit">
                                         <!-- 'text' -->
                                     </div>
                                     <!-- Modal Trigger -->
-                                    <a class="waves-effect waves-light btn modal-trigger translate"
-                                        href="#modal3">help</a>
+                                    <a class="waves-effect waves-light btn modal-trigger translate" href="#modal3">help</a>
                                     <!-- Modal Structure -->
                                     <div id="modal3" class="modal">
                                         <div id="help-sayit" class="modal-content translate">
@@ -1127,8 +1290,7 @@
                                                 <!-- text -->
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="#!"
-                                                    class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
                                             </div>
                                         </div>
                                     </div>
@@ -1142,26 +1304,15 @@
                                         </th>
                                         <th data-name="name" data-type="text" class="header translate" data-lang="name">
                                         </th>
-                                        <th data-name="path" data-type="OID" class="header translate"
-                                            data-lang="'sayit/../text'"></th>
-                                        <th data-name="volume" style="width: 80px" data-type="number"
-                                            class="header translate" data-lang="volume 0-100" data-default="50"></th>
-                                        <th data-name="timeMinHour" style="width: 80px" data-type="select"
-                                            class="header translate" data-lang="active from hour" data-default="0"
-                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                        <th data-name="path" data-type="OID" class="header translate" data-lang="'sayit/../text'"></th>
+                                        <th data-name="volume" style="width: 80px" data-type="number" class="header translate" data-lang="volume 0-100" data-default="50"></th>
+                                        <th data-name="timeMinHour" style="width: 80px" data-type="select" class="header translate" data-lang="active from hour" data-default="0" data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
                                         </th>
-                                        <th data-name="timeMinMin" style="width: 80px" data-type="select"
-                                            class="header translate" data-lang="active from minute" data-default="00"
-                                            data-options="00;15;30;45"></th>
-                                        <th data-name="timeMaxHour" style="width: 80px" data-type="select"
-                                            class="header translate" data-lang="inactive from hour" data-default="23"
-                                            data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
+                                        <th data-name="timeMinMin" style="width: 80px" data-type="select" class="header translate" data-lang="active from minute" data-default="00" data-options="00;15;30;45"></th>
+                                        <th data-name="timeMaxHour" style="width: 80px" data-type="select" class="header translate" data-lang="inactive from hour" data-default="23" data-options="0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23">
                                         </th>
-                                        <th data-name="timeMaxMin" style="width: 80px" data-type="select"
-                                            class="header translate" data-lang="inactive from minute" data-default="59"
-                                            data-options="00;15;30;45;59"></th>
-                                        <th data-buttons="delete" style="width: 80px" class="header translate del-Btn"
-                                            data-lang="delete"></th>
+                                        <th data-name="timeMaxMin" style="width: 80px" data-type="select" class="header translate" data-lang="inactive from minute" data-default="59" data-options="00;15;30;45;59"></th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate del-Btn" data-lang="delete"></th>
                                         <th data-name="id" style="width: 0px; display: none;" class="header translate">
                                             id</th>
                                     </tr>
@@ -1180,22 +1331,19 @@
                             <div class="row">
                                 <div style="display: flex; align-items: center;">
                                     <div class="col left s2">
-                                        <a id='btn-add-pushover'
-                                            class="btn-floating waves-effect waves-light blue table-button-add">
+                                        <a id='btn-add-pushover' class="btn-floating waves-effect waves-light blue table-button-add">
                                             <i class="material-icons">add_circle_outline</i></a>
                                         <span class="translate" style="font-weight:bold;" data-lang="add device">add
                                             device</span>
                                     </div>
                                     <div class="col s2">
-                                        <a id="btn-check-pushover" class="waves-effect waves-light btn translate"
-                                            data-lang="save"></a>
+                                        <a id="btn-check-pushover" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                     </div>
                                     <div class="col s8" id="err-pushover">
                                         <!-- 'text' -->
                                     </div>
                                     <!-- Modal Trigger -->
-                                    <a class="waves-effect waves-light btn modal-trigger translate"
-                                        href="#modal5">help</a>
+                                    <a class="waves-effect waves-light btn modal-trigger translate" href="#modal5">help</a>
                                     <!-- Modal Structure -->
                                     <div id="modal5" class="modal">
                                         <div id="help-pushover" class="modal-content translate">
@@ -1203,8 +1351,7 @@
                                                 <!-- text -->
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="#!"
-                                                    class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
                                             </div>
                                         </div>
                                     </div>
@@ -1218,18 +1365,12 @@
                                         </th>
                                         <th data-name="name" data-type="text" class="header translate" data-lang="name">
                                         </th>
-                                        <th data-name="inst" data-type="select" class="header translate"
-                                            data-lang="pushover instance" data-default=".0"
-                                            data-options=".0;.1;.2;.3;.4;.5"></th>
-                                        <th data-name="prio" data-type="select" class="header translate"
-                                            data-lang="priority" data-default="normal" data-options="normal;high;quiet">
+                                        <th data-name="inst" data-type="select" class="header translate" data-lang="pushover instance" data-default=".0" data-options=".0;.1;.2;.3;.4;.5"></th>
+                                        <th data-name="prio" data-type="select" class="header translate" data-lang="priority" data-default="normal" data-options="normal;high;quiet">
                                         </th>
-                                        <th data-name="sound" data-type="select" class="header translate"
-                                            data-lang="sound" data-default="pushover"
-                                            data-options="pushover; bike; bugle; cashregister; classical; cosmic; falling; gamelan; incoming; intermission; magic; mechanical; pianobar; siren; spacealarm; tugboat; alien; climb; persistent; echo; updown; none">
+                                        <th data-name="sound" data-type="select" class="header translate" data-lang="sound" data-default="pushover" data-options="pushover; bike; bugle; cashregister; classical; cosmic; falling; gamelan; incoming; intermission; magic; mechanical; pianobar; siren; spacealarm; tugboat; alien; climb; persistent; echo; updown; none">
                                         </th>
-                                        <th data-buttons="delete" style="width: 80px" class="header translate del-Btn"
-                                            data-lang="delete"></th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate del-Btn" data-lang="delete"></th>
                                         <th data-name="id" style="width: 0px; display: none;" class="header translate">
                                             id </th>
                                     </tr>
@@ -1248,22 +1389,19 @@
                             <div class="row">
                                 <div style="display: flex; align-items: center;">
                                     <div class="col left s2">
-                                        <a id='btn-add-email'
-                                            class="btn-floating waves-effect waves-light blue table-button-add">
+                                        <a id='btn-add-email' class="btn-floating waves-effect waves-light blue table-button-add">
                                             <i class="material-icons">add_circle_outline</i></a>
                                         <span class="translate" style="font-weight:bold;" data-lang="add device">add
                                             device</span>
                                     </div>
                                     <div class="col s2">
-                                        <a id="btn-check-email" class="waves-effect waves-light btn translate"
-                                            data-lang="save"></a>
+                                        <a id="btn-check-email" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                     </div>
                                     <div class="col s8" id="err-email">
                                         <!-- text -->
                                     </div>
                                     <!-- Modal Trigger -->
-                                    <a class="waves-effect waves-light btn modal-trigger translate"
-                                        href="#modal6">help</a>
+                                    <a class="waves-effect waves-light btn modal-trigger translate" href="#modal6">help</a>
                                     <!-- Modal Structure -->
                                     <div id="modal6" class="modal">
                                         <div id="help-email" class="modal-content translate">
@@ -1271,8 +1409,7 @@
                                                 <!-- text -->
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="#!"
-                                                    class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
                                             </div>
                                         </div>
                                     </div>
@@ -1286,12 +1423,9 @@
                                         </th>
                                         <th data-name="name" data-type="text" class="header translate" data-lang="name">
                                         </th>
-                                        <th data-name="emailFrom" data-type="text" class="header translate"
-                                            data-lang="sender address"></th>
-                                        <th data-name="emailTo" data-type="text" class="header translate"
-                                            data-lang="receiver address"></th>
-                                        <th data-buttons="delete" style="width: 80px" class="header translate del-Btn"
-                                            data-lang="delete"></th>
+                                        <th data-name="emailFrom" data-type="text" class="header translate" data-lang="sender address"></th>
+                                        <th data-name="emailTo" data-type="text" class="header translate" data-lang="receiver address"></th>
+                                        <th data-buttons="delete" style="width: 80px" class="header translate del-Btn" data-lang="delete"></th>
                                         <th data-name="id" style="width: 0px; display: none;" class="header translate">
                                             id</th>
                                     </tr>
@@ -1310,15 +1444,13 @@
                             <div class="row">
                                 <div style="display: flex; align-items: center;">
                                     <div>
-                                        <a id="btn-check-default" class="waves-effect waves-light btn translate"
-                                            data-lang="save"></a>
+                                        <a id="btn-check-default" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                     </div>
                                     <div class="col s10" id="err-default">
                                         <!-- 'text' -->
                                     </div>
                                     <!-- Modal Trigger -->
-                                    <a class="waves-effect waves-light btn modal-trigger translate"
-                                        href="#modal7">help</a>
+                                    <a class="waves-effect waves-light btn modal-trigger translate" href="#modal7">help</a>
                                     <!-- Modal Structure -->
                                     <div id="modal7" class="modal">
                                         <div id="help-default-type" class="modal-content translate">
@@ -1326,8 +1458,7 @@
                                                 <!-- text -->
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="#!"
-                                                    class="modal-close waves-effect waves-green btn-flat">close</a>
+                                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
                                             </div>
                                         </div>
                                     </div>
@@ -1339,20 +1470,13 @@
                             <table id="disableFirstField" class="table-values remove-last-column">
                                 <thead>
                                     <tr>
-                                        <th id="disableFirstField" class="header translate" data-type="text"
-                                            data-name="name" data-lang="name"></th>
-                                        <th class="header translate" data-type="number" data-name="startVal"
-                                            data-lang="threshold start (watt)"></th>
-                                        <th class="header translate" data-type="number" data-name="endVal"
-                                            data-lang="threshold end (watt)"></th>
-                                        <th class="header translate" data-type="number" data-name="standby"
-                                            data-lang="threshold standby (watt)"></th>
-                                        <th class="header translate" data-type="number" data-name="startCount"
-                                            data-lang="number of start values"></th>
-                                        <th class="header translate" data-type="number" data-name="endCount"
-                                            data-lang="number of end values"></th>
-                                        <th class="header translate" data-type="number" data-name="id"
-                                            style="width: 0px; display: none;">id</th>
+                                        <th id="disableFirstField" class="header translate" data-type="text" data-name="name" data-lang="name"></th>
+                                        <th class="header translate" data-type="number" data-name="startVal" data-lang="threshold start (watt)"></th>
+                                        <th class="header translate" data-type="number" data-name="endVal" data-lang="threshold end (watt)"></th>
+                                        <th class="header translate" data-type="number" data-name="standby" data-lang="threshold standby (watt)"></th>
+                                        <th class="header translate" data-type="number" data-name="startCount" data-lang="number of start values"></th>
+                                        <th class="header translate" data-type="number" data-name="endCount" data-lang="number of end values"></th>
+                                        <th class="header translate" data-type="number" data-name="id" style="width: 0px; display: none;">id</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -1376,15 +1500,13 @@
                                                     data-lang="add device">add device</span>
                                             </div> -->
                                     <div class="col s2">
-                                        <a id="btn-check-custom" class="waves-effect waves-light btn translate"
-                                            data-lang="save"></a>
+                                        <a id="btn-check-custom" class="waves-effect waves-light btn translate" data-lang="save"></a>
                                     </div>
                                     <div class="col s8" id="err-custom">
                                         <!-- 'text' -->
                                     </div>
                                     <!-- Modal Trigger -->
-                                    <a class="waves-effect waves-light btn modal-trigger translate"
-                                        href="#modal8">help</a>
+                                    <a class="waves-effect waves-light btn modal-trigger translate" href="#modal8">help</a>
                                     <!-- Modal Structure -->
                                     <div id="modal8" class="modal">
                                         <div id="help-custom-type" class="modal-content translate">
@@ -1392,8 +1514,7 @@
                                                 <!-- text -->
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="#!"
-                                                    class="modal-close waves-effect waves-green btn-flat translate">close</a>
+                                                <a href="#!" class="modal-close waves-effect waves-green btn-flat translate">close</a>
                                             </div>
                                         </div>
                                     </div>
@@ -1405,20 +1526,13 @@
                             <table id="disableFirstField" class="table-values remove-last-column">
                                 <thead>
                                     <tr>
-                                        <th id="disableFirstField" class="header translate" data-type="text"
-                                            data-name="name" data-lang="name"></th>
-                                        <th class="header translate" data-type="number" data-name="startVal"
-                                            data-lang="threshold 'start' (watt)"></th>
-                                        <th class="header translate" data-type="number" data-name="endVal"
-                                            data-lang="threshold 'end' (watt)"></th>
-                                        <th class="header translate" data-type="number" data-name="standby"
-                                            data-lang="threshold 'standby' (watt)"></th>
-                                        <th class="header translate" data-type="number" data-name="startCount"
-                                            data-lang="number of 'start' values"></th>
-                                        <th class="header translate" data-type="number" data-name="endCount"
-                                            data-lang="number of ​'end' values"></th>
-                                        <th class="header translate" data-type="number" data-name="id"
-                                            style="width: 0px; display: none;">id</th>
+                                        <th id="disableFirstField" class="header translate" data-type="text" data-name="name" data-lang="name"></th>
+                                        <th class="header translate" data-type="number" data-name="startVal" data-lang="threshold 'start' (watt)"></th>
+                                        <th class="header translate" data-type="number" data-name="endVal" data-lang="threshold 'end' (watt)"></th>
+                                        <th class="header translate" data-type="number" data-name="standby" data-lang="threshold 'standby' (watt)"></th>
+                                        <th class="header translate" data-type="number" data-name="startCount" data-lang="number of 'start' values"></th>
+                                        <th class="header translate" data-type="number" data-name="endCount" data-lang="number of ​'end' values"></th>
+                                        <th class="header translate" data-type="number" data-name="id" style="width: 0px; display: none;">id</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -1447,12 +1561,9 @@
                                     <tr>
                                         <!-- <th class="header translate" style="width: 0px; display: none;">
                                         </th> -->
-                                        <th class="header translate" data-type="text" data-name="stateAction"
-                                            data-lang="status: in action"></th>
-                                        <th class="header translate" data-type="text" data-name="stateStandby"
-                                            data-lang="status: standby"></th>
-                                        <th class="header translate" data-type="text" data-name="stateOff"
-                                            data-lang="status: device off"></th>
+                                        <th class="header translate" data-type="text" data-name="stateAction" data-lang="status: in action"></th>
+                                        <th class="header translate" data-type="text" data-name="stateStandby" data-lang="status: standby"></th>
+                                        <th class="header translate" data-type="text" data-name="stateOff" data-lang="status: device off"></th>
                                     </tr>
                                 </thead>
                             </table>
