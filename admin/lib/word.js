@@ -303,8 +303,8 @@ systemDictionary = {
         "pl": "aktywnie od godziny",
         "uk": "активний час",
         "zh-cn": "积极时间"
-      },
-      "active from minute": {
+    },
+    "active from minute": {
         "en": "active from minute",
         "de": "aktiv ab minute",
         "ru": "активный с минуты",
@@ -316,8 +316,8 @@ systemDictionary = {
         "pl": "aktywnie",
         "uk": "активний з хвилини",
         "zh-cn": "引言"
-      },
-      "inactive from hour" : {
+    },
+    "inactive from hour": {
         "en": "inactive from hour",
         "de": "inaktiv von stunde",
         "ru": "неактивный от часа",
@@ -329,8 +329,8 @@ systemDictionary = {
         "pl": "nieaktywny od godziny",
         "uk": "неактивний час",
         "zh-cn": "b. 小时内的活动"
-      },
-      "inactive from minute" : {
+    },
+    "inactive from minute": {
         "en": "inactive from minute",
         "de": "inaktiv von minute",
         "ru": "неактивно с минуты",
@@ -342,7 +342,7 @@ systemDictionary = {
         "pl": "nieaktywny od minuty",
         "uk": "неактивний від хвилини",
         "zh-cn": "导 言"
-      },
+    },
     "no entries found": {
         "en": "no entries found",
         "de": "Keine Einträge gefunden",
@@ -511,8 +511,8 @@ systemDictionary = {
         "pl": "status: „w działaniu”. '",
         "uk": "статус: 'в дії р",
         "zh-cn": "现状:行动 评 注"
-      },
-      "status: standby": {
+    },
+    "status: standby": {
         "en": "status: standby",
         "de": "Status: Standby",
         "ru": "статус: standby",
@@ -524,8 +524,8 @@ systemDictionary = {
         "pl": "status:",
         "uk": "статус: очікування",
         "zh-cn": "现状:待命状态"
-      },
-      "status: device off": {
+    },
+    "status: device off": {
         "en": "status: device off",
         "de": "Status: ausgeschaltet ",
         "ru": "статус: 'device off « »",
@@ -537,7 +537,7 @@ systemDictionary = {
         "pl": "statystyka: „odc. '",
         "uk": "статус: 'розвиток від р",
         "zh-cn": "地位:退出 评 注"
-      },
+    },
     "standby": {
         "en": "standby",
         "de": "Standby",
@@ -586,8 +586,8 @@ systemDictionary = {
         "pl": "typ maszynowy",
         "uk": "типи користувацького пристрою",
         "zh-cn": "习惯装置"
-      },
-      "default device types": {
+    },
+    "default device types": {
         "en": "default device types",
         "de": "Standardgerätetypen",
         "ru": "типы устройств по умолчанию",
@@ -599,8 +599,8 @@ systemDictionary = {
         "pl": "typename",
         "uk": "типи пристроїв за замовчуванням",
         "zh-cn": "过期装置"
-      },
-      "add device": {
+    },
+    "add device": {
         "en": "add device",
         "de": "Gerät hinzufügen",
         "ru": "добавить устройство",
@@ -612,7 +612,7 @@ systemDictionary = {
         "pl": "dodać",
         "uk": "додати пристрій",
         "zh-cn": "增加装置"
-      },
+    },
     "telegram user": {
         "en": "telegram user",
         "de": "Telegrambenutzer",
@@ -865,8 +865,8 @@ systemDictionary = {
         "pl": "Edyta",
         "uk": "Редагування",
         "zh-cn": "编辑"
-      },
-      "custom type config": {
+    },
+    "custom type config": {
         "en": "custom type config",
         "de": "benutzerdefinierte Gerätetypen",
         "ru": "пользовательский тип config",
@@ -878,8 +878,8 @@ systemDictionary = {
         "pl": "konfiguracja",
         "uk": "налаштування користувацького типу",
         "zh-cn": "习俗类型"
-      },
-      "default type config": {
+    },
+    "default type config": {
         "en": "default type config",
         "de": "Standardgerätetypen",
         "ru": "тип по умолчанию config",
@@ -891,5 +891,57 @@ systemDictionary = {
         "pl": "typename",
         "uk": "налаштування типу за замовчуванням",
         "zh-cn": "违约情况"
-      },
+    },
+    "device ID": {
+        "en": "device ID",
+        "de": "Geräte ID",
+        "ru": "устройство ID",
+        "pt": "iD do dispositivo",
+        "nl": "iD",
+        "fr": "iD",
+        "it": "iD dispositivo",
+        "es": "iD de dispositivo",
+        "pl": "urządzenie ID",
+        "uk": "пристрій ID",
+        "zh-cn": "装置"
+    },
+    "signal instance": {
+        "en": "signal instance",
+        "de": "Signal-Instanz",
+        "ru": "инстанция сигнала",
+        "pt": "instância de sinal",
+        "nl": "vertaling:",
+        "fr": "signal instance",
+        "it": "istanza segnale",
+        "es": "instancia de señalización",
+        "pl": "instancja",
+        "uk": "екземпляр сигналу",
+        "zh-cn": "信号"
+    },
+    "matrix instance": {
+        "en": "matrix instance",
+        "de": "Matrix-Instanz",
+        "ru": "пример матрицы",
+        "pt": "instância de matriz",
+        "nl": "matrix instituut",
+        "fr": "matrice instance",
+        "it": "istanza matrice",
+        "es": "matrícula",
+        "pl": "instancja macierzowa",
+        "uk": "екземпляр матриці",
+        "zh-cn": "汇总表"
+    },
+    "telegram instance": {
+        "en": "telegram instance",
+        "de": "telegramm-Instanz",
+        "ru": "telegram пример",
+        "pt": "instância de telegrama",
+        "nl": "telegram instituut",
+        "fr": "telegram instance",
+        "it": "istanza del telegramma",
+        "es": "telegram instance",
+        "pl": "telegram",
+        "uk": "телеграма",
+        "zh-cn": "电话图"
+    }
 };
