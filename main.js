@@ -1350,24 +1350,24 @@ class deviceReminder extends utils.Adapter {
             // const name = obj.command.cmd;
             let objMessenger = {};
 
-            if (name == 'telegram') {
-                objMessenger = {
-                    name: name,
-                    path: 'communicate.users'
-                };
-            };
-            if (name == 'whatsapp-cmb') {
-                objMessenger = {
-                    name: name,
-                    path: 'sendMessage'
-                };
-            };
+            // if (name == 'telegram') {
+            //     objMessenger = {
+            //         name: name,
+            //         path: 'communicate.users'
+            //     };
+            // };
+            // if (name == 'whatsapp-cmb') {
+            //     objMessenger = {
+            //         name: name,
+            //         path: 'sendMessage'
+            //     };
+            // };
 
-            if (name == 'telegram' || name == 'whatsapp-cmb') {
-                await this.getInstance(obj, objMessenger.name, objMessenger.path, counter);
-            } else {
-                await this.ctrlInput(obj, obj.command, obj.message);
-            };
+            // if (name == 'telegram' || name == 'whatsapp-cmb') {
+            //     await this.getInstance(obj, objMessenger.name, objMessenger.path, counter);
+            // } else {
+            await this.ctrlInput(obj, obj.command, obj.message);
+            // };
         } catch (error) {
             this.log.error(`[ERROR] {onMessage}: "${error}"`);
         };
@@ -1391,8 +1391,12 @@ class deviceReminder extends utils.Adapter {
             if (cmd.includes('devices')) keys = ['name', 'type', 'consumption', 'switch'];
             if (cmd.includes('alexa')) keys = ['name', 'path'];
             if (cmd.includes('sayit')) keys = ['name', 'path'];
+            if (cmd.includes('telegram')) keys = ['name', 'inst', 'username'];
+            if (cmd.includes('whatsapp')) keys = ['name', 'path'];
             if (cmd.includes('pushover')) keys = ['name', 'inst', 'prio', 'sound'];
             if (cmd.includes('email')) keys = ['name', 'emailFrom', 'emailTo'];
+            if (cmd.includes('signal')) keys = ['name', 'inst', 'number'];
+            if (cmd.includes('matrix')) keys = ['name', 'inst'];
             if (cmd.includes('default') || cmd.includes('custom')) keys = ['name', 'startVal', 'endVal', 'standby', 'startCount', 'endCount'];
 
             // Userinput pruefen
@@ -1429,9 +1433,9 @@ class deviceReminder extends utils.Adapter {
 
                     this.log.info(JSON.stringify(data))
 
-                    if (cmd.includes('device') && data.switch == 'empty')
+                    if (cmd.includes('devices') && data.switch == 'empty')
                         dataFinal.autoOff = true;
-                    if (cmd.includes('device') && data.switch != 'empty')
+                    if (cmd.includes('devices') && data.switch != 'empty')
                         dataFinal.autoOff = false;
 
                     checked.push(dataFinal);
