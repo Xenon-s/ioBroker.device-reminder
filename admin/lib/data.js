@@ -149,9 +149,7 @@ async function createTableHeadData(settings) {
                         "class": "header translate select",
                         "dataType": "select",
                         "dataLang": "device type",
-                        "dataOptions": "washing-machine;dryer;dishwasher",
-                        "dataDefault": "wasching-machine"
-                            //"tdClass": "validate values-input select",
+                        //"tdClass": "validate values-input select",
                     },
                     "3": {
                         "dataName": "consumption",

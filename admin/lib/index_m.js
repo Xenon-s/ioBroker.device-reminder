@@ -67,61 +67,8 @@ async function createGUI(settings, onChange) {
     $('.red').on('click', clickEventDelBtn); // click event auf delete button setzen
     onChange(false);
 
-    // create table
+    // create static table
     async function staticTable(data) {
-
-        const createTable = async(data, i) => {
-            const name = data[i].name;
-            values2table(data[i].idHTML, data[i].ids, onChange); // create table
-
-            // create click event "disable save button"
-            const btnSave = `#btn-check-${name}`;
-            console.warn(btnSave)
-            $(btnSave).fadeOut(); // save buttons deaktivieren bis events auf "add button" erkannt
-            $(btnSave).on('click', async() => {
-                console.warn(btnSave);
-                console.warn(dataGlobal)
-                dataGlobal = await btnPressed(settings, i);
-                console.warn(dataGlobal)
-                $(btnSave).fadeOut();
-            });
-
-            // create click event "add button"
-            const btnAdd = `#btn-add-${name}`;
-            $(btnAdd).on('click', async() => {
-                $(btnSave).fadeIn();
-                setTimeout(() => {
-                    // Attribute aendern
-                    $(`#${name}ID .table-lines [data-name="activeFrom"]`).attr('class', 'values-input timepicker');
-                    $(`#${name}ID .table-lines [data-name="activeUntil"]`).attr('class', 'values-input timepicker');
-                    $('.timepicker').timepicker({ "twelveHour": false });
-                }, 200)
-
-                $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;">
-                                                    <span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
-                $('.btn-save, .btn-save-close').fadeOut();
-                onChange(false);
-            });
-
-            // create event "change" on table
-            const eventID = `#${data[i].idHTML}`;
-            if (eventID !== '#valStates') {
-                $(eventID).on('change keyup', () => {
-                    $(`#btn-check-${name}`).fadeIn();
-                    $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;">
-                                                        <span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
-                    $('.btn-save, .btn-save-close').fadeOut();
-                    onChange(false);
-                });
-            } else {
-                $('#valStates').find('.values-input').on('change', () => {
-                    $('.btn-save, .btn-save-close').fadeIn();
-                    onChange(true);
-                });
-            };
-
-            return true;
-        }
 
         // Zuerst alle Inhalte außer "measuring Devices" erstellen, sonst koennen keine Inhalte aus anderen Tabellen geholt
         for (const i in data) {
@@ -137,13 +84,63 @@ async function createGUI(settings, onChange) {
         const checked = await checkInput(data, 'all');
         checkedUserInput = checked;
 
-        $(`#deviceTypeID`).attr("data-options", deviceTypes.join(';'));
         await createTable(data, 'devices');
 
         $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true); // disable "name" in table default-types
 
         return checked;
     };
+
+    async function createTable(data, i) {
+        // console.warn(data[i].idHTML)
+        // console.warn(data[i].ids)
+        const name = data[i].name;
+        values2table(data[i].idHTML, data[i].ids, onChange); // create table
+
+        // create click event "disable save button"
+        const btnSave = `#btn-check-${name}`;
+        $(btnSave).fadeOut(); // save buttons deaktivieren bis events auf "add button" erkannt
+        $(btnSave).on('click', async() => {
+            dataGlobal = await btnPressed(settings, i);
+            $(btnSave).fadeOut();
+        });
+
+        // create click event "add button"
+        const btnAdd = `#btn-add-${name}`;
+        $(btnAdd).on('click', async() => {
+            $(btnSave).fadeIn();
+            setTimeout(() => {
+                // Attribute aendern
+                $(`#${name}ID .table-lines [data-name="activeFrom"]`).attr('class', 'values-input timepicker');
+                $(`#${name}ID .table-lines [data-name="activeUntil"]`).attr('class', 'values-input timepicker');
+                $('.timepicker').timepicker({ "twelveHour": false });
+            }, 200)
+
+            $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;">
+                                                <span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
+            $('.btn-save, .btn-save-close').fadeOut();
+            onChange(false);
+        });
+
+        // create event "change" on table
+        const eventID = `#${data[i].idHTML}`;
+        if (eventID !== '#valStates') {
+            $(eventID).on('change keyup', () => {
+                $(`#btn-check-${name}`).fadeIn();
+                $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;">
+                                                    <span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
+                $('.btn-save, .btn-save-close').fadeOut();
+                onChange(false);
+            });
+        } else {
+            $('#valStates').find('.values-input').on('change', () => {
+                $('.btn-save, .btn-save-close').fadeIn();
+                onChange(true);
+            });
+        };
+
+        return true;
+    }
 
     async function dynamicTable(data, checked) {
         dataGlobal = await createDynamicTable(data, onChange, checked); // create dynamic table "device"
@@ -152,11 +149,21 @@ async function createGUI(settings, onChange) {
     };
 
     async function btnPressed(settings, name) {
+
         const actData = await createData(settings)
         const data = await createSettings(actData);
         // dataGlobal = await createSettings(actData);
         const result = await checkInput(actData, name);
         checkedUserInput[actData[name].name] = result[name];
+
+        // Wenn in Custom Types geaendert werden, muss die GUI neu geladen werden, da sonst die neuen Types nicht auftauchen
+        if (name.includes('custom')) {
+            deviceTypes = [];
+            $(`#gui`).html();
+            await createGUI(settings, onChange)
+            selectedHeader(`header-${name}`, true)
+        };
+
         dynamicTable(actData, checkedUserInput);
 
         $('.red').on('click', clickEventDelBtn); // click event auf delete button setzen
@@ -400,7 +407,7 @@ async function createDynamicTable(settings, onChange, checked) {
     };
 
     if (curDevice != null) {
-        const selectInstance = M.FormSelect.getInstance($('select'));
+        // const selectInstance = M.FormSelect.getInstance($('select'));
         instances = M.FormSelect.init($('select'));
         M.updateTextFields();
     };
@@ -417,38 +424,28 @@ async function checkInput(data, type) {
     async function deviceCheck(dataSendTo, data, successCallback, errorCallback) {
 
         const name = dataSendTo.name
-            // let objType = `${dataSendTo.objType}`
         let obj = dataSendTo.obj;
-
         let arr = {};
         arr = data.ids;
 
-        // console.warn(data)
-
-        // if (name != 'telegram' && name != 'whatsapp') { // telegram / whatsapp uebergibt nur einen counter
-        //     var arr = {}
-        //     arr = data.ids;
-        // } else {
-        //     var arr = {}
-        //     arr = data;
-        // };
-
+        // Userinput ins Backend schicken und auf Plausibilitaet pruefen
         try {
+            console.warn(name)
+            console.warn(arr)
             sendTo(`device-reminder.${instance}`, name, arr, async result => {
                 const res = await result;
+
+                // console.warn(res.checked)
                 if (res != undefined) {
                     obj.dataChecked = res.checked || [];
                     obj.dataFailed = res.failed || [];
                     if (name === 'default' || name === 'custom') { // device types erstellen
-                        $.each(res.checked, async(index, element) => {
-                            deviceTypes.push(`${element.name}`);
-                        });
-                        $(`#deviceID .table-lines [data-name="type"]`).attr("data-options", deviceTypes.join(';'));
-                        // $('#deviceID').attr("data-options", deviceTypes.join(';'));
+                        for (const i of Object.keys(res.checked)) {
+                            deviceTypes.push(`${res.checked[i].name}`);
+                        };
+                        $(`#deviceTypeID`).attr("data-options", deviceTypes.join(';'));
                     };
-                    // if (name !== 'telegram' && name !== 'whatsapp') { // telegram / whatsapp hat kein Auswahlfeld 
                     await checked(obj); // Auswahlfelder erstellen
-                    // };
                     showHeader('link-deviceID', name, res.checked || {}); // erkannte Geraete in "dynamicTable" einblenden
                     successCallback(res.checked);
                 };
@@ -501,11 +498,7 @@ async function checkInput(data, type) {
                     $('#err-status').css('display', 'none');
                 } else {
                     result[name] = [];
-                    // if (name == 'telegram' || name == 'whatsapp') {
-                    //     result[name] = await functionLogic(checkData[i], 0); // daten in der main.js prüfen und return
-                    // } else {
                     result[name] = await functionLogic(checkData[i], data[i]); // daten in der main.js prüfen und return
-                    // }
                 };
             };
             return result
@@ -515,6 +508,13 @@ async function checkInput(data, type) {
     };
 
     async function checked(obj) {
+
+        if (obj.dataFailed.length > 0) {
+            console.warn(obj)
+            console.warn(obj.dataFailed)
+            console.warn(`#${obj.err}`)
+        }
+
 
         $(`#${obj.header}`).html(`<div class="collapsible-header translate"><i class="material-icons">create</i><span>${_(obj.name)}</span></div>`);
         if (obj.name !== `device status` && (obj.dataChecked.length <= 0) && (obj.dataFailed.length <= 0)) {
@@ -599,8 +599,13 @@ async function createTableHeader(tableHead) {
                             <p></p>
                         </div>
                         <div class="row">
-                            <div style="display: flex; align-items: center;">
-                            <div>`
+                            <div style="display: flex; align-items: center;">`
+            // Abfrage, ob Add- oder Submit-Button erstellt wird
+        if (tableHead[i].table.addbtn || tableHead[i].table.submitbtn) {
+            html += `<div>`
+        };
+
+        // Abfrage, ob Add-Button erstellt wird
         if (tableHead[i].table.addbtn) {
             html += `
                                 <!-- Add btn -->
@@ -609,13 +614,26 @@ async function createTableHeader(tableHead) {
                                     <i class="material-icons">add_circle_outline</i></a>
                                 <span class="translate" style="font-weight:bold;" data-lang="add">${_("add")}</span>`
         };
-        html += ` 
+
+        // Abfrage, ob Submit-Button erstellt wird
+        if (tableHead[i].table.submitbtn) {
+            html += ` 
                                 <!-- submit button-->
                                 <button id="btn-check-${key}" class="btn waves-effect waves-light" type="submit" name="action">Submit
                                     <i class="material-icons right">send</i>
-                                </button>
-                                
-                            </div>
+                                </button>`
+        };
+
+        // Abfrage, ob Add- oder Submit-Button erstellt wird
+        if (tableHead[i].table.addbtn || tableHead[i].table.submitbtn) {
+            html += `</div>`
+        };
+
+        html += `
+                                <!-- DIV ERROR USERINPUT -->
+                                <div class="col s8" id="err-${key}">
+                                <!-- text -->
+                                </div>
                                 <!-- Add btn End-->
                                 <!-- Input Check -->
                             <div class="col left s2">
@@ -703,6 +721,7 @@ async function eventHandler(data, /**@type{string}*/ name, onChange) {
     const btnSave = `#btn-check-${name}`;
     showBtns(btnSave, false, onChange); // save buttons deaktivieren bis events auf "add button" erkannt
     $(btnSave).off('click').on('click', async() => {
+        console.warn('test')
         btnPressed(onChange, name);
         showBtns(btnSave, false, onChange);
     });
@@ -721,18 +740,18 @@ async function eventHandler(data, /**@type{string}*/ name, onChange) {
     };
 
     // Click events OID neu setzen
-    $(`.oid`).off('click').on('click', function() {
-        const nameData = $(this).data('name');
-        const index = $(this).data('index');
-        const $input = $('.values-input[data-name="' + nameData + '"][data-index="' + index + '"]');
-        const val = $input.val() || '';
-        showSelectIdDialog(val, function(newValue, oldValue) {
-            if (newValue != oldValue) {
-                // if ()
-                $input.val(newValue).trigger('change');
-            }
-        });
-    });
+    // $(`.oid`).off('click').on('click', function() {
+    //     const nameData = $(this).data('name');
+    //     const index = $(this).data('index');
+    //     const $input = $('.values-input[data-name="' + nameData + '"][data-index="' + index + '"]');
+    //     const val = $input.val() || '';
+    //     showSelectIdDialog(val, function(newValue, oldValue) {
+    //         if (newValue != oldValue) {
+    //             // if ()
+    //             $input.val(newValue).trigger('change');
+    //         }
+    //     });
+    // });
 
     setTimeout(() => {
         // zusatz klassen setzen
@@ -749,6 +768,7 @@ async function eventHandler(data, /**@type{string}*/ name, onChange) {
 
 // Wenn add-Button, check-Button oder delete-Button gedrueckt wurde, Zeilen oder Tabellen neu bauen
 async function btnPressed(onChange, name) {
+    console.warn(name)
     if (name != 'red') {
         if (name.toLowerCase().includes('devicevalues')) { // Wenn Daten in "deviceValues" geaendert wurde, muss die Tabelle von "measuringDevice" neu erstellt werden, damit der Dropdown passt
             cntrRow['measuringDevice'] = 0;
@@ -770,21 +790,28 @@ function showBtns( /**@type {string}*/ id, /**@type {boolean}*/ cmd, onChange) {
 };
 
 // Collapsible Header oeffnen / schliessen
-async function selectedHeader( /**@type {string}*/ id) {
-    if (headerOpened == ``) {
-        headerOpened = id;
-        $(`#${id}`).addClass('collapsible-active');
-        $(`#${id}`).removeClass('collapsible-inactive');
+async function selectedHeader( /**@type {string}*/ id, /**@type {boolean}*/ rebuild) {
+
+    if (rebuild) {
+        var instance = M.Collapsible.getInstance($('.collapsible')[0]);
+        console.warn(instance.open)
+        instance.open(4);
     } else {
-        headerOpened = headerOpened == id ? `` : id;
-        if (lastHeaderOpened != id) {
-            $(`#${lastHeaderOpened}`).addClass('collapsible-inactive');
-            $(`#${lastHeaderOpened}`).removeClass('collapsible-active');
+        if (headerOpened == ``) {
+            headerOpened = id;
             $(`#${id}`).addClass('collapsible-active');
             $(`#${id}`).removeClass('collapsible-inactive');
         } else {
-            $(`#${id}`).addClass('collapsible-inactive');
-            $(`#${id}`).removeClass('collapsible-active');
+            headerOpened = headerOpened == id ? `` : id;
+            if (lastHeaderOpened != id) {
+                $(`#${lastHeaderOpened}`).addClass('collapsible-inactive');
+                $(`#${lastHeaderOpened}`).removeClass('collapsible-active');
+                $(`#${id}`).addClass('collapsible-active');
+                $(`#${id}`).removeClass('collapsible-inactive');
+            } else {
+                $(`#${id}`).addClass('collapsible-inactive');
+                $(`#${id}`).removeClass('collapsible-active');
+            };
         };
     };
 
@@ -819,7 +846,6 @@ async function createSettings(data) {
 
     // Daten aus jeder einzelnen Tabelle holen und in Objekt abspeichern
     async function getDataFromTable(data) { // daten aus tabellen holen
-        console.warn(data)
         let dataReturn = {};
         for (const i in data) {
             dataReturn[i] = await table2values(data[i].idHTML);
@@ -866,14 +892,12 @@ async function createSettings(data) {
         devices.push(data); // device daten in array pushen
     });
 
-    console.warn(obj)
     obj.linkedDevice = {
             ids: devices
         }
         // obj['linkedDevice'].ids = devices; // dynamische daten in devices sichern
         // obj.linkedDevice.ids = devices; // dynamische daten in devices sichern
 
-    console.warn(obj)
     return obj; // settings zurueckgeben
 };
 
