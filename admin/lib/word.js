@@ -933,7 +933,7 @@ systemDictionary = {
     },
     "telegram instance": {
         "en": "telegram instance",
-        "de": "telegramm-Instanz",
+        "de": "Telegram-Instanz",
         "ru": "telegram пример",
         "pt": "instância de telegrama",
         "nl": "telegram instituut",
@@ -943,5 +943,57 @@ systemDictionary = {
         "pl": "telegram",
         "uk": "телеграма",
         "zh-cn": "电话图"
+    },
+    "link-device": {
+        "en": "link-device",
+        "de": "Verknüpfte Geräte",
+        "ru": "ссылка-устройство",
+        "pt": "dispositivo de ligação",
+        "nl": "vertaling:",
+        "fr": "link-device",
+        "it": "link-dispositivo",
+        "es": "link-device",
+        "pl": "link-device",
+        "uk": "посилання-розробник",
+        "zh-cn": "联系"
+    },
+    "matrix": {
+        "en": "matrix",
+        "de": "Matrix",
+        "ru": "матрица",
+        "pt": "matriz de matriz",
+        "nl": "matrix",
+        "fr": "matrice",
+        "it": "matrice",
+        "es": "matriz",
+        "pl": "macierz",
+        "uk": "матриця",
+        "zh-cn": "总表"
+    },
+    "Measuring devices": {
+        "en": "Measuring devices",
+        "de": "Messgeräte",
+        "ru": "Измерительные приборы",
+        "pt": "Dispositivos de medição",
+        "nl": "Measing apparatuur",
+        "fr": "Appareils de mesure",
+        "it": "Apparecchi di misura",
+        "es": "Dispositivos de medición",
+        "pl": "Measuring device",
+        "uk": "Вимірювальні пристрої",
+        "zh-cn": "衡量装置"
+    },
+    "signal-cmb": {
+        "en": "signal-cmb",
+        "de": "Signal-cmb",
+        "ru": "сигнал-cmb",
+        "pt": "sinal-cmb",
+        "nl": "signaal cmb",
+        "fr": "signal-cmb",
+        "it": "segnale-cmb",
+        "es": "señal-cmb",
+        "pl": "sygnał",
+        "uk": "сигнальний",
+        "zh-cn": "信号"
     }
 };

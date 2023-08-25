@@ -6,7 +6,6 @@ In dataTable stehen alle Daten, um die HTML der einzelnen Tabellen erstellen zu 
 */
 
 async function createTableHeadData(settings) {
-    // async function createData(settings) {
 
     let dataTable = {
         "link-device": {
@@ -15,12 +14,15 @@ async function createTableHeadData(settings) {
             },
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
+                "addbtn": false,
+                "submitbtn": false,
                 "th": {
                     "0": {
                         "dataName": "enabled",
                         "class": "header translate header10",
                         "dataType": "checkbox",
                         "dataLang": "active",
+                        "id": "_enabled",
                     },
                     "1": {
                         "dataName": "name",
@@ -28,85 +30,93 @@ async function createTableHeadData(settings) {
                         "dataType": "text",
                         "dataLang": "device name",
                         "disabled": true,
-                        "data_default": '',
+                        "dataDefault": '',
+                        "id": "_name",
                     },
                     "2": {
                         "dataName": "alexa",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "alexa",
-                        "data_default": {},
+                        "dataDefault": {},
+                        "id": "_alexa",
                     },
                     "3": {
                         "dataName": "sayit",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "sayit",
-                        "data_default": {},
+                        "dataDefault": {},
+                        "id": "_sayit",
                     },
                     "4": {
                         "dataName": "telegram",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "telegram",
-                        "data_default": {},
+                        "dataDefault": {},
+                        "id": "_telegram",
                     },
                     "5": {
                         "dataName": "whatsapp",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "whatsapp",
-                        "data_default": {},
+                        "dataDefault": {},
+                        "id": "_whatsapp",
                     },
                     "6": {
                         "dataName": "pushover",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "pushover",
-                        "data_default": {},
+                        "dataDefault": {},
+                        "id": "_pushover",
                     },
                     "7": {
                         "dataName": "signal",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "signal",
-                        "data_default": {},
+                        "dataDefault": {},
+                        "id": "_signal",
                     },
                     "8": {
                         "dataName": "email",
                         "class": "header translate",
                         "dataType": "multiple",
                         "dataLang": "email",
-                        "data_default": {},
+                        "dataDefault": {},
+                        "id": "_email",
                     },
                     "9": {
-                        "dataName": "autoOff",
-                        "class": "header translate header10",
-                        "dataType": "select",
-                        "dataLang": "switch off",
-                        "data_default": "false",
-                        "dataOptions": [
-                            { "name": "false", "id": false },
-                            { "name": "true", "id": true },
-                        ]
+                        "dataName": "matrix",
+                        "class": "header translate",
+                        "dataType": "multiple",
+                        "dataLang": "matrix",
+                        "dataDefault": {},
+                        "id": "_matrix",
                     },
                     "10": {
+                        "dataName": "autoOff",
+                        "class": "header translate header10",
+                        "dataType": "checkbox",
+                        "dataLang": "switch off",
+                        "dataDefault": false,
+                    },
+                    "11": {
                         "dataName": "timer",
                         "class": "header translate",
                         "dataType": "number",
                         "dataLang": "switch off after minutes",
-                        "data_default": 0,
+                        "dataDefault": 0,
                     },
-                    "11": {
+                    "12": {
                         "dataName": "abort",
                         "class": "header translate header10",
-                        "dataType": "select",
+                        "dataType": "checkbox",
                         "dataLang": "abort detection",
-                        "data_default": "false",
-                        "dataOptions": [
-                            { "name": "false", "id": false },
-                            { "name": "true", "id": true },
-                        ]
+                        "dataDefault": false,
                     },
                     "99": {
                         "dataName": "id",
@@ -117,198 +127,38 @@ async function createTableHeadData(settings) {
                 }
             }
         },
-        "status": {
-            "head": {
-                "class": "translate collapsible-inactive"
-            },
-            "table": {
-                "class": "table-values changeOnChangeEvent remove-last-column",
-                "th": {
-                    "1": {
-                        "dataName": "stateAction",
-                        "class": "header translate",
-                        "dataType": "text",
-                        "dataLang": "in action",
-                    },
-                    "2": {
-                        "dataName": "stateStandby",
-                        "class": "header translate",
-                        "dataType": "text",
-                        "dataLang": "standby",
-                    },
-                    "3": {
-                        "dataName": "stateOff",
-                        "class": "header translate",
-                        "dataType": "text",
-                        "dataLang": "device off",
-                    },
-                    "99": {
-                        "dataName": "id",
-                        "class": "none",
-                        "dataType": "number",
-                        "dataLang": "id",
-                    },
-                }
-            }
-        },
-        "default": {
+        "devices": {
             "head": {
                 "class": "translate collapsible-inactive"
             },
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
-                "th": {
-                    "1": {
-                        "dataName": "name",
-                        "class": "header translate",
-                        "dataType": "text",
-                        "dataLang": "name",
-                        "data_default": "new device",
-                        "disabled": true,
-                    },
-                    "2": {
-                        "dataName": "startVal",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "threshold start (watt)",
-                        "min": 0,
-                        "data_default": 10,
-                    },
-                    "3": {
-                        "dataName": "endVal",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "threshold end (watt)",
-                        "min": 0,
-                        "data_default": 1,
-                    },
-                    "4": {
-                        "dataName": "standby",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "threshold standby (watt)",
-                        "min": 0,
-                        "data_default": 5,
-                    },
-                    "5": {
-                        "dataName": "startCount",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "number of start values",
-                        "min": 1,
-                        "data_default": 1,
-                    },
-                    "6": {
-                        "dataName": "endCount",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "number of end values",
-                        "min": 1,
-                        "data_default": 3,
-                    },
-                    "99": {
-                        "dataName": "id",
-                        "class": "none",
-                        "dataType": "number",
-                        "dataLang": "id",
-                    },
-                }
-            }
-        },
-        "custom": {
-            "head": {
-                "class": "translate collapsible-inactive"
-            },
-            "table": {
-                "class": "table-values changeOnChangeEvent remove-last-column",
-                "addbtn": true,
-                "th": {
-                    "1": {
-                        "dataName": "name",
-                        "class": "header translate",
-                        "dataType": "text",
-                        "dataLang": "name",
-                        "data_default": "new device",
-                        // "disabled": true,
-                    },
-                    "2": {
-                        "dataName": "startVal",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "threshold start (watt)",
-                        "min": 0,
-                        "data_default": 10,
-                    },
-                    "3": {
-                        "dataName": "endVal",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "threshold end (watt)",
-                        "min": 0,
-                        "data_default": 1,
-                    },
-                    "4": {
-                        "dataName": "standby",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "threshold standby (watt)",
-                        "min": 0,
-                        "data_default": 5,
-                    },
-                    "5": {
-                        "dataName": "startCount",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "number of start values",
-                        "min": 1,
-                        "data_default": 1,
-                    },
-                    "6": {
-                        "dataName": "endCount",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "number of end values",
-                        "min": 1,
-                        "data_default": 3,
-                    },
-                    "99": {
-                        "dataName": "id",
-                        "class": "none",
-                        "dataType": "number",
-                        "dataLang": "id",
-                    },
-                }
-            }
-        },
-        "device": {
-            "head": {
-                "class": "translate collapsible-inactive"
-            },
-            "table": {
-                "class": "table-values changeOnChangeEvent remove-last-column",
-                "addbtn": true,
+                "submitbtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "device name",
-                        "tdClass": "validate values-input",
+                        //"tdClass": "validate values-input",
                     },
                     "2": {
+                        "id": "deviceTypeID",
                         "dataName": "type",
                         "class": "header translate select",
                         "dataType": "select",
                         "dataLang": "device type",
-                        "tdClass": "validate values-input select",
+                        "dataOptions": "washing-machine;dryer;dishwasher",
+                        "dataDefault": "wasching-machine"
+                            //"tdClass": "validate values-input select",
                     },
                     "3": {
                         "dataName": "consumption",
                         "class": "header translate",
                         "dataType": "OID",
                         "dataLang": "consumption",
-                        "tdClass": "validate values-input oid-select",
+                        //"tdClass": "validate values-input oid-select",
                         "disabled": true,
                     },
                     "4": {
@@ -316,7 +166,7 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "OID",
                         "dataLang": "Power switch",
-                        "tdClass": "validate values-input oid-select",
+                        //"tdClass": "validate values-input oid-select",
                         "disabled": true,
 
                     },
@@ -325,13 +175,13 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "OID",
                         "dataLang": "starttext",
-                        "tdClass": "validate values-input oid-select",
+                        //"tdClass": "validate values-input oid-select",
 
                     },
                     "6": {
                         "dataName": "endText",
                         "class": "header translate",
-                        "tdClass": "validate values-input oid-select",
+                        //"tdClass": "validate values-input oid-select",
                         "dataType": "OID",
                         "dataLang": "endtext",
 
@@ -352,6 +202,184 @@ async function createTableHeadData(settings) {
                 }
             }
         },
+        "status": {
+            "head": {
+                "class": "translate collapsible-inactive"
+            },
+            "table": {
+                "class": "table-values changeOnChangeEvent remove-last-column",
+                "addbtn": false,
+                "submitbtn": false,
+                "th": {
+                    "1": {
+                        "dataName": "stateAction",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "in action",
+                        "dataDefault": "in action"
+                    },
+                    "2": {
+                        "dataName": "stateStandby",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "standby",
+                        "dataDefault": "standby"
+                    },
+                    "3": {
+                        "dataName": "stateOff",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "device off",
+                        "dataDefault": "device off"
+                    },
+                    "99": {
+                        "dataName": "id",
+                        "class": "none",
+                        "dataType": "number",
+                        "dataLang": "id",
+                    },
+                }
+            }
+        },
+        "default": {
+            "head": {
+                "class": "translate collapsible-inactive"
+            },
+            "table": {
+                "class": "table-values changeOnChangeEvent remove-last-column",
+                "addbtn": false,
+                "submitbtn": true,
+                "th": {
+                    "1": {
+                        "dataName": "name",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "name",
+                        "dataDefault": "new device",
+                        "disabled": true,
+                    },
+                    "2": {
+                        "dataName": "startVal",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "threshold start (watt)",
+                        "min": 0,
+                        "dataDefault": 10,
+                    },
+                    "3": {
+                        "dataName": "endVal",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "threshold end (watt)",
+                        "min": 0,
+                        "dataDefault": 1,
+                    },
+                    "4": {
+                        "dataName": "standby",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "threshold standby (watt)",
+                        "min": 0,
+                        "dataDefault": 5,
+                    },
+                    "5": {
+                        "dataName": "startCount",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "number of start values",
+                        "min": 1,
+                        "dataDefault": 1,
+                    },
+                    "6": {
+                        "dataName": "endCount",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "number of end values",
+                        "min": 1,
+                        "dataDefault": 3,
+                    },
+                    "99": {
+                        "dataName": "id",
+                        "class": "none",
+                        "dataType": "number",
+                        "dataLang": "id",
+                    },
+                }
+            }
+        },
+        "custom": {
+            "head": {
+                "class": "translate collapsible-inactive"
+            },
+            "table": {
+                "class": "table-values changeOnChangeEvent remove-last-column",
+                "addbtn": true,
+                "submitbtn": true,
+                "th": {
+                    "1": {
+                        "dataName": "name",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "name",
+                        "dataDefault": "new device",
+                        // "disabled": true,
+                    },
+                    "2": {
+                        "dataName": "startVal",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "threshold start (watt)",
+                        "min": 0,
+                        "dataDefault": 10,
+                    },
+                    "3": {
+                        "dataName": "endVal",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "threshold end (watt)",
+                        "min": 0,
+                        "dataDefault": 1,
+                    },
+                    "4": {
+                        "dataName": "standby",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "threshold standby (watt)",
+                        "min": 0,
+                        "dataDefault": 5,
+                    },
+                    "5": {
+                        "dataName": "startCount",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "number of start values",
+                        "min": 1,
+                        "dataDefault": 1,
+                    },
+                    "6": {
+                        "dataName": "endCount",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "number of end values",
+                        "min": 1,
+                        "dataDefault": 3,
+                    },
+                    "7": {
+                        "dataName": "delete",
+                        "class": "header10 translate",
+                        "dataType": "delete",
+                        "dataLang": "delete",
+
+                    },
+                    "99": {
+                        "dataName": "id",
+                        "class": "none",
+                        "dataType": "number",
+                        "dataLang": "id",
+                    },
+                }
+            }
+        },
         "alexa": {
             "head": {
                 "class": "translate collapsible-inactive"
@@ -359,21 +387,22 @@ async function createTableHeadData(settings) {
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
+                "submitbtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
-                        "tdClass": "validate values-input",
-                        "data_default": "new device",
+                        //"tdClass": "validate values-input",
+                        "dataDefault": "new device",
                     },
                     "2": {
                         "dataName": "path",
                         "class": "header translate",
                         "dataType": "OID",
                         "dataLang": "'alexa2/../announcement'/'speak'",
-                        "tdClass": "validate values-input oid-select",
+                        //"tdClass": "validate values-input oid-select",
                         "disabled": true,
                     },
                     "3": {
@@ -383,25 +412,25 @@ async function createTableHeadData(settings) {
                         "dataLang": "volume 0-100",
                         "min": 0,
                         "max": 100,
-                        "data_default": 25,
+                        "dataDefault": 25,
                     },
                     "4": {
                         "dataName": "activeFrom",
                         "class": "header10 translate",
                         "dataType": "text",
                         "dataLang": "active from",
-                        "tdClass": "validate values-input timepicker",
+                        //"tdClass": "validate values-input timepicker",
                         "disabled": true,
-                        "data_default": "00:00",
+                        "dataDefault": "00:00",
                     },
                     "5": {
                         "dataName": "activeUntil",
                         "class": "header10 translate",
                         "dataType": "text",
                         "dataLang": "active until",
-                        "tdClass": "validate values-input timepicker",
+                        //"tdClass": "validate values-input timepicker",
                         "disabled": true,
-                        "data_default": "23:59",
+                        "dataDefault": "23:59",
                     },
                     "6": {
                         "dataName": "delete",
@@ -425,21 +454,23 @@ async function createTableHeadData(settings) {
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
+                "submitbtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
-                        "data_default": "new device",
+                        "dataDefault": "new device",
                     },
                     "2": {
                         "dataName": "path",
                         "class": "header translate",
                         "dataType": "OID",
                         "dataLang": "'sayit/../text'",
-                        "tdClass": "validate values-input oid-select",
+                        //"tdClass": "validate values-input oid-select",
                         "disabled": true,
+                        "dataDefault": "sayit.0.tts.text"
                     },
                     "3": {
                         "dataName": "volume",
@@ -448,25 +479,25 @@ async function createTableHeadData(settings) {
                         "dataLang": "volume 0-100",
                         "min": 0,
                         "max": 100,
-                        "data_default": 25
+                        "dataDefault": 25
                     },
                     "4": {
                         "dataName": "activeFrom",
                         "class": "header10 translate",
                         "dataType": "text",
                         "dataLang": "active from",
-                        "tdClass": "validate values-input timepicker",
+                        //"tdClass": "validate values-input timepicker",
                         "disabled": true,
-                        "data_default": "00:00"
+                        "dataDefault": "00:00"
                     },
                     "5": {
                         "dataName": "activeUntil",
                         "class": "header10 translate",
                         "dataType": "text",
                         "dataLang": "active until",
-                        "tdClass": "validate values-input timepicker",
+                        //"tdClass": "validate values-input timepicker",
                         "disabled": true,
-                        "data_default": "23:59"
+                        "dataDefault": "23:59"
                     },
                     "6": {
                         "dataName": "delete",
@@ -490,20 +521,21 @@ async function createTableHeadData(settings) {
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
+                "submitbtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
-                        "data_default": "new user"
+                        "dataDefault": "new user"
                     },
                     "2": {
                         "dataName": "inst",
                         "class": "header translate",
                         "dataType": "select",
                         "dataLang": "telegram instance",
-                        "data_default": ".0",
+                        "dataDefault": ".0",
                         "dataOptions": ".0;.1;.2;.3;.4;.5;.6;.7;.8;.9"
                     },
                     "3": {
@@ -511,14 +543,14 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "username",
-                        "data_default": "username"
+                        "dataDefault": "username"
                     },
                     "4": {
                         "dataName": "Chat ID",
                         "class": "header translate",
                         "dataType": "number",
                         "dataLang": "Chat ID",
-                        "data_default": "0123456789"
+                        "dataDefault": ""
                     },
                     "5": {
                         "dataName": "delete",
@@ -542,21 +574,23 @@ async function createTableHeadData(settings) {
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
+                "submitbtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
-                        "data_default": "new user"
+                        "dataDefault": "new user"
                     },
                     "2": {
                         "dataName": "path",
                         "class": "header translate",
                         "dataType": "OID",
                         "dataLang": "'whatsapp-cmb/../sendMessage'",
-                        "tdClass": "validate values-input oid-select",
+                        //"tdClass": "validate values-input oid-select",
                         "disabled": true,
+                        "dataDefault": "whatsapp-cmb.0.sendMessage"
                     },
                     "3": {
                         "dataName": "delete",
@@ -581,35 +615,36 @@ async function createTableHeadData(settings) {
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
+                "submitbtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
-                        "data_default": "new user"
+                        "dataDefault": "new user"
                     },
                     "2": {
                         "dataName": "inst",
                         "class": "header translate",
                         "dataType": "select",
                         "dataLang": "pushover instance",
-                        "data_default": ".0",
-                        "dataOptions": ".0;.1;.2;.3;.4;.5;.6;.7;.8;.9"
+                        "dataOptions": ".0;.1;.2;.3;.4;.5;.6;.7;.8;.9",
+                        "dataDefault": ".0",
                     },
                     "3": {
                         "dataName": "title",
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "title",
-                        "data_default": ""
+                        "dataDefault": ""
                     },
                     "4": {
                         "dataName": "deviceID",
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "device ID",
-                        "data_default": ""
+                        "dataDefault": ""
                     },
                     "5": {
                         "dataName": "prio",
@@ -617,14 +652,16 @@ async function createTableHeadData(settings) {
                         "dataType": "select",
                         "dataLang": "priority",
                         "dataOptions": "normal;high;quiet",
-                        "tdClass": "validate values-input select",
+                        // "tdClass": "validate values-input select",
+                        "dataDefault": "normal"
                     },
                     "6": {
                         "dataName": "sound",
                         "class": "header translate",
                         "dataType": "select",
                         "dataLang": "sound",
-                        "dataOptions": "pushover; bike; bugle; cashregister; classical; cosmic; falling; gamelan; incoming; intermission; magic; mechanical; pianobar; siren; spacealarm; tugboat; alien; climb; persistent; echo; updown; none"
+                        "dataOptions": "pushover; bike; bugle; cashregister; classical; cosmic; falling; gamelan; incoming; intermission; magic; mechanical; pianobar; siren; spacealarm; tugboat; alien; climb; persistent; echo; updown; none",
+                        "dataDefault": "pushover"
                     },
                     "7": {
                         "dataName": "delete",
@@ -648,6 +685,7 @@ async function createTableHeadData(settings) {
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
+                "submitbtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
@@ -660,8 +698,8 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "select",
                         "dataLang": "signal instance",
-                        "data_default": ".0",
-                        "dataOptions": ".0;.1;.2;.3;.4;.5;.6;.7;.8;.9"
+                        "dataOptions": ".0;.1;.2;.3;.4;.5;.6;.7;.8;.9",
+                        "dataDefault": ".0",
                     },
                     "3": {
                         "dataName": "phone",
@@ -691,6 +729,7 @@ async function createTableHeadData(settings) {
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
+                "submitbtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
@@ -732,6 +771,7 @@ async function createTableHeadData(settings) {
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
+                "submitbtn": true,
                 "th": {
                     "1": {
                         "dataName": "matrix",
@@ -744,7 +784,7 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "select",
                         "dataLang": "matrix instance",
-                        "data_default": ".0",
+                        "dataDefault": ".0",
                         "dataOptions": ".0;.1;.2;.3;.4;.5;.6;.7;.8;.9"
                     },
                     "4": {
@@ -803,11 +843,11 @@ async function dataCntrlInput() {
             dataChecked: [],
             dataFailed: [],
             err: `err-devices`,
-            header: 'header-device',
-            name: 'devices',
-            anchorEn: `create-device`,
-            anchorGer: `device-anlegen`,
-            anchorName: `device`
+            header: 'header-devices',
+            name: 'Measuring devices',
+            anchorEn: `create-devices`,
+            anchorGer: `devices-anlegen`,
+            anchorName: `devices`
         }
     }
     dataSendTo.alexa = {
@@ -928,7 +968,7 @@ async function dataCntrlInput() {
             dataFailed: [],
             err: `err-signal`,
             header: 'header-signal',
-            name: 'device signal',
+            name: 'signal-cmb',
             anchorEn: `create-signal`,
             anchorGer: `signal-user-erstellen`,
             anchorName: `signal`
@@ -941,7 +981,7 @@ async function dataCntrlInput() {
             dataFailed: [],
             err: `err-matrix`,
             header: 'header-matrix',
-            name: 'device matrix',
+            name: 'matrix',
             anchorEn: `create-matrix`,
             anchorGer: `matrix-user-erstellen`,
             anchorName: `matrix`
@@ -959,7 +999,7 @@ function createData(settings) {
     let data = {};
     data.devices = {
         name: 'devices',
-        idHTML: 'deviceID',
+        idHTML: 'devicesID',
         ids: settings.devices !== undefined ? settings.devices.id || [] : [],
         idsTable: settings.devices !== undefined ? settings.devices.final || [] : [],
         cntr: settings.devices_counter !== undefined ? settings.devices_counter || 0 : 0,
@@ -1013,25 +1053,25 @@ function createData(settings) {
         ids: settings.default !== undefined ? settings.default.id || [] : [],
         cntr: settings.default_counter !== undefined ? settings.default_counter || 0 : 0,
     };
-    data.alert = {
-        name: 'alert',
-        idHTML: 'alertID',
-        ids: settings.freqAlert !== undefined ? settings.freqAlert.id || [] : [],
-        cntr: settings.alert_counter !== undefined ? settings.alert_counter || 0 : 0,
-    };
-    data.presence = {
-        name: 'presence',
-        idHTML: 'presenceID',
-        ids: settings.presence !== undefined ? settings.presence.id || [] : [],
-        cntr: settings.presence_counter !== undefined ? settings.presence_counter || 0 : 0,
-    };
+    // data.alert = {
+    //     name: 'alert',
+    //     idHTML: 'alertID',
+    //     ids: settings.freqAlert !== undefined ? settings.freqAlert.id || [] : [],
+    //     cntr: settings.alert_counter !== undefined ? settings.alert_counter || 0 : 0,
+    // };
+    // data.presence = {
+    //     name: 'presence',
+    //     idHTML: 'presenceID',
+    //     ids: settings.presence !== undefined ? settings.presence.id || [] : [],
+    //     cntr: settings.presence_counter !== undefined ? settings.presence_counter || 0 : 0,
+    // };
     data.status = {
         name: 'status',
         idHTML: 'statusID',
         ids: settings.status !== undefined ? settings.status.id || [] : [],
         cntr: settings.status_counter !== undefined ? settings.status_counter || 0 : 0,
     };
-    data.status = {
+    data.signal = {
         name: 'signal',
         idHTML: 'signalID',
         ids: settings.signal !== undefined ? settings.signal.id || [] : [],

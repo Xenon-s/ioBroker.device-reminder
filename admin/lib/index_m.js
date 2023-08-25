@@ -44,12 +44,12 @@ async function createGUI(settings, onChange) {
     ### Header erstellen ###
     */
     // Table Head erstellen fuer alle Tabellen
-    console.warn('Daten fuer Table Head abrufen');
+    console.info('Daten fuer Table Head abrufen');
     const dataTable = await createTableHeadData(settingsGlobal)
-    console.warn('Daten fuer Table Head erfolgreich erstellt');
-    console.warn('Table Header erstellen');
+    console.info('Daten fuer Table Head erfolgreich erstellt');
+    console.info('Table Header erstellen');
     await createTableHeader(dataTable);
-    console.warn('Table Header wurden erstellt');
+    console.info('Table Header wurden erstellt');
     // collapsible und modal aktivieren
     $('.collapsible').collapsible();
     $('.modal').modal();
@@ -58,36 +58,37 @@ async function createGUI(settings, onChange) {
     ### Table Body erstellen ###
     */
     // Table Body erstellen fuer alle Tabellen
+    console.info('Static Table erstellen');
     const resChecked = await staticTable(dataGlobal);
+    console.info('Static Table erstellen abgeschlossen');
+    console.info('Dynamic Table erstellen');
     await dynamicTable(dataGlobal, resChecked);
+    console.info('Dynamic Table erstellen abgeschlossen');
     $('.red').on('click', clickEventDelBtn); // click event auf delete button setzen
-    $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true); // disable "name" in table default-types
     onChange(false);
 
     // create table
     async function staticTable(data) {
-        for (const i in data) {
+
+        const createTable = async(data, i) => {
             const name = data[i].name;
-            // if (name !== 'telegram' && name !== 'whatsapp') {
-            if (name !== 'devices') {
-                values2table(data[i].idHTML, data[i].ids, onChange); // create table
-            };
+            values2table(data[i].idHTML, data[i].ids, onChange); // create table
 
             // create click event "disable save button"
             const btnSave = `#btn-check-${name}`;
-            // console.warn(btnSave)
+            console.warn(btnSave)
             $(btnSave).fadeOut(); // save buttons deaktivieren bis events auf "add button" erkannt
             $(btnSave).on('click', async() => {
                 console.warn(btnSave);
+                console.warn(dataGlobal)
                 dataGlobal = await btnPressed(settings, i);
+                console.warn(dataGlobal)
                 $(btnSave).fadeOut();
             });
 
             // create click event "add button"
             const btnAdd = `#btn-add-${name}`;
-            console.warn(btnAdd);
             $(btnAdd).on('click', async() => {
-                console.warn(name);
                 $(btnSave).fadeIn();
                 setTimeout(() => {
                     // Attribute aendern
@@ -118,7 +119,13 @@ async function createGUI(settings, onChange) {
                     onChange(true);
                 });
             };
-            // };
+
+            return true;
+        }
+
+        // Zuerst alle Inhalte außer "measuring Devices" erstellen, sonst koennen keine Inhalte aus anderen Tabellen geholt
+        for (const i in data) {
+            if (!data[i].name.includes('devices')) await createTable(data, i);
         };
 
         // trigger im "default table" setzen
@@ -130,7 +137,9 @@ async function createGUI(settings, onChange) {
         const checked = await checkInput(data, 'all');
         checkedUserInput = checked;
 
-        values2table(data.devices.idHTML, data.devices.ids, onChange); // create table "devices", warten auf "types"
+        $(`#deviceTypeID`).attr("data-options", deviceTypes.join(';'));
+        await createTable(data, 'devices');
+
         $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true); // disable "name" in table default-types
 
         return checked;
@@ -188,7 +197,8 @@ async function createDynamicTable(settings, onChange, checked) {
     const settingsTable = settings.devices.idsTable;
     const devices = checked.devices;
 
-    $('#dynamic-table-body').html("");
+    // alte Tabelleninhalte loeschen
+    $('#link-device-body').html("");
 
     for (const i in devices) {
         curDevice = null;
@@ -208,7 +218,9 @@ async function createDynamicTable(settings, onChange, checked) {
                 whatsapp: -1,
                 telegram: -1,
                 pushover: -1,
+                signal: -1,
                 email: -1,
+                matrix: -1,
                 autoOff: false,
                 timer: 0,
                 abort: false,
@@ -232,72 +244,90 @@ async function createDynamicTable(settings, onChange, checked) {
         // in Version 1.1 haben sich die Namen geaendert!! (das "id" vor dem Namen ist verschwunden!)
         // console.warn(curDevice)
         data = [{
-            type: 'checkbox',
-            name: "enabled",
-            value: curDevice.enabled,
-            disable: false
-        }, {
-            type: 'label',
-            name: "name",
-            value: curDevice.name,
-            disable: false
-        }, {
-            type: 'multiple',
-            data: checked.alexa,
-            name: "alexa",
-            value: curDevice.alexa,
-            disable: false
-        }, {
-            type: 'multiple',
-            data: checked.sayit,
-            name: "sayit",
-            value: curDevice.sayit,
-            disable: false
-        }, {
-            type: 'multiple',
-            data: checked.telegram,
-            name: "telegram",
-            value: curDevice.telegram,
-            disable: false
-        }, {
-            type: 'multiple',
-            data: checked.whatsapp,
-            name: "whatsapp",
-            value: curDevice.whatsapp,
-            disable: false
-        }, {
-            type: 'multiple',
-            data: checked.pushover,
-            name: "pushover",
-            value: curDevice.pushover,
-            disable: false
-        }, {
-            type: 'multiple',
-            data: checked.email,
-            name: "email",
-            value: curDevice.email,
-            disable: false
-        }, {
-            type: 'checkbox',
-            name: "autoOff",
-            value: curDevice.autoOff,
-            disable: devices[i].autoOff
-        }, {
-            type: 'timer',
-            name: "timer",
-            value: parseInt(curDevice.timer),
-            disable: devices[i].autoOff
-        }, {
-            type: 'checkbox',
-            name: "abort",
-            value: curDevice.abort,
-            disable: false
-        }, {
-            type: 'id',
-            name: "id",
-            value: parseInt(deviceId),
-            disable: false
-        }];
+                type: 'checkbox',
+                name: "enabled",
+                value: curDevice.enabled,
+                disable: false
+            },
+            {
+                type: 'label',
+                name: "name",
+                value: curDevice.name,
+                disable: false
+            },
+            {
+                type: 'multiple',
+                data: checked.alexa,
+                name: "alexa",
+                value: curDevice.alexa,
+                disable: false
+            },
+            {
+                type: 'multiple',
+                data: checked.sayit,
+                name: "sayit",
+                value: curDevice.sayit,
+                disable: false
+            },
+            {
+                type: 'multiple',
+                data: checked.telegram,
+                name: "telegram",
+                value: curDevice.telegram,
+                disable: false
+            },
+            {
+                type: 'multiple',
+                data: checked.whatsapp,
+                name: "whatsapp",
+                value: curDevice.whatsapp,
+                disable: false
+            },
+            {
+                type: 'multiple',
+                data: checked.pushover,
+                name: "pushover",
+                value: curDevice.pushover,
+                disable: false
+            },
+            {
+                type: 'multiple',
+                data: checked.pushover,
+                name: "signal",
+                value: curDevice.pushover,
+                disable: false
+            },
+            {
+                type: 'multiple',
+                data: checked.email,
+                name: "email",
+                value: curDevice.email,
+                disable: false
+            }, {
+                type: 'checkbox',
+                name: "autoOff",
+                value: curDevice.autoOff,
+                disable: devices[i].autoOff
+            },
+            {
+                type: 'timer',
+                name: "timer",
+                value: parseInt(curDevice.timer),
+                disable: devices[i].autoOff
+            },
+            {
+                type: 'checkbox',
+                name: "abort",
+                value: curDevice.abort,
+                disable: false
+            },
+            {
+                type: 'id',
+                name: "id",
+                value: parseInt(deviceId),
+                disable: false
+            }
+        ];
 
         let col = "<tr>";
         for (const j in data) {
@@ -351,10 +381,10 @@ async function createDynamicTable(settings, onChange, checked) {
         };
 
         col += "</tr>";
-        $('#dynamic-table-body').append(col);
+        $('#link-device-body').append(col);
 
         // vom User gesetzte "multiple options" in der Tabelle anzeigen
-        $('#dynamic-table-body').children().eq(i).children().each(function() {
+        $('#link-device-body').children().eq(i).children().each(function() {
             if ($(this).data('type') == 'multiple') {
                 $(this).find('select').val(curDevice[$(this).data('name')]);
             } else {
@@ -363,17 +393,17 @@ async function createDynamicTable(settings, onChange, checked) {
         });
 
         // trigger im dynamic table setzen
-        $('#dynamic-table-body').find('.values-input').on('change', function() {
+        $('#link-device-body').find('.values-input').on('change', function() {
             $('.btn-save, .btn-save-close').fadeIn();
             onChange(true);
         });
     };
 
-    // if (curDevice != null) {
-    //     const selectInstance = M.FormSelect.getInstance($('select'));
-    //     instances = M.FormSelect.init($('select'));
-    //     M.updateTextFields();
-    // };
+    if (curDevice != null) {
+        const selectInstance = M.FormSelect.getInstance($('select'));
+        instances = M.FormSelect.init($('select'));
+        M.updateTextFields();
+    };
 
     return settings;
 };
@@ -390,13 +420,18 @@ async function checkInput(data, type) {
             // let objType = `${dataSendTo.objType}`
         let obj = dataSendTo.obj;
 
-        if (name != 'telegram' && name != 'whatsapp') { // telegram / whatsapp uebergibt nur einen counter
-            var arr = {}
-            arr = data.ids;
-        } else {
-            var arr = {}
-            arr = data;
-        };
+        let arr = {};
+        arr = data.ids;
+
+        // console.warn(data)
+
+        // if (name != 'telegram' && name != 'whatsapp') { // telegram / whatsapp uebergibt nur einen counter
+        //     var arr = {}
+        //     arr = data.ids;
+        // } else {
+        //     var arr = {}
+        //     arr = data;
+        // };
 
         try {
             sendTo(`device-reminder.${instance}`, name, arr, async result => {
@@ -408,12 +443,13 @@ async function checkInput(data, type) {
                         $.each(res.checked, async(index, element) => {
                             deviceTypes.push(`${element.name}`);
                         });
-                        $('#deviceTypeID').attr("data-options", deviceTypes.join(';'));
+                        $(`#deviceID .table-lines [data-name="type"]`).attr("data-options", deviceTypes.join(';'));
+                        // $('#deviceID').attr("data-options", deviceTypes.join(';'));
                     };
-                    if (name !== 'telegram' && name !== 'whatsapp') { // telegram / whatsapp hat kein Auswahlfeld 
-                        await checked(obj); // Auswahlfelder erstellen
-                    };
-                    showHeader('dynamicTable', name, res.checked || {}); // erkannte Geraete in "dynamicTable" einblenden
+                    // if (name !== 'telegram' && name !== 'whatsapp') { // telegram / whatsapp hat kein Auswahlfeld 
+                    await checked(obj); // Auswahlfelder erstellen
+                    // };
+                    showHeader('link-deviceID', name, res.checked || {}); // erkannte Geraete in "dynamicTable" einblenden
                     successCallback(res.checked);
                 };
             });
@@ -465,11 +501,11 @@ async function checkInput(data, type) {
                     $('#err-status').css('display', 'none');
                 } else {
                     result[name] = [];
-                    if (name == 'telegram' || name == 'whatsapp') {
-                        result[name] = await functionLogic(checkData[i], 0); // daten in der main.js prüfen und return
-                    } else {
-                        result[name] = await functionLogic(checkData[i], data[i]); // daten in der main.js prüfen und return
-                    }
+                    // if (name == 'telegram' || name == 'whatsapp') {
+                    //     result[name] = await functionLogic(checkData[i], 0); // daten in der main.js prüfen und return
+                    // } else {
+                    result[name] = await functionLogic(checkData[i], data[i]); // daten in der main.js prüfen und return
+                    // }
                 };
             };
             return result
@@ -479,7 +515,7 @@ async function checkInput(data, type) {
     };
 
     async function checked(obj) {
-        // console.warn(obj)
+
         $(`#${obj.header}`).html(`<div class="collapsible-header translate"><i class="material-icons">create</i><span>${_(obj.name)}</span></div>`);
         if (obj.name !== `device status` && (obj.dataChecked.length <= 0) && (obj.dataFailed.length <= 0)) {
             $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: grey;">
@@ -512,7 +548,6 @@ async function checkInput(data, type) {
 
 // createTableHeader
 async function createTableHeader(tableHead) {
-    // console.warn(tableHead)
 
     let html = "";
 
@@ -566,7 +601,6 @@ async function createTableHeader(tableHead) {
                         <div class="row">
                             <div style="display: flex; align-items: center;">
                             <div>`
-
         if (tableHead[i].table.addbtn) {
             html += `
                                 <!-- Add btn -->
@@ -580,6 +614,7 @@ async function createTableHeader(tableHead) {
                                 <button id="btn-check-${key}" class="btn waves-effect waves-light" type="submit" name="action">Submit
                                     <i class="material-icons right">send</i>
                                 </button>
+                                
                             </div>
                                 <!-- Add btn End-->
                                 <!-- Input Check -->
@@ -626,7 +661,7 @@ async function createTableHeader(tableHead) {
             } else {
                 let disable = '';
                 if (th.disabled) disable = "disabled";
-                html += `<th id="${th.id != undefined ? th.id || '' : ''}" class="${th.class}" data-type="${th.dataType}" data-name="${th.dataName}" data-lang="${th.dataLang}" ${disable} data-options="${th.dataOptions != undefined ? th.dataOptions || "" : ""}">${_(th.dataLang)}</th>`
+                html += `<th id="${th.id != undefined ? th.id || '' : ''}" class="${th.class}" data-type="${th.dataType}" data-name="${th.dataName}" data-lang="${th.dataLang}" ${disable} data-options="${th.dataOptions != undefined ? th.dataOptions || "" : ""}" data-default="${th.dataDefault != undefined ? th.dataDefault || "" : ""}">${_(th.dataLang)}</th>`
             };
 
         };
@@ -634,7 +669,7 @@ async function createTableHeader(tableHead) {
 
         // Table Body erstellen
         html += `<!-- Table head End -->
-                        <tbody class="table-lines"></tbody>
+                        <tbody id="${key}-body" class="table-lines"></tbody>
                         <!-- Table End -->
                         </table>
                     </div>
@@ -719,9 +754,6 @@ async function btnPressed(onChange, name) {
             cntrRow['measuringDevice'] = 0;
             await createDataTable(onChange, 'rebuild', 'measuringDevice'); // eine Tabellenzeile hinzufuegen
         };
-        if (name.toLowerCase().includes('link')) {
-            console.warn(await createSettings(await createData(settingsGlobal)));
-        }
     };
 
     showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
@@ -739,8 +771,6 @@ function showBtns( /**@type {string}*/ id, /**@type {boolean}*/ cmd, onChange) {
 
 // Collapsible Header oeffnen / schliessen
 async function selectedHeader( /**@type {string}*/ id) {
-    console.warn(id)
-
     if (headerOpened == ``) {
         headerOpened = id;
         $(`#${id}`).addClass('collapsible-active');
@@ -762,22 +792,12 @@ async function selectedHeader( /**@type {string}*/ id) {
 };
 
 // Header im "linkedDevices table" anzeigen, wenn Daten vorhanden (zb. alexa)
-function showHeader( /**@type {string}*/ tblId, /**@type {Boolean}*/ cmd, arr) {
-
-    // console.warn(tblId)
-    // if (cmd) {
-    //         $(`${tblId}`).css('display', 'table-cell');
-    //     } else {
-    //         $(`${tblId}`).css('display', 'none');
-    //         // $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'none');
-    //     };
-    // if (columnName != undefined) {
-    //     if (arr.length > 0 && columnName != undefined) {
-    //         $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'table-cell');
-    //     } else {
-    //         $('#' + tblId + ' [data-name="' + columnName + '"]').css('display', 'none');
-    //     };
-    // };
+function showHeader( /**@type {string}*/ tblId, /**@type {Boolean}*/ name, arr) {
+    if (arr.length > 0) {
+        $(`#_${name}`).removeClass('none');
+    } else {
+        $(`#_${name}`).attr('class', 'none');
+    };
 };
 
 // settings neu erstellen und an die table schicken
@@ -789,7 +809,7 @@ async function createSettings(data) {
     // Daten aus tabellen nur holen, wenn neues device erzeugt wurde
     // if (type != 'save') {
 
-    const result = await getDataFromTable(); // daten für jedes device holen
+    const result = await getDataFromTable(data); // daten für jedes device holen
 
     for (const i of Object.keys(result)) {
         if (result[i].length) {
@@ -798,10 +818,11 @@ async function createSettings(data) {
     };
 
     // Daten aus jeder einzelnen Tabelle holen und in Objekt abspeichern
-    async function getDataFromTable() { // daten aus tabellen holen
+    async function getDataFromTable(data) { // daten aus tabellen holen
+        console.warn(data)
         let dataReturn = {};
         for (const i in data) {
-            dataReturn[i] = await table2values(data[i].data.idHTML);
+            dataReturn[i] = await table2values(data[i].idHTML);
         };
         return dataReturn;
     };
@@ -820,7 +841,7 @@ async function createSettings(data) {
     };
     // };
 
-    let body = $('#linkedDeviceID .table-lines');
+    let body = $('#link-deviceID .table-lines');
     let devices = [];
     body.children().each(function() { // daten aus dyn. tabelle sichern
         let data = {};
@@ -845,9 +866,14 @@ async function createSettings(data) {
         devices.push(data); // device daten in array pushen
     });
 
-    obj.linkedDevice.ids = devices; // dynamische daten in devices sichern
+    console.warn(obj)
+    obj.linkedDevice = {
+            ids: devices
+        }
+        // obj['linkedDevice'].ids = devices; // dynamische daten in devices sichern
+        // obj.linkedDevice.ids = devices; // dynamische daten in devices sichern
 
-    // console.warn(obj)
+    console.warn(obj)
     return obj; // settings zurueckgeben
 };
 
@@ -867,8 +893,6 @@ async function createTableBody(onChange, data, /**@type{string}*/ cmd, /**@type{
         html += `<tr data-index"${index}">`
         for (const i of Object.keys(th)) { // <th> der Tabellen erstellen
 
-            // console.warn(th)
-
             if (data.ids[j] != undefined && (cmd == 'load' || cmd == 'rebuild')) { // Wenn load aufgerufen wird, Daten aus den settings in die Tabellen schreiben
                 if (data.ids[j][th[i].name] != undefined) { // dataInput[j] = th Daten des Table; [th[i].name] : Attribut; dataInput[j][th[i].name] : input Wert (value)
                     value = data.ids[j][th[i].name];
@@ -876,10 +900,6 @@ async function createTableBody(onChange, data, /**@type{string}*/ cmd, /**@type{
 
                 };
             };
-
-            // if (cmd == 'add' && th[i].dataType != 'select' && th[i].dataType != 'multiple') value = th[i].data_default || '';
-
-            // if (th[i].name.toLowerCase() == 'id') value = index; // Wenn Name "id", dann index als Value setzen, damit jede Tabellenzeile eine eindeutige ID zugewiesen bekommt
 
             switch (th[i].dataType) {
                 case 'text':
