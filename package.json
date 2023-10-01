@@ -44,7 +44,7 @@
     "@iobroker/testing": "^2.6.0",
     "@types/chai": "^4.3.1",
     "@types/chai-as-promised": "^7.1.6",
-    "@types/gulp": "^4.0.9",
+    "@types/gulp": "^4.0.14",
     "@types/jquery": "^3.5.20",
     "@types/mocha": "^9.1.1",
     "@types/node": "^16.11.11",
