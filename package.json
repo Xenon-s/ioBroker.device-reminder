@@ -33,7 +33,7 @@
   "bundleDependencies": [],
   "dependencies": {
     "@iobroker/adapter-core": "^2.5.1",
-    "jsonata": "^1.8.6"
+    "jsonata": "^2.0.3"
   },
   "deprecated": false,
   "description": "device-reminder",
