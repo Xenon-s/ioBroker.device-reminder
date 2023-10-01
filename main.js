@@ -48,6 +48,8 @@ class deviceReminder extends utils.Adapter {
         this.telegramInput = {}; // Array of all telegram users
         this.pushoverInput = {}; // Array of all pushover users
         this.emailInput = {}; // Array of all email addresses
+        this.signalInput = {}; // Array of all signal users
+        this.matrixInput = {}; // Array of all matrix server
         this.states = {}; // Array states
 
         this.adapterDPs = {};
@@ -65,17 +67,10 @@ class deviceReminder extends utils.Adapter {
 
         this.setState('info.connection', false, true);
 
-        const migration = await this.config.migration !== undefined ? this.config.migration || false : false;
-
-        if (!migration) {
-            // this.log.warn('Update detected! Please open the Admin UI (instances -> device-reminder) and follow the instructions!');
-            // this.log.warn('Update erkannt! Bitte die Admin UI (Instanzen -> device-reminder) öffnen und den Anweisungen Folgen!');
-        } else {
-            // Initialize your adapter here
-            this.devicesCompleted = await this.createDevices();
-            this.createDPS();
-            this.pollingData(true);
-        };
+        // Initialize your adapter here
+        this.devicesCompleted = await this.createDevices();
+        this.createDPS();
+        this.pollingData(true);
     };
 
     async createDPS() { // auf "DP Leichen" pruefen
@@ -122,6 +117,8 @@ class deviceReminder extends utils.Adapter {
             this.telegramInput = await getDataFromAdmin(this.config.telegram !== undefined ? this.config.telegram.final || {} : {});
             this.pushoverInput = await getDataFromAdmin(this.config.pushover !== undefined ? this.config.pushover.final || {} : {});
             this.emailInput = await getDataFromAdmin(this.config.email !== undefined ? this.config.email.final || {} : {});
+            this.signalInput = await getDataFromAdmin(this.config.signal !== undefined ? this.config.signal.final || {} : {});
+            this.matrixInput = await getDataFromAdmin(this.config.matrix !== undefined ? this.config.matrix.final || {} : {});
 
             this.states.action = await this.config.status.id[0].stateAction;
 
@@ -167,6 +164,8 @@ class deviceReminder extends utils.Adapter {
             this.log.debug(`ARR INPUT telegram ${JSON.stringify(this.telegramInput)}`);
             this.log.debug(`ARR INPUT pushover ${JSON.stringify(this.pushoverInput)}`);
             this.log.debug(`ARR INPUT email ${JSON.stringify(this.emailInput)}`);
+            this.log.debug(`ARR INPUT signal ${JSON.stringify(this.signalInput)}`);
+            this.log.debug(`ARR INPUT matrix ${JSON.stringify(this.matrixInput)}`);
 
             // Input auf Plausibilität prüfen
             if (Object.keys(this.devices).length > 0) {

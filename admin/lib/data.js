@@ -120,7 +120,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id",
                     },
@@ -193,7 +193,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id"
                     },
@@ -232,7 +232,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id",
                     },
@@ -298,7 +298,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id",
                     },
@@ -371,7 +371,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id",
                     },
@@ -438,7 +438,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id",
                     },
@@ -505,7 +505,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id",
                     },
@@ -558,7 +558,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id",
                     },
@@ -598,7 +598,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id",
 
@@ -669,7 +669,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id",
                     },
@@ -713,7 +713,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id",
                     },
@@ -755,7 +755,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id",
                     },
@@ -793,7 +793,7 @@ async function createTableHeadData(settings) {
                     },
                     "99": {
                         "dataName": "id",
-                        "class": "none",
+                        "class": "header10 translate",
                         "dataType": "number",
                         "dataLang": "id",
                     },
@@ -804,7 +804,6 @@ async function createTableHeadData(settings) {
 
     // Daten aus dem Adapter native holen und ins Objekt schreiben [wenn vorhanden]
     for (const name of Object.keys(dataTable)) {
-
         dataTable[name].data = {
             idHTML: `${name}ID`,
         };
@@ -815,10 +814,12 @@ async function createTableHeadData(settings) {
             } else {
                 dataTable[name].ids = [];
             }
-            if (settings[name].counter !== undefined) {
-                dataTable[name].counter = settings[name].counter
+            if (settings[`${name}_counter`] !== undefined) {
+                dataTable[name].counter = settings[`${name}_counter`];
+                cntrRow[name] = settings[`${name}_counter`];
             } else {
                 dataTable[name].counter = 0;
+                cntrRow[name] = 0;
             };
         } else {
             dataTable[name].ids = [];
