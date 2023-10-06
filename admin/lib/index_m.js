@@ -1,7 +1,7 @@
 /*
 offene Punkte
--> IDs werden nicht richtig vergeben
 -> save function noch offen
+    -> linkedDevice wird noch nicht richtig zusammen gebaut
 */
 
 // hier wird die komplette GUI des Adapters im Admin erstellt
@@ -47,6 +47,7 @@ async function createGUI(settings, onChange) {
     // Table Head erstellen fuer alle Tabellen
     console.info('Daten fuer Table Head abrufen');
     dataTableHead = await createTableHeadData(settings)
+    console.error(dataTableHead)
     console.info('Daten fuer Table Head erfolgreich erstellt');
     console.info('Table Header erstellen');
     await createTableHeader(dataTableHead);
@@ -64,7 +65,7 @@ async function createGUI(settings, onChange) {
     console.info('Static Table erstellen abgeschlossen');
     console.info('Dynamic Table erstellen');
 
-    await dynamicTable(dataGlobal, resChecked);
+    await dynamicTable(dataGlobal, resChecked, onChange);
     console.info('Dynamic Table erstellen abgeschlossen');
     onChange(false);
 
@@ -116,8 +117,8 @@ async function createGUI(settings, onChange) {
 
             $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;">
                                                 <span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
-            $('.btn-save, .btn-save-close').fadeOut();
-            onChange(false);
+            // $('.btn-save, .btn-save-close').fadeOut();
+            // onChange(false);
         });
 
         // create event "change" on table
@@ -127,8 +128,8 @@ async function createGUI(settings, onChange) {
                 $(`#btn-check-${name}`).fadeIn();
                 $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;">
                                                     <span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
-                $('.btn-save, .btn-save-close').fadeOut();
-                onChange(false);
+                // $('.btn-save, .btn-save-close').fadeOut();
+                // onChange(false);
             });
         } else {
             $('#valStates').find('.values-input').on('change', () => {
@@ -140,16 +141,18 @@ async function createGUI(settings, onChange) {
         return true;
     }
 
-    async function dynamicTable(data, checked) {
-        dataGlobal = await createDynamicTable(data, onChange, checked); // create dynamic table "device"
+    async function dynamicTable(data, checked, onChange) {
+        dataGlobal = await createDynamicTable(data, checked, onChange); // create dynamic table "device"
         if (M) M.updateTextFields();
-        onChange(true);
+        // onChange(true);
+        // $('#link-device-body').on('change', () => {
+        //     onChange(true);
+        // })
     };
 
     async function btnPressed(settings, name) {
 
         const actData = await createData(settings)
-        console.warn(actData)
         const data = await createSettings(actData);
         const result = await checkInput(actData, name);
         if (!name.includes('header')) checkedUserInput[actData[name].name] = result[name];
@@ -197,7 +200,7 @@ async function createGUI(settings, onChange) {
     return true;
 };
 
-async function createDynamicTable(settings, onChange, checked) {
+async function createDynamicTable(settings, checked, onChange) {
 
     let curDevice = null;
     const settingsDevice = settings.devices.ids;
@@ -402,7 +405,7 @@ async function createDynamicTable(settings, onChange, checked) {
         // trigger im dynamic table setzen
         $('#link-device-body').find('.values-input').on('change', function() {
             $('.btn-save, .btn-save-close').fadeIn();
-            onChange(true);
+            onChangeGlobal(true);
         });
     };
 
@@ -411,25 +414,6 @@ async function createDynamicTable(settings, onChange, checked) {
         instances = M.FormSelect.init($('select'));
         M.updateTextFields();
     };
-
-
-    // for (const i of Object.keys(checked)) {
-    //     showHeader(i)
-    // }
-
-    // Wenn deviceValue geaendert wurde, muss die Tabelle von "measuringDevice" neu erstellt werden, damit die Auswahloptionen von "type" vorhanden sind
-    // / Table "linkedDevice" wird jedes Mal neu erstellt
-    // if (cmd == 'rebuild' || name.toLowerCase().includes('linked')) {
-    //     $(`#${idHTML} .table-lines`).html('').append(html);
-    // } else {
-    //     $(`#${idHTML} .table-lines`).append(html);
-    // };
-
-    // if (data.ids.length > 0) {
-    //     showHeader(`#${idHTML}`, true);
-    // } else {
-    //     showHeader(`#${idHTML}`, false);
-    // };
 
     return settings;
 };
@@ -722,70 +706,6 @@ async function createTableHeader(tableHead) {
     return true;
 };
 
-// create table input
-// async function eventHandler(data, /**@type{string}*/ name, onChange) {
-
-//     const idHTML = data.data.idHTML; // html id table
-
-//     // create click event "add button"
-//     const btnAdd = `#btn-add-${name}`
-//     $(btnAdd).off('click').on('click', async() => {
-//         if (btnAdd.toLowerCase().includes('measuringdevice')) data = await createSettings(await createData(settingsGlobal));
-//         // createDataTable(onChange, 'add', name); // eine Tabellenzeile hinzufuegen
-//         showBtns(btnSave, true, onChange);
-//         // showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
-//     });
-
-//     // submit button einblenden
-//     const btnSave = `#btn-check-${name}`;
-//     showBtns(btnSave, true, onChange); // save buttons deaktivieren bis events auf "add button" erkannt
-//     $(btnSave).off('click').on('click', async() => {
-//         console.warn('test')
-//         btnPressed(onChange, name);
-//         // showBtns(btnSave, false, onChange);
-//     });
-
-//     // create event "change" on table
-//     const eventID = `#${idHTML}`;
-//     if (eventID != '#linkedDevicesID') {
-//         $(eventID).off('click').on('change keyup', () => {
-//             showBtns(`#btn-check-${name}`, true, onChange);
-//             // showBtns('.btn-save, .btn-save-close, .footer', false, onChange);
-//         });
-//     } else {
-//         $('#linkedDevicesID').find('.table-lines .values-input').on('change', () => {
-//             showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
-//         });
-//     };
-
-//     setTimeout(() => {
-//         // zusatz klassen setzen
-//         $(`#table-${name} .table-lines .red`).off('click').on('click', async() => { // Wenn Zeile geloescht wird, muss "linkedDevices" neu erstellt werden
-//             setTimeout(async() => {
-//                 console.warn(btnSave)
-//                 btnPressed(onChange, 'red'); // Daten neu auslesen und in 'linkedDevices' schreiben
-//             }, 100);
-//         });
-//         $('.timepicker').timepicker({ "twelveHour": false });
-//     }, 200);
-
-//     return true;
-// };
-
-// Wenn add-Button, check-Button oder delete-Button gedrueckt wurde, Zeilen oder Tabellen neu bauen
-// async function btnPressed(onChange, name) {
-//     console.warn(name)
-//     if (name != 'red') {
-//         if (name.toLowerCase().includes('devicevalues')) { // Wenn Daten in "deviceValues" geaendert wurde, muss die Tabelle von "measuringDevice" neu erstellt werden, damit der Dropdown passt
-//             cntrRow['measuringDevice'] = 0;
-//             // await createDataTable(onChange, 'rebuild', 'measuringDevice'); // eine Tabellenzeile hinzufuegen
-//         };
-//     };
-
-//     showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
-//     // dataGlobal = data;
-// };
-
 function showBtns( /**@type {string}*/ id, /**@type {boolean}*/ cmd, onChange) {
     if (cmd) {
         $(id).fadeIn(); // einblenden
@@ -835,8 +755,13 @@ function showHeader( /**@type {string}*/ tblId, /**@type {Boolean}*/ name, arr) 
 // settings neu erstellen und an die table schicken
 async function createSettings(data, type) {
 
+    // console.warn(data)
+
     let obj = {};
+
     obj = data;
+
+    console.warn(obj)
 
     // Daten aus tabellen nur holen, wenn neues device erzeugt wurde
     if (type != 'save') {
@@ -898,14 +823,11 @@ async function createSettings(data, type) {
         devices.push(data); // device daten in array pushen
     });
 
-    obj.linkedDevice = {
-            name: 'linkedDevice',
-            ids: devices
-        }
-        // obj['linkedDevice'].ids = devices; // dynamische daten in devices sichern
-        // obj.linkedDevice.ids = devices; // dynamische daten in devices sichern
-
-    console.warn(obj)
+    obj.linkedDevice['ids'] = devices;
+    // {
+    //     // name: 'linkedDevice',
+    //     id: devices
+    // };
 
     return obj; // settings zurueckgeben
 };
@@ -915,20 +837,30 @@ async function save(callback) {
 
     const actData = await createSettings(dataGlobal, 'save'); // aktuelle settings holen
 
+    console.warn(actData)
+
     const cntr = await saveCntr(actData); // counter fuer save obj erstellen
 
+    console.warn(cntr)
+
     const result = await loopArr(cntr) // devices, messenger, etc "final" erstellen
+
+    console.warn(result)
 
     let resultTemp = result
 
     const finalObj = resultTemp; // fertiges objekt fuer native settings
 
     async function saveCntr(actData) {
+        // console.warn(actData)
         // counter in die native schreiben
         let objTemp = actData;
         for (const name in actData) {
-            const cntrName = `${name}_counter`
-            objTemp[cntrName] = actData[name].cntr;
+            // console.warn(name)
+            if (!name.includes('linked')) {
+                const cntrName = `${name}_counter`
+                objTemp[cntrName] = actData[name].cntr;
+            };
         };
         return objTemp;
     };
@@ -937,7 +869,6 @@ async function save(callback) {
         let objTemp = objCntr;
         for (const i in dataGlobal) {
             if (!i.includes('counter')) {
-                // console.warn(dataGlobal[i])
                 const id = dataGlobal[i].name;
                 objTemp[id] = {
                     id: dataGlobal[i].ids,
@@ -951,6 +882,8 @@ async function save(callback) {
 
     function createArray(obj) {
 
+        console.warn(obj)
+
         const name = obj.name;
 
         let timeMin = "";
@@ -960,10 +893,11 @@ async function save(callback) {
         for (const i in obj.ids) {
             if (i != undefined) {
                 const data = obj.ids[i];
-                // console.warn(data)
-                // console.warn(name)
-                if (name.includes('measuringDevice')) { // ????
-                    const dataTable = obj.idsTable[i]; // devices hat zwei daten arrays
+                if (name.includes('linkedDevice')) { // ????
+                    const dataTable = obj.ids[i]; // devices hat zwei daten arrays
+
+                    // console.warn(data)
+                    // console.warn(dataTable)
 
                     // prüfen ob data in dataTable vorhanden ist
                     // und finales 'device' objekt erstellen
@@ -978,15 +912,15 @@ async function save(callback) {
                             endText: data.endText,
                             runtimeMax: data.runtimeMax,
 
-
                             alexa: dataTable.alexa,
                             sayit: dataTable.sayit,
-                            whatsapp: dataTable.whatsapp,
                             telegram: dataTable.telegram,
+                            whatsapp: dataTable.whatsapp,
                             pushover: dataTable.pushover,
+                            signal: dataTable.pushover,
                             email: dataTable.email,
+                            matrix: dataTable.matrix,
                             timer: dataTable.timer,
-
                             autoOff: dataTable.autoOff,
                             abort: dataTable.abort,
                             id: dataTable.id
@@ -1047,7 +981,7 @@ async function save(callback) {
                         };
                     case "telegram":
                         {
-                            console.warn(data)
+                            // console.warn(data)
                             objTemp[data.id] = {
                                 name: data.nameFinal,
                                 inst: data.inst

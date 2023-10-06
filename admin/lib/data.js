@@ -994,13 +994,20 @@ Hier werden alle Daten aus den Settings geholt und in ein Objekt umgewandelt, mi
 function createData(settings) {
 
     let data = {};
-    data.devices = {
-        name: 'devices',
-        idHTML: 'devicesID',
-        ids: settings.devices !== undefined ? settings.devices.id || [] : [],
-        idsTable: settings.devices !== undefined ? settings.devices.final || [] : [],
-        cntr: settings.devices_counter !== undefined ? settings.devices_counter || 0 : 0,
-    };
+    data.linkedDevice = {
+            name: 'linkedDevice',
+            idHTML: 'link-deviceID',
+            ids: settings.linkedDevice !== undefined ? settings.linkedDevice.id || [] : [],
+            idsTable: settings.linkedDevice !== undefined ? settings.linkedDevice.final || [] : [],
+            cntr: settings.linkedDevice_counter !== undefined ? settings.linkedDevice_counter || 0 : 0,
+        },
+        data.devices = {
+            name: 'devices',
+            idHTML: 'devicesID',
+            ids: settings.devices !== undefined ? settings.devices.id || [] : [],
+            idsTable: settings.devices !== undefined ? settings.devices.final || [] : [],
+            cntr: settings.devices_counter !== undefined ? settings.devices_counter || 0 : 0,
+        };
     data.alexa = {
         name: 'alexa',
         idHTML: 'alexaID',
