@@ -816,15 +816,13 @@ async function createTableHeadData(settings) {
             }
             if (settings[`${name}_counter`] !== undefined) {
                 dataTable[name].counter = settings[`${name}_counter`];
-                cntrRow[name] = settings[`${name}_counter`];
             } else {
                 dataTable[name].counter = 0;
-                cntrRow[name] = 0;
             };
         } else {
             dataTable[name].ids = [];
             dataTable[name].counter = 0;
-        }
+        };
     };
     return dataTable;
 };
@@ -1019,14 +1017,14 @@ function createData(settings) {
         name: 'whatsapp',
         idHTML: 'whatsappID',
         ids: settings.whatsapp !== undefined ? settings.whatsapp.id || [] : [],
-        cntr: settings.whatsapp !== undefined ? settings.whatsapp || 0 : 0,
+        cntr: settings.whatsapp_counter !== undefined ? settings.whatsapp_counter || 0 : 0,
 
     };
     data.telegram = {
         name: 'telegram',
         idHTML: 'telegramID',
         ids: settings.telegram !== undefined ? settings.telegram.id || [] : [],
-        cntr: settings.telegram !== undefined ? settings.telegram || 0 : 0,
+        cntr: settings.telegram_counter !== undefined ? settings.telegram_counter || 0 : 0,
     };
     data.pushover = {
         name: 'pushover',
@@ -1044,7 +1042,7 @@ function createData(settings) {
         name: 'custom',
         idHTML: 'customID',
         ids: settings.custom !== undefined ? settings.custom.id || [] : [],
-        cntr: settings.custom_device_counter !== undefined ? settings.custom_counter || 0 : 0,
+        cntr: settings.custom_counter !== undefined ? settings.custom_counter || 0 : 0,
     };
     data.default = {
         name: 'default',

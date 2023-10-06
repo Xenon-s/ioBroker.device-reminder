@@ -15,7 +15,7 @@ let showSaveBtn;
 let deviceTypes = [];
 let checkedUserInput = {}; // alle geprueften User Inputs werden hier gespeichert
 let dataGlobalNew = {};
-let cntrRow = {}; // Zaehler fuer Tabellenzeilen
+// let cntrRow = {}; // Zaehler fuer Tabellenzeilen
 let dataTableHead = {};
 
 // This will be called by the admin adapter when the settings page loads
@@ -46,7 +46,7 @@ async function createGUI(settings, onChange) {
     */
     // Table Head erstellen fuer alle Tabellen
     console.info('Daten fuer Table Head abrufen');
-    dataTableHead = await createTableHeadData(settingsGlobal)
+    dataTableHead = await createTableHeadData(settings)
     console.info('Daten fuer Table Head erfolgreich erstellt');
     console.info('Table Header erstellen');
     await createTableHeader(dataTableHead);
@@ -842,10 +842,11 @@ async function createSettings(data, type) {
     if (type != 'save') {
 
         const result = await getDataFromTable(data); // daten für jedes device holen
-
         for (const i of Object.keys(result)) {
-            if (result[i].length) {
-                obj[i].ids = await createId(result[i], data[i].cntr, i);
+            if (result[i].length > 0) {
+                const resultCreateId = await createId(result[i], data[i]);
+                obj[i].ids = resultCreateId.array
+                obj[i].cntr = resultCreateId.counter
             };
         };
 
@@ -859,19 +860,16 @@ async function createSettings(data, type) {
         };
 
         // jedem einzelnen device pro Tabelle eine eindeutige ID zuweisen
-        function createId(array, /**@type{number}*/ counter, /**@type{string}*/ name) { // jedem device eine ID zuweisen
-            console.warn(array)
+        function createId(array, data) { // jedem device eine ID zuweisen
+            /**@type{number}*/
+            let counter = data.cntr;
             for (const i in array) {
                 if (array[i].id == "" || array[i].id == undefined) {
                     array[i].id = counter;
                     counter++;
                 };
             };
-            cntrRow[name] = counter
-                // obj[name].data.counter = counter;
-            console.warn(cntrRow)
-                // console.warn(array)
-            return array;
+            return { array, counter };
         };
     };
 
@@ -907,6 +905,8 @@ async function createSettings(data, type) {
         // obj['linkedDevice'].ids = devices; // dynamische daten in devices sichern
         // obj.linkedDevice.ids = devices; // dynamische daten in devices sichern
 
+    console.warn(obj)
+
     return obj; // settings zurueckgeben
 };
 
@@ -934,11 +934,10 @@ async function save(callback) {
     };
 
     async function loopArr(objCntr) {
-        console.warn(dataGlobal)
         let objTemp = objCntr;
         for (const i in dataGlobal) {
             if (!i.includes('counter')) {
-                console.warn(dataGlobal[i])
+                // console.warn(dataGlobal[i])
                 const id = dataGlobal[i].name;
                 objTemp[id] = {
                     id: dataGlobal[i].ids,
@@ -996,20 +995,9 @@ async function save(callback) {
                 };
 
                 if (name.includes("alexa") || name.includes("sayit")) {
-                    // let timeMin = "";
-                    // let timeMax = "";
-                    let timeMinHourTemp = ``;
-                    let timeMinMinTemp = ``;
-                    let timeMaxHourTemp = ``;
-                    let timeMaxMinTemp = ``;
-                    if (data.timeMinHour != `` && data.timeMinMin != `` && data.timeMaxHour != `` && data.timeMaxMin != ``) {
-                        timeMinHourTemp = data.timeMinHour;
-                        timeMinMinTemp = data.timeMinMin;
-                        timeMaxHourTemp = data.timeMaxHour;
-                        timeMaxMinTemp = data.timeMaxMin;
-                        timeMin = `${timeMinHourTemp}:${timeMinMinTemp}`;
-                        timeMax = `${timeMaxHourTemp}:${timeMaxMinTemp}`;
-                    };
+
+                    timeMin = data.activeFrom;
+                    timeMax = data.activeUntil;
                     if (data.volume < 0 || data.volume > 100 || data.volume == undefined || data.volume == '') {
                         data.volume = 50;
                     };
@@ -1022,8 +1010,8 @@ async function save(callback) {
                                 name: data.name,
                                 path: data.path,
                                 volume: data.volume,
-                                timeMin: timeMin,
-                                timeMax: timeMax
+                                timeMin: data.activeFrom,
+                                timeMax: data.activeUntil
                             };
                             break;
                         };
@@ -1059,6 +1047,7 @@ async function save(callback) {
                         };
                     case "telegram":
                         {
+                            console.warn(data)
                             objTemp[data.id] = {
                                 name: data.nameFinal,
                                 inst: data.inst
