@@ -1,512 +1,454 @@
-{
-    "device_counter": 0,
-    "alexa_counter": 1,
-    "sayit_counter": 1,
-    "whatsapp_counter": 1,
-    "telegram_counter": 3,
-    "pushover_counter": 2,
-    "email_counter": 0,
-    "devices_counter": 6,
-    "custom_counter": 3,
-    "default_counter": 0,
-    "alert_counter": 0,
-    "presence_counter": 0,
-    "status_counter": 0,
-    "signal_counter": 2,
-    "matrix_counter": 1,
-    "default": {
-        "id": [{
-                "name": "washing-machine",
-                "startVal": "30",
-                "endVal": "15",
-                "standby": "1",
-                "startCount": "2",
-                "endCount": "50",
-                "id": "1"
+    {
+        "0": {
+            "enabled": false,
+            "name": "1",
+            "type": "washing-machine",
+            "currentConsumption": "0_userdata.0.example_state",
+            "switchPower": "0_userdata.0.example_state",
+            "pathStatus": "1.Status",
+            "pathLiveConsumption": "1.live consumption",
+            "timeTotal": "1.runtime",
+            "timeTotalMs": "1.runtime in ms",
+            "lastRuntime": "1.lastRuntime",
+            "runtimeMaxDP": "1.config.runtime max",
+            "alertRuntime": "1.alert runtime",
+            "messageDP": "1.messageDP",
+            "averageConsumption": "1.average consumption",
+            "dnd": "1.config.do not disturb",
+            "lastOperations": "1.last operations",
+            "startTimeJSON": "00:00:00",
+            "endtimeJSON": "00:00:00",
+            "runtimeJSON": "00:00:00",
+            "startMessageSent": false,
+            "endMessageSent": false,
+            "started": false,
+            "abort": false,
+            "autoOff": true,
+            "consumption": 0,
+            "resultStart": 0,
+            "resultEnd": 0,
+            "resultStandby": 0,
+            "alertCounter": 0,
+            "startValue": "30",
+            "endValue": "15",
+            "standby": "1",
+            "startCount": "2",
+            "endCount": "50",
+            "timeout": null,
+            "timeoutMsg": null,
+            "startTime": 0,
+            "endTime": 0,
+            "arrStart": [],
+            "arrEnd": [],
+            "arrStandby": [],
+            "dateJSON": [],
+            "valCancel": 10,
+            "message": {
+                "startMessage": false,
+                "startMessageText": "",
+                "endMessage": false,
+                "endMessageText": ""
             },
-            {
-                "name": "dryer",
-                "startVal": "120",
-                "endVal": "15",
-                "standby": "1",
-                "startCount": "2",
-                "endCount": "20",
-                "id": "2"
-            },
-            {
-                "name": "dishwasher",
-                "startVal": "15",
-                "endVal": "0.25",
-                "standby": "0.5",
-                "startCount": "2",
-                "endCount": "120",
-                "id": "3"
-            }
-        ],
-        "final": {}
-    },
-    "status": {
-        "id": [{
-            "stateAction": "in action",
-            "stateStandby": "standby",
-            "stateOff": "switched off",
-            "id": "0"
-        }],
-        "final": {}
-    },
-    "custom": {
-        "id": [{
-                "name": "custom",
-                "startVal": "30",
-                "endVal": "5",
-                "standby": "1",
-                "startCount": "1",
-                "endCount": "20",
-                "id": "21"
-            },
-            {
-                "name": "custom2",
-                "startVal": "30",
-                "endVal": "5",
-                "standby": "1",
-                "startCount": "1",
-                "endCount": "20",
-                "id": "22"
-            },
-            {
-                "name": "custom3",
-                "startVal": "30",
-                "endVal": "5",
-                "standby": "1",
-                "startCount": "1",
-                "endCount": "20",
-                "id": "23"
-            },
-            {
-                "name": "custom4",
-                "startVal": "30",
-                "endVal": "5",
-                "standby": "1",
-                "startCount": "1",
-                "endCount": "20",
-                "id": "24"
-            },
-            {
-                "name": "custom5",
-                "startVal": "30",
-                "endVal": "5",
-                "standby": "1",
-                "startCount": "1",
-                "endCount": "20",
-                "id": "25"
-            }
-        ],
-        "final": {}
-    },
-    "alert": {
-        "id": [],
-        "final": {}
-    },
-    "devices": {
-        "id": [{
-                "name": "1",
-                "type": "washing-machine",
-                "consumption": "0_userdata.0.example_state",
-                "switch": "0_userdata.0.example_state",
-                "startText": "1 Start",
-                "endText": "1 Stop",
-                "id": "0"
-            },
-            {
-                "name": "2",
-                "type": "dryer",
-                "consumption": "0_userdata.0.example_state",
-                "switch": "0_userdata.0.example_state",
-                "startText": "2 Start",
-                "endText": "2 Stop",
-                "id": "2"
-            },
-            {
-                "name": "3",
-                "type": "dishwasher",
-                "consumption": "0_userdata.0.example_state",
-                "switch": "0_userdata.0.example_state",
-                "startText": "3 Start",
-                "endText": "3 Stop",
-                "id": "3"
-            },
-            {
-                "name": "4",
-                "type": "custom",
-                "consumption": "0_userdata.0.example_state",
-                "switch": "0_userdata.0.example_state",
-                "startText": "4 Start",
-                "endText": "4 Stop",
-                "id": "4"
-            },
-            {
-                "name": "5",
-                "type": "custom2",
-                "consumption": "0_userdata.0.example_state",
-                "switch": "0_userdata.0.example_state",
-                "startText": "5 Start",
-                "endText": "5 Stop",
-                "id": "5"
-            }
-        ],
-        "final": {}
-    },
-    "alexa": {
-        "id": [{
-            "name": "alexa 1",
-            "path": "0_userdata.0.example_state",
-            "volume": "25",
-            "activeFrom": "00:00",
-            "activeUntil": "23:59",
-            "id": "0"
-        }],
-        "final": {
-            "0": {
-                "name": "alexa 1",
-                "path": "0_userdata.0.example_state",
-                "volume": "25",
-                "timeMin": "00:00",
-                "timeMax": "23:59"
-            }
-        }
-    },
-    "sayit": {
-        "id": [{
-            "name": "new device",
-            "path": "sayit.0.tts.text",
-            "volume": "25",
-            "activeFrom": "00:00",
-            "activeUntil": "23:59",
-            "id": "0"
-        }],
-        "final": {
-            "0": {
-                "name": "new device",
-                "path": "sayit.0.tts.text",
-                "timeMin": "00:00",
-                "timeMax": "23:59",
-                "volume": "25"
-            }
-        }
-    },
-    "whatsapp": {
-        "id": [{
-            "name": "new user",
-            "path": "whatsapp-cmb.0.sendMessage",
-            "id": "0"
-        }],
-        "final": {
-            "0": {
-                "name": "new user",
-                "path": "whatsapp-cmbundefined.sendMessage"
-            }
-        }
-    },
-    "telegram": {
-        "id": [{
-                "name": "new user 1",
-                "inst": ".0",
-                "username": "username",
-                "Chat ID": "",
-                "id": "1"
-            },
-            {
-                "name": "new user 2",
-                "inst": ".0",
-                "username": "username",
-                "Chat ID": "",
-                "id": "2"
-            }
-        ],
-        "final": {
-            "1": {
-                "inst": ".0"
-            },
-            "2": {
-                "inst": ".0"
-            }
-        }
-    },
-    "pushover": {
-        "id": [{
-            "name": "new user",
-            "inst": ".0",
-            "title": "",
-            "deviceID": "",
-            "prio": "normal",
-            "sound": "pushover",
-            "id": 1
-        }],
-        "final": {
-            "1": {
-                "name": "new user",
-                "inst": ".0",
-                "sound": "pushover"
-            }
-        }
-    },
-    "email": {
-        "id": [],
-        "final": {}
-    },
-    "signal": {
-        "id": [{
-            "name": "Signal user",
-            "inst": ".0",
-            "phone": "0123456789",
-            "id": 1
-        }],
-        "final": {}
-    },
-    "matrix": {
-        "id": [{
-            "name": "matrix server",
-            "inst": ".0",
-            "id": 0
-        }],
-        "final": {}
-    },
-    "linkedDevice": {
-        "id": [{
-                "enabled": true,
-                "name": "1",
-                "alexa": [
+            "timeoutInMS": 60000,
+            "alexa": {
+                "active": true,
+                "ids": [
                     "0"
                 ],
-                "sayit": [
+                "volOld": 0
+            },
+            "sayit": {
+                "active": true,
+                "ids": [
                     "0"
                 ],
-                "telegram": [],
-                "whatsapp": [
+                "volOld": 0
+            },
+            "telegram": {
+                "active": false,
+                "ids": []
+            },
+            "whatsapp": {
+                "active": true,
+                "ids": [
                     "0"
-                ],
-                "pushover": [
+                ]
+            },
+            "pushover": {
+                "active": true,
+                "ids": [
                     "1"
-                ],
-                "signal": [
+                ]
+            },
+            "signal": {
+                "active": true,
+                "ids": [
                     "1"
-                ],
-                "matrix": [
+                ]
+            },
+            "email": {
+                "active": false,
+                "ids": []
+            },
+            "matrix": {
+                "active": true,
+                "ids": [
                     "0"
-                ],
-                "autoOff": true,
-                "timer": "1",
-                "abort": false,
-                "id": "0"
+                ]
+            }
+        },
+        "2": {
+            "enabled": true,
+            "name": "2",
+            "type": "dryer",
+            "currentConsumption": "0_userdata.0.example_state",
+            "switchPower": "0_userdata.0.example_state",
+            "pathStatus": "2.Status",
+            "pathLiveConsumption": "2.live consumption",
+            "timeTotal": "2.runtime",
+            "timeTotalMs": "2.runtime in ms",
+            "lastRuntime": "2.lastRuntime",
+            "runtimeMaxDP": "2.config.runtime max",
+            "alertRuntime": "2.alert runtime",
+            "messageDP": "2.messageDP",
+            "averageConsumption": "2.average consumption",
+            "dnd": "2.config.do not disturb",
+            "lastOperations": "2.last operations",
+            "startTimeJSON": "00:00:00",
+            "endtimeJSON": "00:00:00",
+            "runtimeJSON": "00:00:00",
+            "startMessageSent": false,
+            "endMessageSent": false,
+            "started": false,
+            "abort": false,
+            "autoOff": false,
+            "consumption": 0,
+            "resultStart": 0,
+            "resultEnd": 0,
+            "resultStandby": 0,
+            "alertCounter": 0,
+            "startValue": "120",
+            "endValue": "15",
+            "standby": "1",
+            "startCount": "2",
+            "endCount": "20",
+            "timeout": null,
+            "timeoutMsg": null,
+            "startTime": 0,
+            "endTime": 0,
+            "arrStart": [],
+            "arrEnd": [],
+            "arrStandby": [],
+            "dateJSON": [],
+            "valCancel": 10,
+            "message": {
+                "startMessage": true,
+                "startMessageText": "2 Start",
+                "endMessage": true,
+                "endMessageText": "2 Stop"
             },
-            {
-                "enabled": true,
-                "name": "2",
-                "alexa": [],
-                "sayit": [],
-                "telegram": [
+            "alexa": {
+                "active": false,
+                "ids": [],
+                "volOld": 0
+            },
+            "sayit": {
+                "active": false,
+                "ids": [],
+                "volOld": 0
+            },
+            "telegram": {
+                "active": true,
+                "ids": [
                     "1"
-                ],
-                "whatsapp": [],
-                "pushover": [],
-                "signal": [],
-                "matrix": [],
-                "autoOff": false,
-                "timer": "2",
-                "abort": false,
-                "id": "2"
+                ]
             },
-            {
-                "enabled": true,
-                "name": "3",
-                "alexa": [],
-                "sayit": [],
-                "telegram": [
+            "whatsapp": {
+                "active": false,
+                "ids": []
+            },
+            "pushover": {
+                "active": false,
+                "ids": []
+            },
+            "signal": {
+                "active": false,
+                "ids": []
+            },
+            "email": {
+                "active": false,
+                "ids": []
+            },
+            "matrix": {
+                "active": false,
+                "ids": []
+            }
+        },
+        "3": {
+            "enabled": true,
+            "name": "3",
+            "type": "dishwasher",
+            "currentConsumption": "0_userdata.0.example_state",
+            "switchPower": "0_userdata.0.example_state",
+            "pathStatus": "3.Status",
+            "pathLiveConsumption": "3.live consumption",
+            "timeTotal": "3.runtime",
+            "timeTotalMs": "3.runtime in ms",
+            "lastRuntime": "3.lastRuntime",
+            "runtimeMaxDP": "3.config.runtime max",
+            "alertRuntime": "3.alert runtime",
+            "messageDP": "3.messageDP",
+            "averageConsumption": "3.average consumption",
+            "dnd": "3.config.do not disturb",
+            "lastOperations": "3.last operations",
+            "startTimeJSON": "00:00:00",
+            "endtimeJSON": "00:00:00",
+            "runtimeJSON": "00:00:00",
+            "startMessageSent": false,
+            "endMessageSent": false,
+            "started": false,
+            "abort": false,
+            "autoOff": false,
+            "consumption": 0,
+            "resultStart": 0,
+            "resultEnd": 0,
+            "resultStandby": 0,
+            "alertCounter": 0,
+            "startValue": "15",
+            "endValue": "0.25",
+            "standby": "0.5",
+            "startCount": "2",
+            "endCount": "120",
+            "timeout": null,
+            "timeoutMsg": null,
+            "startTime": 0,
+            "endTime": 0,
+            "arrStart": [],
+            "arrEnd": [],
+            "arrStandby": [],
+            "dateJSON": [],
+            "valCancel": 10,
+            "message": {
+                "startMessage": true,
+                "startMessageText": "3 Start",
+                "endMessage": true,
+                "endMessageText": "3 Stop"
+            },
+            "alexa": {
+                "active": false,
+                "ids": [],
+                "volOld": 0
+            },
+            "sayit": {
+                "active": false,
+                "ids": [],
+                "volOld": 0
+            },
+            "telegram": {
+                "active": true,
+                "ids": [
                     "1",
                     "2"
-                ],
-                "whatsapp": [],
-                "pushover": [],
-                "signal": [],
-                "matrix": [],
-                "autoOff": false,
-                "timer": "3",
-                "abort": false,
-                "id": "3"
+                ]
             },
-            {
-                "enabled": true,
-                "name": "4",
-                "alexa": [],
-                "sayit": [
-                    "0"
-                ],
-                "telegram": [
-                    "1"
-                ],
-                "whatsapp": [],
-                "pushover": [],
-                "signal": [],
-                "matrix": [],
-                "autoOff": false,
-                "timer": "4",
-                "abort": false,
-                "id": "4"
+            "whatsapp": {
+                "active": false,
+                "ids": []
             },
-            {
-                "enabled": true,
-                "name": "5",
-                "alexa": [],
-                "sayit": [
-                    "0"
-                ],
-                "telegram": [
-                    "1",
-                    "2"
-                ],
-                "whatsapp": [],
-                "pushover": [],
-                "signal": [],
-                "matrix": [],
-                "autoOff": false,
-                "timer": "0",
-                "abort": false,
-                "id": "5"
+            "pushover": {
+                "active": false,
+                "ids": []
+            },
+            "signal": {
+                "active": false,
+                "ids": []
+            },
+            "email": {
+                "active": false,
+                "ids": []
+            },
+            "matrix": {
+                "active": false,
+                "ids": []
             }
-        ],
-        "final": {
-            "0": {
-                "type": "washing-machine",
-                "pathConsumption": "0_userdata.0.example_state",
-                "pathSwitch": "0_userdata.0.example_state",
-                "startText": "1 Start",
-                "endText": "1 Stop",
-                "enabled": true,
-                "name": "1",
-                "alexa": [
-                    "0"
-                ],
-                "sayit": [
-                    "0"
-                ],
-                "telegram": [],
-                "whatsapp": [
-                    "0"
-                ],
-                "pushover": [
-                    "1"
-                ],
-                "signal": [
-                    "1"
-                ],
-                "email": [],
-                "matrix": [
-                    "0"
-                ],
-                "timer": "1",
-                "autoOff": true,
-                "abort": false,
-                "id": "0"
+        },
+        "4": {
+            "enabled": true,
+            "name": "4",
+            "type": "custom",
+            "currentConsumption": "0_userdata.0.example_state",
+            "switchPower": "0_userdata.0.example_state",
+            "pathStatus": "4.Status",
+            "pathLiveConsumption": "4.live consumption",
+            "timeTotal": "4.runtime",
+            "timeTotalMs": "4.runtime in ms",
+            "lastRuntime": "4.lastRuntime",
+            "runtimeMaxDP": "4.config.runtime max",
+            "alertRuntime": "4.alert runtime",
+            "messageDP": "4.messageDP",
+            "averageConsumption": "4.average consumption",
+            "dnd": "4.config.do not disturb",
+            "lastOperations": "4.last operations",
+            "startTimeJSON": "00:00:00",
+            "endtimeJSON": "00:00:00",
+            "runtimeJSON": "00:00:00",
+            "startMessageSent": false,
+            "endMessageSent": false,
+            "started": false,
+            "abort": false,
+            "autoOff": false,
+            "consumption": 0,
+            "resultStart": 0,
+            "resultEnd": 0,
+            "resultStandby": 0,
+            "alertCounter": 0,
+            "startValue": "30",
+            "endValue": "5",
+            "standby": "1",
+            "startCount": "1",
+            "endCount": "20",
+            "timeout": null,
+            "timeoutMsg": null,
+            "startTime": 0,
+            "endTime": 0,
+            "arrStart": [],
+            "arrEnd": [],
+            "arrStandby": [],
+            "dateJSON": [],
+            "valCancel": 10,
+            "message": {
+                "startMessage": true,
+                "startMessageText": "4 Start",
+                "endMessage": true,
+                "endMessageText": "4 Stop"
             },
-            "2": {
-                "type": "dryer",
-                "pathConsumption": "0_userdata.0.example_state",
-                "pathSwitch": "0_userdata.0.example_state",
-                "startText": "2 Start",
-                "endText": "2 Stop",
-                "enabled": true,
-                "name": "2",
-                "alexa": [],
-                "sayit": [],
-                "telegram": [
-                    "1"
-                ],
-                "whatsapp": [],
-                "pushover": [],
-                "signal": [],
-                "email": [],
-                "matrix": [],
-                "timer": "2",
-                "autoOff": false,
-                "abort": false,
-                "id": "2"
+            "alexa": {
+                "active": false,
+                "ids": [],
+                "volOld": 0
             },
-            "3": {
-                "type": "dishwasher",
-                "pathConsumption": "0_userdata.0.example_state",
-                "pathSwitch": "0_userdata.0.example_state",
-                "startText": "3 Start",
-                "endText": "3 Stop",
-                "enabled": true,
-                "name": "3",
-                "alexa": [],
-                "sayit": [],
-                "telegram": [
+            "sayit": {
+                "active": true,
+                "ids": [
+                    "0"
+                ],
+                "volOld": 0
+            },
+            "telegram": {
+                "active": true,
+                "ids": [
+                    "1"
+                ]
+            },
+            "whatsapp": {
+                "active": false,
+                "ids": []
+            },
+            "pushover": {
+                "active": false,
+                "ids": []
+            },
+            "signal": {
+                "active": false,
+                "ids": []
+            },
+            "email": {
+                "active": false,
+                "ids": []
+            },
+            "matrix": {
+                "active": false,
+                "ids": []
+            }
+        },
+        "5": {
+            "enabled": true,
+            "name": "5",
+            "type": "custom2",
+            "currentConsumption": "0_userdata.0.example_state",
+            "switchPower": "0_userdata.0.example_state",
+            "pathStatus": "5.Status",
+            "pathLiveConsumption": "5.live consumption",
+            "timeTotal": "5.runtime",
+            "timeTotalMs": "5.runtime in ms",
+            "lastRuntime": "5.lastRuntime",
+            "runtimeMaxDP": "5.config.runtime max",
+            "alertRuntime": "5.alert runtime",
+            "messageDP": "5.messageDP",
+            "averageConsumption": "5.average consumption",
+            "dnd": "5.config.do not disturb",
+            "lastOperations": "5.last operations",
+            "startTimeJSON": "00:00:00",
+            "endtimeJSON": "00:00:00",
+            "runtimeJSON": "00:00:00",
+            "startMessageSent": false,
+            "endMessageSent": false,
+            "started": false,
+            "abort": false,
+            "autoOff": false,
+            "consumption": 0,
+            "resultStart": 0,
+            "resultEnd": 0,
+            "resultStandby": 0,
+            "alertCounter": 0,
+            "startValue": "30",
+            "endValue": "5",
+            "standby": "1",
+            "startCount": "1",
+            "endCount": "20",
+            "timeout": null,
+            "timeoutMsg": null,
+            "startTime": 0,
+            "endTime": 0,
+            "arrStart": [],
+            "arrEnd": [],
+            "arrStandby": [],
+            "dateJSON": [],
+            "valCancel": 10,
+            "message": {
+                "startMessage": true,
+                "startMessageText": "5 Start",
+                "endMessage": true,
+                "endMessageText": "5 Stop"
+            },
+            "alexa": {
+                "active": false,
+                "ids": [],
+                "volOld": 0
+            },
+            "sayit": {
+                "active": true,
+                "ids": [
+                    "0"
+                ],
+                "volOld": 0
+            },
+            "telegram": {
+                "active": true,
+                "ids": [
                     "1",
                     "2"
-                ],
-                "whatsapp": [],
-                "pushover": [],
-                "signal": [],
-                "email": [],
-                "matrix": [],
-                "timer": "3",
-                "autoOff": false,
-                "abort": false,
-                "id": "3"
+                ]
             },
-            "4": {
-                "type": "custom",
-                "pathConsumption": "0_userdata.0.example_state",
-                "pathSwitch": "0_userdata.0.example_state",
-                "startText": "4 Start",
-                "endText": "4 Stop",
-                "enabled": true,
-                "name": "4",
-                "alexa": [],
-                "sayit": [
-                    "0"
-                ],
-                "telegram": [
-                    "1"
-                ],
-                "whatsapp": [],
-                "pushover": [],
-                "signal": [],
-                "email": [],
-                "matrix": [],
-                "timer": "4",
-                "autoOff": false,
-                "abort": false,
-                "id": "4"
+            "whatsapp": {
+                "active": false,
+                "ids": []
             },
-            "5": {
-                "type": "custom2",
-                "pathConsumption": "0_userdata.0.example_state",
-                "pathSwitch": "0_userdata.0.example_state",
-                "startText": "5 Start",
-                "endText": "5 Stop",
-                "enabled": true,
-                "name": "5",
-                "alexa": [],
-                "sayit": [
-                    "0"
-                ],
-                "telegram": [
-                    "1",
-                    "2"
-                ],
-                "whatsapp": [],
-                "pushover": [],
-                "signal": [],
-                "email": [],
-                "matrix": [],
-                "timer": "0",
-                "autoOff": false,
-                "abort": false,
-                "id": "5"
+            "pushover": {
+                "active": false,
+                "ids": []
+            },
+            "signal": {
+                "active": false,
+                "ids": []
+            },
+            "email": {
+                "active": false,
+                "ids": []
+            },
+            "matrix": {
+                "active": false,
+                "ids": []
             }
         }
-    },
-    "custom_device_counter": 0
-}
+    }

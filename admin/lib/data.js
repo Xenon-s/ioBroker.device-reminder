@@ -650,8 +650,7 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "select",
                         "dataLang": "priority",
-                        "dataOptions": "normal;high;quiet",
-                        // "tdClass": "validate values-input select",
+                        "dataOptions": "normal;high;quiet;confirmation",
                         "dataDefault": "normal"
                     },
                     "6": {

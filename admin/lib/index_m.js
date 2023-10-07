@@ -940,6 +940,7 @@ async function save(callback) {
                         };
                     case "telegram":
                         {
+                            console.warn(data)
                             objTemp[data.id] = {
                                 /**@type {string}*/
                                 name: data.name,
@@ -948,7 +949,7 @@ async function save(callback) {
                                 /**@type {string}*/
                                 username: data.username,
                                 /**@type {string}*/
-                                chatId: data.chatId,
+                                chatId: data.chatId != undefined ? data.chatId || 0 : 0,
                                 /**@type {boolean}*/
                                 group: data.group
                             };
@@ -974,7 +975,7 @@ async function save(callback) {
                                 /**@type {string}*/
                                 title: data.title,
                                 /**@type {string}*/
-                                deviceID: data.deviceID,
+                                deviceId: data.deviceID,
                                 /**@type {string}*/
                                 prio: data.prio,
                                 /**@type {string}*/
@@ -984,6 +985,8 @@ async function save(callback) {
                                 objTemp[data.id].prio = 1;
                             } else if (objTemp[data.id].prio == 'quiet') {
                                 objTemp[data.id].prio = -1;
+                            } else if (objTemp[data.id].prio == 'confirmation') {
+                                objTemp[data.id].prio = 2;
                             } else {
                                 delete objTemp[data.id].prio;
                             };

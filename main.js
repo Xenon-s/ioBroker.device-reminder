@@ -69,7 +69,7 @@ class deviceReminder extends utils.Adapter {
 
         // Initialize your adapter here
         this.devicesCompleted = await this.createDevices();
-        this.log.info(JSON.stringify(this.devicesCompleted));
+        this.log.debug(JSON.stringify(this.devicesCompleted));
         this.createDPS();
         this.pollingData(true);
     };
@@ -113,15 +113,15 @@ class deviceReminder extends utils.Adapter {
         this.log.debug(JSON.stringify(this.config))
 
         try {
-            this.devices = await getDataFromAdmin(this.config.linkedDevice !== undefined ? this.config.linkedDevice.final || {} : {});
-            this.alexaInput = await getDataFromAdmin(this.config.alexa !== undefined ? this.config.alexa.final || {} : {});
-            this.sayitInput = await getDataFromAdmin(this.config.sayit !== undefined ? this.config.sayit.final || {} : {});
-            this.whatsappInput = await getDataFromAdmin(this.config.whatsapp !== undefined ? this.config.whatsapp.final || {} : {});
-            this.telegramInput = await getDataFromAdmin(this.config.telegram !== undefined ? this.config.telegram.final || {} : {});
-            this.pushoverInput = await getDataFromAdmin(this.config.pushover !== undefined ? this.config.pushover.final || {} : {});
-            this.emailInput = await getDataFromAdmin(this.config.email !== undefined ? this.config.email.final || {} : {});
-            this.signalInput = await getDataFromAdmin(this.config.signal !== undefined ? this.config.signal.final || {} : {});
-            this.matrixInput = await getDataFromAdmin(this.config.matrix !== undefined ? this.config.matrix.final || {} : {});
+            this.devices = await getDataFromAdmin(this.config.linkedDevice != undefined ? this.config.linkedDevice.final || {} : {});
+            this.alexaInput = await getDataFromAdmin(this.config.alexa != undefined ? this.config.alexa.final || {} : {});
+            this.sayitInput = await getDataFromAdmin(this.config.sayit != undefined ? this.config.sayit.final || {} : {});
+            this.whatsappInput = await getDataFromAdmin(this.config.whatsapp != undefined ? this.config.whatsapp.final || {} : {});
+            this.telegramInput = await getDataFromAdmin(this.config.telegram != undefined ? this.config.telegram.final || {} : {});
+            this.pushoverInput = await getDataFromAdmin(this.config.pushover != undefined ? this.config.pushover.final || {} : {});
+            this.emailInput = await getDataFromAdmin(this.config.email != undefined ? this.config.email.final || {} : {});
+            this.signalInput = await getDataFromAdmin(this.config.signal != undefined ? this.config.signal.final || {} : {});
+            this.matrixInput = await getDataFromAdmin(this.config.matrix != undefined ? this.config.matrix.final || {} : {});
 
             this.states.action = await this.config.status.id[0].stateAction;
             this.states.standby = await this.config.status.id[0].stateStandby;
@@ -402,9 +402,9 @@ class deviceReminder extends utils.Adapter {
 
                     this.message = {
                         startMessage: obj.startText.length > 0 ? true || false : false,
-                        startMessageText: obj.startText,
+                        startText: obj.startText,
                         endMessage: obj.endText.length ? true || false : false,
-                        endMessageText: obj.endText
+                        endText: obj.endText
                     };
 
                     /*obj timer erstellen*/
@@ -497,8 +497,8 @@ class deviceReminder extends utils.Adapter {
                     };
                 };
             };
-            this.log.info(`RETURN ${JSON.stringify(objVal)}`);
-            this.log.info(`OBJ IN CONSTRUCTOR: ${JSON.stringify(devicesInput)}`);
+            this.log.debug(`RETURN ${JSON.stringify(objVal)}`);
+            this.log.debug(`OBJ IN CONSTRUCTOR: ${JSON.stringify(devicesInput)}`);
 
             const device = new classDevice(devicesInput,
                 this.adapterDPs[name].statusDevice,
@@ -515,8 +515,8 @@ class deviceReminder extends utils.Adapter {
                 this.adapterDPs[name].doNotDisturb,
                 objVal);
 
-            this.log.info(`RETURN ${JSON.stringify(device)}`);
-            this.log.info(`Device ${JSON.stringify(device.name)} was successfully created`);
+            this.log.debug(`RETURN ${JSON.stringify(device)}`);
+            this.log.debug(`Device ${JSON.stringify(device.name)} was successfully created`);
             return device;
         } catch (error) {
             this.log.error(`[ERROR] {funcCreateObject}: "${error}"`);
@@ -780,7 +780,7 @@ class deviceReminder extends utils.Adapter {
                         await this.setVolume(id, false, "alexa");
                         await this.setVolume(id, false, "sayit");
                     };
-                    this.log.debug(`[${JSON.stringify(device.name)}]: Endmessage: ${device.message.endMessageText}`);
+                    this.log.debug(`[${JSON.stringify(device.name)}]: Endmessage: ${device.message.endText}`);
                 }, 1000);
             };
 
@@ -989,22 +989,27 @@ class deviceReminder extends utils.Adapter {
         let time = `${aHours}:${aMin}`;
         time = await this.str2time(time);
 
-        const sendMsg = async(id, msg) => {
+        const sendMsg = async(id, /**@type {string}*/ msg) => {
             // trigger dp
             this.setStateAsync(device.messageDP, msg, true);
             // send telegram
             try {
-                if (device.telegram && this.telegramInput != undefined) {
-                    for (const i in device.telegramUser) {
-                        let user = ``;
-                        let strTele = ``;
-                        user = this.telegramInput[device.telegramUser[i]].name;
-                        strTele = `telegram${this.telegramInput[device.telegramUser[i]].inst}`;
-                        this.log.debug(`[${JSON.stringify(device.name)}]: telegram message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
-                        this.sendTo(strTele, `send`, {
+                if (device.telegram.active) {
+                    for (const i in device.telegram.ids) {
+                        const dataTelegram = this.telegramInput[device.telegram.ids[i]];
+                        let objTemp = {
+                            /**@type {string}*/
                             text: msg,
-                            user: user
-                        });
+                            /**@type {string}*/
+                            user: dataTelegram.username,
+                            /**@type {string}*/
+                            chatId: dataTelegram.chatId,
+                        };
+                        if (!dataTelegram.group) { // Wenn keine Gruppe, dann chatId loeschen
+                            delete objTemp.chatId;
+                        };
+
+                        this.sendTo(`telegram${dataTelegram.inst}`, `send`, objTemp);
                     };
                 };
             } catch (error) {
@@ -1013,10 +1018,10 @@ class deviceReminder extends utils.Adapter {
 
             // send whatsapp
             try {
-                if (device.whatsapp && this.whatsappInput != undefined) {
-                    for (const i in device.whatsappID) {
+                if (device.whatsapp.active) {
+                    for (const i in device.whatsapp.ids) {
                         this.log.debug(`[${JSON.stringify(device.name)}]: whatsapp message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
-                        await this.setForeignStateAsync(this.whatsappInput[device.whatsappID[i]].path, `${msg}`);
+                        await this.setForeignStateAsync(this.whatsappInput[device.whatsapp.ids[i]].path, `${msg}`);
                     };
                 };
             } catch (error) {
@@ -1025,10 +1030,10 @@ class deviceReminder extends utils.Adapter {
 
             // send alexa
             try {
-                if (device.alexa && !value.dnd.val && this.alexaInput != undefined) {
-                    for (const i in device.alexaID) {
+                if (device.alexa.active && !value.dnd.val) {
+                    for (const i in device.alexa.ids) {
                         this.log.debug(`[${JSON.stringify(device.name)}]: Alexa message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
-                        await this.sendMsgSpeaker(id, this.alexaInput[device.alexaID[i]], time, `${msg}`);
+                        await this.sendMsgSpeaker(id, this.alexaInput[device.alexa.ids[i]], time, `${msg}`);
                     };
                 };
             } catch (error) {
@@ -1037,10 +1042,10 @@ class deviceReminder extends utils.Adapter {
 
             // send sayit
             try {
-                if (device.sayIt && !value.dnd.val && this.sayitInput != undefined) { //sayit 
-                    for (const i in device.sayItID) {
+                if (device.sayit && !value.dnd.val) { //sayit 
+                    for (const i in device.sayit.ids) {
                         this.log.debug(`[${JSON.stringify(device.name)}]: sayIt message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
-                        await this.sendMsgSpeaker(id, this.sayitInput[device.sayItID[i]], time, msg);
+                        await this.sendMsgSpeaker(id, this.sayitInput[device.sayit.ids[i]], time, msg);
                     };
                 };
             } catch (error) {
@@ -1049,25 +1054,70 @@ class deviceReminder extends utils.Adapter {
 
             // send pushover
             try {
-                if (device.pushover && this.pushoverInput != undefined) { // pushover nachricht versenden
-                    for (const i in device.pushoverID) {
+                if (device.pushover.active) { // pushover nachricht versenden
+                    for (const i in device.pushover.ids) {
                         this.log.debug(`[${JSON.stringify(device.name)}]: pushover message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
-                        const strPush = `pushover${this.pushoverInput[device.pushoverID[i]].inst}`;
                         let objTemp = {
+                            /**@type {string}*/
                             message: msg,
-                            sound: this.pushoverInput[device.pushoverID[i]].sound,
-                            priority: this.pushoverInput[device.pushoverID[i]].prio
+                            /**@type {string}*/
+                            sound: this.pushoverInput[device.pushover.ids[i]].sound,
+                            /**@type {string}*/
+                            title: this.pushoverInput[device.pushover.ids[i]].title,
+                            /**@type {string}*/
+                            device: this.pushoverInput[device.pushover.ids[i]].deviceId,
+                            /**@type {number}*/
+                            priority: this.pushoverInput[device.pushover.ids[i]].prio,
+                            /**@type {number}*/
+                            retry: 60, // fuer Bestaetigung, wird geloescht, wenn andere Prio gewaehlt
+                            /**@type {number}*/
+                            expire: 3600, // fuer Bestaetigung, wird geloescht, wenn andere Prio gewaehlt
                         };
 
-                        if (this.pushoverInput[device.pushoverID[i]].prio == undefined) {
-                            delete objTemp.priority;
+                        // Wenn andere Prioritaet als 2, loesche Bestaetigungsparameter
+                        if (objTemp.priority != 2) {
+                            delete objTemp.priority
+                            delete objTemp.retry
+                            delete objTemp.expire
                         };
+
                         this.log.debug(`[${JSON.stringify(device.name)}]: PUSHOVER OBJECT SENDTO: ${JSON.stringify(objTemp)}`);
-                        this.sendTo(strPush, "send", objTemp);
+                        this.sendTo(`pushover${this.pushoverInput[device.pushover.ids[i]].inst}`, "send", objTemp);
                     };
                 };
             } catch (error) {
                 this.log.error(`[ERROR] {sendMsg: PUSHOVER}: "${error}"`);
+            };
+
+            // send signal
+            try {
+                if (device.signal.active) { // pushover nachricht versenden
+                    for (const i in device.signal.ids) {
+                        this.log.debug(`[${JSON.stringify(device.name)}]: signal-cmb message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
+                        let objTemp = {
+                            /**@type {string}*/
+                            text: msg,
+                            /**@type {string}*/
+                            phone: this.signalInput[device.signal.ids[i]].phone,
+                        };
+                        this.log.debug(`[${JSON.stringify(device.name)}]: signal-cmb OBJECT SENDTO: ${JSON.stringify(objTemp)}`);
+                        this.sendTo(`signal-cmb${this.signalInput[device.signal.ids[i]].inst}`, "send", objTemp);
+                    };
+                };
+            } catch (error) {
+                this.log.error(`[ERROR] {sendMsg: signal-cmb}: "${error}"`);
+            };
+
+            // send matrix
+            try {
+                if (device.matrix.active) { // pushover nachricht versenden
+                    for (const i in device.matrix.ids) {
+                        this.log.debug(`[${JSON.stringify(device.name)}]: matrix message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
+                        this.sendTo(`matrix${this.pushoverInput[device.pushover.ids[i]].inst}`, msg);
+                    };
+                };
+            } catch (error) {
+                this.log.error(`[ERROR] {sendMsg: matrix}: "${error}"`);
             };
 
             // send email
@@ -1075,12 +1125,17 @@ class deviceReminder extends utils.Adapter {
                 if (device.email && this.emailInput != undefined) { // email nachricht versenden
                     for (const i in device.emailID) {
                         this.log.debug(`[${JSON.stringify(device.name)}]: email message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
-                        this.sendTo("email", "send", {
+                        let objTemp = {
+                            /**@type {string}*/
                             text: msg,
+                            /**@type {string}*/
                             to: this.emailInput[device.emailID[i]].emailTo,
+                            /**@type {string}*/
                             subject: msg,
+                            /**@type {string}*/
                             from: this.emailInput[device.emailID[i]].emailFrom
-                        });
+                        };
+                        this.sendTo("email", "send", objTemp);
                     };
                 };
             } catch (error) {
@@ -1091,13 +1146,13 @@ class deviceReminder extends utils.Adapter {
 
         switch (type) {
             case "start":
-                msg = await this.createObjMsg(device.message.startMessageText);
-                this.log.debug(`[${JSON.stringify(device.name)}]: startmessage: ${JSON.stringify(device.message.startMessageText)}`);
+                msg = await this.createObjMsg(device.message.startText);
+                this.log.debug(`[${JSON.stringify(device.name)}]: startmessage: ${JSON.stringify(device.message.startText)}`);
                 sendMsg(id, msg);
                 break;
             case "end":
-                msg = await this.createObjMsg(device.message.endMessageText);
-                this.log.debug(`[${JSON.stringify(device.name)}]: endmessage: ${JSON.stringify(device.message.endMessageText)}`);
+                msg = await this.createObjMsg(device.message.endText);
+                this.log.debug(`[${JSON.stringify(device.name)}]: endmessage: ${JSON.stringify(device.message.endText)}`);
                 sendMsg(id, msg);
                 if (!bPresence) {
                     const objTemp = {
@@ -1364,7 +1419,7 @@ class deviceReminder extends utils.Adapter {
         let array = {};
         array = arr;
 
-        this.log.warn(JSON.stringify(array))
+        this.log.debug(JSON.stringify(array))
 
         for (const i in array) {
             array[i].check = 'open';
@@ -1404,7 +1459,7 @@ class deviceReminder extends utils.Adapter {
                         };
                     };
                 };
-                this.log.info(JSON.stringify(data))
+                this.log.debug(JSON.stringify(data))
 
                 // wenn i.O. dann push in array "checked", sonst in "failed"
                 if (data.check != 'err') {
@@ -1414,7 +1469,7 @@ class deviceReminder extends utils.Adapter {
                         id: data.id
                     };
 
-                    this.log.info(JSON.stringify(data))
+                    this.log.debug(JSON.stringify(data))
 
                     if (cmd.includes('devices') && data.switch == 'empty')
                         dataFinal.autoOff = true;
@@ -1433,7 +1488,7 @@ class deviceReminder extends utils.Adapter {
             failed: failed
         };
 
-        this.log.info(JSON.stringify(result))
+        this.log.debug(JSON.stringify(result))
 
         await this.respond(obj, result, this)
     };
