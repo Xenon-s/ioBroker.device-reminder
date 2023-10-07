@@ -8,7 +8,7 @@ In dataTable stehen alle Daten, um die HTML der einzelnen Tabellen erstellen zu 
 async function createTableHeadData(settings) {
 
     let dataTable = {
-        "link-device": {
+        "linked-device": {
             "head": {
                 "class": "translate collapsible-inactive dynamic-table-devices"
             },
@@ -690,6 +690,7 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
+                        "dataDefault": "Signal user",
                     },
                     "2": {
                         "dataName": "inst",
@@ -704,6 +705,7 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "number",
                         "dataLang": "phone",
+                        "dataDefault": "0123456789",
                     },
                     "4": {
                         "dataName": "delete",
@@ -734,6 +736,7 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
+                        "dataDefault": "email user",
                     },
                     "2": {
                         "dataName": "emailFrom",
@@ -772,10 +775,11 @@ async function createTableHeadData(settings) {
                 "submitbtn": true,
                 "th": {
                     "1": {
-                        "dataName": "matrix",
+                        "dataName": "name",
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
+                        "dataDefault": "matrix server",
                     },
                     "2": {
                         "dataName": "inst",
@@ -994,20 +998,21 @@ Hier werden alle Daten aus den Settings geholt und in ein Objekt umgewandelt, mi
 function createData(settings) {
 
     let data = {};
+
     data.linkedDevice = {
-            name: 'linkedDevice',
-            idHTML: 'link-deviceID',
-            ids: settings.linkedDevice !== undefined ? settings.linkedDevice.id || [] : [],
-            idsTable: settings.linkedDevice !== undefined ? settings.linkedDevice.final || [] : [],
-            cntr: settings.linkedDevice_counter !== undefined ? settings.linkedDevice_counter || 0 : 0,
-        },
-        data.devices = {
-            name: 'devices',
-            idHTML: 'devicesID',
-            ids: settings.devices !== undefined ? settings.devices.id || [] : [],
-            idsTable: settings.devices !== undefined ? settings.devices.final || [] : [],
-            cntr: settings.devices_counter !== undefined ? settings.devices_counter || 0 : 0,
-        };
+        name: 'linkedDevice',
+        idHTML: 'linked-deviceID',
+        ids: settings.linkedDevice !== undefined ? settings.linkedDevice.id || [] : [],
+        idsTable: settings.linkedDevice !== undefined ? settings.linkedDevice.final || [] : [],
+        cntr: settings.linkedDevice_counter !== undefined ? settings.linkedDevice_counter || 0 : 0,
+    };
+    data.devices = {
+        name: 'devices',
+        idHTML: 'devicesID',
+        ids: settings.devices !== undefined ? settings.devices.id || [] : [],
+        idsTable: settings.devices !== undefined ? settings.devices.final || [] : [],
+        cntr: settings.devices_counter !== undefined ? settings.devices_counter || 0 : 0,
+    };
     data.alexa = {
         name: 'alexa',
         idHTML: 'alexaID',

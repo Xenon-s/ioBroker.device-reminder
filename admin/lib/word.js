@@ -944,16 +944,16 @@ systemDictionary = {
         "uk": "телеграма",
         "zh-cn": "电话图"
     },
-    "link-device": {
-        "en": "link-device",
+    "linked-device": {
+        "en": "linked-device",
         "de": "Verknüpfte Geräte",
         "ru": "ссылка-устройство",
         "pt": "dispositivo de ligação",
         "nl": "vertaling:",
-        "fr": "link-device",
-        "it": "link-dispositivo",
-        "es": "link-device",
-        "pl": "link-device",
+        "fr": "linked-device",
+        "it": "linked-dispositivo",
+        "es": "linked-device",
+        "pl": "linked-device",
         "uk": "посилання-розробник",
         "zh-cn": "联系"
     },

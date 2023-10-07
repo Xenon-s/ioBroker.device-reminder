@@ -1338,38 +1338,38 @@ class deviceReminder extends utils.Adapter {
 
     async onMessage(obj) {
 
-        try {
+        // try {
 
-            this.log.debug(`Data from configuration received : ${JSON.stringify(obj)}`);
+        this.log.debug(`Data from configuration received : ${JSON.stringify(obj)}`);
 
-            const counter = await obj.message;
-            this.log.debug(`COUNTER ON MESSAGE: ${JSON.stringify(counter)}`);
+        const counter = await obj.message;
+        this.log.debug(`COUNTER ON MESSAGE: ${JSON.stringify(counter)}`);
 
-            const name = obj.command;
-            // const name = obj.command.cmd;
-            let objMessenger = {};
+        const name = obj.command;
+        // const name = obj.command.cmd;
+        let objMessenger = {};
 
-            // if (name == 'telegram') {
-            //     objMessenger = {
-            //         name: name,
-            //         path: 'communicate.users'
-            //     };
-            // };
-            // if (name == 'whatsapp-cmb') {
-            //     objMessenger = {
-            //         name: name,
-            //         path: 'sendMessage'
-            //     };
-            // };
+        // if (name == 'telegram') {
+        //     objMessenger = {
+        //         name: name,
+        //         path: 'communicate.users'
+        //     };
+        // };
+        // if (name == 'whatsapp-cmb') {
+        //     objMessenger = {
+        //         name: name,
+        //         path: 'sendMessage'
+        //     };
+        // };
 
-            // if (name == 'telegram' || name == 'whatsapp-cmb') {
-            //     await this.getInstance(obj, objMessenger.name, objMessenger.path, counter);
-            // } else {
-            await this.ctrlInput(obj, obj.command, obj.message);
-            // };
-        } catch (error) {
-            this.log.error(`[ERROR] {onMessage}: "${error}"`);
-        };
+        // if (name == 'telegram' || name == 'whatsapp-cmb') {
+        //     await this.getInstance(obj, objMessenger.name, objMessenger.path, counter);
+        // } else {
+        await this.ctrlInput(obj, obj.command, obj.message);
+        // };
+        // } catch (error) {
+        // this.log.error(`[ERROR] {onMessage}: "${error}"`);
+        // };
     };
 
     async ctrlInput(obj, cmd, arr) {
@@ -1380,7 +1380,7 @@ class deviceReminder extends utils.Adapter {
         let array = {};
         array = arr;
 
-        this.log.debug(JSON.stringify(array))
+        this.log.warn(JSON.stringify(array))
 
         for (const i in array) {
             array[i].check = 'open';
@@ -1394,7 +1394,7 @@ class deviceReminder extends utils.Adapter {
             if (cmd.includes('whatsapp')) keys = ['name', 'path'];
             if (cmd.includes('pushover')) keys = ['name', 'inst', 'prio', 'sound'];
             if (cmd.includes('email')) keys = ['name', 'emailFrom', 'emailTo'];
-            if (cmd.includes('signal')) keys = ['name', 'inst', 'number'];
+            if (cmd.includes('signal')) keys = ['name', 'inst', 'phone'];
             if (cmd.includes('matrix')) keys = ['name', 'inst'];
             if (cmd.includes('default') || cmd.includes('custom')) keys = ['name', 'startVal', 'endVal', 'standby', 'startCount', 'endCount'];
 

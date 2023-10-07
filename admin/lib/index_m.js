@@ -92,6 +92,7 @@ async function createGUI(settings, onChange) {
         return checked;
     };
 
+    // Static Table erstellen
     async function createTable(data, i) {
 
         const name = data[i].name;
@@ -150,6 +151,7 @@ async function createGUI(settings, onChange) {
         const actData = await createData(settings)
         const data = await createSettings(actData);
         const result = await checkInput(actData, name);
+
         if (!name.includes('header')) checkedUserInput[actData[name].name] = result[name];
 
         // Wenn in Custom Types geaendert werden, muss die GUI neu geladen werden, da sonst die neuen Types nicht auftauchen
@@ -176,15 +178,12 @@ async function createGUI(settings, onChange) {
 
 async function createDynamicTable(settings, checked, onChange) {
 
-    console.warn(settings)
-
     let curDevice = null;
-    // const settingsDevice = settings.linkedDevice.ids;
     const settingsTable = settings.linkedDevice.idsTable;
     const devices = checked.devices;
 
     // alte Tabelleninhalte loeschen
-    $('#link-device-body').html("");
+    $('#linked-device-body').html("");
 
     for (const i in devices) {
         curDevice = null;
@@ -277,9 +276,9 @@ async function createDynamicTable(settings, checked, onChange) {
             },
             {
                 type: 'multiple',
-                data: checked.pushover,
+                data: checked.signal,
                 name: "signal",
-                value: curDevice.pushover,
+                value: curDevice.signal,
                 disable: false
             },
             {
@@ -288,7 +287,15 @@ async function createDynamicTable(settings, checked, onChange) {
                 name: "email",
                 value: curDevice.email,
                 disable: false
-            }, {
+            },
+            {
+                type: 'multiple',
+                data: checked.matrix,
+                name: "matrix",
+                value: curDevice.matrix,
+                disable: false
+            },
+            {
                 type: 'checkbox',
                 name: "autoOff",
                 value: curDevice.autoOff,
@@ -366,10 +373,10 @@ async function createDynamicTable(settings, checked, onChange) {
         };
 
         col += "</tr>";
-        $('#link-device-body').append(col);
+        $('#linked-device-body').append(col);
 
         // vom User gesetzte "multiple options" in der Tabelle anzeigen
-        $('#link-device-body').children().eq(i).children().each(function() {
+        $('#linked-device-body').children().eq(i).children().each(function() {
             if ($(this).data('type') == 'multiple') {
                 $(this).find('select').val(curDevice[$(this).data('name')]);
             } else {
@@ -378,7 +385,7 @@ async function createDynamicTable(settings, checked, onChange) {
         });
 
         // trigger im dynamic table setzen
-        $('#link-device-body').find('.values-input').on('change', function() {
+        $('#linked-device-body').find('.values-input').on('change', function() {
             $('.btn-save, .btn-save-close').fadeIn();
             onChangeGlobal(true);
         });
@@ -409,7 +416,10 @@ async function checkInput(data, type) {
         // Userinput ins Backend schicken und auf Plausibilitaet pruefen
         try {
             sendTo(`device-reminder.${instance}`, name, arr, async result => {
+                console.warn(name)
+                console.warn(arr)
                 const res = await result;
+                console.warn(res)
                 if (res != undefined) {
                     obj.dataChecked = res.checked || [];
                     obj.dataFailed = res.failed || [];
@@ -420,7 +430,7 @@ async function checkInput(data, type) {
                         $(`#deviceTypeID`).attr("data-options", deviceTypes.join(';'));
                     };
                     await checked(obj); // Auswahlfelder erstellen
-                    showHeader('link-deviceID', name, res.checked || {}); // erkannte Geraete in "dynamicTable" einblenden
+                    showHeader('linked-deviceID', name, res.checked || {}); // erkannte Geraete in "dynamicTable" einblenden
                     successCallback(res.checked);
                 };
             });
@@ -481,13 +491,6 @@ async function checkInput(data, type) {
     };
 
     async function checked(obj) {
-
-        if (obj.dataFailed.length > 0) {
-            console.warn(obj)
-            console.warn(obj.dataFailed)
-            console.warn(`#${obj.err}`)
-        }
-
 
         $(`#${obj.header}`).html(`<div class="collapsible-header translate"><i class="material-icons">create</i><span>${_(obj.name)}</span></div>`);
         if (obj.name !== `device status` && (obj.dataChecked.length <= 0) && (obj.dataFailed.length <= 0)) {
@@ -726,13 +729,8 @@ function showHeader( /**@type {string}*/ tblId, /**@type {Boolean}*/ name, arr) 
 // settings neu erstellen und an die table schicken
 async function createSettings(data, type) {
 
-    // console.warn(data)
-
     let obj = {};
-
     obj = data;
-
-    console.warn(obj)
 
     // Daten aus tabellen nur holen, wenn neues device erzeugt wurde
     if (type != 'save') {
@@ -769,7 +767,7 @@ async function createSettings(data, type) {
         };
     };
 
-    let body = $('#link-deviceID .table-lines');
+    let body = $('#linked-deviceID .table-lines');
     let devices = [];
     body.children().each(function() { // daten aus dyn. tabelle sichern
         let data = {};
@@ -837,48 +835,47 @@ async function save(callback) {
 
     function createArray(obj) {
 
-        console.warn(obj)
-
         const name = obj.name;
-
         let timeMin = "";
         let timeMax = "";
-
         let objTemp = {};
+
         for (const i in obj.ids) {
             if (i != undefined) {
                 const data = obj.ids[i];
                 if (name.includes('linkedDevice')) { // ????
-                    const dataTable = obj.ids[i]; // devices hat zwei daten arrays
+                    const dataMeasuringDevices = dataGlobal.devices.ids[i];
+                    const dataLinkedDevices = data;
+                    /*
+                    Daten aus den beiden Tabellen von "linked Device" und "measuring Devices" miteiner verknuepfen und ein finales "linked Device"
+                    daraus erstellen. Messenger Daten werden als ID in einem Array angehangen
+                    */
+                    if (dataMeasuringDevices.id == dataLinkedDevices.id) {
+                        objTemp[dataMeasuringDevices.id] = {
+                            // Daten kommen aus "measuring Devices"
+                            type: dataMeasuringDevices.type,
+                            pathConsumption: dataMeasuringDevices.consumption,
+                            pathSwitch: dataMeasuringDevices.switch,
+                            startText: dataMeasuringDevices.startText,
+                            endText: dataMeasuringDevices.endText,
+                            runtimeMax: dataMeasuringDevices.runtimeMax,
 
-                    console.warn(data)
-                    console.warn(dataTable)
+                            // Daten kommen aus "linked Devices"
+                            enabled: dataLinkedDevices.enabled,
+                            name: dataLinkedDevices.name,
+                            alexa: dataLinkedDevices.alexa != undefined ? dataLinkedDevices.alexa || [] : [],
+                            sayit: dataLinkedDevices.sayit != undefined ? dataLinkedDevices.sayit || [] : [],
+                            telegram: dataLinkedDevices.telegram != undefined ? dataLinkedDevices.telegram || [] : [],
+                            whatsapp: dataLinkedDevices.whatsapp != undefined ? dataLinkedDevices.whatsapp || [] : [],
+                            pushover: dataLinkedDevices.pushover != undefined ? dataLinkedDevices.pushover || [] : [],
+                            signal: dataLinkedDevices.signal != undefined ? dataLinkedDevices.signal || [] : [],
+                            email: dataLinkedDevices.email != undefined ? dataLinkedDevices.email || [] : [],
+                            matrix: dataLinkedDevices.matrix != undefined ? dataLinkedDevices.matrix || [] : [],
 
-                    // prüfen ob data in dataTable vorhanden ist
-                    // und finales 'device' objekt erstellen
-                    if (data.id == dataTable.id) {
-                        objTemp[data.id] = {
-                            enabled: dataTable.enabled,
-                            name: data.name,
-                            type: data.type,
-                            pathConsumption: data.consumption,
-                            pathSwitch: data.switch,
-                            startText: data.startText,
-                            endText: data.endText,
-                            runtimeMax: data.runtimeMax,
-
-                            alexa: dataTable.alexa,
-                            sayit: dataTable.sayit,
-                            telegram: dataTable.telegram,
-                            whatsapp: dataTable.whatsapp,
-                            pushover: dataTable.pushover,
-                            signal: dataTable.pushover,
-                            email: dataTable.email,
-                            matrix: dataTable.matrix,
-                            timer: dataTable.timer,
-                            autoOff: dataTable.autoOff,
-                            abort: dataTable.abort,
-                            id: dataTable.id
+                            timer: dataLinkedDevices.timer != undefined ? dataLinkedDevices.timer || 0 : 0,
+                            autoOff: dataLinkedDevices.autoOff != undefined ? dataLinkedDevices.autoOff || false : false,
+                            abort: dataLinkedDevices.abort != undefined ? dataLinkedDevices.abort || false : false,
+                            id: dataLinkedDevices.id
                         };
                     };
                 };
@@ -936,7 +933,6 @@ async function save(callback) {
                         };
                     case "telegram":
                         {
-                            // console.warn(data)
                             objTemp[data.id] = {
                                 name: data.nameFinal,
                                 inst: data.inst
