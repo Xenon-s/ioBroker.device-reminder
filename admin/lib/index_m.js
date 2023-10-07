@@ -99,8 +99,11 @@ async function createGUI(settings, onChange) {
 
         // create click event "disable save button"
         const btnSave = `#btn-check-${name}`;
+        $(btnSave).fadeOut();
         $(btnSave).on('click', async() => {
             dataGlobal = await btnPressed(settings, i, onChange);
+            $(btnSave).fadeOut();
+            // change keyup
             // onChange(true);
         });
 
@@ -121,7 +124,7 @@ async function createGUI(settings, onChange) {
         // create event "change" on table
         const eventID = `#${data[i].idHTML}`;
         if (eventID !== '#valStates') {
-            $(eventID).on('change keyup', () => {
+            $(eventID).on('click', () => {
                 $(`#btn-check-${name}`).fadeIn();
                 $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
             });
