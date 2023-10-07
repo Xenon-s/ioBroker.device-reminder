@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "2.0.1",
+        "version": "2.1.0",
         "news": {
+            "2.1.0": {
+                "en": "New messengers integrated (signal, matrix)\nNumerous bugs fixed, see changelog",
+                "de": "Neue Messenger integriert (Signal, Matrix)\nZahlreiche Fehler behoben, siehe changelog",
+                "ru": "Новые мессенджеры интегрированы (сигнал, матрица)\nМногочисленные ошибки исправлены, см. changelog",
+                "pt": "Novos mensageiros integrados (signal, matriz)\nVários bugs corrigidos, veja changelog",
+                "nl": "Nieuwe boodschappers geïntegreerd\nVertaling:",
+                "fr": "Nouveaux messagers intégrés (signal, matrice)\nNombre de bugs corrigés, voir changelog",
+                "it": "Nuovi messaggeri integrati (segnale, matrice)\nNumerosi bug fissi, vedi changelog",
+                "es": "Nuevos mensajeros integrados (signal, matriz)\nNumerosos errores fijos, ver el cambio",
+                "pl": "Nowi posłańcy zintegrowali (signal, macierz)\nLiczne błędy ustalone, widzą zmianylogu",
+                "uk": "Нові месенджери інтегровані (дата, матриця)\nНеймовірні помилки виправлені, див. Changelog",
+                "zh-cn": "新的信使综合(签字、矩阵)\n许多固定钢,见改变口号。"
+            },
             "2.0.1": {
                 "en": "JS Controller V 5.x fix \nMany bugs fixed",
                 "de": "JS Controller V 5.x fix\nViele Fehler behoben",
