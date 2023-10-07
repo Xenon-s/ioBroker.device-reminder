@@ -47,7 +47,6 @@ async function createGUI(settings, onChange) {
     // Table Head erstellen fuer alle Tabellen
     console.info('Daten fuer Table Head abrufen');
     dataTableHead = await createTableHeadData(settings)
-    console.error(dataTableHead)
     console.info('Daten fuer Table Head erfolgreich erstellt');
     console.info('Table Header erstellen');
     await createTableHeader(dataTableHead);
@@ -144,10 +143,6 @@ async function createGUI(settings, onChange) {
     async function dynamicTable(data, checked, onChange) {
         dataGlobal = await createDynamicTable(data, checked, onChange); // create dynamic table "device"
         if (M) M.updateTextFields();
-        // onChange(true);
-        // $('#link-device-body').on('change', () => {
-        //     onChange(true);
-        // })
     };
 
     async function btnPressed(settings, name) {
@@ -176,35 +171,16 @@ async function createGUI(settings, onChange) {
 
         return data;
     };
-
-    // create click event "delete device (delete button)"
-    async function clickEventDelBtn(name) {
-
-
-        console.warn(name)
-        console.warn('1')
-            // if (headerOpened !== ``) { // Abfrage welcher button geklickt wurde
-            //     clearTimeout;
-            //     setTimeout(async () => {
-            //         dataGlobal = await btnPressed(settings, name)
-            //         onChange(true);
-            //         if (dataGlobal.devices !== undefined && dataGlobal.devices.ids.length >= 1) {
-            //             $('.dynamic-table-devices').fadeIn();
-            //             $('.btn-save, .btn-save-close').fadeIn();
-            //         } else {
-            //             $('.dynamic-table-devices').fadeOut();
-            //         };
-            //     }, 100);
-            // };
-    };
     return true;
 };
 
 async function createDynamicTable(settings, checked, onChange) {
 
+    console.warn(settings)
+
     let curDevice = null;
-    const settingsDevice = settings.devices.ids;
-    const settingsTable = settings.devices.idsTable;
+    // const settingsDevice = settings.linkedDevice.ids;
+    const settingsTable = settings.linkedDevice.idsTable;
     const devices = checked.devices;
 
     // alte Tabelleninhalte loeschen
@@ -240,10 +216,11 @@ async function createDynamicTable(settings, checked, onChange) {
             curDevice = resultCurDevice;
         };
 
+
         async function createCurDevice() {
             let objTemp = null;
             for (const j in settingsTable) {
-                if (settingsTable[j].deviceName == ID || settingsTable[j].name == ID) { // in Version 1.1 hat sich der ".deviceName" in ".name" geaendert!
+                if (settingsTable[j].deviceName == ID || settingsTable[j].name == ID) {
                     objTemp = settingsTable[j];
                 };
             };
@@ -251,8 +228,6 @@ async function createDynamicTable(settings, checked, onChange) {
         };
 
         // data fuer dynamic table erstellen
-        // in Version 1.1 haben sich die Namen geaendert!! (das "id" vor dem Namen ist verschwunden!)
-        // console.warn(curDevice)
         data = [{
                 type: 'checkbox',
                 name: "enabled",
@@ -433,12 +408,8 @@ async function checkInput(data, type) {
 
         // Userinput ins Backend schicken und auf Plausibilitaet pruefen
         try {
-            // console.warn(name)
-            // console.warn(arr)
             sendTo(`device-reminder.${instance}`, name, arr, async result => {
                 const res = await result;
-
-                // console.warn(res.checked)
                 if (res != undefined) {
                     obj.dataChecked = res.checked || [];
                     obj.dataFailed = res.failed || [];
@@ -493,8 +464,8 @@ async function checkInput(data, type) {
 
         for (const i in checkData) { // check aller inputs 
             const name = checkData[i].name
-            let obj = checkData[i].obj;
-            let arr = data[i].ids;
+                // let obj = checkData[i].obj;
+                // let arr = data[i].ids;
             if (name == 'status') { // status wird nicht geprüft, da jede Eingabe erlaubt ist [string]
                 await checked(checkData[name].obj)
                 $('#err-status').css('display', 'none');
@@ -824,10 +795,6 @@ async function createSettings(data, type) {
     });
 
     obj.linkedDevice['ids'] = devices;
-    // {
-    //     // name: 'linkedDevice',
-    //     id: devices
-    // };
 
     return obj; // settings zurueckgeben
 };
@@ -836,27 +803,15 @@ async function createSettings(data, type) {
 async function save(callback) {
 
     const actData = await createSettings(dataGlobal, 'save'); // aktuelle settings holen
-
-    console.warn(actData)
-
     const cntr = await saveCntr(actData); // counter fuer save obj erstellen
-
-    console.warn(cntr)
-
     const result = await loopArr(cntr) // devices, messenger, etc "final" erstellen
-
-    console.warn(result)
-
     let resultTemp = result
-
     const finalObj = resultTemp; // fertiges objekt fuer native settings
 
     async function saveCntr(actData) {
-        // console.warn(actData)
         // counter in die native schreiben
         let objTemp = actData;
         for (const name in actData) {
-            // console.warn(name)
             if (!name.includes('linked')) {
                 const cntrName = `${name}_counter`
                 objTemp[cntrName] = actData[name].cntr;
@@ -896,8 +851,8 @@ async function save(callback) {
                 if (name.includes('linkedDevice')) { // ????
                     const dataTable = obj.ids[i]; // devices hat zwei daten arrays
 
-                    // console.warn(data)
-                    // console.warn(dataTable)
+                    console.warn(data)
+                    console.warn(dataTable)
 
                     // prüfen ob data in dataTable vorhanden ist
                     // und finales 'device' objekt erstellen
