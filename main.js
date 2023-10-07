@@ -162,7 +162,7 @@ class deviceReminder extends utils.Adapter {
             this.log.debug(`ARR INPUT alexa ${JSON.stringify(this.alexaInput)}`);
             this.log.debug(`ARR INPUT sayit ${JSON.stringify(this.sayitInput)}`);
             this.log.debug(`ARR INPUT whatsapp ${JSON.stringify(this.whatsappInput)}`);
-            this.log.debug(`ARR INPUT telegram ${JSON.stringify(this.telegramInput)}`);
+            this.log.info(`ARR INPUT telegram ${JSON.stringify(this.telegramInput)}`);
             this.log.debug(`ARR INPUT pushover ${JSON.stringify(this.pushoverInput)}`);
             this.log.debug(`ARR INPUT email ${JSON.stringify(this.emailInput)}`);
             this.log.debug(`ARR INPUT signal ${JSON.stringify(this.signalInput)}`);
