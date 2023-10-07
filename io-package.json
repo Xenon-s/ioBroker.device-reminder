@@ -259,6 +259,14 @@
         "telegram_counter": 0,
         "pushover_counter": 0,
         "email_counter": 0,
+        "devices_counter": 0,
+        "custom_counter": 3,
+        "default_counter": 0,
+        "alert_counter": 0,
+        "presence_counter": 0,
+        "status_counter": 0,
+        "signal_counter": 0,
+        "matrix_counter": 0,
         "custom_device_counter": 0,
         "custom": {
             "id": [{
