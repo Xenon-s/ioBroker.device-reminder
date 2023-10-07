@@ -72,7 +72,7 @@ async function createGUI(settings, onChange) {
 
         // Zuerst alle Inhalte außer "measuring Devices" erstellen, sonst koennen keine Inhalte aus anderen Tabellen geholt
         for (const i in data) {
-            if (!data[i].name.includes('devices')) await createTable(data, i);
+            if (!data[i].name.includes('devices')) await createTable(data, i, onChange);
         };
 
         // trigger im "default table" setzen
@@ -84,7 +84,7 @@ async function createGUI(settings, onChange) {
         const checked = await checkInput(data, 'all');
         checkedUserInput = checked;
 
-        await createTable(data, 'devices');
+        await createTable(data, 'devices', onChange);
 
         $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true); // disable "name" in table default-types
 
@@ -92,7 +92,7 @@ async function createGUI(settings, onChange) {
     };
 
     // Static Table erstellen
-    async function createTable(data, i) {
+    async function createTable(data, i, onChange) {
 
         const name = data[i].name;
         values2table(data[i].idHTML, data[i].ids, onChange); // create table
@@ -100,7 +100,8 @@ async function createGUI(settings, onChange) {
         // create click event "disable save button"
         const btnSave = `#btn-check-${name}`;
         $(btnSave).on('click', async() => {
-            dataGlobal = await btnPressed(settings, i);
+            dataGlobal = await btnPressed(settings, i, onChange);
+            // onChange(true);
         });
 
         // create click event "add button"
@@ -114,10 +115,7 @@ async function createGUI(settings, onChange) {
                 $('.timepicker').timepicker({ "twelveHour": false });
             }, 200)
 
-            $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;">
-                                                <span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
-            // $('.btn-save, .btn-save-close').fadeOut();
-            // onChange(false);
+            $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
         });
 
         // create event "change" on table
@@ -125,10 +123,7 @@ async function createGUI(settings, onChange) {
         if (eventID !== '#valStates') {
             $(eventID).on('change keyup', () => {
                 $(`#btn-check-${name}`).fadeIn();
-                $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;">
-                                                    <span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
-                // $('.btn-save, .btn-save-close').fadeOut();
-                // onChange(false);
+                $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
             });
         } else {
             $('#valStates').find('.values-input').on('change', () => {
@@ -145,11 +140,11 @@ async function createGUI(settings, onChange) {
         if (M) M.updateTextFields();
     };
 
-    async function btnPressed(settings, name) {
+    async function btnPressed(settings, name, onChange) {
 
         const actData = await createData(settings)
         const data = await createSettings(actData);
-        const result = await checkInput(actData, name);
+        const result = await checkInput(actData, name, onChange);
 
         if (!name.includes('header')) checkedUserInput[actData[name].name] = result[name];
 
@@ -399,13 +394,13 @@ async function createDynamicTable(settings, checked, onChange) {
     return settings;
 };
 
-async function checkInput(data, type) {
+async function checkInput(data, type, onChange) {
 
-    const result = await loop(type);
+    const result = await loop(type, onChange);
     return result;
 
     // user input überprüfen und auf callback warten
-    async function deviceCheck(dataSendTo, data, successCallback, errorCallback) {
+    async function deviceCheck(dataSendTo, data, onChange, successCallback, errorCallback) {
 
         const name = dataSendTo.name
         let obj = dataSendTo.obj;
@@ -415,10 +410,7 @@ async function checkInput(data, type) {
         // Userinput ins Backend schicken und auf Plausibilitaet pruefen
         try {
             sendTo(`device-reminder.${instance}`, name, arr, async result => {
-                // console.warn(name)
-                // console.warn(arr)
                 const res = await result;
-                // console.warn(res)
                 if (res != undefined) {
                     obj.dataChecked = res.checked || [];
                     obj.dataFailed = res.failed || [];
@@ -439,9 +431,9 @@ async function checkInput(data, type) {
     };
 
     // promise erstellen
-    function functionWrapper(dataSendTo, data) {
+    function functionWrapper(dataSendTo, data, onChange) {
         return new Promise((resolve, reject) => {
-            deviceCheck(dataSendTo, data, (successResponse) => {
+            deviceCheck(dataSendTo, data, onChange, (successResponse) => {
                 resolve(successResponse);
             }, (errorResponse) => {
                 reject(errorResponse);
@@ -449,16 +441,16 @@ async function checkInput(data, type) {
         });
     };
 
-    async function functionLogic(dataSendTo, data) {
+    async function functionLogic(dataSendTo, data, onChange) {
         try {
-            const result = await functionWrapper(dataSendTo, data);
+            const result = await functionWrapper(dataSendTo, data, onChange);
             return result;
         } catch (error) {
             console.error("ERROR:" + error);
         };
     };
 
-    async function loop(type) {
+    async function loop(type, onChange) {
         // Daten aus dataSendTo.js holen
         let dataSendTo = await dataCntrlInput();
 
@@ -473,14 +465,12 @@ async function checkInput(data, type) {
 
         for (const i in checkData) { // check aller inputs 
             const name = checkData[i].name
-                // let obj = checkData[i].obj;
-                // let arr = data[i].ids;
             if (name == 'status') { // status wird nicht geprüft, da jede Eingabe erlaubt ist [string]
                 await checked(checkData[name].obj)
                 $('#err-status').css('display', 'none');
             } else {
                 result[name] = [];
-                result[name] = await functionLogic(checkData[i], data[i]); // daten in der main.js prüfen und return
+                result[name] = await functionLogic(checkData[i], data[i], onChange); // daten in der main.js prüfen und return
             };
         };
         return result
@@ -495,24 +485,18 @@ async function checkInput(data, type) {
         if (obj.name !== `device status` && (obj.dataChecked.length <= 0) && (obj.dataFailed.length <= 0)) {
             $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: grey;">
                     <i class="material-icons">check_circle_outline</i><span>${_("no entries found")}</span> </div>`);
-            // Header innen "config devices"
-            // $(`#${obj.header}`).html(`<div class="collapsible-header translate"><i class="material-icons">create</i><span>${_(obj.name)}</span></div>`);
-
-            showSaveBtn(true); // save button einblenden
         } else if (obj.dataFailed.length >= 1) {
             $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: red;">
                     <i class="large material-icons">error_outline</i><span><b>${_("invalid input detected")}:</b><br> - ${obj.dataFailed.join('<br> - ')}</span></div>`);
-            // Header innen "config devices"
             const text = `${obj.dataFailed.length} error(s) found in `
             $(`#${obj.header}`).html(`<div class="collapsible-header translate"><i class="material-icons">create</i><span>${_("Error(s) found in %s", obj.name)}</span></div>`);
-            // Header außen "config devices"
             $(`#header-config`).html(`<div class="collapsible-header translate"><i class="material-icons">create</i><span>${_("Error(s) found in configuration")}</span></div>`);
-            $('.btn-save, .btn-save-close').fadeOut();
+            onChangeGlobal(false);
         } else {
             $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: green;">
                     <i class="material-icons">check_circle_outline</i><span class="translate" style="font-weight:bold;">${_("Input checked")}</span></div>`);
-            // Header innen "config devices"
-            // $(`#${obj.header}`).html(`<div class="collapsible-header"><i class="material-icons">create</i><span>${_(obj.name)}</span></div>`);
+            onChangeGlobal(true);
+            showSaveBtn(true);
         };
         $(`#help-${obj.anchorName}`).html(`<div><h4>create ${obj.name}</h4><p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README.md#${obj.anchorEn}" target="_blank">${obj.anchorEn} english</a></p>
             <p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README_GER.md#${obj.anchorGer}" target="_blank">${obj.anchorGer} deutsch</a></p></div>`);
@@ -880,8 +864,6 @@ async function save(callback) {
                 };
 
                 if (name.includes("alexa") || name.includes("sayit")) {
-                    console.warn(data)
-
                     timeMin = data.activeFrom;
                     timeMax = data.activeUntil;
                     if (data.volume < 0 || data.volume > 100 || data.volume == undefined || data.volume == '') {
@@ -940,7 +922,6 @@ async function save(callback) {
                         };
                     case "telegram":
                         {
-                            console.warn(data)
                             objTemp[data.id] = {
                                 /**@type {string}*/
                                 name: data.name,

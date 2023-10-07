@@ -868,7 +868,13 @@ async function dataCntrlInput() {
         name: 'telegram',
         obj: {
             dataChecked: [],
-            dataFailed: []
+            dataFailed: [],
+            err: `err-telegram`,
+            header: 'header-telegram',
+            name: 'telegram',
+            anchorEn: `create-telegram`,
+            anchorGer: `telegram-erstellen`,
+            anchorName: `telegram`
         }
     };
     dataSendTo.sayit = {

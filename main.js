@@ -1384,26 +1384,6 @@ class deviceReminder extends utils.Adapter {
         const counter = await obj.message;
         this.log.debug(`COUNTER ON MESSAGE: ${JSON.stringify(counter)}`);
 
-        const name = obj.command;
-        // const name = obj.command.cmd;
-        let objMessenger = {};
-
-        // if (name == 'telegram') {
-        //     objMessenger = {
-        //         name: name,
-        //         path: 'communicate.users'
-        //     };
-        // };
-        // if (name == 'whatsapp-cmb') {
-        //     objMessenger = {
-        //         name: name,
-        //         path: 'sendMessage'
-        //     };
-        // };
-
-        // if (name == 'telegram' || name == 'whatsapp-cmb') {
-        //     await this.getInstance(obj, objMessenger.name, objMessenger.path, counter);
-        // } else {
         await this.ctrlInput(obj, obj.command, obj.message);
         // };
         // } catch (error) {
