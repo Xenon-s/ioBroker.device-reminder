@@ -995,5 +995,18 @@ systemDictionary = {
         "pl": "sygnał",
         "uk": "сигнальний",
         "zh-cn": "信号"
+    },
+    "Group": {
+        "en": "group",
+        "de": "Gruppe",
+        "ru": "группа",
+        "pt": "grupo",
+        "nl": "groep",
+        "fr": "groupe",
+        "it": "gruppo",
+        "es": "grupo",
+        "pl": "grupa",
+        "uk": "групавуха",
+        "zh-cn": "集团"
     }
 };

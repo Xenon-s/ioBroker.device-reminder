@@ -1,7 +1,6 @@
 /*
 offene Punkte
--> save function noch offen
-    -> linkedDevice wird noch nicht richtig zusammen gebaut
+-
 */
 
 // hier wird die komplette GUI des Adapters im Admin erstellt
@@ -416,10 +415,10 @@ async function checkInput(data, type) {
         // Userinput ins Backend schicken und auf Plausibilitaet pruefen
         try {
             sendTo(`device-reminder.${instance}`, name, arr, async result => {
-                console.warn(name)
-                console.warn(arr)
+                // console.warn(name)
+                // console.warn(arr)
                 const res = await result;
-                console.warn(res)
+                // console.warn(res)
                 if (res != undefined) {
                     obj.dataChecked = res.checked || [];
                     obj.dataFailed = res.failed || [];
@@ -856,8 +855,8 @@ async function save(callback) {
                             type: dataMeasuringDevices.type,
                             pathConsumption: dataMeasuringDevices.consumption,
                             pathSwitch: dataMeasuringDevices.switch,
-                            startText: dataMeasuringDevices.startText,
-                            endText: dataMeasuringDevices.endText,
+                            startText: dataMeasuringDevices.startText != undefined ? dataMeasuringDevices.startText || '' : '',
+                            endText: dataMeasuringDevices.endText != undefined ? dataMeasuringDevices.endText || '' : '',
                             runtimeMax: dataMeasuringDevices.runtimeMax,
 
                             // Daten kommen aus "linked Devices"
@@ -881,6 +880,7 @@ async function save(callback) {
                 };
 
                 if (name.includes("alexa") || name.includes("sayit")) {
+                    console.warn(data)
 
                     timeMin = data.activeFrom;
                     timeMax = data.activeUntil;
@@ -893,10 +893,15 @@ async function save(callback) {
                     case "alexa":
                         {
                             objTemp[data.id] = {
+                                /**@type {string}*/
                                 name: data.name,
+                                /**@type {string}*/
                                 path: data.path,
+                                /**@type {number}*/
                                 volume: data.volume,
+                                /**@type {string}*/
                                 timeMin: data.activeFrom,
+                                /**@type {string}*/
                                 timeMax: data.activeUntil
                             };
                             break;
@@ -904,29 +909,31 @@ async function save(callback) {
                     case "sayit":
                         {
                             objTemp[data.id] = {
+                                /**@type {string}*/
                                 name: data.name,
+                                /**@type {string}*/
                                 path: data.path,
-                                timeMin: timeMin,
-                                timeMax: timeMax,
-                                volume: data.volume
-                            };
-                            break;
-                        };
-                    case "whatsapp":
-                        {
-                            objTemp[data.id] = {
-                                name: data.name,
-                                path: `whatsapp-cmb${data.inst}.sendMessage`,
+                                /**@type {number}*/
+                                volume: data.volume,
+                                /**@type {string}*/
+                                timeMin: data.activeFrom,
+                                /**@type {string}*/
+                                timeMax: data.activeUntil
                             };
                             break;
                         };
                     case "typeID":
                         {
                             objTemp[data.id] = {
+                                /**@type {string}*/
                                 name: data.name,
+                                /**@type {number}*/
                                 startVal: data.startVal,
+                                /**@type {number}*/
                                 endVal: data.endVal,
+                                /**@type {number}*/
                                 startCount: data.startCount,
+                                /**@type {number}*/
                                 endCount: data.endCount
                             };
                             break;
@@ -934,17 +941,43 @@ async function save(callback) {
                     case "telegram":
                         {
                             objTemp[data.id] = {
-                                name: data.nameFinal,
-                                inst: data.inst
+                                /**@type {string}*/
+                                name: data.name,
+                                /**@type {string}*/
+                                inst: data.inst,
+                                /**@type {string}*/
+                                username: data.username,
+                                /**@type {string}*/
+                                chatId: data.chatId,
+                                /**@type {boolean}*/
+                                group: data.group
+                            };
+                            break;
+                        };
+                    case "whatsapp":
+                        {
+                            objTemp[data.id] = {
+                                /**@type {string}*/
+                                name: data.name,
+                                /**@type {string}*/
+                                path: data.path,
                             };
                             break;
                         };
                     case "pushover":
                         {
                             objTemp[data.id] = {
+                                /**@type {string}*/
                                 name: data.name,
+                                /**@type {string}*/
                                 inst: data.inst,
+                                /**@type {string}*/
+                                title: data.title,
+                                /**@type {string}*/
+                                deviceID: data.deviceID,
+                                /**@type {string}*/
                                 prio: data.prio,
+                                /**@type {string}*/
                                 sound: data.sound,
                             };
                             if (objTemp[data.id].prio == 'high') {
@@ -956,12 +989,37 @@ async function save(callback) {
                             };
                             break;
                         };
+                    case "signal":
+                        {
+                            objTemp[data.id] = {
+                                /**@type {string}*/
+                                name: data.name,
+                                /**@type {string}*/
+                                inst: data.inst,
+                                /**@type {string}*/
+                                phone: data.phone,
+                            };
+                            break;
+                        };
                     case "email":
                         {
                             objTemp[data.id] = {
+                                /**@type {string}*/
                                 name: data.name,
+                                /**@type {string}*/
                                 emailFrom: data.emailFrom,
+                                /**@type {string}*/
                                 emailTo: data.emailTo
+                            };
+                            break;
+                        };
+                    case "matrix":
+                        {
+                            objTemp[data.id] = {
+                                /**@type {string}*/
+                                name: data.name,
+                                /**@type {string}*/
+                                inst: data.inst,
                             };
                             break;
                         };

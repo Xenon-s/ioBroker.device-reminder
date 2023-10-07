@@ -69,6 +69,7 @@ class deviceReminder extends utils.Adapter {
 
         // Initialize your adapter here
         this.devicesCompleted = await this.createDevices();
+        this.log.info(JSON.stringify(this.devicesCompleted));
         this.createDPS();
         this.pollingData(true);
     };
@@ -109,8 +110,10 @@ class deviceReminder extends utils.Adapter {
 
     async createDevices() {
 
+        this.log.debug(JSON.stringify(this.config))
+
         try {
-            this.devices = await getDataFromAdmin(this.config.devices !== undefined ? this.config.devices.final || {} : {});
+            this.devices = await getDataFromAdmin(this.config.linkedDevice !== undefined ? this.config.linkedDevice.final || {} : {});
             this.alexaInput = await getDataFromAdmin(this.config.alexa !== undefined ? this.config.alexa.final || {} : {});
             this.sayitInput = await getDataFromAdmin(this.config.sayit !== undefined ? this.config.sayit.final || {} : {});
             this.whatsappInput = await getDataFromAdmin(this.config.whatsapp !== undefined ? this.config.whatsapp.final || {} : {});
@@ -121,9 +124,7 @@ class deviceReminder extends utils.Adapter {
             this.matrixInput = await getDataFromAdmin(this.config.matrix !== undefined ? this.config.matrix.final || {} : {});
 
             this.states.action = await this.config.status.id[0].stateAction;
-
             this.states.standby = await this.config.status.id[0].stateStandby;
-
             this.states.off = await this.config.status.id[0].stateOff;
 
             async function getDataFromAdmin(data) {
@@ -379,6 +380,7 @@ class deviceReminder extends utils.Adapter {
                     this.startCount = objVal.startCount;
                     this.endCount = objVal.endCount;
                     // timeout
+                    this.timeout = null;
                     this.timeoutMsg = null;
                     this.startTime = 0;
                     this.endTime = 0;
@@ -398,20 +400,11 @@ class deviceReminder extends utils.Adapter {
                         this.valCancel = 5;
                     };
 
-                    /*obj Startext erstellen*/
-                    this.startMessageText = obj.startText;
-                    if (obj.startText != `` && obj.startText != undefined && obj.startText.length > 0) {
-                        this.startMessage = true;
-                    } else {
-                        this.startMessage = false;
-                    };
-
-                    /*obj Endtext erstellen*/
-                    this.endMessageText = obj.endText;
-                    if (obj.endText != `` && obj.endText != undefined && obj.endText.length > 0) {
-                        this.endMessage = true;
-                    } else {
-                        this.endMessage = false;
+                    this.message = {
+                        startMessage: obj.startText.length > 0 ? true || false : false,
+                        startMessageText: obj.startText,
+                        endMessage: obj.endText.length ? true || false : false,
+                        endMessageText: obj.endText
                     };
 
                     /*obj timer erstellen*/
@@ -422,56 +415,47 @@ class deviceReminder extends utils.Adapter {
                             this.timeoutInMS = 0;
                         };
                     };
-                    this.timeout = null
 
-                    /*obj telegram erstellen*/
-                    if (obj.telegram != `` && obj.telegram != undefined) {
-                        this.telegramUser = obj.telegram
-                        this.telegram = true;
-                    } else {
-                        this.telegram = false;
+                    this.alexa = {
+                        active: obj.alexa.length > 0 ? true || false : false,
+                        ids: obj.alexa != undefined ? obj.alexa || [] : [],
+                        volOld: 0
                     };
 
-                    /*obj alexa erstellen*/
-                    if (obj.alexa != undefined) {
-                        this.alexaID = obj.alexa;
-                        this.alexaVolOld = 0;
-                        this.alexa = true;
-                    } else {
-                        this.alexa = false;
+                    this.sayit = {
+                        active: obj.sayit.length > 0 ? true || false : false,
+                        ids: obj.sayit != undefined ? obj.sayit || [] : [],
+                        volOld: 0
                     };
 
-                    /*obj sayIt erstellen*/
-                    if (obj.sayit != undefined) {
-                        this.sayItID = obj.sayit;
-                        this.sayItVolOld = 0;
-                        this.sayIt = true;
-                    } else {
-                        this.sayIt = false;
+                    this.telegram = {
+                        active: obj.telegram.length > 0 ? true || false : false,
+                        ids: obj.telegram != undefined ? obj.telegram || [] : []
                     };
 
-                    /*obj whatsapp erstellen*/
-                    if (obj.whatsapp != `` && obj.whatsapp != undefined) {
-                        this.whatsappID = obj.whatsapp;
-                        this.whatsapp = true;
-                    } else {
-                        this.whatsapp = false;
+                    this.whatsapp = {
+                        active: obj.whatsapp.length > 0 ? true || false : false,
+                        ids: obj.whatsapp != undefined ? obj.whatsapp || [] : []
                     };
 
-                    /*obj pushover erstellen*/
-                    if (obj.pushover != undefined) {
-                        this.pushoverID = obj.pushover
-                        this.pushover = true;
-                    } else {
-                        this.pushover = false;
+                    this.pushover = {
+                        active: obj.pushover.length > 0 ? true || false : false,
+                        ids: obj.pushover != undefined ? obj.pushover || [] : []
                     };
 
-                    /*obj email erstellen*/
-                    if (obj.email != undefined) {
-                        this.emailID = obj.email
-                        this.email = true;
-                    } else {
-                        this.email = false;
+                    this.signal = {
+                        active: obj.signal.length > 0 ? true || false : false,
+                        ids: obj.signal != undefined ? obj.signal || [] : []
+                    };
+
+                    this.email = {
+                        active: obj.email.length > 0 ? true || false : false,
+                        ids: obj.email != undefined ? obj.email || [] : []
+                    };
+
+                    this.matrix = {
+                        active: obj.matrix.length > 0 ? true || false : false,
+                        ids: obj.matrix != undefined ? obj.matrix || [] : []
                     };
                 };
             };
@@ -513,8 +497,8 @@ class deviceReminder extends utils.Adapter {
                     };
                 };
             };
-            this.log.debug(`RETURN ${JSON.stringify(objVal)}`);
-            this.log.debug(`OBJ IN CONSTRUCTOR: ${JSON.stringify(devicesInput)}`);
+            this.log.info(`RETURN ${JSON.stringify(objVal)}`);
+            this.log.info(`OBJ IN CONSTRUCTOR: ${JSON.stringify(devicesInput)}`);
 
             const device = new classDevice(devicesInput,
                 this.adapterDPs[name].statusDevice,
@@ -531,7 +515,7 @@ class deviceReminder extends utils.Adapter {
                 this.adapterDPs[name].doNotDisturb,
                 objVal);
 
-            this.log.debug(`RETURN ${JSON.stringify(device)}`);
+            this.log.info(`RETURN ${JSON.stringify(device)}`);
             this.log.info(`Device ${JSON.stringify(device.name)} was successfully created`);
             return device;
         } catch (error) {
@@ -707,7 +691,7 @@ class deviceReminder extends utils.Adapter {
             this.setStatus(id, 1);
             this.log.debug(`[${JSON.stringify(device.name)}]: Gerät gestartet, device läuft`);
 
-            if (device.startMessage && !device.startMessageSent) { // Start Benachrichtigung aktiv?
+            if (device.message.startMessage && !device.startMessageSent) { // Start Benachrichtigung aktiv?
                 this.log.debug(`[${JSON.stringify(device.name)}]: GESTARTET`);
                 if (device.timeoutMsg != null) {
                     clearTimeout(device.timeoutMsg);
@@ -781,7 +765,7 @@ class deviceReminder extends utils.Adapter {
             device.arrStart = []; // array wieder leeren
             device.arrEnd = []; // array wieder leeren
 
-            if (device.endMessage && !device.endMessageSent && device.startMessageSent) { // Ende Benachrichtigung aktiv?
+            if (device.message.endMessage && !device.endMessageSent && device.startMessageSent) { // Ende Benachrichtigung aktiv?
                 if (device.timeoutMsg != null) {
                     clearTimeout(device.timeoutMsg);
                     device.timeoutMsg = null;
@@ -796,7 +780,7 @@ class deviceReminder extends utils.Adapter {
                         await this.setVolume(id, false, "alexa");
                         await this.setVolume(id, false, "sayit");
                     };
-                    this.log.debug(`[${JSON.stringify(device.name)}]: Endmessage: ${device.endMessageText}`);
+                    this.log.debug(`[${JSON.stringify(device.name)}]: Endmessage: ${device.message.endMessageText}`);
                 }, 1000);
             };
 
@@ -1107,13 +1091,13 @@ class deviceReminder extends utils.Adapter {
 
         switch (type) {
             case "start":
-                msg = await this.createObjMsg(device.startMessageText);
-                this.log.debug(`[${JSON.stringify(device.name)}]: startmessage: ${JSON.stringify(device.startMessageText)}`);
+                msg = await this.createObjMsg(device.message.startMessageText);
+                this.log.debug(`[${JSON.stringify(device.name)}]: startmessage: ${JSON.stringify(device.message.startMessageText)}`);
                 sendMsg(id, msg);
                 break;
             case "end":
-                msg = await this.createObjMsg(device.endMessageText);
-                this.log.debug(`[${JSON.stringify(device.name)}]: endmessage: ${JSON.stringify(device.endMessageText)}`);
+                msg = await this.createObjMsg(device.message.endMessageText);
+                this.log.debug(`[${JSON.stringify(device.name)}]: endmessage: ${JSON.stringify(device.message.endMessageText)}`);
                 sendMsg(id, msg);
                 if (!bPresence) {
                     const objTemp = {

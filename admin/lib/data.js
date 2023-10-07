@@ -141,7 +141,6 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "device name",
-                        //"tdClass": "validate values-input",
                     },
                     "2": {
                         "id": "deviceTypeID",
@@ -149,14 +148,12 @@ async function createTableHeadData(settings) {
                         "class": "header translate select",
                         "dataType": "select",
                         "dataLang": "device type",
-                        //"tdClass": "validate values-input select",
                     },
                     "3": {
                         "dataName": "consumption",
                         "class": "header translate",
                         "dataType": "OID",
                         "dataLang": "consumption",
-                        //"tdClass": "validate values-input oid-select",
                         "disabled": true,
                     },
                     "4": {
@@ -164,7 +161,6 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "OID",
                         "dataLang": "Power switch",
-                        //"tdClass": "validate values-input oid-select",
                         "disabled": true,
 
                     },
@@ -173,16 +169,14 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "OID",
                         "dataLang": "starttext",
-                        //"tdClass": "validate values-input oid-select",
-
+                        "dataDefault": "device started"
                     },
                     "6": {
                         "dataName": "endText",
                         "class": "header translate",
-                        //"tdClass": "validate values-input oid-select",
                         "dataType": "OID",
                         "dataLang": "endtext",
-
+                        "dataDefault": "device finished"
                     },
                     "7": {
                         "dataName": "delete",
@@ -521,6 +515,13 @@ async function createTableHeadData(settings) {
                 "addbtn": true,
                 "submitbtn": true,
                 "th": {
+                    "0": {
+                        "dataName": "group",
+                        "class": "header10 translate",
+                        "dataType": "checkbox",
+                        "dataLang": "Group",
+                        "dataDefault": false
+                    },
                     "1": {
                         "dataName": "name",
                         "class": "header translate",
@@ -544,7 +545,7 @@ async function createTableHeadData(settings) {
                         "dataDefault": "username"
                     },
                     "4": {
-                        "dataName": "Chat ID",
+                        "dataName": "chatID",
                         "class": "header translate",
                         "dataType": "number",
                         "dataLang": "Chat ID",
