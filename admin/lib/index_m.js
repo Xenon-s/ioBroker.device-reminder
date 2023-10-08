@@ -105,6 +105,9 @@ async function createGUI(settings, onChange) {
         $(btnSave).on('click', async() => {
             dataGlobal = await btnPressed(settings, i, onChange);
             $(btnSave).fadeOut();
+            createEvent(`#${name}ID`);
+            // $(btnSave).addClass('disabled');
+
         });
 
         // create click event "add button"
@@ -121,27 +124,36 @@ async function createGUI(settings, onChange) {
             $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
         });
 
+        const createEvent = async eventID => {
+            console.warn(eventID)
+            if (eventID !== '#valStates') {
+                $(eventID).find('.values-input').off().on('click change', () => {
+                    console.warn('1')
+                    $(`#btn-check-${name}`).fadeIn();
+                    $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
+                    if (!name.includes('linked')) onChange(false); // Hier wird der Speicherbutton deaktiviert. Reaktivierung erst, wenn "Check Button" geklickt und positives Resultat
+                    createEvent(eventID);
+                });
+                $(eventID).find('.red').on('click', () => {
+                    console.warn(eventID)
+                    $(`#btn-check-${name}`).fadeIn();
+                    $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
+                    if (!name.includes('linked')) onChange(false); // Hier wird der Speicherbutton deaktiviert. Reaktivierung erst, wenn "Check Button" geklickt und positives Resultat
+                    createEvent(eventID)
+                });
+            } else {
+                $('#valStates').find('.values-input').off().on('change', () => {
+                    console.warn('3')
+                    $('.btn-save, .btn-save-close').fadeIn();
+                    console.warn('onChange(1)');
+                    onChange(true);
+                });
+            };
+        };
+
         // create event "change" on table
         const eventID = `#${data[i].idHTML}`;
-        if (eventID !== '#valStates') {
-            $(eventID).find('.values-input').on('click change', () => {
-                $(`#btn-check-${name}`).fadeIn();
-                $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
-                if (!name.includes('linked')) onChange(false); // Hier wird der Speicherbutton deaktiviert. Reaktivierung erst, wenn "Check Button" geklickt und positives Resultat
-            });
-            $(eventID).find('.red').on('click', () => {
-                console.warn('OID')
-                $(`#btn-check-${name}`).fadeIn();
-                $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
-                if (!name.includes('linked')) onChange(false); // Hier wird der Speicherbutton deaktiviert. Reaktivierung erst, wenn "Check Button" geklickt und positives Resultat
-            });
-        } else {
-            $('#valStates').find('.values-input').on('change', () => {
-                $('.btn-save, .btn-save-close').fadeIn();
-                console.warn('onChange(1)');
-                onChange(true);
-            });
-        };
+        await createEvent(eventID)
 
         return true;
     }
