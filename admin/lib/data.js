@@ -541,8 +541,8 @@ async function createTableHeadData(settings) {
                         "dataName": "username",
                         "class": "header translate",
                         "dataType": "text",
-                        "dataLang": "username",
-                        "dataDefault": "username"
+                        "dataLang": "username/firstname",
+                        "dataDefault": "username/firstname"
                     },
                     "4": {
                         "dataName": "chatID",
@@ -1101,3 +1101,101 @@ function createData(settings) {
 
     return data;
 };
+
+// Hier werden alle benoetigten Daten fuer den dynamic Table (linked-devices) zusammengebaut und return gegeben
+async function dataCurDevice(curDevice, checked, devices, deviceId, i) {
+    let data = [{
+            type: 'checkbox',
+            name: "enabled",
+            value: curDevice.enabled,
+            disable: false
+        },
+        {
+            type: 'label',
+            name: "name",
+            value: curDevice.name,
+            disable: false
+        },
+        {
+            type: 'multiple',
+            data: checked.alexa,
+            name: "alexa",
+            value: curDevice.alexa,
+            disable: false
+        },
+        {
+            type: 'multiple',
+            data: checked.sayit,
+            name: "sayit",
+            value: curDevice.sayit,
+            disable: false
+        },
+        {
+            type: 'multiple',
+            data: checked.telegram,
+            name: "telegram",
+            value: curDevice.telegram,
+            disable: false
+        },
+        {
+            type: 'multiple',
+            data: checked.whatsapp,
+            name: "whatsapp",
+            value: curDevice.whatsapp,
+            disable: false
+        },
+        {
+            type: 'multiple',
+            data: checked.pushover,
+            name: "pushover",
+            value: curDevice.pushover,
+            disable: false
+        },
+        {
+            type: 'multiple',
+            data: checked.signal,
+            name: "signal",
+            value: curDevice.signal,
+            disable: false
+        },
+        {
+            type: 'multiple',
+            data: checked.email,
+            name: "email",
+            value: curDevice.email,
+            disable: false
+        },
+        {
+            type: 'multiple',
+            data: checked.matrix,
+            name: "matrix",
+            value: curDevice.matrix,
+            disable: false
+        },
+        {
+            type: 'checkbox',
+            name: "autoOff",
+            value: curDevice.autoOff,
+            disable: devices[i].autoOff
+        },
+        {
+            type: 'timer',
+            name: "timer",
+            value: parseInt(curDevice.timer),
+            disable: devices[i].autoOff
+        },
+        {
+            type: 'checkbox',
+            name: "abort",
+            value: curDevice.abort,
+            disable: false
+        },
+        {
+            type: 'id',
+            name: "id",
+            value: parseInt(deviceId),
+            disable: false
+        }
+    ];
+    return data;
+}

@@ -31,7 +31,7 @@ async function load(settings, onChange) {
         await createGUI(settings, onChange)
         $('.collapsible').collapsible();
         $('.modal').modal();
-        $('.timepicker').timepicker();
+        $('.timepicker').timepicker({ "twelveHour": false });
     });
 };
 
@@ -73,6 +73,8 @@ async function createGUI(settings, onChange) {
         // Zuerst alle Inhalte außer "measuring Devices" erstellen, sonst koennen keine Inhalte aus anderen Tabellen geholt
         for (const i in data) {
             if (!data[i].name.includes('devices')) await createTable(data, i, onChange);
+            $(`#${data[i].name}ID .table-lines [data-name="activeFrom"]`).attr('class', 'values-input timepicker');
+            $(`#${data[i].name}ID .table-lines [data-name="activeUntil"]`).attr('class', 'values-input timepicker');
         };
 
         // trigger im "default table" setzen
@@ -103,8 +105,6 @@ async function createGUI(settings, onChange) {
         $(btnSave).on('click', async() => {
             dataGlobal = await btnPressed(settings, i, onChange);
             $(btnSave).fadeOut();
-            // change keyup
-            // onChange(true);
         });
 
         // create click event "add button"
@@ -124,13 +124,21 @@ async function createGUI(settings, onChange) {
         // create event "change" on table
         const eventID = `#${data[i].idHTML}`;
         if (eventID !== '#valStates') {
-            $(eventID).on('click', () => {
+            $(eventID).find('.values-input').on('click change', () => {
                 $(`#btn-check-${name}`).fadeIn();
                 $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
+                if (!name.includes('linked')) onChange(false); // Hier wird der Speicherbutton deaktiviert. Reaktivierung erst, wenn "Check Button" geklickt und positives Resultat
+            });
+            $(eventID).find('.red').on('click', () => {
+                console.warn('OID')
+                $(`#btn-check-${name}`).fadeIn();
+                $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
+                if (!name.includes('linked')) onChange(false); // Hier wird der Speicherbutton deaktiviert. Reaktivierung erst, wenn "Check Button" geklickt und positives Resultat
             });
         } else {
             $('#valStates').find('.values-input').on('change', () => {
                 $('.btn-save, .btn-save-close').fadeIn();
+                console.warn('onChange(1)');
                 onChange(true);
             });
         };
@@ -223,100 +231,8 @@ async function createDynamicTable(settings, checked, onChange) {
             return objTemp;
         };
 
-        // data fuer dynamic table erstellen
-        data = [{
-                type: 'checkbox',
-                name: "enabled",
-                value: curDevice.enabled,
-                disable: false
-            },
-            {
-                type: 'label',
-                name: "name",
-                value: curDevice.name,
-                disable: false
-            },
-            {
-                type: 'multiple',
-                data: checked.alexa,
-                name: "alexa",
-                value: curDevice.alexa,
-                disable: false
-            },
-            {
-                type: 'multiple',
-                data: checked.sayit,
-                name: "sayit",
-                value: curDevice.sayit,
-                disable: false
-            },
-            {
-                type: 'multiple',
-                data: checked.telegram,
-                name: "telegram",
-                value: curDevice.telegram,
-                disable: false
-            },
-            {
-                type: 'multiple',
-                data: checked.whatsapp,
-                name: "whatsapp",
-                value: curDevice.whatsapp,
-                disable: false
-            },
-            {
-                type: 'multiple',
-                data: checked.pushover,
-                name: "pushover",
-                value: curDevice.pushover,
-                disable: false
-            },
-            {
-                type: 'multiple',
-                data: checked.signal,
-                name: "signal",
-                value: curDevice.signal,
-                disable: false
-            },
-            {
-                type: 'multiple',
-                data: checked.email,
-                name: "email",
-                value: curDevice.email,
-                disable: false
-            },
-            {
-                type: 'multiple',
-                data: checked.matrix,
-                name: "matrix",
-                value: curDevice.matrix,
-                disable: false
-            },
-            {
-                type: 'checkbox',
-                name: "autoOff",
-                value: curDevice.autoOff,
-                disable: devices[i].autoOff
-            },
-            {
-                type: 'timer',
-                name: "timer",
-                value: parseInt(curDevice.timer),
-                disable: devices[i].autoOff
-            },
-            {
-                type: 'checkbox',
-                name: "abort",
-                value: curDevice.abort,
-                disable: false
-            },
-            {
-                type: 'id',
-                name: "id",
-                value: parseInt(deviceId),
-                disable: false
-            }
-        ];
+        // data fuer dynamic table holen
+        data = await dataCurDevice(curDevice, checked, devices, deviceId, i);
 
         let col = "<tr>";
         for (const j in data) {
@@ -384,6 +300,7 @@ async function createDynamicTable(settings, checked, onChange) {
         // trigger im dynamic table setzen
         $('#linked-device-body').find('.values-input').on('change', function() {
             $('.btn-save, .btn-save-close').fadeIn();
+            console.warn('onChange(2)');
             onChangeGlobal(true);
         });
     };
@@ -498,6 +415,8 @@ async function checkInput(data, type, onChange) {
         } else {
             $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: green;">
                     <i class="material-icons">check_circle_outline</i><span class="translate" style="font-weight:bold;">${_("Input checked")}</span></div>`);
+
+            console.warn('onChange(3)');
             onChangeGlobal(true);
             showSaveBtn(true);
         };
@@ -796,7 +715,7 @@ async function save(callback) {
         // counter in die native schreiben
         let objTemp = actData;
         for (const name in actData) {
-            if (!name.includes('linked')) {
+            if (!name.includes('linked') && !name.includes('counter')) {
                 const cntrName = `${name}_counter`
                 objTemp[cntrName] = actData[name].cntr;
             };

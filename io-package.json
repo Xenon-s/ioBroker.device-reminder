@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "2.1.0",
+        "version": "2.1.1",
         "news": {
+            "2.1.1": {
+                "en": "GUI: Bugfixes",
+                "de": "GUI: Bugfixes",
+                "ru": "GUI: багфиксы",
+                "pt": "GUI: Bugfixes",
+                "nl": "Bugfixes",
+                "fr": "GUI: Bugfixes",
+                "it": "GUI: Bugfixes",
+                "es": "Errores",
+                "pl": "GUI: Bugfix",
+                "uk": "GUI: Бугфікси",
+                "zh-cn": "GUI:Bugfixes"
+            },
             "2.1.0": {
                 "en": "New messengers integrated (signal, matrix)\nNumerous bugs fixed, see changelog",
                 "de": "Neue Messenger integriert (Signal, Matrix)\nZahlreiche Fehler behoben, siehe changelog",

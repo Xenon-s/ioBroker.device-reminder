@@ -829,16 +829,17 @@ systemDictionary = {
         "pl": "Error znalazł się w konfiguracji",
         "zh-cn": "组合中发现的票据"
     },
-    "username": {
-        "en": "username",
-        "de": "Username",
-        "ru": "имя пользователя",
-        "pt": "nome de utilizador",
+    "username/firstname": {
+        "en": "username/firstname",
+        "de": "username/firstname",
+        "ru": "имя пользователя/имя",
+        "pt": "nome de usuário/nome",
         "nl": "gebruikersnaam",
-        "fr": "username",
-        "it": "nome utente",
-        "es": "nombre de usuario",
-        "pl": "username",
+        "fr": "username/firstname",
+        "it": "nome utente / nome",
+        "es": "nombre de usuario/primer nombre",
+        "pl": "nazwa użytkownika/pierwszy nazw/name/firstname/name/person/name/name/name/firstname/name/name/person/name/name/person/name/person/name/name/first",
+        "uk": "ім'я користувача",
         "zh-cn": "用户名称"
     },
     "instance": {

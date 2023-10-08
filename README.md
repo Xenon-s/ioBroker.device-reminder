@@ -162,8 +162,10 @@ is displayed.
 	Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
+### 2.1.1 (2023-10-07)
+* (xenon-s) GUI: bugfixes
 
-### 2.1.0 (2023-10.07)
+### 2.1.0 (2023-10-07)
 * (xenon-s) GUI Fixes "devices" : switch may be empty, but then no longer selectable 
 * (xenon-s) add: [issue #258: Signal Messenger added](https://github.com/Xenon-s/ioBroker.device-reminder/issues/258)
 * (xenon-s) add: [issue #245: Matrix added](https://github.com/Xenon-s/ioBroker.device-reminder/issues/245)
