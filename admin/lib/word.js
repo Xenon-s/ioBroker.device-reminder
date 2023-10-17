@@ -499,6 +499,45 @@ systemDictionary = {
         "pl": "liczba ​wartości końcowych",
         "zh-cn": "“结束”值的数量"
     },
+    "status": {
+        "en": "status",
+        "de": "Status",
+        "ru": "статус",
+        "pt": "status",
+        "nl": "status",
+        "fr": "état",
+        "it": "stato",
+        "es": "situación",
+        "pl": "status",
+        "uk": "статус",
+        "zh-cn": "现状"
+    },
+    "default": {
+        "en": "default",
+        "de": "Standard Gerätetypen",
+        "ru": "по умолчанию",
+        "pt": "padrão",
+        "nl": "defensie",
+        "fr": "default",
+        "it": "predefinito",
+        "es": "por defecto",
+        "pl": "domyślna domyślność",
+        "uk": "за замовчуванням",
+        "zh-cn": "违约"
+    },
+    "custom": {
+        "en": "custom",
+        "de": "Benutzerdefinierte Gerätetypen",
+        "ru": "на заказ",
+        "pt": "personalizado",
+        "nl": "- ja",
+        "fr": "personnalisé",
+        "it": "personalizzato",
+        "es": "personalizado",
+        "pl": "zwyczajny",
+        "uk": "на замовлення",
+        "zh-cn": "习俗"
+    },
     "status: in action": {
         "en": "status: in action",
         "de": "Status: in Aktion ",
@@ -639,7 +678,7 @@ systemDictionary = {
     },
     "signal": {
         "en": "Signal-cmb",
-        "de": "Signal-cmb",
+        "de": "Signal",
         "ru": "Signal-cmb",
         "pt": "Signal-cmb",
         "nl": "Signal-cmb",
@@ -675,7 +714,7 @@ systemDictionary = {
     },
     "whatsapp": {
         "en": "whatsapp-cmb",
-        "de": "WhatsApp-cmb",
+        "de": "WhatsApp",
         "ru": "WhatsApp-cmb",
         "pt": "Whatsapp-cmb",
         "nl": "whatsapp-cmb",

@@ -5,6 +5,8 @@ muss man unter "dataTable" alle Tabellenrelevanten Daten angeben.
 In dataTable stehen alle Daten, um die HTML der einzelnen Tabellen erstellen zu koennen. 
 */
 
+const keys = ['linkedDevice', 'devices', 'alexa', 'sayit', 'whatsapp', 'telegram', 'pushover', 'email', 'custom', 'default', 'status', 'signal', 'matrix'];
+
 async function createTableHeadData(settings) {
 
     let dataTable = {
@@ -838,161 +840,36 @@ async function dataCntrlInput() {
 
     let dataSendTo = {};
 
-    dataSendTo.devices = {
-        name: 'devices',
-        obj: {
-            dataChecked: [],
-            dataFailed: [],
-            err: `err-devices`,
-            header: 'header-devices',
-            name: 'Measuring devices',
-            anchorEn: `create-devices`,
-            anchorGer: `devices-anlegen`,
-            anchorName: `devices`
-        }
-    }
-    dataSendTo.alexa = {
-        name: 'alexa',
-        obj: {
-            dataChecked: [],
-            dataFailed: [],
-            err: `err-alexa`,
-            header: 'header-alexa',
-            name: 'alexa',
-            anchorEn: `create-alexa`,
-            anchorGer: `alexa-erstellen`,
-            anchorName: `alexa`
-        }
+    const getDataSendTo = async /**@type {string}*/ name => {
+
+        let data = {};
+        data = {
+            /**@type {string}*/
+            name: name,
+            obj: {
+                /**@type {array}*/
+                dataChecked: [],
+                /**@type {array}*/
+                dataFailed: [],
+                /**@type {string}*/
+                err: `err-${name}`,
+                /**@type {string}*/
+                header: `header-${name}`,
+                /**@type {string}*/
+                name: `${name}`,
+                /**@type {string}*/
+                anchorEn: `create-${name}`,
+                /**@type {string}*/
+                anchorGer: `${name}-anlegen`,
+                /**@type {string}*/
+                anchorName: `${name}`
+            }
+        };
+        return data;
     };
-    dataSendTo.telegram = {
-        name: 'telegram',
-        obj: {
-            dataChecked: [],
-            dataFailed: [],
-            err: `err-telegram`,
-            header: 'header-telegram',
-            name: 'telegram',
-            anchorEn: `create-telegram`,
-            anchorGer: `telegram-erstellen`,
-            anchorName: `telegram`
-        }
-    };
-    dataSendTo.sayit = {
-        name: 'sayit',
-        obj: {
-            dataChecked: [],
-            dataFailed: [],
-            err: `err-sayit`,
-            header: 'header-sayit',
-            name: 'sayit',
-            anchorEn: `create-sayit`,
-            anchorGer: `sayit-erstellen`,
-            anchorName: `sayit`
-        }
-    };
-    dataSendTo.whatsapp = {
-        name: 'whatsapp',
-        obj: {
-            dataChecked: [],
-            dataFailed: [],
-            err: `err-whatsapp`,
-            header: 'header-whatsapp',
-            name: 'whatsapp',
-            anchorEn: `create-whatsapp`,
-            anchorGer: `whatsapp-erstellen`,
-            anchorName: `whatsapp`
-        }
-    };
-    dataSendTo.pushover = {
-        name: 'pushover',
-        obj: {
-            dataChecked: [],
-            dataFailed: [],
-            err: `err-pushover`,
-            header: 'header-pushover',
-            name: 'pushover',
-            anchorEn: `create-pushover-user`,
-            anchorGer: `pushover-user-erstellen`,
-            anchorName: `pushover`
-        }
-    };
-    dataSendTo.email = {
-        name: 'email',
-        obj: {
-            dataChecked: [],
-            dataFailed: [],
-            err: `err-email`,
-            header: 'header-email',
-            name: 'email',
-            anchorEn: `create-email-user`,
-            anchorGer: `email-user-erstellen`,
-            anchorName: `email`
-        }
-    };
-    dataSendTo.default = {
-        name: 'default',
-        obj: {
-            dataChecked: [],
-            dataFailed: [],
-            err: `err-default`,
-            header: 'header-default',
-            name: 'default type config',
-            anchorEn: `default-devices`,
-            anchorGer: `default-devices`,
-            anchorName: `default-type`
-        }
-    };
-    dataSendTo.custom = {
-        name: 'custom',
-        obj: {
-            dataChecked: [],
-            dataFailed: [],
-            err: `err-custom`,
-            header: 'header-custom',
-            name: 'custom type config',
-            anchorEn: `custom-devices`,
-            anchorGer: `custom-devices`,
-            anchorName: `create-custom-type`
-        }
-    };
-    dataSendTo.status = {
-        name: 'status',
-        obj: {
-            dataChecked: [],
-            dataFailed: [],
-            err: `err-status`,
-            header: 'header-status',
-            name: 'device status',
-            anchorEn: `custom-states`,
-            anchorGer: `eigene-zustaende`,
-            anchorName: `custom-status`
-        }
-    };
-    dataSendTo.signal = {
-        name: 'signal',
-        obj: {
-            dataChecked: [],
-            dataFailed: [],
-            err: `err-signal`,
-            header: 'header-signal',
-            name: 'signal-cmb',
-            anchorEn: `create-signal`,
-            anchorGer: `signal-user-erstellen`,
-            anchorName: `signal`
-        }
-    };
-    dataSendTo.matrix = {
-        name: 'matrix',
-        obj: {
-            dataChecked: [],
-            dataFailed: [],
-            err: `err-matrix`,
-            header: 'header-matrix',
-            name: 'matrix',
-            anchorEn: `create-matrix`,
-            anchorGer: `matrix-user-erstellen`,
-            anchorName: `matrix`
-        }
+
+    for (const i of keys) {
+        dataSendTo[i] = await getDataSendTo(i);
     };
 
     return dataSendTo;
@@ -1001,105 +878,44 @@ async function dataCntrlInput() {
 /*
 Hier werden alle Daten aus den Settings geholt und in ein Objekt umgewandelt, mit dem die Tabelleninputs erstellt werden
 */
-function createData(settings) {
+async function createData(settings) {
 
-    let data = {};
+    console.warn(settings)
 
-    data.linkedDevice = {
-        name: 'linkedDevice',
-        idHTML: 'linked-deviceID',
-        ids: settings.linkedDevice !== undefined ? settings.linkedDevice.id || [] : [],
-        idsTable: settings.linkedDevice !== undefined ? settings.linkedDevice.final || [] : [],
-        cntr: settings.linkedDevice_counter !== undefined ? settings.linkedDevice_counter || 0 : 0,
-    };
-    data.devices = {
-        name: 'devices',
-        idHTML: 'devicesID',
-        ids: settings.devices !== undefined ? settings.devices.id || [] : [],
-        idsTable: settings.devices !== undefined ? settings.devices.final || [] : [],
-        cntr: settings.devices_counter !== undefined ? settings.devices_counter || 0 : 0,
-    };
-    data.alexa = {
-        name: 'alexa',
-        idHTML: 'alexaID',
-        ids: settings.alexa !== undefined ? settings.alexa.id || [] : [],
-        cntr: settings.alexa_counter !== undefined ? settings.alexa_counter || 0 : 0,
-    };
-    data.sayit = {
-        name: 'sayit',
-        idHTML: 'sayitID',
-        ids: settings.sayit !== undefined ? settings.sayit.id || [] : [],
-        cntr: settings.sayit_counter !== undefined ? settings.sayit_counter || 0 : 0,
-    };
-    data.whatsapp = {
-        name: 'whatsapp',
-        idHTML: 'whatsappID',
-        ids: settings.whatsapp !== undefined ? settings.whatsapp.id || [] : [],
-        cntr: settings.whatsapp_counter !== undefined ? settings.whatsapp_counter || 0 : 0,
+    let dataReturn = {};
 
-    };
-    data.telegram = {
-        name: 'telegram',
-        idHTML: 'telegramID',
-        ids: settings.telegram !== undefined ? settings.telegram.id || [] : [],
-        cntr: settings.telegram_counter !== undefined ? settings.telegram_counter || 0 : 0,
-    };
-    data.pushover = {
-        name: 'pushover',
-        idHTML: 'pushoverID',
-        ids: settings.pushover !== undefined ? settings.pushover.id || [] : [],
-        cntr: settings.pushover_counter !== undefined ? settings.pushover_counter || 0 : 0,
-    };
-    data.email = {
-        name: 'email',
-        idHTML: 'emailID',
-        ids: settings.email !== undefined ? settings.email.id || [] : [],
-        cntr: settings.email_counter !== undefined ? settings.email_counter || 0 : 0,
-    };
-    data.custom = {
-        name: 'custom',
-        idHTML: 'customID',
-        ids: settings.custom !== undefined ? settings.custom.id || [] : [],
-        cntr: settings.custom_counter !== undefined ? settings.custom_counter || 0 : 0,
-    };
-    data.default = {
-        name: 'default',
-        idHTML: 'defaultID',
-        ids: settings.default !== undefined ? settings.default.id || [] : [],
-        cntr: settings.default_counter !== undefined ? settings.default_counter || 0 : 0,
-    };
-    // data.alert = {
-    //     name: 'alert',
-    //     idHTML: 'alertID',
-    //     ids: settings.freqAlert !== undefined ? settings.freqAlert.id || [] : [],
-    //     cntr: settings.alert_counter !== undefined ? settings.alert_counter || 0 : 0,
-    // };
-    // data.presence = {
-    //     name: 'presence',
-    //     idHTML: 'presenceID',
-    //     ids: settings.presence !== undefined ? settings.presence.id || [] : [],
-    //     cntr: settings.presence_counter !== undefined ? settings.presence_counter || 0 : 0,
-    // };
-    data.status = {
-        name: 'status',
-        idHTML: 'statusID',
-        ids: settings.status !== undefined ? settings.status.id || [] : [],
-        cntr: settings.status_counter !== undefined ? settings.status_counter || 0 : 0,
-    };
-    data.signal = {
-        name: 'signal',
-        idHTML: 'signalID',
-        ids: settings.signal !== undefined ? settings.signal.id || [] : [],
-        cntr: settings.signal_counter !== undefined ? settings.signal_counter || 0 : 0,
-    };
-    data.matrix = {
-        name: 'matrix',
-        idHTML: 'matrixID',
-        ids: settings.matrix !== undefined ? settings.matrix.id || [] : [],
-        cntr: settings.matrix_counter !== undefined ? settings.matrix_counter || 0 : 0,
+    // Alle Daten aus den settings holen und als JSON zusammenbauen
+    const getIds = async(name) => {
+        let data = {};
+        if (settings[name] != undefined) {
+            /**@type {string}*/
+            data.name = name;
+            /**@type {string}*/
+            data.idHTML = `${name}ID`;
+            if (settings[name].id != undefined) {
+                /**@type {{}}*/
+                data.ids = settings[name].id;
+            } else if (settings[name].ids != undefined) {
+                /**@type {{}}*/
+                data.ids = settings[name].ids;
+            } else {
+                /**@type {{}}*/
+                data.ids = [];
+            }
+            /**@type {{}}*/
+            data.idsTable = settings.linkedDevice !== undefined ? settings.linkedDevice.final || [] : [];
+            /**@type {number}*/
+            data.cntr = settings.linkedDevice_counter !== undefined ? settings.linkedDevice_counter || 0 : 0;
+        };
+        return data;
     };
 
-    return data;
+    for (const i of keys) {
+        dataReturn[i] = await getIds(i);
+    };
+
+    console.warn(dataReturn)
+    return dataReturn;
 };
 
 // Hier werden alle benoetigten Daten fuer den dynamic Table (linked-devices) zusammengebaut und return gegeben

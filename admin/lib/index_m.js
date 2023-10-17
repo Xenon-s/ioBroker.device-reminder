@@ -1,6 +1,8 @@
 /*
 offene Punkte
--
+- linked-devices lassen sich nicht speichern -> Prüfen 
+- save function immer noch durcheinander
+- save : counter werden nicht uebergeben sind entweder 0 oder undefined
 */
 
 // hier wird die komplette GUI des Adapters im Admin erstellt
@@ -13,22 +15,27 @@ let onChangeGlobal;
 let showSaveBtn;
 let deviceTypes = [];
 let checkedUserInput = {}; // alle geprueften User Inputs werden hier gespeichert
-let dataGlobalNew = {};
-// let cntrRow = {}; // Zaehler fuer Tabellenzeilen
 let dataTableHead = {};
 
 // This will be called by the admin adapter when the settings page loads
 async function load(settings, onChange) {
 
+    const id = 'system.adapter.' + adapter + '.' + instance;
+
+    // socket.emit('getObject', id, (err, res) => {
+    //     console.warn(res.native)
+    // })
+
     if (!settings) return;
 
     // Pruefen, ob Adapter laeuft, da sonst keine Pruefungen im Backend ausgefuehrt werden koennen
     const namespace = `${adapter}.${instance}`;
-    socket.emit('getState', `system.adapter.${namespace}.alive`, async(err, state) => {
+    socket.emit('getState', `${id}.alive`, async(err, state) => {
+        // socket.emit('getState', `system.adapter.${namespace}.alive`, async(err, state) => {
         showSaveBtn = onChange;
         settingsGlobal = settings;
         onChangeGlobal = onChange;
-        await createGUI(settings, onChange)
+        await createGUI(settingsGlobal, onChange)
         $('.collapsible').collapsible();
         $('.modal').modal();
         $('.timepicker').timepicker({ "twelveHour": false });
@@ -36,20 +43,17 @@ async function load(settings, onChange) {
 };
 
 // Hier wird die gesamte GUI gebaut
-async function createGUI(settings, onChange) {
+async function createGUI(settingsGlobal, onChange) {
     showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
-    dataGlobal = await createData(settings);
-
+    dataGlobal = await createData(settingsGlobal);
     /*
     ### Header erstellen ###
     */
     // Table Head erstellen fuer alle Tabellen
     console.info('Daten fuer Table Head abrufen');
-    dataTableHead = await createTableHeadData(settings)
-    console.info('Daten fuer Table Head erfolgreich erstellt');
-    console.info('Table Header erstellen');
-    await createTableHeader(dataTableHead);
-    console.info('Table Header wurden erstellt');
+    // dataTableHead = await createTableHeadData(settingsGlobal)
+    await createTableHeader(await createTableHeadData(settingsGlobal));
+    // await createTableHeader(dataTableHead);
     // collapsible und modal aktivieren
     $('.collapsible').collapsible();
     $('.modal').modal();
@@ -57,19 +61,12 @@ async function createGUI(settings, onChange) {
     /*
     ### Table Body erstellen ###
     */
-    // Table Body erstellen fuer alle Tabellen
-    console.info('Static Table erstellen');
-    const resChecked = await staticTable(dataGlobal);
-    console.info('Static Table erstellen abgeschlossen');
-    console.info('Dynamic Table erstellen');
-
-    await dynamicTable(dataGlobal, resChecked, onChange);
-    console.info('Dynamic Table erstellen abgeschlossen');
+    await dynamicTable(dataGlobal, await staticTable(dataGlobal), onChange);
+    // await dynamicTable(dataGlobal, await staticTable(dataGlobal), onChange);
     onChange(false);
 
     // create static table
     async function staticTable(data) {
-
         // Zuerst alle Inhalte außer "measuring Devices" erstellen, sonst koennen keine Inhalte aus anderen Tabellen geholt
         for (const i in data) {
             if (!data[i].name.includes('devices')) await createTable(data, i, onChange);
@@ -103,7 +100,7 @@ async function createGUI(settings, onChange) {
         const btnSave = `#btn-check-${name}`;
         $(btnSave).fadeOut();
         $(btnSave).on('click', async() => {
-            dataGlobal = await btnPressed(settings, i, onChange);
+            dataGlobal = await btnPressed(settingsGlobal, i, onChange);
             $(btnSave).fadeOut();
             createEvent(`#${name}ID`);
             // $(btnSave).addClass('disabled');
@@ -125,17 +122,14 @@ async function createGUI(settings, onChange) {
         });
 
         const createEvent = async eventID => {
-            console.warn(eventID)
             if (eventID !== '#valStates') {
                 $(eventID).find('.values-input').off().on('click change', () => {
-                    console.warn('1')
                     $(`#btn-check-${name}`).fadeIn();
                     $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
                     if (!name.includes('linked')) onChange(false); // Hier wird der Speicherbutton deaktiviert. Reaktivierung erst, wenn "Check Button" geklickt und positives Resultat
                     createEvent(eventID);
                 });
                 $(eventID).find('.red').on('click', () => {
-                    console.warn(eventID)
                     $(`#btn-check-${name}`).fadeIn();
                     $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
                     if (!name.includes('linked')) onChange(false); // Hier wird der Speicherbutton deaktiviert. Reaktivierung erst, wenn "Check Button" geklickt und positives Resultat
@@ -143,9 +137,7 @@ async function createGUI(settings, onChange) {
                 });
             } else {
                 $('#valStates').find('.values-input').off().on('change', () => {
-                    console.warn('3')
                     $('.btn-save, .btn-save-close').fadeIn();
-                    console.warn('onChange(1)');
                     onChange(true);
                 });
             };
@@ -159,14 +151,18 @@ async function createGUI(settings, onChange) {
     }
 
     async function dynamicTable(data, checked, onChange) {
-        dataGlobal = await createDynamicTable(data, checked, onChange); // create dynamic table "device"
+
+        createDynamicTable(data, checked, onChange); // create dynamic table "device"
+        // dataGlobal = await createDynamicTable(data, checked, onChange); // create dynamic table "device"
         if (M) M.updateTextFields();
+
+        return true;
     };
 
-    async function btnPressed(settings, name, onChange) {
+    async function btnPressed(settingsGlobal, name, onChange) {
 
-        const actData = await createData(settings)
-        const data = await createSettings(actData);
+        const actData = await createData(dataGlobal)
+        const data = await createSettings(actData, 'btn');
         const result = await checkInput(actData, name, onChange);
 
         if (!name.includes('header')) checkedUserInput[actData[name].name] = result[name];
@@ -175,7 +171,7 @@ async function createGUI(settings, onChange) {
         if (name.includes('custom')) {
             deviceTypes = [];
             $(`#gui`).html();
-            await createGUI(settings, onChange)
+            await createGUI(settingsGlobal, onChange)
             selectedHeader(`header-${name}`, true)
         };
 
@@ -193,10 +189,10 @@ async function createGUI(settings, onChange) {
     return true;
 };
 
-async function createDynamicTable(settings, checked, onChange) {
+async function createDynamicTable(settingsGlobal, checked, onChange) {
 
     let curDevice = null;
-    const settingsTable = settings.linkedDevice.idsTable;
+    const settingsTable = settingsGlobal.linkedDevice.idsTable;
     const devices = checked.devices;
 
     // alte Tabelleninhalte loeschen
@@ -310,9 +306,8 @@ async function createDynamicTable(settings, checked, onChange) {
         });
 
         // trigger im dynamic table setzen
-        $('#linked-device-body').find('.values-input').on('change', function() {
+        $('#linked-device-body').find('.values-input').off().on('change', function() {
             $('.btn-save, .btn-save-close').fadeIn();
-            console.warn('onChange(2)');
             onChangeGlobal(true);
         });
     };
@@ -323,7 +318,7 @@ async function createDynamicTable(settings, checked, onChange) {
         M.updateTextFields();
     };
 
-    return settings;
+    return settingsGlobal;
 };
 
 async function checkInput(data, type, onChange) {
@@ -417,6 +412,7 @@ async function checkInput(data, type, onChange) {
         if (obj.name !== `device status` && (obj.dataChecked.length <= 0) && (obj.dataFailed.length <= 0)) {
             $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: grey;">
                     <i class="material-icons">check_circle_outline</i><span>${_("no entries found")}</span> </div>`);
+            onChangeGlobal(true);
         } else if (obj.dataFailed.length >= 1) {
             $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: red;">
                     <i class="large material-icons">error_outline</i><span><b>${_("invalid input detected")}:</b><br> - ${obj.dataFailed.join('<br> - ')}</span></div>`);
@@ -427,8 +423,6 @@ async function checkInput(data, type, onChange) {
         } else {
             $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: green;">
                     <i class="material-icons">check_circle_outline</i><span class="translate" style="font-weight:bold;">${_("Input checked")}</span></div>`);
-
-            console.warn('onChange(3)');
             onChangeGlobal(true);
             showSaveBtn(true);
         };
@@ -644,18 +638,16 @@ function showHeader( /**@type {string}*/ tblId, /**@type {Boolean}*/ name, arr) 
 };
 
 // settings neu erstellen und an die table schicken
-async function createSettings(data, type) {
-
+async function createSettings(data, /**@type{string}*/ type) {
     let obj = {};
-    obj = data;
-
     // Daten aus tabellen nur holen, wenn neues device erzeugt wurde
     if (type != 'save') {
+        obj = data;
 
         const result = await getDataFromTable(data); // daten für jedes device holen
         for (const i of Object.keys(result)) {
             if (result[i].length > 0) {
-                const resultCreateId = await createId(result[i], data[i]);
+                const resultCreateId = await createId(result[i]);
                 obj[i].ids = resultCreateId.array
                 obj[i].cntr = resultCreateId.counter
             };
@@ -671,10 +663,23 @@ async function createSettings(data, type) {
         };
 
         // jedem einzelnen device pro Tabelle eine eindeutige ID zuweisen
-        function createId(array, data) { // jedem device eine ID zuweisen
+        function createId(array) { // jedem device eine ID zuweisen
+
+            // Hoechte ID rausfinden
+            let arrIds = [];
+            for (const i of Object.keys(array)) {
+                if (array[i].id != "" || array[i].id !== undefined) {
+                    arrIds.push(array[i].id);
+                };
+            };
+            arrIds.sort(function(a, b) {
+                return a - b;
+            });
+
             /**@type{number}*/
-            let counter = data.cntr;
-            for (const i in array) {
+            let counter = arrIds.length > 0 ? arrIds[arrIds.length - 1] || 0 : 0;
+
+            for (const i of Object.keys(array)) {
                 if (array[i].id == "" || array[i].id == undefined) {
                     array[i].id = counter;
                     counter++;
@@ -682,43 +687,54 @@ async function createSettings(data, type) {
             };
             return { array, counter };
         };
+    } else {
+        obj = dataGlobal;
+    }
+
+
+    const getDataFromDynamicTable = async() => {
+        let body = $('#linked-deviceID .table-lines');
+        let devices = [];
+        body.children().each(function() { // daten aus dyn. tabelle sichern
+            let data = {};
+            $(this).children().each(function() {
+                let value;
+                if ($(this).data('type') == 'multiple') {
+                    value = $(this).find('select').val();
+                    $(this).find('select').data('old-value', value);
+                } else if ($(this).data('type') == 'label') {
+                    value = $(this).find('span').text();
+                } else if ($(this).data('type') == 'checkbox') {
+                    value = $(this).find('input').prop('checked');
+                    $(this).find('input').data('old-value', value);
+                } else if ($(this).data('type') == 'id') {
+                    value = $(this).find('span').text();
+                } else {
+                    value = $(this).find('input').val();
+                    $(this).find('input').data('old-value', value);
+                };
+                data[$(this).data('name')] = value;
+            });
+            // console.warn(data)
+            devices.push(data); // device daten in array pushen
+        });
+        return devices;
     };
 
-    let body = $('#linked-deviceID .table-lines');
-    let devices = [];
-    body.children().each(function() { // daten aus dyn. tabelle sichern
-        let data = {};
-        $(this).children().each(function() {
-            let value;
-            if ($(this).data('type') == 'multiple') {
-                value = $(this).find('select').val();
-                $(this).find('select').data('old-value', value);
-            } else if ($(this).data('type') == 'label') {
-                value = $(this).find('span').text();
-            } else if ($(this).data('type') == 'checkbox') {
-                value = $(this).find('input').prop('checked');
-                $(this).find('input').data('old-value', value);
-            } else if ($(this).data('type') == 'id') {
-                value = $(this).find('span').text();
-            } else {
-                value = $(this).find('input').val();
-                $(this).find('input').data('old-value', value);
-            };
-            data[$(this).data('name')] = value;
-        });
-        devices.push(data); // device daten in array pushen
-    });
-
-    obj.linkedDevice['ids'] = devices;
-
+    obj.linkedDevice.ids = await getDataFromDynamicTable();
+    dataGlobal = obj;
+    console.warn(dataGlobal)
     return obj; // settings zurueckgeben
 };
 
 // Daten ins native schreiben
 async function save(callback) {
 
-    const actData = await createSettings(dataGlobal, 'save'); // aktuelle settings holen
-    const cntr = await saveCntr(actData); // counter fuer save obj erstellen
+    console.warn(dataGlobal)
+    const actData = await createData(dataGlobal)
+    const data = await createSettings(actData, 'save');
+
+    const cntr = await saveCntr(data); // counter fuer save obj erstellen
     const result = await loopArr(cntr) // devices, messenger, etc "final" erstellen
     let resultTemp = result
     const finalObj = resultTemp; // fertiges objekt fuer native settings
@@ -727,8 +743,9 @@ async function save(callback) {
         // counter in die native schreiben
         let objTemp = actData;
         for (const name in actData) {
-            if (!name.includes('linked') && !name.includes('counter')) {
+            if (!name.includes('linked') && !name.includes('counter') && !name.includes('status')) {
                 const cntrName = `${name}_counter`
+                    /**@type {number}*/
                 objTemp[cntrName] = actData[name].cntr;
             };
         };
@@ -737,22 +754,27 @@ async function save(callback) {
 
     async function loopArr(objCntr) {
         let objTemp = objCntr;
+        // console.warn(dataGlobal)
         for (const i in dataGlobal) {
             if (!i.includes('counter')) {
                 const id = dataGlobal[i].name;
                 objTemp[id] = {
                     id: dataGlobal[i].ids,
-                    final: await createArray(dataGlobal[i]),
+                    final: await createArray(dataGlobal[i], i),
                 };
             };
         };
 
+        // console.warn(objTemp)
         return objTemp;
     };
 
-    function createArray(obj) {
+    function createArray(obj, i) {
 
-        const name = obj.name;
+        // console.warn(obj)
+
+        const name = i;
+        // const name = obj.name 
         let timeMin = "";
         let timeMax = "";
         let objTemp = {};
@@ -760,8 +782,15 @@ async function save(callback) {
         for (const i in obj.ids) {
             if (i != undefined) {
                 const data = obj.ids[i];
+                // console.warn(name)
                 if (name.includes('linkedDevice')) { // ????
-                    const dataMeasuringDevices = dataGlobal.devices.ids[i];
+                    console.warn(true)
+                    if (dataGlobal.devices.ids != undefined) {
+                        var dataMeasuringDevices = dataGlobal.devices.ids[i]
+                    } else {
+                        var dataMeasuringDevices = dataGlobal.devices.id[i]
+                    }
+                    // const dataMeasuringDevices = dataGlobal.devices.ids[i] != undefined ? dataGlobal.devices.ids[i] || dataGlobal.devices.id[i] : dataGlobal.devices.id[i];
                     const dataLinkedDevices = data;
                     /*
                     Daten aus den beiden Tabellen von "linked Device" und "measuring Devices" miteiner verknuepfen und ein finales "linked Device"
@@ -947,5 +976,5 @@ async function save(callback) {
         return objTemp;
     };
     console.warn(finalObj)
-    callback(finalObj); // daten in native settings schreiben
+    callback(dataGlobal); // daten in native settings schreiben
 };
