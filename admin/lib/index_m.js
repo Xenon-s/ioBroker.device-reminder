@@ -9,7 +9,9 @@ offene Punkte
 
 let headerOpened = ``;
 let lastHeaderOpened = '';
-let dataGlobal = {}; // alle native Daten aus "settings" werden hier gespeichert
+let dataGlobal = {}; // Objektinhalt : alle Daten aus der native + tabelleninformationen wie tableID
+let tableIds = {}; // Objektinhalt : HTML Informationen fuer die einzelnen Tabellen
+let tableContent = {}; // Objektinhalt : Ids + Counter aller Tabellen
 let settingsGlobal;
 let onChangeGlobal;
 let showSaveBtn;
@@ -18,26 +20,25 @@ let checkedUserInput = {}; // alle geprueften User Inputs werden hier gespeicher
 let dataTableHead = {};
 
 // This will be called by the admin adapter when the settings page loads
+// @ts-ignore
 async function load(settings, onChange) {
 
-    const id = 'system.adapter.' + adapter + '.' + instance;
-
-    // socket.emit('getObject', id, (err, res) => {
-    //     console.warn(res.native)
-    // })
+    const adapterInstance = `system.adapter.device-reminder.${instance}`;
 
     if (!settings) return;
 
     // Pruefen, ob Adapter laeuft, da sonst keine Pruefungen im Backend ausgefuehrt werden koennen
-    const namespace = `${adapter}.${instance}`;
-    socket.emit('getState', `${id}.alive`, async(err, state) => {
+    socket.emit('getState', `${adapterInstance}.alive`, async(err, state) => {
         // socket.emit('getState', `system.adapter.${namespace}.alive`, async(err, state) => {
         showSaveBtn = onChange;
         settingsGlobal = settings;
         onChangeGlobal = onChange;
         await createGUI(settingsGlobal, onChange)
+            // @ts-ignore
         $('.collapsible').collapsible();
+        // @ts-ignore
         $('.modal').modal();
+        // @ts-ignore
         $('.timepicker').timepicker({ "twelveHour": false });
     });
 };
@@ -45,33 +46,46 @@ async function load(settings, onChange) {
 // Hier wird die gesamte GUI gebaut
 async function createGUI(settingsGlobal, onChange) {
     showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
-    dataGlobal = await createData(settingsGlobal);
+    const result = await createData();
+    for (const i of Object.keys(result)) {
+        tableIds[i] = result[i].data;
+        tableContent[i] = result[i].dataIds;
+    };
+
+    // DataGlobal mit allen Daten zusammenbauen
+    for (const i of Object.keys(result)) {
+        dataGlobal[i] = {
+            name: result[i].data.name,
+            idHTML: result[i].data.idHTML,
+            ids: result[i].dataIds.ids,
+            cntr: result[i].dataIds.cntr,
+            idsTable: result[i].dataIds.idsTable
+        };
+    };
     /*
     ### Header erstellen ###
     */
     // Table Head erstellen fuer alle Tabellen
-    console.info('Daten fuer Table Head abrufen');
-    // dataTableHead = await createTableHeadData(settingsGlobal)
     await createTableHeader(await createTableHeadData(settingsGlobal));
-    // await createTableHeader(dataTableHead);
     // collapsible und modal aktivieren
+    // @ts-ignore
     $('.collapsible').collapsible();
+    // @ts-ignore
     $('.modal').modal();
 
     /*
     ### Table Body erstellen ###
     */
-    await dynamicTable(dataGlobal, await staticTable(dataGlobal), onChange);
-    // await dynamicTable(dataGlobal, await staticTable(dataGlobal), onChange);
+    await dynamicTable(await staticTable());
     onChange(false);
 
     // create static table
-    async function staticTable(data) {
+    async function staticTable() {
         // Zuerst alle Inhalte außer "measuring Devices" erstellen, sonst koennen keine Inhalte aus anderen Tabellen geholt
-        for (const i in data) {
-            if (!data[i].name.includes('devices')) await createTable(data, i, onChange);
-            $(`#${data[i].name}ID .table-lines [data-name="activeFrom"]`).attr('class', 'values-input timepicker');
-            $(`#${data[i].name}ID .table-lines [data-name="activeUntil"]`).attr('class', 'values-input timepicker');
+        for (const i in tableIds) {
+            if (!tableIds[i].name.includes('devices')) await createTable(i, onChange);
+            $(`#${tableIds[i].idHTML} .table-lines [data-name="activeFrom"]`).attr('class', 'values-input timepicker');
+            $(`#${tableIds[i].idHTML} .table-lines [data-name="activeUntil"]`).attr('class', 'values-input timepicker');
         };
 
         // trigger im "default table" setzen
@@ -80,10 +94,10 @@ async function createGUI(settingsGlobal, onChange) {
             $('#btn-check-default').removeClass('disabled');
         });
 
-        const checked = await checkInput(data, 'all');
+        const checked = await checkInput('all');
         checkedUserInput = checked;
 
-        await createTable(data, 'devices', onChange);
+        await createTable('devices', onChange);
 
         $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true); // disable "name" in table default-types
 
@@ -91,20 +105,19 @@ async function createGUI(settingsGlobal, onChange) {
     };
 
     // Static Table erstellen
-    async function createTable(data, i, onChange) {
+    async function createTable( /**@type {string}*/ i, onChange) {
 
-        const name = data[i].name;
-        values2table(data[i].idHTML, data[i].ids, onChange); // create table
+        const name = tableIds[i].name;
+        // @ts-ignore
+        values2table(tableIds[i].idHTML, tableContent[i].ids, onChange); // create table
 
         // create click event "disable save button"
         const btnSave = `#btn-check-${name}`;
         $(btnSave).fadeOut();
         $(btnSave).on('click', async() => {
-            dataGlobal = await btnPressed(settingsGlobal, i, onChange);
+            tableContent = await btnPressed(settingsGlobal, i, onChange);
             $(btnSave).fadeOut();
             createEvent(`#${name}ID`);
-            // $(btnSave).addClass('disabled');
-
         });
 
         // create click event "add button"
@@ -115,6 +128,7 @@ async function createGUI(settingsGlobal, onChange) {
                 // Attribute aendern
                 $(`#${name}ID .table-lines [data-name="activeFrom"]`).attr('class', 'values-input timepicker');
                 $(`#${name}ID .table-lines [data-name="activeUntil"]`).attr('class', 'values-input timepicker');
+                // @ts-ignore
                 $('.timepicker').timepicker({ "twelveHour": false });
             }, 200)
 
@@ -144,16 +158,16 @@ async function createGUI(settingsGlobal, onChange) {
         };
 
         // create event "change" on table
-        const eventID = `#${data[i].idHTML}`;
+        const eventID = `#${tableIds[i].idHTML}`;
         await createEvent(eventID)
 
         return true;
     }
 
-    async function dynamicTable(data, checked, onChange) {
+    async function dynamicTable(checked) {
 
-        createDynamicTable(data, checked, onChange); // create dynamic table "device"
-        // dataGlobal = await createDynamicTable(data, checked, onChange); // create dynamic table "device"
+        createDynamicTable(checked); // create dynamic table "device"
+        // @ts-ignore
         if (M) M.updateTextFields();
 
         return true;
@@ -161,11 +175,10 @@ async function createGUI(settingsGlobal, onChange) {
 
     async function btnPressed(settingsGlobal, name, onChange) {
 
-        const actData = await createData(dataGlobal)
-        const data = await createSettings(actData, 'btn');
-        const result = await checkInput(actData, name, onChange);
+        tableContent = await createSettings();
+        const result = await checkInput(name);
 
-        if (!name.includes('header')) checkedUserInput[actData[name].name] = result[name];
+        if (!name.includes('header')) checkedUserInput[name] = result[name];
 
         // Wenn in Custom Types geaendert werden, muss die GUI neu geladen werden, da sonst die neuen Types nicht auftauchen
         if (name.includes('custom')) {
@@ -175,24 +188,26 @@ async function createGUI(settingsGlobal, onChange) {
             selectedHeader(`header-${name}`, true)
         };
 
-        dynamicTable(actData, checkedUserInput);
+        dynamicTable(checkedUserInput);
 
         if (checkedUserInput.devices !== undefined && checkedUserInput.devices.length >= 1) {
             $('.dynamic-table-devices').fadeIn();
             $('.btn-save, .btn-save-close').fadeIn();
         };
 
+        // @ts-ignore
         if (M) M.updateTextFields();
 
-        return data;
+        return tableContent;
     };
     return true;
 };
 
-async function createDynamicTable(settingsGlobal, checked, onChange) {
+async function createDynamicTable(checked) {
 
     let curDevice = null;
-    const settingsTable = settingsGlobal.linkedDevice.idsTable;
+    const settingsTable = tableContent.linkedDevice.idsTable;
+    // const settingsTable = settingsGlobal.linkedDevice.idsTable;
     const devices = checked.devices;
 
     // alte Tabelleninhalte loeschen
@@ -297,6 +312,7 @@ async function createDynamicTable(settingsGlobal, checked, onChange) {
         $('#linked-device-body').append(col);
 
         // vom User gesetzte "multiple options" in der Tabelle anzeigen
+        // @ts-ignore
         $('#linked-device-body').children().eq(i).children().each(function() {
             if ($(this).data('type') == 'multiple') {
                 $(this).find('select').val(curDevice[$(this).data('name')]);
@@ -314,29 +330,30 @@ async function createDynamicTable(settingsGlobal, checked, onChange) {
 
     if (curDevice != null) {
         // const selectInstance = M.FormSelect.getInstance($('select'));
+        // @ts-ignore
         instances = M.FormSelect.init($('select'));
+        // @ts-ignore
         M.updateTextFields();
     };
 
-    return settingsGlobal;
+    return true;
+    // return settingsGlobal;
 };
 
-async function checkInput(data, type, onChange) {
+async function checkInput(type) {
 
-    const result = await loop(type, onChange);
+    const result = await loop(type);
     return result;
 
     // user input überprüfen und auf callback warten
-    async function deviceCheck(dataSendTo, data, onChange, successCallback, errorCallback) {
+    async function deviceCheck(dataSendTo, successCallback, errorCallback) {
 
         const name = dataSendTo.name
         let obj = dataSendTo.obj;
-        let arr = {};
-        arr = data.ids;
 
         // Userinput ins Backend schicken und auf Plausibilitaet pruefen
         try {
-            sendTo(`device-reminder.${instance}`, name, arr, async result => {
+            sendTo(`device-reminder.${instance}`, name, tableContent[name].ids, async result => {
                 const res = await result;
                 if (res != undefined) {
                     obj.dataChecked = res.checked || [];
@@ -358,9 +375,9 @@ async function checkInput(data, type, onChange) {
     };
 
     // promise erstellen
-    function functionWrapper(dataSendTo, data, onChange) {
+    function functionWrapper(dataSendTo) {
         return new Promise((resolve, reject) => {
-            deviceCheck(dataSendTo, data, onChange, (successResponse) => {
+            deviceCheck(dataSendTo, (successResponse) => {
                 resolve(successResponse);
             }, (errorResponse) => {
                 reject(errorResponse);
@@ -368,42 +385,42 @@ async function checkInput(data, type, onChange) {
         });
     };
 
-    async function functionLogic(dataSendTo, data, onChange) {
+    async function functionLogic(dataSendTo) {
         try {
-            const result = await functionWrapper(dataSendTo, data, onChange);
+            const result = await functionWrapper(dataSendTo);
             return result;
         } catch (error) {
             console.error("ERROR:" + error);
         };
     };
 
-    async function loop(type, onChange) {
+    async function loop( /**@type {string}*/ type) {
         // Daten aus dataSendTo.js holen
         let dataSendTo = await dataCntrlInput();
 
-        // try {
-        let result = {};
-        let checkData = {};
-        if (type !== 'all' && !type.includes('header')) {
-            checkData[type] = dataSendTo[type];
-        } else {
-            checkData = dataSendTo;
-        };
-
-        for (const i in checkData) { // check aller inputs 
-            const name = checkData[i].name
-            if (name == 'status') { // status wird nicht geprüft, da jede Eingabe erlaubt ist [string]
-                await checked(checkData[name].obj)
-                $('#err-status').css('display', 'none');
+        try {
+            let result = {};
+            let checkData = {};
+            if (type !== 'all' && !type.includes('header')) {
+                checkData[type] = dataSendTo[type];
             } else {
-                result[name] = [];
-                result[name] = await functionLogic(checkData[i], data[i], onChange); // daten in der main.js prüfen und return
+                checkData = dataSendTo;
             };
+
+            for (const i in checkData) { // check aller inputs 
+                const name = checkData[i].name
+                if (name == 'status') { // status wird nicht geprüft, da jede Eingabe erlaubt ist [string]
+                    await checked(checkData[name].obj)
+                    $('#err-status').css('display', 'none');
+                } else {
+                    result[name] = [];
+                    result[name] = await functionLogic(checkData[i], ); // daten in der main.js prüfen und return
+                };
+            };
+            return result;
+        } catch (error) {
+            console.error(error);
         };
-        return result
-            // } catch (error) {
-            //     console.error(error);
-            // };
     };
 
     async function checked(obj) {
@@ -604,6 +621,7 @@ function showBtns( /**@type {string}*/ id, /**@type {boolean}*/ cmd, onChange) {
 async function selectedHeader( /**@type {string}*/ id, /**@type {boolean}*/ rebuild) {
 
     if (rebuild) {
+        // @ts-ignore
         var instance = M.Collapsible.getInstance($('.collapsible')[0]);
         instance.open(4);
     } else {
@@ -638,153 +656,118 @@ function showHeader( /**@type {string}*/ tblId, /**@type {Boolean}*/ name, arr) 
 };
 
 // settings neu erstellen und an die table schicken
-async function createSettings(data, /**@type{string}*/ type) {
-    let obj = {};
-    // Daten aus tabellen nur holen, wenn neues device erzeugt wurde
-    if (type != 'save') {
-        obj = data;
+async function createSettings() {
 
-        const result = await getDataFromTable(data); // daten für jedes device holen
-        for (const i of Object.keys(result)) {
-            if (result[i].length > 0) {
-                const resultCreateId = await createId(result[i]);
-                obj[i].ids = resultCreateId.array
-                obj[i].cntr = resultCreateId.counter
-            };
+    // Daten aus Tabellen holen und als Objekt abspeichern [IDs aus Tabellen holen und counter anpassen]
+    for (const name of Object.keys(tableContent)) {
+        if (!name.includes('counter')) tableContent[name].ids = await getDataFromTable(name);
+        if (tableContent[name].ids.length > 0) {
+            const resultCreateId = await createId(tableContent[name].ids);
+            tableContent[name].ids = resultCreateId.array;
+            tableContent[name].cntr = resultCreateId.counter;
         };
-
-        // Daten aus jeder einzelnen Tabelle holen und in Objekt abspeichern
-        async function getDataFromTable(data) { // daten aus tabellen holen
-            let dataReturn = {};
-            for (const i in data) {
-                dataReturn[i] = await table2values(data[i].idHTML);
-            };
-            return dataReturn;
-        };
-
-        // jedem einzelnen device pro Tabelle eine eindeutige ID zuweisen
-        function createId(array) { // jedem device eine ID zuweisen
-
-            // Hoechte ID rausfinden
-            let arrIds = [];
-            for (const i of Object.keys(array)) {
-                if (array[i].id != "" || array[i].id !== undefined) {
-                    arrIds.push(array[i].id);
-                };
-            };
-            arrIds.sort(function(a, b) {
-                return a - b;
-            });
-
-            /**@type{number}*/
-            let counter = arrIds.length > 0 ? arrIds[arrIds.length - 1] || 0 : 0;
-
-            for (const i of Object.keys(array)) {
-                if (array[i].id == "" || array[i].id == undefined) {
-                    array[i].id = counter;
-                    counter++;
-                };
-            };
-            return { array, counter };
-        };
-    } else {
-        obj = dataGlobal;
-    }
-
-
-    const getDataFromDynamicTable = async() => {
-        let body = $('#linked-deviceID .table-lines');
-        let devices = [];
-        body.children().each(function() { // daten aus dyn. tabelle sichern
-            let data = {};
-            $(this).children().each(function() {
-                let value;
-                if ($(this).data('type') == 'multiple') {
-                    value = $(this).find('select').val();
-                    $(this).find('select').data('old-value', value);
-                } else if ($(this).data('type') == 'label') {
-                    value = $(this).find('span').text();
-                } else if ($(this).data('type') == 'checkbox') {
-                    value = $(this).find('input').prop('checked');
-                    $(this).find('input').data('old-value', value);
-                } else if ($(this).data('type') == 'id') {
-                    value = $(this).find('span').text();
-                } else {
-                    value = $(this).find('input').val();
-                    $(this).find('input').data('old-value', value);
-                };
-                data[$(this).data('name')] = value;
-            });
-            // console.warn(data)
-            devices.push(data); // device daten in array pushen
-        });
-        return devices;
     };
 
-    obj.linkedDevice.ids = await getDataFromDynamicTable();
-    dataGlobal = obj;
-    console.warn(dataGlobal)
-    return obj; // settings zurueckgeben
+    // Daten aus jeder einzelnen Tabelle holen und in Objekt abspeichern
+    async function getDataFromTable( /**@type{string}*/ name) { // daten aus tabellen holen
+        let dataReturn = {};
+        // Static Table auslesen
+        if (!name.includes('linked')) {
+            dataReturn = await table2values(tableIds[name].idHTML);
+        } else {
+            // Dynamic Table auslesen (linked-device)
+            let body = $(`#linked-deviceID .table-lines`);
+            let devices = [];
+            body.children().each(function() { // daten aus dyn. tabelle sichern
+                let data = {};
+                $(this).children().each(function() {
+                    let value;
+                    if ($(this).data('type') == 'multiple') {
+                        value = $(this).find('select').val();
+                        // @ts-ignore
+                        $(this).find('select').data('old-value', value);
+                    } else if ($(this).data('type') == 'label') {
+                        value = $(this).find('span').text();
+                    } else if ($(this).data('type') == 'checkbox') {
+                        value = $(this).find('input').prop('checked');
+                        $(this).find('input').data('old-value', value);
+                    } else if ($(this).data('type') == 'id') {
+                        value = $(this).find('span').text();
+                    } else {
+                        value = $(this).find('input').val();
+                        // @ts-ignore
+                        $(this).find('input').data('old-value', value);
+                    };
+                    data[$(this).data('name')] = value;
+                });
+                devices.push(data); // device daten in array pushen
+            });
+            dataReturn = devices;
+        };
+        return dataReturn;
+    };
+    return tableContent; // settings zurueckgeben
+};
+
+// jedem einzelnen device pro Tabelle eine eindeutige ID zuweisen
+async function createId(array) { // jedem device eine ID zuweisen
+    // Hoechte ID rausfinden
+    let arrIds = [];
+    for (const i of Object.keys(array)) {
+        if (array[i].id != "" || array[i].id !== undefined) {
+            arrIds.push(array[i].id);
+        };
+    };
+    arrIds.sort(function(a, b) {
+        return a - b;
+    });
+
+    /**@type{number}*/
+    let counter = arrIds.length > 0 ? arrIds[arrIds.length - 1] || 0 : 0;
+
+    for (const i of Object.keys(array)) {
+        if (array[i].id == "" || array[i].id == undefined) {
+            array[i].id = counter;
+            counter++;
+        };
+    };
+    return { array, counter };
 };
 
 // Daten ins native schreiben
+// @ts-ignore
 async function save(callback) {
 
-    console.warn(dataGlobal)
-    const actData = await createData(dataGlobal)
-    const data = await createSettings(actData, 'save');
-
-    const cntr = await saveCntr(data); // counter fuer save obj erstellen
-    const result = await loopArr(cntr) // devices, messenger, etc "final" erstellen
+    tableContent = await createSettings();
+    const result = await loopArr() // devices, messenger, etc "final" erstellen
     let resultTemp = result
     const finalObj = resultTemp; // fertiges objekt fuer native settings
 
-    async function saveCntr(actData) {
-        // counter in die native schreiben
-        let objTemp = actData;
-        for (const name in actData) {
-            if (!name.includes('linked') && !name.includes('counter') && !name.includes('status')) {
-                const cntrName = `${name}_counter`
-                    /**@type {number}*/
-                objTemp[cntrName] = actData[name].cntr;
-            };
-        };
-        return objTemp;
-    };
-
-    async function loopArr(objCntr) {
-        let objTemp = objCntr;
-        // console.warn(dataGlobal)
-        for (const i in dataGlobal) {
-            if (!i.includes('counter')) {
-                const id = dataGlobal[i].name;
+    async function loopArr() {
+        let objTemp = tableContent;
+        for (const name in tableContent) {
+            if (!name.includes('counter')) {
+                const id = name;
                 objTemp[id] = {
-                    id: dataGlobal[i].ids,
-                    final: await createArray(dataGlobal[i], i),
+                    ids: tableContent[name].ids,
+                    finalIds: await createArray(tableContent[name], name),
                 };
+
+                if (Object.keys(objTemp[id].finalIds).length == 0) delete objTemp[id].finalIds;
             };
         };
-
-        // console.warn(objTemp)
         return objTemp;
     };
 
-    function createArray(obj, i) {
-
-        // console.warn(obj)
+    async function createArray(obj, i) {
 
         const name = i;
-        // const name = obj.name 
-        let timeMin = "";
-        let timeMax = "";
         let objTemp = {};
 
         for (const i in obj.ids) {
             if (i != undefined) {
                 const data = obj.ids[i];
-                // console.warn(name)
-                if (name.includes('linkedDevice')) { // ????
-                    console.warn(true)
+                if (name.includes('linkedDevice')) {
                     if (dataGlobal.devices.ids != undefined) {
                         var dataMeasuringDevices = dataGlobal.devices.ids[i]
                     } else {
@@ -975,6 +958,5 @@ async function save(callback) {
         };
         return objTemp;
     };
-    console.warn(finalObj)
-    callback(dataGlobal); // daten in native settings schreiben
+    callback(finalObj); // daten in native settings schreiben
 };

@@ -5,6 +5,7 @@ muss man unter "dataTable" alle Tabellenrelevanten Daten angeben.
 In dataTable stehen alle Daten, um die HTML der einzelnen Tabellen erstellen zu koennen. 
 */
 
+const adapterInstance = `system.adapter.device-reminder.${instance}`;
 const keys = ['linkedDevice', 'devices', 'alexa', 'sayit', 'whatsapp', 'telegram', 'pushover', 'email', 'custom', 'default', 'status', 'signal', 'matrix'];
 
 async function createTableHeadData(settings) {
@@ -871,50 +872,74 @@ async function dataCntrlInput() {
     for (const i of keys) {
         dataSendTo[i] = await getDataSendTo(i);
     };
-
     return dataSendTo;
 };
 
 /*
 Hier werden alle Daten aus den Settings geholt und in ein Objekt umgewandelt, mit dem die Tabelleninputs erstellt werden
 */
-async function createData(settings) {
-
-    console.warn(settings)
+async function createData() {
 
     let dataReturn = {};
 
+    function getSettings() {
+        return new Promise((resolve, reject) => {
+            getDataFromNative((successResponse) => {
+                resolve(successResponse);
+            }, (errorResponse) => {
+                reject(errorResponse);
+            });
+        });
+    };
+
+    async function getDataFromNative(successCallback, errorCallback) {
+        socket.emit('getObject', adapterInstance, (err, res) => {
+            if (!err) {
+                successCallback(res.native);
+            } else {
+                errorCallback(err)
+            };
+        });
+    };
+
+    const settings = await getSettings();
+
     // Alle Daten aus den settings holen und als JSON zusammenbauen
-    const getIds = async(name) => {
+    const getIds = async( /**@type {string}*/ name) => {
         let data = {};
+        let dataIds = {};
         if (settings[name] != undefined) {
             /**@type {string}*/
             data.name = name;
             /**@type {string}*/
             data.idHTML = `${name}ID`;
-            if (settings[name].id != undefined) {
-                /**@type {{}}*/
-                data.ids = settings[name].id;
-            } else if (settings[name].ids != undefined) {
-                /**@type {{}}*/
-                data.ids = settings[name].ids;
+            if (settings[name].ids != undefined) {
+                dataIds.ids = settings[name].ids;
             } else {
-                /**@type {{}}*/
-                data.ids = [];
+                dataIds.ids = [];
+            };
+
+            // Counter anhand der IDs hochzaehlen
+            if (dataIds.ids.length > 0) {
+                const result = await createId(dataIds.ids)
+                dataIds.ids = result.array;
+                /**@type {number}*/
+                dataIds.cntr = result.counter;
+            } else {
+                /**@type {number}*/
+                dataIds.cntr = 0;
             }
+
+
             /**@type {{}}*/
-            data.idsTable = settings.linkedDevice !== undefined ? settings.linkedDevice.final || [] : [];
-            /**@type {number}*/
-            data.cntr = settings.linkedDevice_counter !== undefined ? settings.linkedDevice_counter || 0 : 0;
+            dataIds.idsTable = settings.linkedDevice !== undefined ? settings.linkedDevice.finalIds || [] : [];
         };
-        return data;
+        return { data, dataIds };
     };
 
     for (const i of keys) {
         dataReturn[i] = await getIds(i);
     };
-
-    console.warn(dataReturn)
     return dataReturn;
 };
 
