@@ -20,8 +20,10 @@ let checkedUserInput = {}; // alle geprueften User Inputs werden hier gespeicher
 let dataTableHead = {};
 
 // This will be called by the admin adapter when the settings page loads
-// @ts-ignore
+
 async function load(settings, onChange) {
+
+    console.warn(`DEBUG:LOAD`);
 
     const adapterInstance = `system.adapter.device-reminder.${instance}`;
 
@@ -34,11 +36,11 @@ async function load(settings, onChange) {
         settingsGlobal = settings;
         onChangeGlobal = onChange;
         await createGUI(settingsGlobal, onChange)
-            // @ts-ignore
+
         $('.collapsible').collapsible();
-        // @ts-ignore
+
         $('.modal').modal();
-        // @ts-ignore
+
         $('.timepicker').timepicker({ "twelveHour": false });
     });
 };
@@ -68,9 +70,9 @@ async function createGUI(settingsGlobal, onChange) {
     // Table Head erstellen fuer alle Tabellen
     await createTableHeader(await createTableHeadData(settingsGlobal));
     // collapsible und modal aktivieren
-    // @ts-ignore
+
     $('.collapsible').collapsible();
-    // @ts-ignore
+
     $('.modal').modal();
 
     /*
@@ -81,6 +83,7 @@ async function createGUI(settingsGlobal, onChange) {
 
     // create static table
     async function staticTable() {
+        console.warn(`DEBUG: staticTable`);
         // Zuerst alle Inhalte außer "measuring Devices" erstellen, sonst koennen keine Inhalte aus anderen Tabellen geholt
         for (const i in tableIds) {
             if (!i.includes('devices')) await createTable(i, onChange);
@@ -108,7 +111,7 @@ async function createGUI(settingsGlobal, onChange) {
     async function createTable( /**@type {string}*/ i, onChange) {
 
         const name = tableIds[i].name;
-        // @ts-ignore
+
         values2table(tableIds[i].idHTML, tableContent[i].ids, onChange); // create table
 
         // create click event "disable save button"
@@ -128,7 +131,7 @@ async function createGUI(settingsGlobal, onChange) {
                 // Attribute aendern
                 $(`#${name}ID .table-lines [data-name="activeFrom"]`).attr('class', 'values-input timepicker');
                 $(`#${name}ID .table-lines [data-name="activeUntil"]`).attr('class', 'values-input timepicker');
-                // @ts-ignore
+
                 $('.timepicker').timepicker({ "twelveHour": false });
             }, 200)
 
@@ -165,9 +168,11 @@ async function createGUI(settingsGlobal, onChange) {
     }
 
     async function dynamicTable(checked) {
+        console.warn(`DEBUG: dynamicTable`);
+        console.warn(checked);
 
         createDynamicTable(checked); // create dynamic table "device"
-        // @ts-ignore
+
         if (M) M.updateTextFields();
 
         return true;
@@ -195,7 +200,7 @@ async function createGUI(settingsGlobal, onChange) {
             $('.btn-save, .btn-save-close').fadeIn();
         };
 
-        // @ts-ignore
+
         if (M) M.updateTextFields();
 
         return tableContent;
@@ -312,7 +317,7 @@ async function createDynamicTable(checked) {
         $('#linked-device-body').append(col);
 
         // vom User gesetzte "multiple options" in der Tabelle anzeigen
-        // @ts-ignore
+
         $('#linked-device-body').children().eq(i).children().each(function() {
             if ($(this).data('type') == 'multiple') {
                 $(this).find('select').val(curDevice[$(this).data('name')]);
@@ -330,9 +335,9 @@ async function createDynamicTable(checked) {
 
     if (curDevice != null) {
         // const selectInstance = M.FormSelect.getInstance($('select'));
-        // @ts-ignore
+
         instances = M.FormSelect.init($('select'));
-        // @ts-ignore
+
         M.updateTextFields();
     };
 
@@ -452,6 +457,8 @@ async function checkInput(type) {
 
 // createTableHeader
 async function createTableHeader(tableHead) {
+    console.warn(`DEBUG:createTableHeader`);
+    console.warn(tableHead);
 
     let html = "";
 
@@ -511,6 +518,8 @@ async function createTableHeader(tableHead) {
 
         // Abfrage, ob Add-Button erstellt wird
         if (tableHead[i].table.addbtn) {
+            console.warn(`DEBUG: addbutton`);
+            console.warn(tableHead[i].table.addbtn);
             html += `
                                 <!-- Add btn -->
                                 <a id="btn-add-${key}"
@@ -621,7 +630,7 @@ function showBtns( /**@type {string}*/ id, /**@type {boolean}*/ cmd, onChange) {
 async function selectedHeader( /**@type {string}*/ id, /**@type {boolean}*/ rebuild) {
 
     if (rebuild) {
-        // @ts-ignore
+
         var instance = M.Collapsible.getInstance($('.collapsible')[0]);
         instance.open(4);
     } else {
@@ -684,7 +693,7 @@ async function createSettings() {
                     let value;
                     if ($(this).data('type') == 'multiple') {
                         value = $(this).find('select').val();
-                        // @ts-ignore
+
                         $(this).find('select').data('old-value', value);
                     } else if ($(this).data('type') == 'label') {
                         value = $(this).find('span').text();
@@ -695,7 +704,7 @@ async function createSettings() {
                         value = $(this).find('span').text();
                     } else {
                         value = $(this).find('input').val();
-                        // @ts-ignore
+
                         $(this).find('input').data('old-value', value);
                     };
                     data[$(this).data('name')] = value;
@@ -735,7 +744,7 @@ async function createId(array) { // jedem device eine ID zuweisen
 };
 
 // Daten ins native schreiben
-// @ts-ignore
+
 async function save(callback) {
 
     tableContent = await createSettings();

@@ -893,6 +893,7 @@ async function createData() {
     };
 
     async function getDataFromNative(successCallback, errorCallback) {
+        // @ts-ignore
         socket.emit('getObject', adapterInstance, (err, res) => {
             if (!err) {
                 successCallback(res.native);
