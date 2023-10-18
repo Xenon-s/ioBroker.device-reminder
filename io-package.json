@@ -260,6 +260,7 @@
         "dataSource": "push",
         "connectionType": "local",
         "materialize": true,
+        "adminUI": { "config": "materialize" },
         "dependencies": [{
             "js-controller": ">=5.0.0"
         }]
