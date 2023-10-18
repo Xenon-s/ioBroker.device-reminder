@@ -162,7 +162,7 @@ is displayed.
 	Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
-### 2.1.1 (2023-10-07)
+### 2.1.2 (2023-10-18)
 * (xenon-s) GUI: bugfixes
 
 ### 2.1.0 (2023-10-07)

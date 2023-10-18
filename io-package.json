@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "2.1.1",
+        "version": "2.1.2",
         "news": {
-            "2.1.1": {
+            "2.1.2": {
                 "en": "GUI: Bugfixes",
                 "de": "GUI: Bugfixes",
                 "ru": "GUI: багфиксы",
@@ -274,7 +274,7 @@
                     "standby": 1,
                     "startCount": 1,
                     "endCount": 20,
-                    "id": 21
+                    "id": 0
                 },
                 {
                     "name": "custom2",
@@ -283,7 +283,7 @@
                     "standby": 1,
                     "startCount": 1,
                     "endCount": 20,
-                    "id": 22
+                    "id": 1
                 },
                 {
                     "name": "custom3",
@@ -292,7 +292,7 @@
                     "standby": 1,
                     "startCount": 1,
                     "endCount": 20,
-                    "id": 23
+                    "id": 2
                 },
                 {
                     "name": "custom4",
@@ -301,7 +301,7 @@
                     "standby": 1,
                     "startCount": 1,
                     "endCount": 20,
-                    "id": 24
+                    "id": 3
                 },
                 {
                     "name": "custom5",
@@ -310,7 +310,7 @@
                     "standby": 1,
                     "startCount": 1,
                     "endCount": 20,
-                    "id": 25
+                    "id": 4
                 }
             ],
             "final": {}
@@ -323,7 +323,7 @@
                     "standby": 1,
                     "startCount": 2,
                     "endCount": 50,
-                    "id": 1
+                    "id": 0
                 },
                 {
                     "name": "dryer",
@@ -332,7 +332,7 @@
                     "standby": 1,
                     "startCount": 2,
                     "endCount": 20,
-                    "id": 2
+                    "id": 1
                 },
                 {
                     "name": "dishwasher",
@@ -341,7 +341,7 @@
                     "standby": 0.5,
                     "startCount": 2,
                     "endCount": 120,
-                    "id": 3
+                    "id": 2
                 }
             ],
             "final": {}

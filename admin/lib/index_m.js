@@ -1,8 +1,6 @@
 /*
 offene Punkte
-- linked-devices lassen sich nicht speichern -> Prüfen 
-- save function immer noch durcheinander
-- save : counter werden nicht uebergeben sind entweder 0 oder undefined
+- createData() -> getIds() -> hier werden leere Objekte uebergeben, deswegen koennen die Tabellen nicht aufgebaut werden
 */
 
 // hier wird die komplette GUI des Adapters im Admin erstellt
@@ -23,7 +21,7 @@ let dataTableHead = {};
 
 async function load(settings, onChange) {
 
-    console.warn(`DEBUG:LOAD`);
+    // console.warn(`DEBUG:LOAD`);
 
     const adapterInstance = `system.adapter.device-reminder.${instance}`;
 
@@ -35,7 +33,7 @@ async function load(settings, onChange) {
         showSaveBtn = onChange;
         settingsGlobal = settings;
         onChangeGlobal = onChange;
-        await createGUI(settingsGlobal, onChange)
+        await createGUI(settingsGlobal, onChange);
 
         $('.collapsible').collapsible();
 
@@ -47,7 +45,6 @@ async function load(settings, onChange) {
 
 // Hier wird die gesamte GUI gebaut
 async function createGUI(settingsGlobal, onChange) {
-    showBtns('.btn-save, .btn-save-close, .footer', true, onChange);
     const result = await createData();
     for (const i of Object.keys(result)) {
         tableIds[i] = result[i].data;
@@ -61,7 +58,6 @@ async function createGUI(settingsGlobal, onChange) {
             idHTML: result[i].data.idHTML,
             ids: result[i].dataIds.ids,
             cntr: result[i].dataIds.cntr,
-            idsTable: result[i].dataIds.idsTable
         };
     };
     /*
@@ -70,9 +66,7 @@ async function createGUI(settingsGlobal, onChange) {
     // Table Head erstellen fuer alle Tabellen
     await createTableHeader(await createTableHeadData(settingsGlobal));
     // collapsible und modal aktivieren
-
     $('.collapsible').collapsible();
-
     $('.modal').modal();
 
     /*
@@ -83,7 +77,7 @@ async function createGUI(settingsGlobal, onChange) {
 
     // create static table
     async function staticTable() {
-        console.warn(`DEBUG: staticTable`);
+        // console.warn(`DEBUG: staticTable`);
         // Zuerst alle Inhalte außer "measuring Devices" erstellen, sonst koennen keine Inhalte aus anderen Tabellen geholt
         for (const i in tableIds) {
             if (!i.includes('devices')) await createTable(i, onChange);
@@ -127,6 +121,8 @@ async function createGUI(settingsGlobal, onChange) {
         const btnAdd = `#btn-add-${name}`;
         $(btnAdd).on('click', async() => {
             $(btnSave).fadeIn();
+            showBtns('.btn-save, .btn-save-close', false, onChange);
+            onChange(false);
             setTimeout(() => {
                 // Attribute aendern
                 $(`#${name}ID .table-lines [data-name="activeFrom"]`).attr('class', 'values-input timepicker');
@@ -151,6 +147,8 @@ async function createGUI(settingsGlobal, onChange) {
                     $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
                     if (!name.includes('linked')) onChange(false); // Hier wird der Speicherbutton deaktiviert. Reaktivierung erst, wenn "Check Button" geklickt und positives Resultat
                     createEvent(eventID)
+                        // Save Buttons ausblenden
+                    showBtns('.btn-save, .btn-save-close', false, onChange);
                 });
             } else {
                 $('#valStates').find('.values-input').off().on('change', () => {
@@ -168,8 +166,8 @@ async function createGUI(settingsGlobal, onChange) {
     }
 
     async function dynamicTable(checked) {
-        console.warn(`DEBUG: dynamicTable`);
-        console.warn(checked);
+        // console.warn(`DEBUG: dynamicTable`);
+        // console.warn(checked);
 
         createDynamicTable(checked); // create dynamic table "device"
 
@@ -205,13 +203,15 @@ async function createGUI(settingsGlobal, onChange) {
 
         return tableContent;
     };
+    // Save buttons ausblenden
+    showBtns('.btn-save, .btn-save-close', false, onChange);
     return true;
 };
 
 async function createDynamicTable(checked) {
 
     let curDevice = null;
-    const settingsTable = tableContent.linkedDevice.idsTable;
+    const settingsTable = tableContent.linkedDevice.ids;
     // const settingsTable = settingsGlobal.linkedDevice.idsTable;
     const devices = checked.devices;
 
@@ -334,15 +334,12 @@ async function createDynamicTable(checked) {
     };
 
     if (curDevice != null) {
-        // const selectInstance = M.FormSelect.getInstance($('select'));
-
+        const selectInstance = M.FormSelect.getInstance($('select'));
         instances = M.FormSelect.init($('select'));
-
         M.updateTextFields();
     };
 
     return true;
-    // return settingsGlobal;
 };
 
 async function checkInput(type) {
@@ -457,8 +454,8 @@ async function checkInput(type) {
 
 // createTableHeader
 async function createTableHeader(tableHead) {
-    console.warn(`DEBUG:createTableHeader`);
-    console.warn(tableHead);
+    // console.warn(`DEBUG:createTableHeader`);
+    // console.warn(tableHead);
 
     let html = "";
 
@@ -518,8 +515,8 @@ async function createTableHeader(tableHead) {
 
         // Abfrage, ob Add-Button erstellt wird
         if (tableHead[i].table.addbtn) {
-            console.warn(`DEBUG: addbutton`);
-            console.warn(tableHead[i].table.addbtn);
+            // console.warn(`DEBUG: addbutton`);
+            // console.warn(tableHead[i].table.addbtn);
             html += `
                                 <!-- Add btn -->
                                 <a id="btn-add-${key}"
@@ -622,6 +619,7 @@ function showBtns( /**@type {string}*/ id, /**@type {boolean}*/ cmd, onChange) {
         $(id).fadeIn(); // einblenden
     } else {
         $(id).fadeOut(); // ausblenden
+        onChange(false);
     };
     onChange(cmd);
 };

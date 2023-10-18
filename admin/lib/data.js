@@ -9,6 +9,8 @@ const adapterInstance = `system.adapter.device-reminder.${instance}`;
 const keys = ['linkedDevice', 'devices', 'alexa', 'sayit', 'whatsapp', 'telegram', 'pushover', 'email', 'custom', 'default', 'status', 'signal', 'matrix'];
 
 async function createTableHeadData(settings) {
+    // console.warn(`DEBUG:createTableHeadData`);
+    // console.warn(settings);
 
     let dataTable = {
         "linked-device": {
@@ -882,6 +884,12 @@ async function createData() {
 
     let dataReturn = {};
 
+    const settings = await getSettings();
+
+    for (const i of keys) {
+        dataReturn[i] = await getIds(i);
+    };
+
     function getSettings() {
         return new Promise((resolve, reject) => {
             getDataFromNative((successResponse) => {
@@ -903,44 +911,33 @@ async function createData() {
         });
     };
 
-    const settings = await getSettings();
-
     // Alle Daten aus den settings holen und als JSON zusammenbauen
-    const getIds = async( /**@type {string}*/ name) => {
+    async function getIds( /**@type {string}*/ name) {
         let data = {};
         let dataIds = {};
+        /**@type {string}*/
+        data.name = name;
+        /**@type {string}*/
+        data.idHTML = `${name}ID`;
         if (settings[name] != undefined) {
-            /**@type {string}*/
-            data.name = name;
-            /**@type {string}*/
-            data.idHTML = `${name}ID`;
-            if (settings[name].ids != undefined) {
-                dataIds.ids = settings[name].ids;
-            } else {
-                dataIds.ids = [];
-            };
-
-            // Counter anhand der IDs hochzaehlen
-            if (dataIds.ids.length > 0) {
-                const result = await createId(dataIds.ids)
-                dataIds.ids = result.array;
-                /**@type {number}*/
-                dataIds.cntr = result.counter;
-            } else {
-                /**@type {number}*/
-                dataIds.cntr = 0;
-            }
-
-
-            /**@type {{}}*/
-            dataIds.idsTable = settings.linkedDevice !== undefined ? settings.linkedDevice.finalIds || [] : [];
+            dataIds.ids = settings[name].ids;
+        } else {
+            dataIds.ids = [];
+        };
+        // Counter anhand der IDs hochzaehlen
+        if (dataIds.ids.length > 0) {
+            const result = await createId(dataIds.ids)
+            dataIds.ids = result.array;
+            /**@type {number}*/
+            dataIds.cntr = result.counter;
+        } else {
+            /**@type {number}*/
+            dataIds.cntr = 0;
         };
         return { data, dataIds };
     };
 
-    for (const i of keys) {
-        dataReturn[i] = await getIds(i);
-    };
+    console.warn(dataReturn)
     return dataReturn;
 };
 

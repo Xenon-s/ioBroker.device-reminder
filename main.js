@@ -1405,7 +1405,7 @@ class deviceReminder extends utils.Adapter {
             array[i].check = 'open';
         };
 
-        if (array.length > 0) {
+        if (Object.keys(array).length > 0) {
             if (cmd.includes('devices')) keys = ['name', 'type', 'consumption', 'switch'];
             if (cmd.includes('alexa')) keys = ['name', 'path'];
             if (cmd.includes('sayit')) keys = ['name', 'path'];

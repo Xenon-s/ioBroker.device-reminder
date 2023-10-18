@@ -88,5 +88,5 @@
         "test:unit": "mocha test/unit --exit",
         "translate": "translate-adapter"
     },
-    "version": "2.1.1"
+    "version": "2.1.2"
 }
