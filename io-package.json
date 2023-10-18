@@ -214,15 +214,15 @@
         "title": "device-reminder",
         "titleLang": {
             "en": "device-reminder",
-            "de": "Geräteerinnerung",
-            "ru": "устройство-напоминание",
-            "pt": "lembrete de dispositivo",
-            "nl": "apparaat-herinnering",
-            "fr": "rappel d'appareil",
-            "it": "dispositivo-promemoria",
-            "es": "recordatorio del dispositivo",
-            "pl": "przypomnienie o urządzeniu",
-            "zh-cn": "设备提醒"
+            "de": "device-reminder",
+            "ru": "device-reminder",
+            "pt": "device-reminder",
+            "nl": "device-reminder",
+            "fr": "device-reminder",
+            "it": "device-reminder",
+            "es": "device-reminder",
+            "pl": "device-reminder",
+            "zh-cn": "device-reminder"
         },
         "desc": {
             "en": "Adapter for device reminder and notification when reaching different states",
