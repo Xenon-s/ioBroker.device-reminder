@@ -83,7 +83,7 @@ async function createGUI(settingsGlobal, onChange) {
     async function staticTable() {
         // Zuerst alle Inhalte außer "measuring Devices" erstellen, sonst koennen keine Inhalte aus anderen Tabellen geholt
         for (const i in tableIds) {
-            if (!tableIds[i].name.includes('devices')) await createTable(i, onChange);
+            if (!i.includes('devices')) await createTable(i, onChange);
             $(`#${tableIds[i].idHTML} .table-lines [data-name="activeFrom"]`).attr('class', 'values-input timepicker');
             $(`#${tableIds[i].idHTML} .table-lines [data-name="activeUntil"]`).attr('class', 'values-input timepicker');
         };
