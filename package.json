@@ -76,7 +76,7 @@
     "name": "iobroker.device-reminder",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/xenon-s/ioBroker.device-reminder.git"
+        "url": "https://github.com/Xenon-s/ioBroker.device-reminder.git"
     },
     "scripts": {
         "lint": "eslint",
