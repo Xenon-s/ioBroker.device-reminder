@@ -727,11 +727,17 @@ async function createSettings() {
 
 // jedem einzelnen device pro Tabelle eine eindeutige ID zuweisen
 async function createId(array) { // jedem device eine ID zuweisen
-    // Hoechte ID rausfinden
+    console.warn(array)
+        // Hoechte ID rausfinden
     let arrIds = [];
     for (const i of Object.keys(array)) {
         if (array[i].id != "" || array[i].id !== undefined) {
-            arrIds.push(array[i].id);
+            if (!arrIds.includes(array[i].id)) {
+                arrIds.push(array[i].id);
+            } else {
+                array[i].id = '';
+            };
+
         };
     };
     arrIds.sort(function(a, b) {
@@ -739,7 +745,8 @@ async function createId(array) { // jedem device eine ID zuweisen
     });
 
     /**@type{number}*/
-    let counter = arrIds.length > 0 ? arrIds[arrIds.length - 1] || 0 : 0;
+    let counter = arrIds.length > 0 ? arrIds.length || 0 : 0;
+    // let counter = arrIds.length > 0 ? arrIds[arrIds.length - 1] || 0 : 0;
 
     for (const i of Object.keys(array)) {
         if (array[i].id === "" || array[i].id === undefined) {
