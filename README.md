@@ -163,9 +163,13 @@ is displayed.
     ### __WORK IN PROGRESS__
 -->
 ### 2.1.2 (2023-10-18)
-* (xenon-s) GUI: bugfixes
-
-### 2.1.0 (2023-10-07)
+Breaking Changes! Adapter must be uninstalled first and then reinstalled!
+* (xenon-s) Fixes for js-controller 5.*
+* (xenon-s) bugfix: [issue #278](https://github.com/Xenon-s/ioBroker.device-reminder/issues/278)
+* (xenon-s) bugfix: [issue #273](https://github.com/Xenon-s/ioBroker.device-reminder/issues/273)
+* (xenon-s) bugfix: [issue #267](https://github.com/Xenon-s/ioBroker.device-reminder/issues/267)
+* (xenon-s) bugfix: [issue #218](https://github.com/Xenon-s/ioBroker.device-reminder/issues/218)
+* (xenon-s) bugfix: [issue #207](https://github.com/Xenon-s/ioBroker.device-reminder/issues/207)
 * (xenon-s) GUI Fixes "devices" : switch may be empty, but then no longer selectable 
 * (xenon-s) add: [issue #258: Signal Messenger added](https://github.com/Xenon-s/ioBroker.device-reminder/issues/258)
 * (xenon-s) add: [issue #245: Matrix added](https://github.com/Xenon-s/ioBroker.device-reminder/issues/245)
@@ -173,16 +177,6 @@ is displayed.
 * (xenon-s) bugfix [issue #210](https://github.com/Xenon-s/ioBroker.device-reminder/issues/210)
 * (xenon-s) bugfix [issue #169](https://github.com/Xenon-s/ioBroker.device-reminder/issues/169)
 * (xenon-s) bugfix [issue #297](https://github.com/Xenon-s/ioBroker.device-reminder/issues/297)
-
-### 2.0.1 (2023-08-20)
-* (xenon-s) : !!! BREAKING CHANGE ! Reinstallation is strongly recommended !!!
-* (xenon-s) Fixes for js-controller 5.*
-* (xenon-s) bugfix: [issue #278](https://github.com/Xenon-s/ioBroker.device-reminder/issues/278)
-* (xenon-s) bugfix: [issue #273](https://github.com/Xenon-s/ioBroker.device-reminder/issues/273)
-* (xenon-s) bugfix: [issue #267](https://github.com/Xenon-s/ioBroker.device-reminder/issues/267)
-* (xenon-s) bugfix: [issue #218](https://github.com/Xenon-s/ioBroker.device-reminder/issues/218)
-* (xenon-s) bugfix: [issue #207](https://github.com/Xenon-s/ioBroker.device-reminder/issues/207)
-
 
 ### 1.2.9 (2021-06-22)
 * (xenon-s) bugfix: error catching JSON last operations doesn't work
