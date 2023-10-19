@@ -310,7 +310,7 @@ async function createTableHeadData(settings) {
             },
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
-                "addbtn": true,
+                "addbtn": false,
                 "submitbtn": true,
                 "th": {
                     "1": {
@@ -319,7 +319,7 @@ async function createTableHeadData(settings) {
                         "dataType": "text",
                         "dataLang": "name",
                         "dataDefault": "new device",
-                        // "disabled": true,
+                        "disabled": true,
                     },
                     "2": {
                         "dataName": "startVal",
@@ -360,13 +360,6 @@ async function createTableHeadData(settings) {
                         "dataLang": "number of end values",
                         "min": 1,
                         "dataDefault": 3,
-                    },
-                    "7": {
-                        "dataName": "delete",
-                        "class": "header10 translate",
-                        "dataType": "delete",
-                        "dataLang": "delete",
-
                     },
                     "99": {
                         "dataName": "id",
@@ -884,61 +877,67 @@ async function createData() {
 
     let dataReturn = {};
 
-    const settings = await getSettings();
+    try {
 
-    for (const i of keys) {
-        dataReturn[i] = await getIds(i);
-    };
+        const settings = await getSettings();
 
-    function getSettings() {
-        return new Promise((resolve, reject) => {
-            getDataFromNative((successResponse) => {
-                resolve(successResponse);
-            }, (errorResponse) => {
-                reject(errorResponse);
+        for (const i of keys) {
+            dataReturn[i] = await getIds(i);
+        };
+
+        function getSettings() {
+            return new Promise((resolve, reject) => {
+                getDataFromNative((successResponse) => {
+                    resolve(successResponse);
+                }, (errorResponse) => {
+                    reject(errorResponse);
+                });
             });
-        });
-    };
+        };
 
-    async function getDataFromNative(successCallback, errorCallback) {
-        // @ts-ignore
-        socket.emit('getObject', adapterInstance, (err, res) => {
-            if (!err) {
-                successCallback(res.native);
+        async function getDataFromNative(successCallback, errorCallback) {
+            // @ts-ignore
+            socket.emit('getObject', adapterInstance, (err, res) => {
+                if (!err) {
+                    successCallback(res.native);
+                } else {
+                    errorCallback(err)
+                };
+            });
+        };
+
+        // Alle Daten aus den settings holen und als JSON zusammenbauen
+        async function getIds( /**@type {string}*/ name) {
+            let data = {};
+            let dataIds = {};
+            /**@type {string}*/
+            data.name = name;
+            /**@type {string}*/
+            data.idHTML = `${name}ID`;
+            if (settings[name] != undefined) {
+                dataIds.ids = settings[name].ids;
             } else {
-                errorCallback(err)
+                dataIds.ids = [];
             };
-        });
-    };
-
-    // Alle Daten aus den settings holen und als JSON zusammenbauen
-    async function getIds( /**@type {string}*/ name) {
-        let data = {};
-        let dataIds = {};
-        /**@type {string}*/
-        data.name = name;
-        /**@type {string}*/
-        data.idHTML = `${name}ID`;
-        if (settings[name] != undefined) {
-            dataIds.ids = settings[name].ids;
-        } else {
-            dataIds.ids = [];
+            // Counter anhand der IDs hochzaehlen
+            if (dataIds.ids.length > 0) {
+                const result = await createId(dataIds.ids)
+                dataIds.ids = result.array;
+                /**@type {number}*/
+                dataIds.cntr = result.counter;
+            } else {
+                /**@type {number}*/
+                dataIds.cntr = 0;
+            };
+            return { data, dataIds };
         };
-        // Counter anhand der IDs hochzaehlen
-        if (dataIds.ids.length > 0) {
-            const result = await createId(dataIds.ids)
-            dataIds.ids = result.array;
-            /**@type {number}*/
-            dataIds.cntr = result.counter;
-        } else {
-            /**@type {number}*/
-            dataIds.cntr = 0;
-        };
-        return { data, dataIds };
-    };
+        console.warn(dataReturn)
+        return dataReturn;
 
-    console.warn(dataReturn)
-    return dataReturn;
+    } catch (error) {
+        $(`#gui`).html(`<div> ERROR: >>>${error}<<< </div> 
+        <div style="background: red"> If this error is displayed after an update, please create a new instance or reinstall the adapter </div>`);
+    };
 };
 
 // Hier werden alle benoetigten Daten fuer den dynamic Table (linked-devices) zusammengebaut und return gegeben

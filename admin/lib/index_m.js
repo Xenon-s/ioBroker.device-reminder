@@ -29,17 +29,22 @@ async function load(settings, onChange) {
 
     // Pruefen, ob Adapter laeuft, da sonst keine Pruefungen im Backend ausgefuehrt werden koennen
     socket.emit('getState', `${adapterInstance}.alive`, async(err, state) => {
-        // socket.emit('getState', `system.adapter.${namespace}.alive`, async(err, state) => {
-        showSaveBtn = onChange;
-        settingsGlobal = settings;
-        onChangeGlobal = onChange;
-        await createGUI(settingsGlobal, onChange);
+        if (state.val) {
+            console.warn(err)
+            console.warn(state)
+            showSaveBtn = onChange;
+            settingsGlobal = settings;
+            onChangeGlobal = onChange;
+            await createGUI(settingsGlobal, onChange);
 
-        $('.collapsible').collapsible();
+            $('.collapsible').collapsible();
+            $('.modal').modal();
+            $('.timepicker').timepicker({ "twelveHour": false });
+            onChange(false);
+        } else {
+            $(`#gui`).html(`<div style="background: red"> ERROR: >>>Start device-reminder first! ${adapterInstance} state: ${state.val}<<< </div>`);
+        }
 
-        $('.modal').modal();
-
-        $('.timepicker').timepicker({ "twelveHour": false });
     });
 };
 
@@ -73,7 +78,6 @@ async function createGUI(settingsGlobal, onChange) {
     ### Table Body erstellen ###
     */
     await dynamicTable(await staticTable());
-    onChange(false);
 
     // create static table
     async function staticTable() {
@@ -83,20 +87,25 @@ async function createGUI(settingsGlobal, onChange) {
             if (!i.includes('devices')) await createTable(i, onChange);
             $(`#${tableIds[i].idHTML} .table-lines [data-name="activeFrom"]`).attr('class', 'values-input timepicker');
             $(`#${tableIds[i].idHTML} .table-lines [data-name="activeUntil"]`).attr('class', 'values-input timepicker');
+            if (i.includes('custom') || i.includes('default')) setProps(tableIds[i].idHTML);
         };
-
-        // trigger im "default table" setzen
-        // default hat keinen "add button" 
-        $('#defaultTypeID').find('.values-input').on('change', () => { // default hat keinen "add button"
-            $('#btn-check-default').removeClass('disabled');
-        });
 
         const checked = await checkInput('all');
         checkedUserInput = checked;
 
         await createTable('devices', onChange);
 
-        $('#disableFirstField').find('td:first-child .values-input').prop('disabled', true); // disable "name" in table default-types
+        function setProps( /**@type {string}*/ id) {
+            // Attribute fuer device-types aendern
+            // Namensfelder bei device-types sperren
+            $(`#${id} [data-name="name"`).prop("disabled", true)
+                // MIN / MAX einfuegen
+            $(`#${id} [data-name="startVal"`).prop("min", 0)
+            $(`#${id} [data-name="endVal"`).prop("min", 0)
+            $(`#${id} [data-name="standby"`).prop("min", 0)
+            $(`#${id} [data-name="startCount"`).prop("min", 1)
+            $(`#${id} [data-name="endCount"`).prop("min", 2)
+        };
 
         return checked;
     };
@@ -184,12 +193,12 @@ async function createGUI(settingsGlobal, onChange) {
         if (!name.includes('header')) checkedUserInput[name] = result[name];
 
         // Wenn in Custom Types geaendert werden, muss die GUI neu geladen werden, da sonst die neuen Types nicht auftauchen
-        if (name.includes('custom')) {
-            deviceTypes = [];
-            $(`#gui`).html();
-            await createGUI(settingsGlobal, onChange)
-            selectedHeader(`header-${name}`, true)
-        };
+        // if (name.includes('custom')) {
+        //     deviceTypes = [];
+        //     $(`#gui`).html();
+        //     await createGUI(settingsGlobal, onChange)
+        //     selectedHeader(`header-${name}`, true)
+        // };
 
         dynamicTable(checkedUserInput);
 
@@ -443,7 +452,7 @@ async function checkInput(type) {
             $(`#${obj.err}`).html(`<div style="display: flex; align-items: center; color: green;">
                     <i class="material-icons">check_circle_outline</i><span class="translate" style="font-weight:bold;">${_("Input checked")}</span></div>`);
             onChangeGlobal(true);
-            showSaveBtn(true);
+            showBtns('.btn-save, .btn-save-close', true, onChangeGlobal);
         };
         $(`#help-${obj.anchorName}`).html(`<div><h4>create ${obj.name}</h4><p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README.md#${obj.anchorEn}" target="_blank">${obj.anchorEn} english</a></p>
             <p><a href="https://github.com/Xenon-s/ioBroker.device-reminder/blob/master/README_GER.md#${obj.anchorGer}" target="_blank">${obj.anchorGer} deutsch</a></p></div>`);
@@ -609,7 +618,7 @@ async function createTableHeader(tableHead) {
     html += `</ul>
     </div>
     <!-- Tab Config End-->`;
-    $(`#gui`).html(html)
+    $(`#gui`).html(html);
 
     return true;
 };

@@ -311,6 +311,51 @@
                     "startCount": 1,
                     "endCount": 20,
                     "id": 4
+                },
+                {
+                    "name": "custom6",
+                    "startVal": 30,
+                    "endVal": 5,
+                    "standby": 1,
+                    "startCount": 1,
+                    "endCount": 20,
+                    "id": 5
+                },
+                {
+                    "name": "custom7",
+                    "startVal": 30,
+                    "endVal": 5,
+                    "standby": 1,
+                    "startCount": 1,
+                    "endCount": 20,
+                    "id": 6
+                },
+                {
+                    "name": "custom8",
+                    "startVal": 30,
+                    "endVal": 5,
+                    "standby": 1,
+                    "startCount": 1,
+                    "endCount": 20,
+                    "id": 7
+                },
+                {
+                    "name": "custom9",
+                    "startVal": 30,
+                    "endVal": 5,
+                    "standby": 1,
+                    "startCount": 1,
+                    "endCount": 20,
+                    "id": 8
+                },
+                {
+                    "name": "custom10",
+                    "startVal": 30,
+                    "endVal": 5,
+                    "standby": 1,
+                    "startCount": 1,
+                    "endCount": 20,
+                    "id": 9
                 }
             ],
             "final": {}
