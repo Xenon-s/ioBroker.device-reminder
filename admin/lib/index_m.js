@@ -742,7 +742,7 @@ async function createId(array) { // jedem device eine ID zuweisen
     let counter = arrIds.length > 0 ? arrIds[arrIds.length - 1] || 0 : 0;
 
     for (const i of Object.keys(array)) {
-        if (array[i].id == "" || array[i].id == undefined) {
+        if (array[i].id === "" || array[i].id === undefined) {
             array[i].id = counter;
             counter++;
         };
