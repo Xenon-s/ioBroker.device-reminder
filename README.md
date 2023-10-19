@@ -162,7 +162,7 @@ is displayed.
 	Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
-### 2.1.2 (2023-10-18)
+### 3.0.0 (2023-10-18)
 Breaking Changes! Adapter must be uninstalled first and then reinstalled!
 * (xenon-s) Fixes for js-controller 5.*
 * (xenon-s) bugfix: [issue #278](https://github.com/Xenon-s/ioBroker.device-reminder/issues/278)

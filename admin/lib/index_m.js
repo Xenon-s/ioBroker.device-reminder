@@ -21,8 +21,6 @@ let dataTableHead = {};
 
 async function load(settings, onChange) {
 
-    // console.warn(`DEBUG:LOAD`);
-
     const adapterInstance = `system.adapter.device-reminder.${instance}`;
 
     if (!settings) return;
@@ -30,8 +28,6 @@ async function load(settings, onChange) {
     // Pruefen, ob Adapter laeuft, da sonst keine Pruefungen im Backend ausgefuehrt werden koennen
     socket.emit('getState', `${adapterInstance}.alive`, async(err, state) => {
         if (state.val) {
-            console.warn(err)
-            console.warn(state)
             showSaveBtn = onChange;
             settingsGlobal = settings;
             onChangeGlobal = onChange;
@@ -81,7 +77,6 @@ async function createGUI(settingsGlobal, onChange) {
 
     // create static table
     async function staticTable() {
-        // console.warn(`DEBUG: staticTable`);
         // Zuerst alle Inhalte außer "measuring Devices" erstellen, sonst koennen keine Inhalte aus anderen Tabellen geholt
         for (const i in tableIds) {
             if (!i.includes('devices')) await createTable(i, onChange);
@@ -172,11 +167,9 @@ async function createGUI(settingsGlobal, onChange) {
         await createEvent(eventID)
 
         return true;
-    }
+    };
 
     async function dynamicTable(checked) {
-        // console.warn(`DEBUG: dynamicTable`);
-        // console.warn(checked);
 
         createDynamicTable(checked); // create dynamic table "device"
 
@@ -463,21 +456,10 @@ async function checkInput(type) {
 
 // createTableHeader
 async function createTableHeader(tableHead) {
-    // console.warn(`DEBUG:createTableHeader`);
-    // console.warn(tableHead);
 
     let html = "";
 
-    html += `<!-- Header -->
-    <div id="header-area" class="row">
-        <div id="header-logo-title" class="col s6">
-            <img class="logo" src="icon.png"> <!-- Adapter Logo -->
-            <p>
-                <span class="translate h-title" data-lang="device-reminder">${_("device-reminder")}</span><br />
-                <span class="translate h-sub-title" data-lang="Monitoring of devices based on consumption">${_("Monitoring of devices based on consumption")}</span>
-            </p>
-        </div>
-    </div>
+    html += `
     <!-- Tabs -->
     <div class="col s12" id="tab-area">
     <!-- Tab Area -->
@@ -487,6 +469,7 @@ async function createTableHeader(tableHead) {
         <p></p>
     </div>
     <div id="tab-config" class="col s12 page">
+    
     <!-- JS Loop -->
     <!-- collapsible table -->
     <ul class="collapsible popout">
@@ -524,8 +507,6 @@ async function createTableHeader(tableHead) {
 
         // Abfrage, ob Add-Button erstellt wird
         if (tableHead[i].table.addbtn) {
-            // console.warn(`DEBUG: addbutton`);
-            // console.warn(tableHead[i].table.addbtn);
             html += `
                                 <!-- Add btn -->
                                 <a id="btn-add-${key}"
@@ -616,6 +597,7 @@ async function createTableHeader(tableHead) {
             // }; <_
     };
     html += `</ul>
+        </div>
     </div>
     <!-- Tab Config End-->`;
     $(`#gui`).html(html);
@@ -727,8 +709,7 @@ async function createSettings() {
 
 // jedem einzelnen device pro Tabelle eine eindeutige ID zuweisen
 async function createId(array) { // jedem device eine ID zuweisen
-    console.warn(array)
-        // Hoechte ID rausfinden
+    // Hoechte ID rausfinden
     let arrIds = [];
     for (const i of Object.keys(array)) {
         if (array[i].id != "" || array[i].id !== undefined) {
@@ -750,7 +731,7 @@ async function createId(array) { // jedem device eine ID zuweisen
 
     for (const i of Object.keys(array)) {
         if (array[i].id === "" || array[i].id === undefined) {
-            array[i].id = counter;
+            array[i].id = `${counter}`;
             counter++;
         };
     };
@@ -787,16 +768,12 @@ async function save(callback) {
         const name = i;
         let objTemp = {};
 
+        // Wenn final erstellt wurde pruefen, ob .length zu der Anzahl der erstellten FinalIds passt
         for (const i in obj.ids) {
             if (i != undefined) {
                 const data = obj.ids[i];
                 if (name.includes('linkedDevice')) {
-                    if (dataGlobal.devices.ids != undefined) {
-                        var dataMeasuringDevices = dataGlobal.devices.ids[i]
-                    } else {
-                        var dataMeasuringDevices = dataGlobal.devices.id[i]
-                    }
-                    // const dataMeasuringDevices = dataGlobal.devices.ids[i] != undefined ? dataGlobal.devices.ids[i] || dataGlobal.devices.id[i] : dataGlobal.devices.id[i];
+                    const dataMeasuringDevices = tableContent.devices.ids[i];
                     const dataLinkedDevices = data;
                     /*
                     Daten aus den beiden Tabellen von "linked Device" und "measuring Devices" miteiner verknuepfen und ein finales "linked Device"

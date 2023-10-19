@@ -65,7 +65,7 @@ class deviceReminder extends utils.Adapter {
      */
     async onReady() {
 
-        this.setState('info.connection', false, true);
+        // this.setState('info.connection', false, true);
 
         // Initialize your adapter here
         this.devicesCompleted = await this.createDevices();
@@ -1021,7 +1021,6 @@ class deviceReminder extends utils.Adapter {
                 if (device.whatsapp.active) {
                     for (const i in device.whatsapp.ids) {
                         this.log.warn(`[${JSON.stringify(device.name)}]: whatsapp message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
-                        this.log.warn(`[${JSON.stringify(this.whatsappInput[device.whatsapp.ids[i]].path)}]: whatsapp message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
                         await this.setForeignStateAsync(this.whatsappInput[device.whatsapp.ids[i]].path, `${msg}`);
                     };
                 };

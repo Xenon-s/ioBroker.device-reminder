@@ -9,8 +9,6 @@ const adapterInstance = `system.adapter.device-reminder.${instance}`;
 const keys = ['linkedDevice', 'devices', 'alexa', 'sayit', 'whatsapp', 'telegram', 'pushover', 'email', 'custom', 'default', 'status', 'signal', 'matrix'];
 
 async function createTableHeadData(settings) {
-    // console.warn(`DEBUG:createTableHeadData`);
-    // console.warn(settings);
 
     let dataTable = {
         "linked-device": {
@@ -931,7 +929,6 @@ async function createData() {
             };
             return { data, dataIds };
         };
-        console.warn(dataReturn)
         return dataReturn;
 
     } catch (error) {
