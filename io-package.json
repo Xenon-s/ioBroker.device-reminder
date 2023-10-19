@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "2.1.2",
+        "version": "3.0.0",
         "news": {
-            "2.1.2": {
+            "3.0.0": {
                 "en": "GUI: Bugfixes",
                 "de": "GUI: Bugfixes",
                 "ru": "GUI: багфиксы",
@@ -70,7 +70,7 @@
             "config": "materialize"
         },
         "dependencies": [{
-            "js-controller": ">=5.0.0"
+            "js-controller": ">=5.0.12"
         }],
         "messages": [{
             "condition": {
