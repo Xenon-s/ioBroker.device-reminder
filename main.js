@@ -110,7 +110,7 @@ class deviceReminder extends utils.Adapter {
 
     async createDevices() {
 
-        this.log.info(`CONFIG INPUT${JSON.stringify(this.config)}`)
+        this.log.debug(`CONFIG INPUT${JSON.stringify(this.config)}`)
 
         // try {
         this.devices = await getDataFromAdmin(this.config.linkedDevice != undefined ? this.config.linkedDevice.finalIds || {} : {});
