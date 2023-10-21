@@ -382,7 +382,6 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "text",
                         "dataLang": "name",
-                        //"tdClass": "validate values-input",
                         "dataDefault": "new device",
                     },
                     "2": {
@@ -390,7 +389,6 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "OID",
                         "dataLang": "'alexa2/../announcement'/'speak'",
-                        //"tdClass": "validate values-input oid-select",
                         "disabled": true,
                     },
                     "3": {
@@ -407,7 +405,6 @@ async function createTableHeadData(settings) {
                         "class": "header10 translate",
                         "dataType": "text",
                         "dataLang": "active from",
-                        //"tdClass": "validate values-input timepicker",
                         "disabled": true,
                         "dataDefault": "00:00",
                     },
@@ -416,7 +413,6 @@ async function createTableHeadData(settings) {
                         "class": "header10 translate",
                         "dataType": "text",
                         "dataLang": "inactive from",
-                        //"tdClass": "validate values-input timepicker",
                         "disabled": true,
                         "dataDefault": "23:59",
                     },
@@ -456,7 +452,6 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "OID",
                         "dataLang": "'sayit/../text'",
-                        //"tdClass": "validate values-input oid-select",
                         "disabled": true,
                         "dataDefault": "sayit.0.tts.text"
                     },
@@ -474,7 +469,6 @@ async function createTableHeadData(settings) {
                         "class": "header10 translate",
                         "dataType": "text",
                         "dataLang": "active from",
-                        //"tdClass": "validate values-input timepicker",
                         "disabled": true,
                         "dataDefault": "00:00"
                     },
@@ -482,8 +476,7 @@ async function createTableHeadData(settings) {
                         "dataName": "activeUntil",
                         "class": "header10 translate",
                         "dataType": "text",
-                        "dataLang": "active until",
-                        //"tdClass": "validate values-input timepicker",
+                        "dataLang": "inactive from",
                         "disabled": true,
                         "dataDefault": "23:59"
                     },
@@ -583,7 +576,6 @@ async function createTableHeadData(settings) {
                         "class": "header translate",
                         "dataType": "OID",
                         "dataLang": "'whatsapp-cmb/../sendMessage'",
-                        //"tdClass": "validate values-input oid-select",
                         "disabled": true,
                         "dataDefault": "whatsapp-cmb.0.sendMessage"
                     },
