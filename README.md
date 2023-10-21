@@ -184,7 +184,12 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
     ### __WORK IN PROGRESS__
 -->
 ### 3.0.0 (2023-10-18)
-Breaking Changes! Adapter must be uninstalled first and then reinstalled!
+**Breaking Changes**
+* Made basic changes to the adapter structure, because there were numerous problems with the new "js-Controller 5.x". It is mandatory to reinstall the adapter!
+* Numerous bug fixes
+* New messengers added
+* Admin GUI fundamentally reworked
+* Whatsapp and Telegram must now be created manually
 * (xenon-s) Fixes for js-controller 5.*
 * (xenon-s) bugfix: [issue #278](https://github.com/Xenon-s/ioBroker.device-reminder/issues/278)
 * (xenon-s) bugfix: [issue #273](https://github.com/Xenon-s/ioBroker.device-reminder/issues/273)
