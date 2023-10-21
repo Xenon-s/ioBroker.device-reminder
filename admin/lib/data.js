@@ -415,7 +415,7 @@ async function createTableHeadData(settings) {
                         "dataName": "activeUntil",
                         "class": "header10 translate",
                         "dataType": "text",
-                        "dataLang": "active until",
+                        "dataLang": "inactive from",
                         //"tdClass": "validate values-input timepicker",
                         "disabled": true,
                         "dataDefault": "23:59",

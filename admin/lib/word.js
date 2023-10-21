@@ -305,7 +305,7 @@ systemDictionary = {
         "uk": "активний",
         "zh-cn": "积极参与"
     },
-    "inactive from ": {
+    "inactive from": {
         "en": "inactive from",
         "de": "inaktiv ab",
         "ru": "неактивный от",
