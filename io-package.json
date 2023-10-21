@@ -4,17 +4,17 @@
         "version": "3.0.0",
         "news": {
             "3.0.0": {
-                "en": "GUI: Bugfixes",
-                "de": "GUI: Bugfixes",
-                "ru": "GUI: багфиксы",
-                "pt": "GUI: Bugfixes",
-                "nl": "Bugfixes",
-                "fr": "GUI: Bugfixes",
-                "it": "GUI: Bugfixes",
-                "es": "Errores",
-                "pl": "GUI: Bugfix",
-                "uk": "GUI: Бугфікси",
-                "zh-cn": "GUI:Bugfixes"
+                "en": "!!Breaking Changes!!\n- Made basic changes to the adapter structure, because there were numerous problems with the new \"js-Controller 5.x\". It is mandatory to reinstall the adapter!\n- Admin GUI fundamentally reworked\n- Numerous bug fixes\n- New messengers added (Signal, Matrix)\n- New features added to Pushover\n- Whatsapp and Telegram must now be created manually\n- Fixes for js-controller 5.*",
+                "de": "! Breaking Changes!\n- Erstellte grundlegende Änderungen an der Adapterstruktur, denn es gab zahlreiche Probleme mit dem neuen \"js-Controller 5.x\" Es ist zwingend notwendig, den Adapter neu zu installieren!\n- Admin GUI grundlegend überarbeitet\n- Zahlreiche Fehlerbehebungen\n- Neue Boten hinzugefügt (Signal, Matrix)\n- Neue Features in Pushover hinzugefügt\n- Whatsapp und Telegram müssen jetzt manuell erstellt werden\n- Fixes für den js-Controller 5. *",
+                "ru": "! Перерыв изменений!\n- Изготовлены основные изменения в структуре адаптера, потому что были многочисленные проблемы с новым \"js-Controller 5.x\" Обязательно переустановить адаптер!\n- Admin GUI принципиально переработано\n- Многочисленные исправления ошибок\n- Добавлены новые посланники (Signal, Matrix)\n- Новые функции, добавленные в Pushover\n- Whatsapp и Telegram теперь должны быть созданы вручную\n- Исправления для js-контроллера 5. *",
+                "pt": "! Mudanças de ruptura!\n- Fez alterações básicas à estrutura do adaptador, porque houve vários problemas com o novo \"js-Controller 5.x\" É obrigatório reinstalar o adaptador!\n- Admin GUI retrabalhado fundamentalmente\n- Várias correções de bugs\n- Novos mensageiros adicionados (Signal, Matrix)\n- Novos recursos adicionados a Pushover\n- Whatsapp e Telegram devem agora ser criados manualmente\n- Correções para js-controller 5. *",
+                "nl": "! Veranderingen breken!\nDe basis veranderde in de adapterstructuur, want er waren veel problemen met de nieuwe Js-Controller 5.x. Het is verplicht om de adapter te herinstalleren!\n- Admin GUI fundamenteel herwerkt\n- Vertaling:\n- Nieuwe boodschappers toegevoegd\n- Nieuwe kenmerken toegevoegd aan Pushover\n- Watsap en Telegram moeten nu handmatig gemaakt worden\n- Fixes voor Js-controller 5. ♪",
+                "fr": "! Breaking Changes!\n- Fait des changements de base à la structure de l'adaptateur, car il y avait de nombreux problèmes avec le nouveau \"js-Controller 5.x\" Il est obligatoire de réinstaller l'adaptateur !\n- Admin GUI fondamentalement retravaillé\n- De nombreuses corrections de bugs\n- Nouveaux messagers ajoutés (Signal, Matrix)\n- Nouvelles fonctionnalités ajoutées à Pushover\n- Whatsapp et Telegram doivent maintenant être créés manuellement\n- Fixes pour js-contrôleur 5. *",
+                "it": "! Breaking Changes!\n- Fatto modifiche di base alla struttura dell'adattatore, perché ci sono stati numerosi problemi con il nuovo \"js-Controller 5.x\" È obbligatorio reinstallare l'adattatore!\n- Admin GUI rielaborato fondamentalmente\n- Numerose correzioni di bug\n- Nuovi messaggeri aggiunti (Signal, Matrix)\n- Nuove funzionalità aggiunte a Pushover\n- Whatsapp e Telegram devono ora essere creati manualmente\n- Fissa per js-controller 5. #",
+                "es": "! Cambios de ruptura!\n- Realizar cambios básicos en la estructura del adaptador, porque había numerosos problemas con el nuevo \"js-Controller 5.x\" ¡Es obligatorio reinstalar el adaptador!\n- GI de Admin fundamentalmente reelaborado\n- Numerosas correcciones de errores\n- Nuevos mensajeros añadidos (Signal, Matrix)\n- Nuevas características agregadas a Pushover\n- Whatsapp y Telegram deben crearse manualmente\n- Arreglos para js-controller 5. *",
+                "pl": "! Zmiany!\nZmieniła podstawowe zmiany w strukturze adaptacyjnej, ponieważ było wiele problemów z nowym „js-Controller 5.x”. Jest zobowiązany do przywrócenia adapteru!\nAdmin GUI jest zasadniczo przerobiony\nNumerous bug fixes (ang.)\nNowi posłańcy dołączyli (Signal, Matrix)\nNowe cechy dodano do Pushoveru\n- Cosapp i Telegram są tworzone ręcznie\n- Fixs for js-controller 5 (ang.). *",
+                "uk": "! Зміни у відставці!\n- Виготовлялися основні зміни до структури адаптера, бо виникали численні проблеми з новим \"js-Controller 5.x\" Обов'язково перевстановити адаптер!\n- Адмін GUI фундаментально перероблено\n- Неймовірні виправлення помилок\n- Додані нові месенджери (Signal, Matrix)\n- Нові можливості до Пушвер\n- Whatsapp і Телеграма повинні бути створені вручну\n- Виправлення для js-controller 5. Ім'я *",
+                "zh-cn": "! 打破变革!\n- 修改适应人员结构的基本变化,因为新的“js-Controller 5.x”存在许多问题。 必须重整适应者!\n- 从根本上重新工作\n- 众多的丑闻\n- 新的我sengers(Signal, Matrix)\n- 普沙布新增的新特点\n- 现在必须用手工制作图和电图\n- 第5条。 * A/64/50。"
             }
         },
         "title": "device-reminder",
