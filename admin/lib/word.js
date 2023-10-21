@@ -99,17 +99,18 @@ systemDictionary = {
         "pl": "wyłączyć",
         "zh-cn": "关掉"
     },
-    "switch off after minutes": {
-        "en": "switch off after minutes",
-        "de": "Abschalten nach Minuten",
-        "ru": "выключить через несколько минут",
-        "pt": "desligue após minutos",
-        "nl": "na minuten uitschakelen",
-        "fr": "s'éteint après quelques minutes",
-        "it": "si spegne dopo pochi minuti",
-        "es": "apagar después de minutos",
-        "pl": "wyłącz po minutach",
-        "zh-cn": "几分钟后关闭"
+    "switch off delay": {
+        "en": "switch off delay",
+        "de": "Ausschaltverzögerung",
+        "ru": "выключить задержку",
+        "pt": "desligar o atraso",
+        "nl": "vertaling:",
+        "fr": "arrêt du délai",
+        "it": "disattivare il ritardo",
+        "es": "apagar el retraso",
+        "pl": "przełączać",
+        "uk": "відключення затримки",
+        "zh-cn": "延迟的转换"
     },
     "abort detection": {
         "en": "abort detection",
@@ -291,57 +292,31 @@ systemDictionary = {
         "pl": "objętość 0-100",
         "zh-cn": "音量 0-100"
     },
-    "active from hour": {
-        "en": "active from hour",
-        "de": "aktiv ab stunde",
-        "ru": "активный с часа",
-        "pt": "ativo de hora",
-        "nl": "quality over quantity (qoq) releases vertaling:",
-        "fr": "active à partir de l ' heure",
-        "it": "attivo da ora",
-        "es": "activo desde la hora",
-        "pl": "aktywnie od godziny",
-        "uk": "активний час",
-        "zh-cn": "积极时间"
+    "active from": {
+        "en": "active from",
+        "de": "aktiv ab",
+        "ru": "активный от",
+        "pt": "ativo de",
+        "nl": "♪",
+        "fr": "active from",
+        "it": "attivo da",
+        "es": "activo desde",
+        "pl": "aktywna",
+        "uk": "активний",
+        "zh-cn": "积极参与"
     },
-    "active from minute": {
-        "en": "active from minute",
-        "de": "aktiv ab minute",
-        "ru": "активный с минуты",
-        "pt": "ativo de minuto",
-        "nl": "actief",
-        "fr": "active à partir de la minute",
-        "it": "attivo dal minuto",
-        "es": "activo desde el minuto",
-        "pl": "aktywnie",
-        "uk": "активний з хвилини",
-        "zh-cn": "引言"
-    },
-    "inactive from hour": {
-        "en": "inactive from hour",
-        "de": "inaktiv von stunde",
-        "ru": "неактивный от часа",
-        "pt": "inativo de hora",
-        "nl": "inactief van uur",
-        "fr": "inactif à partir de l ' heure",
-        "it": "inattivo da ora",
-        "es": "inactivo desde la hora",
-        "pl": "nieaktywny od godziny",
-        "uk": "неактивний час",
-        "zh-cn": "b. 小时内的活动"
-    },
-    "inactive from minute": {
-        "en": "inactive from minute",
-        "de": "inaktiv von minute",
-        "ru": "неактивно с минуты",
-        "pt": "inativo de minuto",
-        "nl": "inactief van minuut",
-        "fr": "inactif de la minute",
-        "it": "inattivo da minuto",
-        "es": "inactivo desde el minuto",
-        "pl": "nieaktywny od minuty",
-        "uk": "неактивний від хвилини",
-        "zh-cn": "导 言"
+    "inactive from ": {
+        "en": "inactive from",
+        "de": "inaktiv ab",
+        "ru": "неактивный от",
+        "pt": "inativo de",
+        "nl": "inactief van",
+        "fr": "inactifs",
+        "it": "inattivo da",
+        "es": "inactivo desde",
+        "pl": "nieaktywny",
+        "uk": "неактивний від",
+        "zh-cn": "反应"
     },
     "no entries found": {
         "en": "no entries found",
@@ -538,7 +513,7 @@ systemDictionary = {
         "uk": "на замовлення",
         "zh-cn": "习俗"
     },
-    "status: in action": {
+    "in action": {
         "en": "status: in action",
         "de": "Status: in Aktion ",
         "ru": "статус: 'в действии « »",
@@ -551,7 +526,7 @@ systemDictionary = {
         "uk": "статус: 'в дії р",
         "zh-cn": "现状:行动 评 注"
     },
-    "status: standby": {
+    "standby": {
         "en": "status: standby",
         "de": "Status: Standby",
         "ru": "статус: standby",
@@ -564,7 +539,7 @@ systemDictionary = {
         "uk": "статус: очікування",
         "zh-cn": "现状:待命状态"
     },
-    "status: device off": {
+    "device off": {
         "en": "status: device off",
         "de": "Status: ausgeschaltet ",
         "ru": "статус: 'device off « »",
@@ -576,30 +551,6 @@ systemDictionary = {
         "pl": "statystyka: „odc. '",
         "uk": "статус: 'розвиток від р",
         "zh-cn": "地位:退出 评 注"
-    },
-    "standby": {
-        "en": "standby",
-        "de": "Standby",
-        "ru": "«ожидание»",
-        "pt": "em espera",
-        "nl": "stand-by",
-        "fr": "en attente",
-        "it": "standby",
-        "es": "en espera",
-        "pl": "„gotowość”",
-        "zh-cn": "状态：“待命”"
-    },
-    "device off": {
-        "en": "device off",
-        "de": "Gerät aus",
-        "ru": "устройство выключено",
-        "pt": "dispositivo desligado",
-        "nl": "apparaat uit",
-        "fr": "appareil éteint",
-        "it": "dispositivo spento",
-        "es": "dispositivo apagado",
-        "pl": "„urządzenie wyłączone”",
-        "zh-cn": "状态：“设备关闭”"
     },
     "device status": {
         "en": "Device status",

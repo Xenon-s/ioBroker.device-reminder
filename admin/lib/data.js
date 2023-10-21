@@ -111,7 +111,7 @@ async function createTableHeadData(settings) {
                         "dataName": "timer",
                         "class": "header translate",
                         "dataType": "number",
-                        "dataLang": "switch off after minutes",
+                        "dataLang": "switch off delay",
                         "dataDefault": 0,
                     },
                     "12": {
