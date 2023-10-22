@@ -6,7 +6,87 @@ In dataTable stehen alle Daten, um die HTML der einzelnen Tabellen erstellen zu 
 */
 
 const adapterInstance = `system.adapter.device-reminder.${instance}`;
-const keys = ['linkedDevice', 'devices', 'alexa', 'sayit', 'whatsapp', 'telegram', 'pushover', 'email', 'custom', 'default', 'status', 'signal', 'matrix'];
+// const keys = ['linkedDevice', 'devices', 'alexa', 'sayit', 'whatsapp', 'telegram', 'pushover', 'email', 'custom', 'default', 'status', 'signal', 'matrix'];
+
+const keysCntrlInput = {
+    linkedDevice: {
+        keys: [
+
+        ]
+    },
+    devices: {
+        states: [
+            'consumption', 'switch'
+        ],
+        keys: [
+            'name', 'type'
+        ]
+    },
+    alexa: {
+        states: [
+            'path'
+        ],
+        keys: [
+            'name', 'volume'
+        ]
+    },
+    sayit: {
+        states: [
+            'path'
+        ],
+        keys: [
+            'name', 'volume'
+        ]
+    },
+    telegram: {
+        keys: [
+            'name', 'inst', 'username'
+        ]
+    },
+    whatsapp: {
+        states: [
+            'path'
+        ],
+        keys: [
+            'name'
+        ]
+    },
+    pushover: {
+        keys: [
+            'name', 'inst', 'prio', 'sound'
+        ]
+    },
+    email: {
+        keys: [
+            'name', 'emailFrom', 'emailTo'
+        ]
+    },
+    signal: {
+        keys: [
+            'name', 'inst', 'phone'
+        ]
+    },
+    matrix: {
+        keys: [
+            'name', 'inst'
+        ]
+    },
+    default: {
+        keys: [
+            'name', 'startVal', 'endVal', 'standby', 'startCount', 'endCount'
+        ]
+    },
+    custom: {
+        keys: [
+            'name', 'startVal', 'endVal', 'standby', 'startCount', 'endCount'
+        ]
+    },
+    status: {
+        keys: [
+
+        ]
+    },
+};
 
 async function createTableHeadData(settings) {
 
@@ -822,11 +902,20 @@ async function createTableHeadData(settings) {
 /*
 Alle hier stehenden Daten werden benoetigt, um die Usereingaben spaeter pruefen und validieren zu koennen
 */
-async function dataCntrlInput() {
+async function dataCntrlInput( /**@type {string}*/ name) {
 
     let dataSendTo = {};
 
-    const getDataSendTo = async /**@type {string}*/ name => {
+    if (name != null || name != undefined) {
+        dataSendTo[name] = await getDataSendTo(name)
+    } else {
+        for (const i of Object.keys(keysCntrlInput)) {
+            // for (const i of keys) {
+            dataSendTo[i] = await getDataSendTo(i);
+        };
+    };
+
+    async function getDataSendTo( /**@type {string}*/ name) {
 
         let data = {};
         data = {
@@ -848,15 +937,13 @@ async function dataCntrlInput() {
                 /**@type {string}*/
                 anchorGer: `${name}-anlegen`,
                 /**@type {string}*/
-                anchorName: `${name}`
+                anchorName: `${name}`,
+                dataCntrl: keysCntrlInput[name]
             }
         };
         return data;
     };
 
-    for (const i of keys) {
-        dataSendTo[i] = await getDataSendTo(i);
-    };
     return dataSendTo;
 };
 
@@ -871,28 +958,22 @@ async function createData() {
 
         const settings = await getSettings();
 
-        for (const i of keys) {
+        for (const i of Object.keys(keysCntrlInput)) {
+            // for (const i of keys) {
             dataReturn[i] = await getIds(i);
         };
 
         function getSettings() {
             return new Promise((resolve, reject) => {
-                getDataFromNative((successResponse) => {
-                    resolve(successResponse);
-                }, (errorResponse) => {
-                    reject(errorResponse);
-                });
-            });
-        };
 
-        async function getDataFromNative(successCallback, errorCallback) {
-            // @ts-ignore
-            socket.emit('getObject', adapterInstance, (err, res) => {
-                if (!err) {
-                    successCallback(res.native);
-                } else {
-                    errorCallback(err)
-                };
+                // @ts-ignore
+                socket.emit('getObject', adapterInstance, (err, res) => {
+                    if (!err) {
+                        resolve(res.native);
+                    } else {
+                        reject(err)
+                    };
+                });
             });
         };
 
@@ -1025,4 +1106,4 @@ async function dataCurDevice(curDevice, checked, devices, deviceId, i) {
         }
     ];
     return data;
-}
+};

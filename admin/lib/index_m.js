@@ -37,6 +37,7 @@ async function load(settings, onChange) {
             $('.modal').modal();
             $('.timepicker').timepicker({ "twelveHour": false });
             onChange(false);
+            // cntrlUserInputNew('test')
         } else {
             $(`#gui`).html(`<div style="background: red"> ERROR: >>>Start device-reminder first! ${adapterInstance} state: ${state.val}<<< </div>`);
         }
@@ -80,27 +81,12 @@ async function createGUI(settingsGlobal, onChange) {
         // Zuerst alle Inhalte außer "measuring Devices" erstellen, sonst koennen keine Inhalte aus anderen Tabellen geholt
         for (const i in tableIds) {
             if (!i.includes('devices')) await createTable(i, onChange);
-            $(`#${tableIds[i].idHTML} .table-lines [data-name="activeFrom"]`).attr('class', 'values-input timepicker');
-            $(`#${tableIds[i].idHTML} .table-lines [data-name="activeUntil"]`).attr('class', 'values-input timepicker');
-            if (i.includes('custom') || i.includes('default')) setProps(tableIds[i].idHTML);
         };
 
         const checked = await checkInput('all');
         checkedUserInput = checked;
 
         await createTable('devices', onChange);
-
-        function setProps( /**@type {string}*/ id) {
-            // Attribute fuer device-types aendern
-            // Namensfelder bei device-types sperren
-            $(`#${id} [data-name="name"`).prop("disabled", true)
-                // MIN / MAX einfuegen
-            $(`#${id} [data-name="startVal"`).prop("min", 0)
-            $(`#${id} [data-name="endVal"`).prop("min", 0)
-            $(`#${id} [data-name="standby"`).prop("min", 0)
-            $(`#${id} [data-name="startCount"`).prop("min", 1)
-            $(`#${id} [data-name="endCount"`).prop("min", 2)
-        };
 
         return checked;
     };
@@ -128,11 +114,7 @@ async function createGUI(settingsGlobal, onChange) {
             showBtns('.btn-save, .btn-save-close', false, onChange);
             onChange(false);
             setTimeout(() => {
-                // Attribute aendern
-                $(`#${name}ID .table-lines [data-name="activeFrom"]`).attr('class', 'values-input timepicker');
-                $(`#${name}ID .table-lines [data-name="activeUntil"]`).attr('class', 'values-input timepicker');
-
-                $('.timepicker').timepicker({ "twelveHour": false });
+                setProps(tableIds[name].idHTML, name);
             }, 200)
 
             $(`#err-${name}`).html(`<div style="display: flex; align-items: center; color: red;"><span style="font-weight:bold;">${_("Pls check input")}</span></div>`);
@@ -166,6 +148,8 @@ async function createGUI(settingsGlobal, onChange) {
         const eventID = `#${tableIds[i].idHTML}`;
         await createEvent(eventID)
 
+        setProps(tableIds[i].idHTML, i);
+
         return true;
     };
 
@@ -182,16 +166,9 @@ async function createGUI(settingsGlobal, onChange) {
 
         tableContent = await createSettings();
         const result = await checkInput(name);
+        console.warn(await cntrlUserInputNew(tableContent, name));
 
         if (!name.includes('header')) checkedUserInput[name] = result[name];
-
-        // Wenn in Custom Types geaendert werden, muss die GUI neu geladen werden, da sonst die neuen Types nicht auftauchen
-        // if (name.includes('custom')) {
-        //     deviceTypes = [];
-        //     $(`#gui`).html();
-        //     await createGUI(settingsGlobal, onChange)
-        //     selectedHeader(`header-${name}`, true)
-        // };
 
         dynamicTable(checkedUserInput);
 
@@ -200,6 +177,7 @@ async function createGUI(settingsGlobal, onChange) {
             $('.btn-save, .btn-save-close').fadeIn();
         };
 
+        // cntrlUserInputNew(tableContent, name)
 
         if (M) M.updateTextFields();
 
@@ -613,44 +591,6 @@ function showBtns( /**@type {string}*/ id, /**@type {boolean}*/ cmd, onChange) {
         onChange(false);
     };
     onChange(cmd);
-};
-
-// Collapsible Header oeffnen / schliessen
-async function selectedHeader( /**@type {string}*/ id, /**@type {boolean}*/ rebuild) {
-
-    if (rebuild) {
-
-        var instance = M.Collapsible.getInstance($('.collapsible')[0]);
-        instance.open(4);
-    } else {
-        if (headerOpened == ``) {
-            headerOpened = id;
-            $(`#${id}`).addClass('collapsible-active');
-            $(`#${id}`).removeClass('collapsible-inactive');
-        } else {
-            headerOpened = headerOpened == id ? `` : id;
-            if (lastHeaderOpened != id) {
-                $(`#${lastHeaderOpened}`).addClass('collapsible-inactive');
-                $(`#${lastHeaderOpened}`).removeClass('collapsible-active');
-                $(`#${id}`).addClass('collapsible-active');
-                $(`#${id}`).removeClass('collapsible-inactive');
-            } else {
-                $(`#${id}`).addClass('collapsible-inactive');
-                $(`#${id}`).removeClass('collapsible-active');
-            };
-        };
-    };
-
-    lastHeaderOpened = id;
-};
-
-// Header im "linkedDevices table" anzeigen, wenn Daten vorhanden (zb. alexa)
-function showHeader( /**@type {string}*/ tblId, /**@type {Boolean}*/ name, arr) {
-    if (arr.length > 0) {
-        $(`#_${name}`).removeClass('none');
-    } else {
-        $(`#_${name}`).addClass('none');
-    };
 };
 
 // settings neu erstellen und an die table schicken
