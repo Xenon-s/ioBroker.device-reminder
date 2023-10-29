@@ -166,7 +166,7 @@ async function createGUI(settingsGlobal, onChange) {
 
         tableContent = await createSettings();
         const result = await checkInput(name);
-        console.warn(await cntrlUserInputNew(tableContent, name));
+        // console.warn(await cntrlUserInputNew(tableContent, name));
 
         if (!name.includes('header')) checkedUserInput[name] = result[name];
 

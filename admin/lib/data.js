@@ -284,7 +284,7 @@ async function createTableHeadData(settings) {
             "table": {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": false,
-                "submitbtn": false,
+                "submitbtn": true,
                 "th": {
                     "1": {
                         "dataName": "stateAction",

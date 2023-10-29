@@ -1414,6 +1414,7 @@ class deviceReminder extends utils.Adapter {
             if (cmd.includes('signal')) keys = ['name', 'inst', 'phone'];
             if (cmd.includes('matrix')) keys = ['name', 'inst'];
             if (cmd.includes('default') || cmd.includes('custom')) keys = ['name', 'startVal', 'endVal', 'standby', 'startCount', 'endCount'];
+            if (cmd.includes('status')) keys = ['stateAction', 'stateStandby', 'stateOff'];
 
             // Userinput pruefen
             for (const data of array) {
