@@ -17,7 +17,6 @@
                 "zh-cn": "! 打破变革!\n- 修改适应人员结构的基本变化,因为新的“js-Controller 5.x”存在许多问题。 必须重整适应者!\n- 从根本上重新工作\n- 众多的丑闻\n- 新的我sengers(Signal, Matrix)\n- 普沙布新增的新特点\n- 现在必须用手工制作图和电图\n- 第5条。 * A/64/50。"
             }
         },
-        "title": "device-reminder",
         "titleLang": {
             "en": "device-reminder",
             "de": "device-reminder",
@@ -28,25 +27,26 @@
             "it": "device-reminder",
             "es": "device-reminder",
             "pl": "device-reminder",
+            "uk": "device-reminder",
             "zh-cn": "device-reminder"
         },
         "desc": {
             "en": "Adapter for device reminder and notification when reaching different states",
-            "de": "Adapter für Geräteerinnerung und Benachrichtigung beim Erreichen von verschiedenen Zuständen",
-            "ru": "Адаптер для напоминания и уведомления устройства при достижении разных состояний",
-            "pt": "Adaptador para lembrete e notificação do dispositivo ao atingir diferentes estados",
-            "nl": "Adapter voor apparaatherinnering en melding bij het bereiken van verschillende toestanden",
-            "fr": "Adaptateur pour le rappel de l'appareil et la notification lorsque vous atteignez différents états",
-            "it": "Adattatore per promemoria del dispositivo e notifica al raggiungimento di stati diversi",
-            "es": "Adaptador para recordatorio y notificación del dispositivo al llegar a diferentes estados",
-            "pl": "Adapter do przypomnienia o urządzeniu i powiadomienia po osiągnięciu różnych stanów",
-            "zh-cn": "达到不同状态时用于设备提醒和通知的适配器"
+            "de": "Adapter für Geräte-Erinnerung und Benachrichtigung beim Erreichen verschiedener Zustände",
+            "ru": "Адаптер для напоминания устройства и уведомления при достижении различных государств",
+            "pt": "Adaptador para lembrete de dispositivo e notificação quando chegar a diferentes estados",
+            "nl": "Adapter voor apparaatherinnering en inlichtingen als je verschillende staten bereikt",
+            "fr": "Adaptateur pour le rappel du dispositif et la notification lors d'atteindre différents états",
+            "it": "Adattatore per promemoria e notifica del dispositivo quando si raggiunge diversi stati",
+            "es": "Adaptador para recordatorio y notificación de dispositivos al llegar a diferentes estados",
+            "pl": "Adapter: Przypomnienie urządzeń i powiadomienie, gdy dochodzi do różnych stanów",
+            "uk": "Адаптер для нагадування пристроїв та сповіщення при досягненні різних станів",
+            "zh-cn": "在接触不同国家时发出提醒和通知装置的道歉"
         },
         "authors": [
             "xenon-s <ente_s@hotmail.de>"
         ],
         "keywords": [
-            "ioBroker",
             "device reminder",
             "Smart Home",
             "home automation"
