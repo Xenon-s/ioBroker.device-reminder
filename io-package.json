@@ -3,6 +3,19 @@
         "name": "device-reminder",
         "version": "3.0.1",
         "news": {
+            "3.0.1": {
+                "en": "some bugfixes, check Changelog",
+                "de": "einige Bugfixes, überprüfen Changelog",
+                "ru": "некоторые исправления, проверьте Changelog",
+                "pt": "alguns bugfixes, verificar Changelog",
+                "nl": "wat insecten, controleer Changelog",
+                "fr": "certains bugfix, vérifier Changelog",
+                "it": "alcuni bugfix, controlla Changelog",
+                "es": "algunos bugfixes, check Changelog",
+                "pl": "some bugfixs check Changelog (ang.)",
+                "uk": "деякі fixes, перевірити Changelog",
+                "zh-cn": "某些制药、检查变革口"
+            },
             "3.0.0": {
                 "en": "!!Breaking Changes!!\n- Made basic changes to the adapter structure, because there were numerous problems with the new \"js-Controller 5.x\". It is mandatory to reinstall the adapter!\n- Admin GUI fundamentally reworked\n- Numerous bug fixes\n- New messengers added (Signal, Matrix)\n- New features added to Pushover\n- Whatsapp and Telegram must now be created manually\n- Fixes for js-controller 5.*",
                 "de": "! Breaking Changes!\n- Erstellte grundlegende Änderungen an der Adapterstruktur, denn es gab zahlreiche Probleme mit dem neuen \"js-Controller 5.x\" Es ist zwingend notwendig, den Adapter neu zu installieren!\n- Admin GUI grundlegend überarbeitet\n- Zahlreiche Fehlerbehebungen\n- Neue Boten hinzugefügt (Signal, Matrix)\n- Neue Features in Pushover hinzugefügt\n- Whatsapp und Telegram müssen jetzt manuell erstellt werden\n- Fixes für den js-Controller 5. *",
