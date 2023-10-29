@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "3.0.0",
+        "version": "3.0.1",
         "news": {
             "3.0.0": {
                 "en": "!!Breaking Changes!!\n- Made basic changes to the adapter structure, because there were numerous problems with the new \"js-Controller 5.x\". It is mandatory to reinstall the adapter!\n- Admin GUI fundamentally reworked\n- Numerous bug fixes\n- New messengers added (Signal, Matrix)\n- New features added to Pushover\n- Whatsapp and Telegram must now be created manually\n- Fixes for js-controller 5.*",
