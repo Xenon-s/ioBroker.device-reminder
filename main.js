@@ -106,6 +106,8 @@ class deviceReminder extends utils.Adapter {
                 };
             };
         };
+
+        await this.delObjectAsync(`${this.name}.${this.instance}.info.connection`); // geloeschte device DPs entfernen
     };
 
     async createDevices() {
