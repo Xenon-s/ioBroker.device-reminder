@@ -183,6 +183,9 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
 	Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
+### 3.0.2 (XXXX-XX-XX)
+* (xenon-s) 
+
 ### 3.0.1 (2023-10-18)
 * (xenon-s) Update testing: [issue #325](https://github.com/Xenon-s/ioBroker.device-reminder/issues/325)
 * (xenon-s) bugfix: [issue #327](https://github.com/Xenon-s/ioBroker.device-reminder/issues/327)
