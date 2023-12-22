@@ -90,5 +90,5 @@
         "translate": "translate-adapter",
         "release": "release-script"
     },
-    "version": "3.0.2"
+    "version": "3.0.2-beta"
 }
