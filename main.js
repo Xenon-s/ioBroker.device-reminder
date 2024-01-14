@@ -251,7 +251,7 @@ class deviceReminder extends utils.Adapter {
                         this.getValues(i);
                     };
                 };
-            }, 10000);
+            }, 1000);
         };
     };
 
@@ -1060,7 +1060,7 @@ class deviceReminder extends utils.Adapter {
             try {
                 if (device.whatsapp.active) {
                     for (const i in device.whatsapp.ids) {
-                        this.log.warn(`[${JSON.stringify(device.name)}]: whatsapp message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
+                        this.log.debug(`[${JSON.stringify(device.name)}]: whatsapp message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
                         await this.setForeignStateAsync(this.whatsappInput[device.whatsapp.ids[i]].path, `${msg}`);
                     };
                 };
@@ -1266,7 +1266,7 @@ class deviceReminder extends utils.Adapter {
 
     async volume(obj, /**@type{boolean}*/ action, /**@type{string}*/ strVol) {
 
-        /**@type{string}*/
+        /**@type{number}*/
         let volume = obj.volume;
         /**@type{number}*/
         let volOld = obj.volOld != undefined ? obj.volOld || 0 : 0;
@@ -1295,7 +1295,7 @@ class deviceReminder extends utils.Adapter {
                     obj.volOld = null
                 };
                 this.log.debug(`[1214]: type volume : ${typeof (volume)}, val: ${volume}`);
-                await this.setForeignStateAsync(pathNew, volume);
+                await this.setForeignStateAsync(pathNew, parseInt(volume));
 
             } else {
                 if (obj.timeout != null) {
@@ -1305,7 +1305,7 @@ class deviceReminder extends utils.Adapter {
                 if (obj.volOld !== null) {
                     obj.timeout = setTimeout(async() => { //timeout starten
                         this.log.debug(`[1224]: type volOld : ${typeof (volOld)}, val: ${volOld}`);
-                        await this.setForeignStateAsync(pathNew, volOld);
+                        await this.setForeignStateAsync(pathNew, parseInt(volOld));
                     }, 2000);
                 };
             };
