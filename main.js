@@ -1239,11 +1239,8 @@ class deviceReminder extends utils.Adapter {
             case "alexa":
                 {
                     if (device.alexa.active) {
-                        // this.log.info(JSON.stringify(this.alexaInput))
                         for (const i in device.alexa.ids) {
                             const strVol = '.speak-volume';
-                            // this.log.info(device.alexa.ids[i])
-                            // this.log.info(JSON.stringify(this.alexaInput[device.alexa.ids[i]].path))
                             await this.volume(this.alexaInput[device.alexa.ids[i]], action, strVol)
                         };
                     };
@@ -1252,7 +1249,6 @@ class deviceReminder extends utils.Adapter {
             case "sayit":
                 {
                     if (device.sayit.active) {
-                        // this.log.info(JSON.stringify(this.sayitInput))
                         for (const i in device.sayit.ids) {
                             const strVol = '.volume';
                             await this.volume(this.sayitInput[device.sayit.ids[i]], action, strVol)
@@ -1284,12 +1280,11 @@ class deviceReminder extends utils.Adapter {
 
         // check pathNew
         const checkPath = await this.getForeignObjectAsync(pathNew);
-        this.log.info(checkPath)
         if (!checkPath) {
             this.log.debug(`DP was not found: ${pathNew}`);
             pathNew = null;
         };
-        this.log.info(pathNew)
+
         if (pathNew !== null) {
             if (action) {
                 /**@type{number}*/
@@ -1300,7 +1295,6 @@ class deviceReminder extends utils.Adapter {
                     obj.volOld = null
                 };
                 this.log.debug(`[1214]: type volume : ${typeof (volume)}, val: ${volume}`);
-                this.log.info(pathNew + ' ' + volume)
                 await this.setForeignStateAsync(pathNew, volume);
 
             } else {
