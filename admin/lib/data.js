@@ -769,7 +769,7 @@ async function createTableHeadData(settings) {
                         "dataDefault": ".0",
                     },
                     "3": {
-                        "dataName": "phone",
+                        // "dataName": "phone",
                         "class": "header translate",
                         "dataType": "number",
                         "dataLang": "phone",

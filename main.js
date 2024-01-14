@@ -1137,8 +1137,8 @@ class deviceReminder extends utils.Adapter {
                         let objTemp = {
                             /**@type {string}*/
                             text: msg,
-                            /**@type {string}*/
-                            phone: this.signalInput[device.signal.ids[i]].phone,
+                            // /**@type {string}*/
+                            // phone: this.signalInput[device.signal.ids[i]].phone,
                         };
                         this.log.debug(`[${JSON.stringify(device.name)}]: signal-cmb OBJECT SENDTO: ${JSON.stringify(objTemp)}`);
                         this.sendTo(`signal-cmb${this.signalInput[device.signal.ids[i]].inst}`, "send", objTemp);

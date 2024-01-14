@@ -866,8 +866,8 @@ async function save(callback) {
                                 name: data.name,
                                 /**@type {string}*/
                                 inst: data.inst,
-                                /**@type {string}*/
-                                phone: data.phone,
+                                // /**@type {string}*/
+                                // phone: data.phone,
                             };
                             break;
                         };
