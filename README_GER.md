@@ -34,6 +34,7 @@ Befehl in der Tasmota Konsole : TelePeriod 10
 - Email-Benachrichtung (mehrere IDs sind möglich)
 - Signal-Benachrichtung (mehrere IDs sind möglich)
 - Matrix-Benachrichtung (Mehrere IDs sind möglich)
+- Discord-Benachrichtung (Mehrere IDs sind möglich)
 - Benachrichtigungen können frei erstellt oder auch von einem externen Script vorgegeben werden
 - Datenpunkte mit dem aktuellen Zustand, Live-Verbrauch und letzte gesendete Statusmeldung, um Werte aus diesem Adapter in anderen Scripten verwenden zu können
 - Geräte bei Bedarf abschalten (auch zeitverzögert), wenn Vorgang beendet erkannt wurde
@@ -124,6 +125,7 @@ Mit den 2 letzten Feldern kann ein Zeitraum erstellt werden, in dem eure Alexa S
 - **Geräte ID**: optionale Geräte-ID, an die gesendet werden soll
 - **Priorität**: Die Priorität, mit der gesendet werden soll
 - **Klang**: Der Sound, der abgespielt werden soll, wenn Pushover die Nachricht erhält
+- **TTL**: Dauer, nach der eine Nachricht gelöscht werden soll (Sekunden)
 
 ## email User erstellen
 ![email_ger.png](admin/pictures/email_ger.png)
@@ -137,7 +139,6 @@ Mit den 2 letzten Feldern kann ein Zeitraum erstellt werden, in dem eure Alexa S
 
 - **Name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
 - **Signal-Instanz**: Die installierte Instanz, an die gesendet werden soll
-- **Telefon**: optional eine Handynummer
 
 ## telegram User erstellen
 ![telegram_ger.png](admin/pictures/telegram_ger.png)
@@ -153,6 +154,18 @@ Mit den 2 letzten Feldern kann ein Zeitraum erstellt werden, in dem eure Alexa S
 
 - **Name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
 - **'whatsapp-cmb/../sendMessage'**: Der Datenpunkt des Whatsapp-Adapters, an den die Nachricht gesendet werden soll
+
+## Discord User erstellen
+
+![discord_ger.png](admin/pictures/discord_ger.png)
+
+- **Name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
+- **Discord Instanz**: Die Discord Ziel-Instanz
+- **User ID**: Die User ID
+- **Chat Tag**: Der User Tag
+- **Chat Name**: Der User Name (**Pflichtfeld**)
+- **Server ID**: Die Server ID des Discord Servers
+- **Channel ID**: Die Channel ID des Discord Servers
 
 # Standard Gerätetypen
 ![default_types_ger.png](admin/pictures/default_types_ger.png)

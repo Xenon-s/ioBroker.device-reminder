@@ -133,7 +133,8 @@ is displayed.
 - **Subject**: optional subject of the message
 - **Device ID**: optional device ID to which the message should be sent
 - **Priority**: The priority with which to send
-- **Sound**: The sound to play when Pushover receives the message.
+- **Sound**: The sound to play when Pushover receives the message
+- **TTL**: Duration after which a message is to be deleted (seconds)
 
 ## Create email user
 
@@ -148,8 +149,7 @@ is displayed.
 ![addSignal.png](admin/pictures/addSignal.png)
 
 - **Name**: Freely selectable name, special characters are also possible.
-- **Signal instance**: The installed instance to send to.
-- **Phone**: optionally a cell phone number
+- **Signal instance**: The installed instance to send to
 
 ## create telegram user
 
@@ -157,7 +157,7 @@ is displayed.
 
 - **Group**: If checked, it is mandatory to specify a chat ID in order to send to a group chat
 - **Name**: Freely selectable name, special characters are also possible.
-- **Telegram instance**: The installed instance to send to.
+- **Telegram instance**: The installed instance to send to
 - **Username/Firstname**: The name stored in the Telegram adapter
 - **Chat ID**: Must only be filled in if you want to send to a group
 
@@ -167,6 +167,20 @@ is displayed.
 
 - **Name**: Freely selectable name, special characters are also possible.
 - **'whatsapp-cmb/../sendMessage'**: The datapoint of the Whatsapp adapter to which the message should be sent.
+
+## create discord user
+
+![addDiscord.png](admin/pictures/addDiscord.png)
+
+- **Name**: Freely selectable name, special characters are also possible.
+- **Discord instance**: The installed instance to send to.
+- **User ID**: The Discord User Id
+- **Chat Tag**: The Discord user tag
+- **Chat Name**: The Discord user name (**Mandatory field**)
+- **Server ID**: The Discord Server ID
+- **Channel ID**: The Discord Channel ID
+
+
 
 # Default devices
 
