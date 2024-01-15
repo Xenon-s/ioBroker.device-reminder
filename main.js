@@ -303,280 +303,280 @@ class deviceReminder extends utils.Adapter {
      * @param {string} id
      */
     async funcCreateObject(id) {
-        try {
-            const devicesInput = this.devices[id];
-            const name = this.devices[id].name;
+        // try {
+        const devicesInput = this.devices[id];
+        const name = this.devices[id].name;
 
-            class classDevice {
-                /**
-                 * @param {number} startValue
-                 * @param {number} endValue
-                 * @param {number} startCount
-                 * @param {number} endCount
-                 * @param {number} runtimeMax
-                 * @param {string | string} statusDevice
-                 * @param {string | number} consumpLive
-                 * @param {string | number} averageConsumption
-                 * @param {string | number} runtime
-                 * @param {string | number} lastRuntime
-                 * @param {string | string} messageDP
-                 */
-                constructor(obj, statusDevice, consumpLivePath, runtimePath, runtimeMSPath, lastRuntimePath, runtimeMaxDP, alertRuntimeDP, lastOperations, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal) {
-                    // DPs
-                    /** @type {boolean} */
-                    this.enabled = obj.enabled;
-                    /** @type {string} */
-                    this.name = obj.name;
-                    /** @type {string} */
-                    this.type = obj.type;
-                    /** @type {number} */
-                    this.currentConsumption = obj.pathConsumption;
-                    /** @type {string} */
-                    this.switchPower = obj.pathSwitch;
-                    // script intern
-                    /** @type {string} */
-                    this.pathStatus = statusDevice;
-                    /** @type {string} */
-                    this.pathLiveConsumption = consumpLivePath;
-                    /** @type {string} */
-                    this.timeTotal = runtimePath;
-                    /** @type {string} */
-                    this.timeTotalMs = runtimeMSPath;
-                    /** @type {string} */
-                    this.lastRuntime = lastRuntimePath;
-                    /** @type {string} */
-                    this.runtimeMaxDP = runtimeMaxDP;
-                    /** @type {string} */
-                    this.alertRuntime = alertRuntimeDP;
-                    /** @type {string} */
-                    this.messageDP = messageDP;
-                    /** @type {string} */
-                    this.averageConsumption = averageConsumption;
-                    /** @type {string} */
-                    this.dnd = doNotDisturb;
-                    /** @type {string} */
-                    this.lastOperations = lastOperations;
-                    /** @type {string} */
-                    this.autoOffDP = autoOffDP;
-                    // string
-                    /** @type {string} */
-                    this.startTimeJSON = `00:00:00`;
-                    /** @type {string} */
-                    this.endtimeJSON = `00:00:00`;
-                    /** @type {string} */
-                    this.runtimeJSON = '00:00:00';
-                    // boolean
-                    /** @type {boolean} */
-                    this.started = false;
-                    /** @type {boolean} */
-                    this.abort = obj.abort;
-                    // boolean Benutzervorgaben
-                    /** @type {boolean} */
-                    this.autoOff = obj.autoOff;
-                    // Verbrauchswerte
-                    /** @type {number} */
-                    this.startValue = objVal.startVal;
-                    /** @type {number} */
-                    this.endValue = objVal.endVal;
-                    /** @type {number} */
-                    this.standby = objVal.standby != '' ? objVal.standby || 1 : 1;
-                    // Zaehler Abbruchbedingungen
-                    /** @type {number} */
-                    this.startCount = objVal.startCount;
-                    /** @type {number} */
-                    this.endCount = objVal.endCount;
-
-                    // timeout
-                    this.timeout = null;
-                    this.timeoutMsg = null;
-                    this.startTime = 0;
-                    this.endTime = 0;
-
-                    /** @type {number} */
-                    this.valCancel = objVal.endCount / 2;
-
-                    // array
-                    this.arrays = {
-                        start: [],
-                        end: [],
-                        standby: [],
-                        dateJSON: [],
-                    };
-
-                    this.calculation = {
-                        /** @type {number} */
-                        consumption: 0,
-                        /** @type {number} */
-                        resultStart: 0,
-                        /** @type {number} */
-                        resultEnd: 0,
-                        /** @type {number} */
-                        resultStandby: 0,
-                        /** @type {number} */
-                        alertCounter: 0,
-                    };
-
-                    this.message = {
-                        /** @type {boolean} */
-                        startMessage: obj.startText.length > 0 ? true || false : false,
-                        /** @type {string} */
-                        startText: obj.startText,
-                        /** @type {boolean} */
-                        startMessageSent: false,
-                        /** @type {boolean} */
-                        endMessage: obj.endText.length ? true || false : false,
-                        /** @type {strin} */
-                        endText: obj.endText,
-                        /** @type {boolean} */
-                        endMessageSent: false
-                    };
-
-                    /*obj timer erstellen*/
-                    if (obj.autoOff) {
-                        if (obj.timer != `` && obj.timer != undefined && obj.timer != 0) {
-                            this.timeoutInMS = (Math.floor(obj.timer) * 60 * 1000); // Umrechnung auf ms
-                        } else {
-                            this.timeoutInMS = 0;
-                        };
-                    };
-
-                    this.alexa = {
-                        /** @type {boolean} */
-                        active: obj.alexa.length > 0 ? true || false : false,
-                        ids: obj.alexa != undefined ? obj.alexa || [] : [],
-                        /** @type {number} */
-                        volOld: 0
-                    };
-
-                    this.sayit = {
-                        /** @type {boolean} */
-                        active: obj.sayit.length > 0 ? true || false : false,
-                        ids: obj.sayit != undefined ? obj.sayit || [] : [],
-                        /** @type {number} */
-                        volOld: 0
-                    };
-
-                    this.telegram = {
-                        /** @type {boolean} */
-                        active: obj.telegram.length > 0 ? true || false : false,
-                        ids: obj.telegram != undefined ? obj.telegram || [] : []
-                    };
-
-                    this.whatsapp = {
-                        /** @type {boolean} */
-                        active: obj.whatsapp.length > 0 ? true || false : false,
-                        ids: obj.whatsapp != undefined ? obj.whatsapp || [] : []
-                    };
-
-                    this.pushover = {
-                        /** @type {boolean} */
-                        active: obj.pushover.length > 0 ? true || false : false,
-                        ids: obj.pushover != undefined ? obj.pushover || [] : []
-                    };
-
-                    this.signal = {
-                        /** @type {boolean} */
-                        active: obj.signal.length > 0 ? true || false : false,
-                        ids: obj.signal != undefined ? obj.signal || [] : []
-                    };
-
-                    this.email = {
-                        /** @type {boolean} */
-                        active: obj.email.length > 0 ? true || false : false,
-                        ids: obj.email != undefined ? obj.email || [] : []
-                    };
-
-                    this.matrix = {
-                        /** @type {boolean} */
-                        active: obj.matrix.length > 0 ? true || false : false,
-                        ids: obj.matrix != undefined ? obj.matrix || [] : []
-                    };
-                    this.discord = {
-                        /** @type {boolean} */
-                        active: obj.discord.length > 0 ? true || false : false,
-                        ids: obj.discord != undefined ? obj.discord || [] : []
-                    };
-                };
-            };
-
-            this.adapterDPs[name] = await this.createDP(name); // DP erstellen und pfad in array speichern
-
-            // device type ermitteln und Objekt bauen
-            const devCusType = await this.config.default.ids;
-            const devDefType = await this.config.custom.ids;
-
-            let objVal = {
+        class classDevice {
+            /**
+             * @param {number} startValue
+             * @param {number} endValue
+             * @param {number} startCount
+             * @param {number} endCount
+             * @param {number} runtimeMax
+             * @param {string | string} statusDevice
+             * @param {string | number} consumpLive
+             * @param {string | number} averageConsumption
+             * @param {string | number} runtime
+             * @param {string | number} lastRuntime
+             * @param {string | string} messageDP
+             */
+            constructor(obj, statusDevice, consumpLivePath, runtimePath, runtimeMSPath, lastRuntimePath, runtimeMaxDP, alertRuntimeDP, lastOperations, messageDP, autoOffDP, averageConsumption, doNotDisturb, objVal) {
+                // DPs
                 /** @type {boolean} */
-                used: false,
+                this.enabled = obj.enabled;
+                /** @type {string} */
+                this.name = obj.name;
+                /** @type {string} */
+                this.type = obj.type;
                 /** @type {number} */
-                startVal: 0,
+                this.currentConsumption = obj.pathConsumption;
+                /** @type {string} */
+                this.switchPower = obj.pathSwitch;
+                // script intern
+                /** @type {string} */
+                this.pathStatus = statusDevice;
+                /** @type {string} */
+                this.pathLiveConsumption = consumpLivePath;
+                /** @type {string} */
+                this.timeTotal = runtimePath;
+                /** @type {string} */
+                this.timeTotalMs = runtimeMSPath;
+                /** @type {string} */
+                this.lastRuntime = lastRuntimePath;
+                /** @type {string} */
+                this.runtimeMaxDP = runtimeMaxDP;
+                /** @type {string} */
+                this.alertRuntime = alertRuntimeDP;
+                /** @type {string} */
+                this.messageDP = messageDP;
+                /** @type {string} */
+                this.averageConsumption = averageConsumption;
+                /** @type {string} */
+                this.dnd = doNotDisturb;
+                /** @type {string} */
+                this.lastOperations = lastOperations;
+                /** @type {string} */
+                this.autoOffDP = autoOffDP;
+                // string
+                /** @type {string} */
+                this.startTimeJSON = `00:00:00`;
+                /** @type {string} */
+                this.endtimeJSON = `00:00:00`;
+                /** @type {string} */
+                this.runtimeJSON = '00:00:00';
+                // boolean
+                /** @type {boolean} */
+                this.started = false;
+                /** @type {boolean} */
+                this.abort = obj.abort;
+                // boolean Benutzervorgaben
+                /** @type {boolean} */
+                this.autoOff = obj.autoOff;
+                // Verbrauchswerte
                 /** @type {number} */
-                endVal: 0,
+                this.startValue = objVal.startVal;
                 /** @type {number} */
-                standby: 0,
+                this.endValue = objVal.endVal;
                 /** @type {number} */
-                startCount: 0,
+                this.standby = objVal.standby != '' ? objVal.standby || 1 : 1;
+                // Zaehler Abbruchbedingungen
                 /** @type {number} */
-                endCount: 0
-            };
+                this.startCount = objVal.startCount;
+                /** @type {number} */
+                this.endCount = objVal.endCount;
 
-            for (const i in devCusType) { // default types
-                if (devCusType[i].name == devicesInput.type) {
-                    /** @type {boolean} */
-                    objVal.used = true;
-                    /** @type {number} */
-                    objVal.startVal = devCusType[i].startVal; // startwert
-                    /** @type {number} */
-                    objVal.endVal = devCusType[i].endVal; // endwert
-                    /** @type {number} */
-                    objVal.standby = devCusType[i].standby; //standbywert
-                    /** @type {number} */
-                    objVal.startCount = devCusType[i].startCount; // anzahl Messungen "START"
-                    /** @type {number} */
-                    objVal.endCount = devCusType[i].endCount; // anzahl Messungen "ENDE"
+                // timeout
+                this.timeout = null;
+                this.timeoutMsg = null;
+                this.startTime = 0;
+                this.endTime = 0;
+
+                /** @type {number} */
+                this.valCancel = objVal.endCount / 2;
+
+                // array
+                this.arrays = {
+                    start: [],
+                    end: [],
+                    standby: [],
+                    dateJSON: [],
                 };
-            };
 
-            if (objVal.used == false) { //custom types
-                for (const i in devDefType) {
-                    if (devDefType[i].name == devicesInput.type) {
-                        /** @type {number} */
-                        objVal.startVal = devDefType[i].startVal // startwert
-                            /** @type {number} */
-                        objVal.endVal = devDefType[i].endVal // endwert
-                            /** @type {number} */
-                        objVal.standby = devDefType[i].standby // stanbbywert
-                            /** @type {number} */
-                        objVal.startCount = devDefType[i].startCount // anzahl Messungen "START"
-                            /** @type {number} */
-                        objVal.endCount = devDefType[i].endCount // anzahl Messungen "ENDE"
+                this.calculation = {
+                    /** @type {number} */
+                    consumption: 0,
+                    /** @type {number} */
+                    resultStart: 0,
+                    /** @type {number} */
+                    resultEnd: 0,
+                    /** @type {number} */
+                    resultStandby: 0,
+                    /** @type {number} */
+                    alertCounter: 0,
+                };
+
+                this.message = {
+                    /** @type {boolean} */
+                    startMessage: obj.startText.length > 0 ? true || false : false,
+                    /** @type {string} */
+                    startText: obj.startText,
+                    /** @type {boolean} */
+                    startMessageSent: false,
+                    /** @type {boolean} */
+                    endMessage: obj.endText.length ? true || false : false,
+                    /** @type {strin} */
+                    endText: obj.endText,
+                    /** @type {boolean} */
+                    endMessageSent: false
+                };
+
+                /*obj timer erstellen*/
+                if (obj.autoOff) {
+                    if (obj.timer != `` && obj.timer != undefined && obj.timer != 0) {
+                        this.timeoutInMS = (Math.floor(obj.timer) * 60 * 1000); // Umrechnung auf ms
+                    } else {
+                        this.timeoutInMS = 0;
                     };
                 };
+
+                this.alexa = {
+                    /** @type {boolean} */
+                    active: obj.alexa.length > 0 ? true || false : false,
+                    ids: obj.alexa != undefined ? obj.alexa || [] : [],
+                    /** @type {number} */
+                    volOld: 0
+                };
+
+                this.sayit = {
+                    /** @type {boolean} */
+                    active: obj.sayit.length > 0 ? true || false : false,
+                    ids: obj.sayit != undefined ? obj.sayit || [] : [],
+                    /** @type {number} */
+                    volOld: 0
+                };
+
+                this.telegram = {
+                    /** @type {boolean} */
+                    active: obj.telegram.length > 0 ? true || false : false,
+                    ids: obj.telegram != undefined ? obj.telegram || [] : []
+                };
+
+                this.whatsapp = {
+                    /** @type {boolean} */
+                    active: obj.whatsapp.length > 0 ? true || false : false,
+                    ids: obj.whatsapp != undefined ? obj.whatsapp || [] : []
+                };
+
+                this.pushover = {
+                    /** @type {boolean} */
+                    active: obj.pushover.length > 0 ? true || false : false,
+                    ids: obj.pushover != undefined ? obj.pushover || [] : []
+                };
+
+                this.signal = {
+                    /** @type {boolean} */
+                    active: obj.signal.length > 0 ? true || false : false,
+                    ids: obj.signal != undefined ? obj.signal || [] : []
+                };
+
+                this.email = {
+                    /** @type {boolean} */
+                    active: obj.email.length > 0 ? true || false : false,
+                    ids: obj.email != undefined ? obj.email || [] : []
+                };
+
+                this.matrix = {
+                    /** @type {boolean} */
+                    active: obj.matrix.length > 0 ? true || false : false,
+                    ids: obj.matrix != undefined ? obj.matrix || [] : []
+                };
+                this.discord = {
+                    /** @type {boolean} */
+                    active: obj.discord.length > 0 ? true || false : false,
+                    ids: obj.discord != undefined ? obj.discord || [] : []
+                };
             };
-            this.log.debug(`RETURN ${JSON.stringify(objVal)}`);
-            this.log.debug(`OBJ IN CONSTRUCTOR: ${JSON.stringify(devicesInput)}`);
-
-            const device = new classDevice(devicesInput,
-                this.adapterDPs[name].statusDevice,
-                this.adapterDPs[name].consumpLive,
-                this.adapterDPs[name].runtime,
-                this.adapterDPs[name].runtimeMS,
-                this.adapterDPs[name].lastRuntime,
-                this.adapterDPs[name].runtimeMax,
-                this.adapterDPs[name].alertRuntime,
-                this.adapterDPs[name].lastOperations,
-                this.adapterDPs[name].messageDP,
-                this.adapterDPs[name].autoOffDP,
-                this.adapterDPs[name].averageConsumption,
-                this.adapterDPs[name].doNotDisturb,
-                objVal);
-
-            this.log.debug(`RETURN ${JSON.stringify(device)}`);
-            this.log.debug(`Device ${JSON.stringify(device.name)} was successfully created`);
-            return device;
-        } catch (error) {
-            this.log.error(`[ERROR] {funcCreateObject}: "${error}"`);
         };
+
+        this.adapterDPs[name] = await this.createDP(name); // DP erstellen und pfad in array speichern
+
+        // device type ermitteln und Objekt bauen
+        const devCusType = await this.config.default.ids;
+        const devDefType = await this.config.custom.ids;
+
+        let objVal = {
+            /** @type {boolean} */
+            used: false,
+            /** @type {number} */
+            startVal: 0,
+            /** @type {number} */
+            endVal: 0,
+            /** @type {number} */
+            standby: 0,
+            /** @type {number} */
+            startCount: 0,
+            /** @type {number} */
+            endCount: 0
+        };
+
+        for (const i in devCusType) { // default types
+            if (devCusType[i].name == devicesInput.type) {
+                /** @type {boolean} */
+                objVal.used = true;
+                /** @type {number} */
+                objVal.startVal = devCusType[i].startVal; // startwert
+                /** @type {number} */
+                objVal.endVal = devCusType[i].endVal; // endwert
+                /** @type {number} */
+                objVal.standby = devCusType[i].standby; //standbywert
+                /** @type {number} */
+                objVal.startCount = devCusType[i].startCount; // anzahl Messungen "START"
+                /** @type {number} */
+                objVal.endCount = devCusType[i].endCount; // anzahl Messungen "ENDE"
+            };
+        };
+
+        if (objVal.used == false) { //custom types
+            for (const i in devDefType) {
+                if (devDefType[i].name == devicesInput.type) {
+                    /** @type {number} */
+                    objVal.startVal = devDefType[i].startVal // startwert
+                        /** @type {number} */
+                    objVal.endVal = devDefType[i].endVal // endwert
+                        /** @type {number} */
+                    objVal.standby = devDefType[i].standby // stanbbywert
+                        /** @type {number} */
+                    objVal.startCount = devDefType[i].startCount // anzahl Messungen "START"
+                        /** @type {number} */
+                    objVal.endCount = devDefType[i].endCount // anzahl Messungen "ENDE"
+                };
+            };
+        };
+        this.log.debug(`RETURN ${JSON.stringify(objVal)}`);
+        this.log.info(`OBJ IN CONSTRUCTOR: ${JSON.stringify(devicesInput)}`);
+
+        const device = new classDevice(devicesInput,
+            this.adapterDPs[name].statusDevice,
+            this.adapterDPs[name].consumpLive,
+            this.adapterDPs[name].runtime,
+            this.adapterDPs[name].runtimeMS,
+            this.adapterDPs[name].lastRuntime,
+            this.adapterDPs[name].runtimeMax,
+            this.adapterDPs[name].alertRuntime,
+            this.adapterDPs[name].lastOperations,
+            this.adapterDPs[name].messageDP,
+            this.adapterDPs[name].autoOffDP,
+            this.adapterDPs[name].averageConsumption,
+            this.adapterDPs[name].doNotDisturb,
+            objVal);
+
+        this.log.debug(`RETURN ${JSON.stringify(device)}`);
+        this.log.debug(`Device ${JSON.stringify(device.name)} was successfully created`);
+        return device;
+        // } catch (error) {
+        //     this.log.error(`[ERROR] {funcCreateObject}: "${error}"`);
+        // };
     };
 
     async createDP(name) {
