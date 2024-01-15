@@ -206,8 +206,9 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
 
 ### 3.0.X -beta (XXXX-XX-XX)
 
-- (xenon-s) enhancement: [issue #337](https://github.com/Xenon-s/ioBroker.device-reminder/issues/337)
-- (xenon-s) enhancement: [issue #342](https://github.com/Xenon-s/ioBroker.device-reminder/issues/342)
+- (xenon-s) enhancement "Add comment field "Default / Custom values": [issue #337](https://github.com/Xenon-s/ioBroker.device-reminder/issues/337)
+- (xenon-s) enhancement "Integrate Discord": [issue #341](https://github.com/Xenon-s/ioBroker.device-reminder/issues/341)
+- (xenon-s) enhancement "Integrate Pushover TTL": [issue #342](https://github.com/Xenon-s/ioBroker.device-reminder/issues/342)
 - (xenon-s) bugfix: [issue #344](https://github.com/Xenon-s/ioBroker.device-reminder/issues/344)
 - (xenon-s) bugfix: [issue #345](https://github.com/Xenon-s/ioBroker.device-reminder/issues/345)
 - (xenon-s) bugfix: [issue #346](https://github.com/Xenon-s/ioBroker.device-reminder/issues/346)

@@ -50,6 +50,7 @@ class deviceReminder extends utils.Adapter {
         this.emailInput = {}; // Array of all email addresses
         this.signalInput = {}; // Array of all signal users
         this.matrixInput = {}; // Array of all matrix server
+        this.discordInput = {}; // Array of all discord user
         this.states = {}; // Array states
 
         this.adapterDPs = {};
@@ -124,6 +125,7 @@ class deviceReminder extends utils.Adapter {
             this.emailInput = await getDataFromAdmin(this.config.email != undefined ? this.config.email.finalIds || {} : {});
             this.signalInput = await getDataFromAdmin(this.config.signal != undefined ? this.config.signal.finalIds || {} : {});
             this.matrixInput = await getDataFromAdmin(this.config.matrix != undefined ? this.config.matrix.finalIds || {} : {});
+            this.discordInput = await getDataFromAdmin(this.config.discord != undefined ? this.config.discord.finalIds || {} : {});
 
             this.states.action = await this.config.status.ids[0].stateAction;
             this.states.standby = await this.config.status.ids[0].stateStandby;
@@ -149,6 +151,7 @@ class deviceReminder extends utils.Adapter {
             this.log.debug(`ARR INPUT email ${JSON.stringify(this.emailInput)}`);
             this.log.debug(`ARR INPUT signal ${JSON.stringify(this.signalInput)}`);
             this.log.debug(`ARR INPUT matrix ${JSON.stringify(this.matrixInput)}`);
+            this.log.debug(`ARR INPUT discord ${JSON.stringify(this.discordInput)}`);
 
             // Input auf Plausibilität prüfen
             if (Object.keys(this.devices).length > 0) {
@@ -251,7 +254,7 @@ class deviceReminder extends utils.Adapter {
                         this.getValues(i);
                     };
                 };
-            }, 10000);
+            }, 1000);
         };
     };
 
@@ -488,6 +491,11 @@ class deviceReminder extends utils.Adapter {
                         active: obj.matrix.length > 0 ? true || false : false,
                         ids: obj.matrix != undefined ? obj.matrix || [] : []
                     };
+                    this.discord = {
+                        /** @type {boolean} */
+                        active: obj.discord.length > 0 ? true || false : false,
+                        ids: obj.discord != undefined ? obj.discord || [] : []
+                    };
                 };
             };
 
@@ -684,7 +692,6 @@ class deviceReminder extends utils.Adapter {
                         // Startphase -> Startwertberechnung
                         await this.calcStart(id, "start"); // Startwert Berechnung
                         // standby Berechnung löschen
-                        // this.setStatus(id, 'initialize');
                         device.arrays.standby = [];
                         this.log.debug(`[${JSON.stringify(device.name)}]: arrStandby gelöscht`);
                     };
@@ -694,6 +701,8 @@ class deviceReminder extends utils.Adapter {
                 break;
         };
         this.log.debug(`[${JSON.stringify(device.name)}]: Berechnung beendet`);
+
+        return true;
     };
 
     /**
@@ -772,6 +781,7 @@ class deviceReminder extends utils.Adapter {
             this.setStateAsync(device.alertRuntime, false, true);
 
             // standby oder off?
+            this.log.info(`Wert resultEnd [${device.calculation.resultEnd}] SOLL < standby [${device.standby}], dann END, sonst STANDBY`);
             if (device.calculation.resultEnd < device.standby) {
                 this.log.debug(`2: ${device.calculation.resultEnd} < ${device.standby}; ${device.started}`);
                 device.calculation.resultStandby = device.calculation.resultEnd;
@@ -793,15 +803,13 @@ class deviceReminder extends utils.Adapter {
         // device nicht in Betrieb
         // device nicht in Startphase
         if (!device.started) {
-            // ResultStandby kleiner Schwelle Standby && arrStandby Laenge groesser gleich Abbruch
-            if (device.calculation.resultStandby < device.standby && device.arrays.standby.length >= 3) {
-                // if (device.calculation.resultStandby < device.standby && device.arrays.standby.length >= device.valCancel) {
-                await this.setStatus(id, 'end');
-                this.log.debug(`3: ${device.calculation.resultStandby} < ${device.standby} && ${device.arrays.standby.length} >= ${device.valCancel}`);
-            } else if (device.calculation.resultStandby >= device.standby && device.arrays.standby.length >= 3) {
-                // } else if (device.calculation.resultStandby >= device.standby && device.arrays.standby.length >= device.valCancel) {
-                this.log.debug(`STANDBY2: ${device.calculation.resultStandby} >= ${device.standby} && ${device.arrays.standby.length} >= ${device.valCancel}; valEND: ${device.calculation.resultEnd}`);
+            // !!! STANDBY STATUS UEBERARBEITEN !!!
+
+            // ResultStandby groesser Schwelle Standby && result standby kleiner endValue => standby, sonst aus
+            if (device.calculation.resultStandby >= device.standby && device.calculation.resultStandby < device.endValue) {
                 await this.setStatus(id, 'standby');
+            } else if (device.calculation.resultStandby <= device.standby) {
+                await this.setStatus(id, 'end');
             };
         };
 
@@ -1158,14 +1166,49 @@ class deviceReminder extends utils.Adapter {
 
             // send matrix
             try {
-                if (device.matrix.active) { // pushover nachricht versenden
+                if (device.matrix.active) { // matrix nachricht versenden
                     for (const i in device.matrix.ids) {
                         this.log.debug(`[${JSON.stringify(device.name)}]: matrix message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
-                        this.sendTo(`matrix${this.pushoverInput[device.pushover.ids[i]].inst}`, msg);
+                        this.sendTo(`matrix${this.matrixInput[device.matrix.ids[i]].inst}`, msg);
                     };
                 };
             } catch (error) {
                 this.log.error(`[ERROR] {sendMsg: matrix}: "${error}"`);
+            };
+
+            // send discord
+            try {
+                if (device.discord.active) { // discord nachricht versenden
+                    for (const i in device.discord.ids) {
+                        this.log.debug(`[${JSON.stringify(device.name)}]: discord message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
+
+                        let objTemp = {
+                            /**@type {string}*/
+                            content: msg,
+                            /**@type {string}*/
+                            userId: this.discordInput[device.discord.ids[i]].userId,
+                            /**@type {string}*/
+                            userTag: this.discordInput[device.discord.ids[i]].userTag,
+                            /**@type {string}*/
+                            userName: this.discordInput[device.discord.ids[i]].userName,
+                            /**@type {string}*/
+                            serverId: this.discordInput[device.discord.ids[i]].serverId,
+                            /**@type {string}*/
+                            channelId: this.discordInput[device.discord.ids[i]].channelId,
+                        };
+
+                        // Leere keys loeschen
+                        for (const j of Object.keys(objTemp)) {
+                            if (objTemp[j] == null) delete objTemp[j]
+                        };
+
+                        this.log.info(`discord objTemp: ${JSON.stringify(objTemp)}`);
+
+                        this.sendTo(`discord${this.discordInput[device.discord.ids[i]].inst}`, "send", objTemp);
+                    };
+                };
+            } catch (error) {
+                this.log.error(`[ERROR] {sendMsg: discord}: "${error}"`);
             };
 
             // send email
@@ -1462,6 +1505,7 @@ class deviceReminder extends utils.Adapter {
             if (cmd.includes('email')) keys = ['name', 'emailFrom', 'emailTo'];
             if (cmd.includes('signal')) keys = ['name', 'inst'];
             if (cmd.includes('matrix')) keys = ['name', 'inst'];
+            if (cmd.includes('discord')) keys = ['name', 'inst', 'userName'];
             if (cmd.includes('default') || cmd.includes('custom')) keys = ['name', 'startVal', 'endVal', 'standby', 'startCount', 'endCount'];
             if (cmd.includes('status')) keys = ['stateAction', 'stateStandby', 'stateOff'];
 

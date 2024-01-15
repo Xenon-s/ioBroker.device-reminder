@@ -219,6 +219,7 @@ async function createDynamicTable(checked) {
                 signal: -1,
                 email: -1,
                 matrix: -1,
+                discord: -1,
                 autoOff: false,
                 timer: 0,
                 abort: false,
@@ -740,6 +741,7 @@ async function save(callback) {
                             signal: dataLinkedDevices.signal != undefined ? dataLinkedDevices.signal || [] : [],
                             email: dataLinkedDevices.email != undefined ? dataLinkedDevices.email || [] : [],
                             matrix: dataLinkedDevices.matrix != undefined ? dataLinkedDevices.matrix || [] : [],
+                            discord: dataLinkedDevices.discord != undefined ? dataLinkedDevices.discord || [] : [],
 
                             timer: dataLinkedDevices.timer != undefined ? dataLinkedDevices.timer || 0 : 0,
                             autoOff: dataLinkedDevices.autoOff != undefined ? dataLinkedDevices.autoOff || false : false,
@@ -890,6 +892,26 @@ async function save(callback) {
                                 name: data.name,
                                 /**@type {string}*/
                                 inst: data.inst,
+                            };
+                            break;
+                        };
+                    case "discord":
+                        {
+                            objTemp[data.id] = {
+                                /**@type {string}*/
+                                name: data.name,
+                                /**@type {string}*/
+                                inst: data.inst,
+                                /**@type {string}*/
+                                userId: data.userId != undefined ? data.userId || null : null,
+                                /**@type {string}*/
+                                userTag: data.userTag != undefined ? data.userTag || null : null,
+                                /**@type {string}*/
+                                userName: data.userName,
+                                /**@type {string}*/
+                                serverId: data.serverId != undefined ? data.serverId || null : null,
+                                /**@type {string}*/
+                                channelId: data.channelId != undefined ? data.channelId || null : null,
                             };
                             break;
                         };

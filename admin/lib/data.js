@@ -86,6 +86,11 @@ const keysCntrlInput = {
 
         ]
     },
+    discord: {
+        keys: [
+
+        ]
+    }
 };
 
 async function createTableHeadData(settings) {
@@ -181,27 +186,43 @@ async function createTableHeadData(settings) {
                         "id": "_matrix",
                     },
                     "10": {
+                        "dataName": "discord",
+                        "class": "header translate",
+                        "dataType": "multiple",
+                        "dataLang": "discord",
+                        "dataDefault": {},
+                        "id": "_discord",
+                    },
+                    // "11": {
+                    //     "dataName": "gotify",
+                    //     "class": "header translate",
+                    //     "dataType": "multiple",
+                    //     "dataLang": "gotify",
+                    //     "dataDefault": {},
+                    //     "id": "_gotify",
+                    // },
+                    "100": {
                         "dataName": "autoOff",
                         "class": "header translate header10",
                         "dataType": "checkbox",
                         "dataLang": "switch off",
                         "dataDefault": false,
                     },
-                    "11": {
+                    "110": {
                         "dataName": "timer",
                         "class": "header translate",
                         "dataType": "number",
                         "dataLang": "switch off delay",
                         "dataDefault": 0,
                     },
-                    "12": {
+                    "120": {
                         "dataName": "abort",
                         "class": "header translate header10",
                         "dataType": "checkbox",
                         "dataLang": "abort detection",
                         "dataDefault": false,
                     },
-                    "99": {
+                    "999": {
                         "dataName": "id",
                         "class": "none",
                         "dataType": "number",
@@ -893,6 +914,80 @@ async function createTableHeadData(settings) {
                 }
             }
         },
+        "discord": {
+            "head": {
+                "class": "translate collapsible-inactive"
+            },
+            "table": {
+                "class": "table-values changeOnChangeEvent remove-last-column",
+                "addbtn": true,
+                "submitbtn": true,
+                "th": {
+                    "1": {
+                        "dataName": "name",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "name",
+                        "dataDefault": "discord",
+                    },
+                    "2": {
+                        "dataName": "inst",
+                        "class": "header translate",
+                        "dataType": "select",
+                        "dataLang": "discord instance",
+                        "dataDefault": ".0",
+                        "dataOptions": ".0;.1;.2;.3;.4;.5;.6;.7;.8;.9"
+                    },
+                    "3": {
+                        "dataName": "userId",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "User ID",
+                        "dataDefault": "",
+                    },
+                    "4": {
+                        "dataName": "userTag",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "User Tag",
+                        "dataDefault": "",
+                    },
+                    "5": {
+                        "dataName": "userName",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "Username",
+                        "dataDefault": "",
+                    },
+                    "6": {
+                        "dataName": "serverId",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "Server ID",
+                        "dataDefault": "",
+                    },
+                    "7": {
+                        "dataName": "channelId",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "Channel ID",
+                        "dataDefault": "",
+                    },
+                    "10": {
+                        "dataName": "delete",
+                        "class": "header10 translate",
+                        "dataType": "delete",
+                        "dataLang": "delete",
+                    },
+                    "99": {
+                        "dataName": "id",
+                        "class": "none",
+                        "dataType": "number",
+                        "dataLang": "id",
+                    },
+                }
+            }
+        },
     };
 
     // Daten aus dem Adapter native holen und ins Objekt schreiben [wenn vorhanden]
@@ -1099,6 +1194,13 @@ async function dataCurDevice(curDevice, checked, devices, deviceId, i) {
             data: checked.matrix,
             name: "matrix",
             value: curDevice.matrix,
+            disable: false
+        },
+        {
+            type: 'multiple',
+            data: checked.discord,
+            name: "discord",
+            value: curDevice.discord,
             disable: false
         },
         {
