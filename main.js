@@ -254,7 +254,7 @@ class deviceReminder extends utils.Adapter {
                         this.getValues(i);
                     };
                 };
-            }, 1000);
+            }, 10000);
         };
     };
 
