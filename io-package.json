@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "3.0.3-beta",
+        "version": "3.1.0-beta",
         "news": {
             "3.0.1": {
                 "en": "some bugfixes, check Changelog",

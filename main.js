@@ -292,6 +292,8 @@ class deviceReminder extends utils.Adapter {
         this.setStateAsync(device.timeTotal, `00:00:00`, true);
         this.setStateAsync(device.timeTotalMs, 0, true);
 
+        return true;
+
     };
 
     /**
@@ -880,34 +882,36 @@ class deviceReminder extends utils.Adapter {
         // Start oder Endnachricht versenden?
         if ((device.message.startMessage && !device.message.startMessageSent && status == 'start') || (device.message.endMessage && !device.message.endMessageSent && device.message.startMessageSent && status == 'end')) {
 
+            // Startnachricht wurde versendet
             if (status == 'start') {
                 device.message.startMessageSent = true;
                 device.message.endMessageSent = false;
             };
 
+            // Endnachricht wurde versendet
             if (status == 'end') {
                 device.message.startMessageSent = false;
                 device.message.endMessageSent = true;
             };
 
-            if (device.timeoutMsg != null) {
-                clearTimeout(device.timeoutMsg);
-                device.timeoutMsg = null;
-            };
             // Volume anpassen [alexa, sayit]
             if (!this.values[id].dnd.val) {
-                this.log.info(`[${JSON.stringify(device.name)}]: Lautstärke Alexa und Sayit anpassen`);
                 if (device.alexa.active) await this.setVolume(id, true, "alexa");
                 if (device.sayit.active) await this.setVolume(id, true, "sayit");
-            };
-            device.timeoutMsg = setTimeout(async() => { //timeout starten
-                await this.message(id, status); // send message
-                if (!this.values[id].dnd.val) {
-                    this.log.debug(`[${JSON.stringify(device.name)}]: Alexa und Sayit Nachricht senden`);
+
+                // Volume wieder auf alten Wert zuruecksetzen
+                if (device.timeoutMsg != null) {
+                    clearTimeout(device.timeoutMsg);
+                    device.timeoutMsg = null;
+                };
+                device.timeoutMsg = setTimeout(async() => { //timeout starten
+                    await this.message(id, status); // send message
                     if (device.alexa.active) await this.setVolume(id, false, "alexa");
                     if (device.sayit.active) await this.setVolume(id, false, "sayit");
-                };
-            }, 1000);
+                }, 500);
+            };
+
+
         } else if (status == 'standby') {
             await this.message(id, 'standby'); // send message
         };
@@ -1109,6 +1113,8 @@ class deviceReminder extends utils.Adapter {
                             /**@type {number}*/
                             priority: this.pushoverInput[device.pushover.ids[i]].prio,
                             /**@type {number}*/
+                            ttl: this.pushoverInput[device.pushover.ids[i]].ttl, // Automatisches loeschen der Nachricht nach X Sekunden, wird geloescht, wenn Feld leer
+                            /**@type {number}*/
                             retry: 60, // fuer Bestaetigung, wird geloescht, wenn andere Prio gewaehlt
                             /**@type {number}*/
                             expire: 3600, // fuer Bestaetigung, wird geloescht, wenn andere Prio gewaehlt
@@ -1121,7 +1127,11 @@ class deviceReminder extends utils.Adapter {
                             delete objTemp.expire
                         };
 
-                        this.log.debug(`[${JSON.stringify(device.name)}]: PUSHOVER OBJECT SENDTO: ${JSON.stringify(objTemp)}`);
+                        if (objTemp.ttl == null) {
+                            delete objTemp.ttl
+                        };
+
+                        this.log.info(`[${JSON.stringify(device.name)}]: PUSHOVER OBJECT SENDTO: ${JSON.stringify(objTemp)}`);
                         this.sendTo(`pushover${this.pushoverInput[device.pushover.ids[i]].inst}`, "send", objTemp);
                     };
                 };
@@ -1137,8 +1147,6 @@ class deviceReminder extends utils.Adapter {
                         let objTemp = {
                             /**@type {string}*/
                             text: msg,
-                            // /**@type {string}*/
-                            // phone: this.signalInput[device.signal.ids[i]].phone,
                         };
                         this.log.debug(`[${JSON.stringify(device.name)}]: signal-cmb OBJECT SENDTO: ${JSON.stringify(objTemp)}`);
                         this.sendTo(`signal-cmb${this.signalInput[device.signal.ids[i]].inst}`, "send", objTemp);
@@ -1162,19 +1170,22 @@ class deviceReminder extends utils.Adapter {
 
             // send email
             try {
-                if (device.email && this.emailInput != undefined) { // email nachricht versenden
-                    for (const i in device.emailID) {
-                        this.log.debug(`[${JSON.stringify(device.name)}]: email message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
+                this.log.info(JSON.stringify(device.email))
+                this.log.info(JSON.stringify(this.emailInput))
+                if (device.email.active) { // email nachricht versenden
+                    for (const i in device.email.ids) {
+                        this.log.info(`[${JSON.stringify(device.name)}]: email message wird ausgefuehrt! Msg: ${JSON.stringify(msg)}`);
                         let objTemp = {
                             /**@type {string}*/
                             text: msg,
                             /**@type {string}*/
-                            to: this.emailInput[device.emailID[i]].emailTo,
+                            to: this.emailInput[device.email.ids[i]].emailTo,
                             /**@type {string}*/
                             subject: msg,
                             /**@type {string}*/
-                            from: this.emailInput[device.emailID[i]].emailFrom
+                            from: this.emailInput[device.email.ids[i]].emailFrom
                         };
+                        this.log.info(`obj Email: ${JSON.stringify(objTemp)}`);
                         this.sendTo("email", "send", objTemp);
                     };
                 };
@@ -1234,6 +1245,8 @@ class deviceReminder extends utils.Adapter {
      */
     async setVolume(id, action, type) {
         const device = this.devicesCompleted[id];
+
+        this.log.info(`[${JSON.stringify(device.name)}]: Lautstärke ${type} anpassen`);
 
         switch (type) {
             case "alexa":

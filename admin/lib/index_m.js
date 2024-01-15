@@ -847,6 +847,8 @@ async function save(callback) {
                                 prio: data.prio,
                                 /**@type {string}*/
                                 sound: data.sound,
+                                /**@type {number}*/
+                                ttl: data.ttl != undefined ? data.ttl || null : null,
                             };
                             if (objTemp[data.id].prio == 'high') {
                                 objTemp[data.id].prio = 1;
@@ -865,9 +867,7 @@ async function save(callback) {
                                 /**@type {string}*/
                                 name: data.name,
                                 /**@type {string}*/
-                                inst: data.inst,
-                                // /**@type {string}*/
-                                // phone: data.phone,
+                                inst: data.inst
                             };
                             break;
                         };

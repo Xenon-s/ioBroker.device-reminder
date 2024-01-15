@@ -325,6 +325,13 @@ async function createTableHeadData(settings) {
                 "addbtn": false,
                 "submitbtn": true,
                 "th": {
+                    "0": {
+                        "dataName": "comment",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "comment",
+                        "dataDefault": "",
+                    },
                     "1": {
                         "dataName": "name",
                         "class": "header translate",
@@ -391,6 +398,13 @@ async function createTableHeadData(settings) {
                 "addbtn": false,
                 "submitbtn": true,
                 "th": {
+                    "0": {
+                        "dataName": "comment",
+                        "class": "header translate",
+                        "dataType": "text",
+                        "dataLang": "comment",
+                        "dataDefault": "",
+                    },
                     "1": {
                         "dataName": "name",
                         "class": "header translate",
@@ -730,6 +744,13 @@ async function createTableHeadData(settings) {
                         "dataDefault": "pushover"
                     },
                     "7": {
+                        "dataName": "ttl",
+                        "class": "header translate",
+                        "dataType": "number",
+                        "dataLang": "Duration in seconds",
+                        "dataDefault": "",
+                    },
+                    "8": {
                         "dataName": "delete",
                         "class": "header10 translate",
                         "dataType": "delete",
@@ -768,13 +789,13 @@ async function createTableHeadData(settings) {
                         "dataOptions": ".0;.1;.2;.3;.4;.5;.6;.7;.8;.9",
                         "dataDefault": ".0",
                     },
-                    "3": {
-                        // "dataName": "phone",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "phone",
-                        "dataDefault": "0123456789",
-                    },
+                    // "3": {
+                    //     // "dataName": "phone",
+                    //     "class": "header translate",
+                    //     "dataType": "number",
+                    //     "dataLang": "phone",
+                    //     "dataDefault": "0123456789",
+                    // },
                     "4": {
                         "dataName": "delete",
                         "class": "header10 translate",

@@ -999,5 +999,31 @@ systemDictionary = {
         "pl": "grupa",
         "uk": "групавуха",
         "zh-cn": "集团"
+    },
+    "Duration in seconds": {
+        "en": "Duration in seconds",
+        "de": "Dauer in Sekunden",
+        "ru": "Длительность в секундах",
+        "pt": "Duração em segundos",
+        "nl": "Duur in seconden",
+        "fr": "Durée en secondes",
+        "it": "Durata in secondi",
+        "es": "Duración en segundos",
+        "pl": "Czas trwania w sekundach",
+        "uk": "Тривалість за секундами",
+        "zh-cn": "持续时间( 秒)"
+    },
+    "comment": {
+        "en": "comment",
+        "de": "Kommentarfeld",
+        "ru": "комментарий",
+        "pt": "comentário",
+        "nl": "commentaar",
+        "fr": "commentaire",
+        "it": "commento",
+        "es": "comentario",
+        "pl": "komentarz",
+        "uk": "новини",
+        "zh-cn": "注释"
     }
 };
