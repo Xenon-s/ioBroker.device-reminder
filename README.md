@@ -207,7 +207,7 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
 ### 3.0.X -beta (XXXX-XX-XX)
 
 - (xenon-s) enhancement: [issue #337](https://github.com/Xenon-s/ioBroker.device-reminder/issues/337)
-- (xenon-s) enhancement: [issue #346](https://github.com/Xenon-s/ioBroker.device-reminder/issues/342)
+- (xenon-s) enhancement: [issue #342](https://github.com/Xenon-s/ioBroker.device-reminder/issues/342)
 - (xenon-s) bugfix: [issue #344](https://github.com/Xenon-s/ioBroker.device-reminder/issues/344)
 - (xenon-s) bugfix: [issue #345](https://github.com/Xenon-s/ioBroker.device-reminder/issues/345)
 - (xenon-s) bugfix: [issue #346](https://github.com/Xenon-s/ioBroker.device-reminder/issues/346)
@@ -219,8 +219,8 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
 - (xenon-s) bugfix: [issue #327](https://github.com/Xenon-s/ioBroker.device-reminder/issues/327)
 - (xenon-s) bugfix: [issue #328](https://github.com/Xenon-s/ioBroker.device-reminder/issues/328)
 - (xenon-s) bugfix: [issue #329](https://github.com/Xenon-s/ioBroker.device-reminder/issues/329)
-- (xenon-s) bugfix: [issue #329](https://github.com/Xenon-s/ioBroker.device-reminder/issues/344)
-- (xenon-s) bugfix: [issue #329](https://github.com/Xenon-s/ioBroker.device-reminder/issues/346)
+- (xenon-s) bugfix: [issue #344](https://github.com/Xenon-s/ioBroker.device-reminder/issues/344)
+- (xenon-s) bugfix: [issue #346](https://github.com/Xenon-s/ioBroker.device-reminder/issues/346)
 
 ### 3.0.0 (2023-10-18)
 
