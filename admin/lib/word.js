@@ -795,6 +795,32 @@ systemDictionary = {
         "pl": "check",
         "zh-cn": "检查"
     },
+    "check-input": {
+        "en": "check Input",
+        "de": "Eingaben prüfen",
+        "ru": "вход",
+        "pt": "verificação de Entrada",
+        "nl": "invoer controleren",
+        "fr": "vérifier l'entrée",
+        "it": "check Input",
+        "es": "entrada",
+        "pl": "sprawdź wejście",
+        "uk": "реєстрація Вхід",
+        "zh-cn": "检查输入"
+    },
+    "test-message": {
+        "en": "test message",
+        "de": "Testnachricht senden",
+        "ru": "тест-сообщение",
+        "pt": "teste-mensagem",
+        "nl": "testbericht",
+        "fr": "essai-message",
+        "it": "test-message",
+        "es": "test-message",
+        "pl": "test- message",
+        "uk": "тест-повідомлення",
+        "zh-cn": "测试信息"
+    },
     "error found in": {
         "en": "error found in",
         "de": "Fehlerhafte Eigabe erkannt",
@@ -819,19 +845,32 @@ systemDictionary = {
         "pl": "Error znalazł się w konfiguracji",
         "zh-cn": "组合中发现的票据"
     },
-    "username/firstname": {
-        "en": "username/firstname",
-        "de": "username/firstname",
-        "ru": "имя пользователя/имя",
-        "pt": "nome de usuário/nome",
-        "nl": "gebruikersnaam",
-        "fr": "username/firstname",
-        "it": "nome utente / nome",
-        "es": "nombre de usuario/primer nombre",
-        "pl": "nazwa użytkownika/pierwszy nazw/name/firstname/name/person/name/name/name/firstname/name/name/person/name/name/person/name/person/name/name/first",
-        "uk": "ім'я користувача",
-        "zh-cn": "用户名称"
-    },
+    "enter username or firstname or chatID": {
+        "en": "enter username or firstname or chatID",
+        "de": "username oder firstname oder ChatID eingeben",
+        "ru": "имя пользователя или имя или чат",
+        "pt": "insira nome de usuário ou primeiro nome ou chatID",
+        "nl": "gebruikersnaam of voornaam of chatID invoeren",
+        "fr": "saisir un nom d'utilisateur ou un prénom ou un chatID",
+        "it": "inserire nome utente o nome o chatID",
+        "es": "introducir nombre de usuario o nombre de pila o chatID",
+        "pl": "wpisz nazwę użytkownika, imię lub chatyd",
+        "uk": "введіть ім'я користувача або ім'я користувача або чатID",
+        "zh-cn": "输入用户名或名或聊天ID"
+      },
+      "select username/firstname/chatID" : {
+        "en": "select username/firstname/chatID",
+        "de": "username/firstname/ChatID auswählen",
+        "ru": "имя пользователя/первое имя/chatID",
+        "pt": "selecionar nome de usuário/nome/chatID",
+        "nl": "gebruikersnaam/voornaam/chatID selecteren",
+        "fr": "sélectionner le nom d'utilisateur/prénom/chatID",
+        "it": "selezionare nome utente/nome/chatID",
+        "es": "seleccione el nombre de usuario/primer nombre/chatID",
+        "pl": "wybierz nazwę użytkownika / imię / chatyd",
+        "uk": "виберіть ім'я користувача / ім'я користувача / chatID",
+        "zh-cn": "选择用户名/ 首名/ 聊天ID"
+      },
     "instance": {
         "en": "Instance",
         "de": "Instanz",

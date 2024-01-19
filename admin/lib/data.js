@@ -104,6 +104,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": false,
                 "submitbtn": false,
+                "testMessageBtn": false,
                 "th": {
                     "0": {
                         "dataName": "enabled",
@@ -239,6 +240,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
                 "submitbtn": true,
+                "testMessageBtn": false,
                 "th": {
                     "1": {
                         "dataName": "name",
@@ -306,6 +308,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": false,
                 "submitbtn": true,
+                "testMessageBtn": false,
                 "th": {
                     "1": {
                         "dataName": "stateAction",
@@ -345,6 +348,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": false,
                 "submitbtn": true,
+                "testMessageBtn": false,
                 "th": {
                     "0": {
                         "dataName": "comment",
@@ -418,6 +422,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": false,
                 "submitbtn": true,
+                "testMessageBtn": false,
                 "th": {
                     "0": {
                         "dataName": "comment",
@@ -491,6 +496,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
                 "submitbtn": true,
+                "testMessageBtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
@@ -554,6 +560,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
                 "submitbtn": true,
+                "testMessageBtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
@@ -618,14 +625,8 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
                 "submitbtn": true,
+                "testMessageBtn": true,
                 "th": {
-                    "0": {
-                        "dataName": "group",
-                        "class": "header10 translate",
-                        "dataType": "checkbox",
-                        "dataLang": "Group",
-                        "dataDefault": false
-                    },
                     "1": {
                         "dataName": "name",
                         "class": "header translate",
@@ -642,20 +643,20 @@ async function createTableHeadData(settings) {
                         "dataOptions": ".0;.1;.2;.3;.4;.5;.6;.7;.8;.9"
                     },
                     "3": {
+                        "dataName": "key",
+                        "class": "header translate",
+                        "dataType": "select",
+                        "dataLang": "select username/firstname/chatID",
+                        "dataDefault": "username",
+                        "dataOptions": "username;firstname;chatID"
+                    },
+                    "4": {
                         "dataName": "username",
                         "class": "header translate",
                         "dataType": "text",
-                        "dataLang": "username/firstname",
-                        "dataDefault": "username/firstname"
+                        "dataLang": "enter username or firstname or chatID",
                     },
-                    "4": {
-                        "dataName": "chatID",
-                        "class": "header translate",
-                        "dataType": "number",
-                        "dataLang": "Chat ID",
-                        "dataDefault": ""
-                    },
-                    "5": {
+                    "6": {
                         "dataName": "delete",
                         "class": "header10 translate",
                         "dataType": "delete",
@@ -678,6 +679,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
                 "submitbtn": true,
+                "testMessageBtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
@@ -705,7 +707,6 @@ async function createTableHeadData(settings) {
                         "class": "none",
                         "dataType": "number",
                         "dataLang": "id",
-
                     },
                 }
             }
@@ -718,6 +719,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
                 "submitbtn": true,
+                "testMessageBtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
@@ -794,6 +796,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
                 "submitbtn": true,
+                "testMessageBtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
@@ -840,6 +843,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
                 "submitbtn": true,
+                "testMessageBtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
@@ -883,6 +887,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
                 "submitbtn": true,
+                "testMessageBtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",
@@ -922,6 +927,7 @@ async function createTableHeadData(settings) {
                 "class": "table-values changeOnChangeEvent remove-last-column",
                 "addbtn": true,
                 "submitbtn": true,
+                "testMessageBtn": true,
                 "th": {
                     "1": {
                         "dataName": "name",

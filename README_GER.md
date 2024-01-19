@@ -97,6 +97,12 @@ Nachdem nun auf "**Speichern und schliessen**" geklickt wurde, wird unter *Objek
 
 angezeigt wird.
 
+## Test-button
+
+![testButton_ger.png](admin/pictures/testButton_ger.png)
+
+Es gibt in jedem Messenger einen Testknopf. Wird dieser angeklickt, wird eine Testnachricht an den jeweiligen Messenger gesendet. Kommt keine Nachricht an, bitte die Konfiguration prüfen. Der Adapter selber prüft nicht, ob die Nachricht angekommen ist!
+
 ## Alexa erstellen
 ![alexa_ger.png](admin/pictures/alexa_ger.png)
 
@@ -143,11 +149,10 @@ Mit den 2 letzten Feldern kann ein Zeitraum erstellt werden, in dem eure Alexa S
 ## telegram User erstellen
 ![telegram_ger.png](admin/pictures/telegram_ger.png)
 
-- **Gruppe**: Wenn angehakt, muss zwingend eine Chat ID angegeben werden, damit an einen Gruppenchat gesendet werden kann
 - **Name**: Frei wählbarer Name, auch Sonderzeichen sind möglich
 - **Telegram-Instanz**: Die installierte Instanz, an die gesendet werden soll
-- **Username/Firstname**: Der im Telegram-Adapter hinterlegte Name 
-- **Chat ID**: Muss nur ausgefüllt werden, wenn an eine Gruppe gesendet werden soll
+- **username/firstname/ChatID auswählen**: Auswählen, ob an den username, firstname oder die ChatID (empfohlen) gesendet werden soll. Die Daten stehen in der Telegram Instanz. Wird eine negative ChatID eingegeben, so wird an eine Gruppe gesendet
+- **username oder firstname oder ChatID eingeben**: Den username, firstname oder die ChatID eingeben, je nachdem was ausgewählt wurde
 
 ## whatsapp User erstellen
 ![whatsapp_ger.png](admin/pictures/whatsapp_ger.png)
@@ -204,7 +209,7 @@ Der Changelog ist in der englischen Version der readme zu finden <br>
 
 MIT License
 
-Copyright (c) 2023 xenon-s
+Copyright (c) 2024 xenon-s
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

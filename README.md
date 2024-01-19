@@ -103,6 +103,12 @@ After clicking on "**Save and close**", a folder is now created under _Objects -
 is displayed.
 <br>
 
+## Testbutton
+
+![testButton.png](admin/pictures/testButton.png)
+
+There is a test button in every messenger. If this is clicked, a test message is sent to the respective messenger. If no message is received, please check the configuration. The adapter itself does not check whether the message has arrived!
+
 ## Create Alexa
 
 ![addAlexa.png](admin/pictures/addAlexa.png)
@@ -155,11 +161,10 @@ is displayed.
 
 ![addTelegram.png](admin/pictures/addTelegram.png)
 
-- **Group**: If checked, it is mandatory to specify a chat ID in order to send to a group chat
 - **Name**: Freely selectable name, special characters are also possible.
 - **Telegram instance**: The installed instance to send to
-- **Username/Firstname**: The name stored in the Telegram adapter
-- **Chat ID**: Must only be filled in if you want to send to a group
+- **select username/firstname/chatID**: Select whether to send to the username, firstname or the ChatID (recommended). The data is stored in the Telegram instance. If a negative ChatID is entered, the message is sent to a group
+- **enter username or firstname or chatID**: Enter the username, firstname or the ChatID, depending on what was selected
 
 ## create whatsapp user
 
@@ -218,15 +223,19 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
     ### __WORK IN PROGRESS__
 -->
 
-### 3.0.X -beta (XXXX-XX-XX)
+### 3.1.0 (2024-01-19)
+
+**Attention! Check the Telegram settings after the update! You must now enter either the username, firstname or the ChatID!**
 
 - (xenon-s) enhancement "Add comment field "Default / Custom values": [issue #337](https://github.com/Xenon-s/ioBroker.device-reminder/issues/337)
 - (xenon-s) enhancement "Integrate Discord": [issue #341](https://github.com/Xenon-s/ioBroker.device-reminder/issues/341)
 - (xenon-s) enhancement "Integrate Pushover TTL": [issue #342](https://github.com/Xenon-s/ioBroker.device-reminder/issues/342)
+- (xenon-s) enhancement "Button to check the messenger configuration": [issue #379](https://github.com/Xenon-s/ioBroker.device-reminder/issues/379)
 - (xenon-s) bugfix: [issue #344](https://github.com/Xenon-s/ioBroker.device-reminder/issues/344)
 - (xenon-s) bugfix: [issue #345](https://github.com/Xenon-s/ioBroker.device-reminder/issues/345)
 - (xenon-s) bugfix: [issue #346](https://github.com/Xenon-s/ioBroker.device-reminder/issues/346)
 - (xenon-s) bugfix: [issue #363](https://github.com/Xenon-s/ioBroker.device-reminder/issues/363)
+- (xenon-s) Optimization : MessageHandler revised
 
 ### 3.0.1 (2023-10-18)
 
@@ -290,7 +299,7 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
 
 MIT License
 
-Copyright (c) 2023 xenon-s <ente_s@hotmail.de>
+Copyright (c) 2024 xenon-s <ente_s@hotmail.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
