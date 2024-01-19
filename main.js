@@ -119,7 +119,7 @@ class deviceReminder extends utils.Adapter {
                     this.log.debug(JSON.stringify(this.config[name]))
                     this.messenger[name] = await getDataFromAdmin(this.config[name])
                 };
-                this.log.info(JSON.stringify(this.messenger))
+                this.log.debug(JSON.stringify(this.messenger))
             };
 
             // Daten fuer jeden Messenger auf Inhalt pruefen und aus array ein object bauen
