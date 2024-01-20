@@ -1240,6 +1240,8 @@ class deviceReminder extends utils.Adapter {
     // Usereingaben auf Plausibilitaet pruefen
     async ctrlInput(obj, cmd, arr) {
 
+        this.log.warn(JSON.stringify(arr))
+
         let checked = [];
         let failed = [];
         let keys = [];
@@ -1279,7 +1281,7 @@ class deviceReminder extends utils.Adapter {
                             };
                         };
                     } else { // Pruefen ob alle Pflichtfelder ausgefuellt sind
-                        if (data[key].length == 0 || data[key] == undefined) {
+                        if (data[key] == undefined || data[key].length == 0 ) {
                             data.check = 'err';
                             data[key] = 'wrong input2';
                             wrongInput += `${key}, `;

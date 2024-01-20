@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "3.1.0",
+        "version": "3.1.1",
         "news": {
-            "3.1.0": {
+            "3.1.1": {
                 "en": "Some bug fixes, new features and optimizations. See changelog before the update, as something has changed in the Telegram configuration!",
                 "de": "Einige Fehlerbehebungen, neue Features und Optimierungen. Siehe Changelog vor dem Update, da sich in der Telegram-Konfiguration etwas geändert hat!",
                 "ru": "Некоторые исправления ошибок, новые функции и оптимизации. См. сменлог перед обновлением, так как что-то изменилось в конфигурации Telegram!",

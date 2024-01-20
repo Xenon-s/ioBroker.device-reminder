@@ -49,6 +49,7 @@ async function load(settings, onChange) {
 // Hier wird die gesamte GUI gebaut
 async function createGUI(settingsGlobal, onChange) {
     const result = await createData();
+    console.warn(result)
     for (const i of Object.keys(result)) {
         tableIds[i] = result[i].data;
         tableContent[i] = result[i].dataIds;
