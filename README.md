@@ -223,6 +223,10 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
     ### __WORK IN PROGRESS__
 -->
 
+### 3.1.1 (2024-01-20)
+
+- (xenon-s) bugfix: [issue #380](https://github.com/Xenon-s/ioBroker.device-reminder/issues/380)
+
 ### 3.1.0 (2024-01-19)
 
 **Attention! Check the Telegram settings after the update! You must now enter either the username, firstname or the ChatID!**
