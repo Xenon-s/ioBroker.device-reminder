@@ -704,20 +704,29 @@ class deviceReminder extends utils.Adapter {
             };
         };
 
-        // device nich in Betrieb
         // Ermittlung, ob device gestartet wurde
         this.log.debug(`[${JSON.stringify(device.name)}]: WERTE für START: ${this.values[id].consumption.val}W; Schwelle Start: ${device.startValue}W; gestartet: ${device.started}`);
         if (device.calculation.start > device.startValue && device.calculation.start != null && device.arrays.start.length >= device.startCount && !device.started) {
             // device wurde gestartet
+            this.log.debug('started')
             device.started = true; // Vorgang started
             device.startTime = Date.now(); // startTime loggen
             device.startTimeJSON = this.formatDate(new Date(), "DD.MM.YYYY hh:mm:ss");
             await this.runtime(id);
             await this.setStatus(id, 'start');
+
+            // Startnachricht versenden?
+            if ((device.message.startMessage && !device.message.startMessageSent)) {
+                this.log.debug('Startmessage');
+                this.messageHandler(id, await this.createObjMsg(device.message.startText));
+            };
+
+            device.message.startMessageSent = true;
+            device.message.endMessageSent = false;
         };
 
         // device in Betrieb
-        // Ermittlung, ob device nocht laeuft
+        // Ermittlung, ob device noch laeuft
         if (device.calculation.end > device.endValue && device.calculation.end != null && device.started) { // Wert > endValue und consumption lag 1x ueber startValue
             this.log.debug(`[${JSON.stringify(device.name)}]: in Betrieb?  Ergebnis ENDE: ${JSON.stringify(device.calculation.end)} Wert ENDE: ${JSON.stringify(device.endValue)} started: ${JSON.stringify(device.started)} Arraylength: ${JSON.stringify(device.arrays.end.length)} Zaehler Arr Ende: ${JSON.stringify(device.endCount)} `);
             if (device.timeouts.autoOff != null) {
@@ -730,6 +739,15 @@ class deviceReminder extends utils.Adapter {
         } else if (device.calculation.end < device.endValue && device.calculation.end != null && device.started && device.arrays.end.length >= (device.endCount * (2 / 3))) { // geraet muss mind. 1x ueber startValue gewesen sein, arrEnd muss voll sein und ergebis aus arrEnd unter endValue
             // Vorgang vom device beendet
             this.log.debug(`[${JSON.stringify(device.name)}]: Vorgang beendet, Gerät fertig`);
+
+            // Endnachricht versenden?
+            if (device.started && device.message.endMessage && !device.message.endMessageSent && device.message.startMessageSent) {
+                this.log.debug('Ende');
+                device.message.startMessageSent = false;
+                device.message.endMessageSent = true;
+                await this.messageHandler(id, await this.createObjMsg(device.message.endText));
+            };
+
             device.started = false; // device started = false ;
             device.endtimeJSON = this.formatDate(new Date(), "DD.MM.YYYY hh:mm:ss");
 
@@ -836,33 +854,6 @@ class deviceReminder extends utils.Adapter {
                 break;
         };
 
-        // Start oder Endnachricht versenden?
-        if ((device.message.startMessage &&
-                !device.message.startMessageSent &&
-                status == 'start') ||
-            (device.message.endMessage &&
-                !device.message.endMessageSent &&
-                device.message.startMessageSent &&
-                (status == 'end' || status == 'standby'))) {
-
-            // Startnachricht wurde versendet
-            if (status == 'start') {
-                this.log.debug('Start');
-                device.message.startMessageSent = true;
-                device.message.endMessageSent = false;
-                this.messageHandler(id, await this.createObjMsg(device.message.startText));
-            };
-
-            // Endnachricht wurde versendet
-            if (status == 'end' || status == 'standby') {
-                this.log.debug('Ende');
-                device.message.startMessageSent = false;
-                device.message.endMessageSent = true;
-                this.messageHandler(id, await this.createObjMsg(device.message.endText));
-            };
-
-        };
-
         return true;
     };
 
@@ -948,126 +939,130 @@ class deviceReminder extends utils.Adapter {
             device = id;
         };
 
-        try {
-            for (const name of Object.keys(device.messenger)) {
-                for (const i in device.messenger[name].ids) {
-                    const dataMessenger = device.messenger[name].ids[i];
-                    let objMessenger = {};
-                    switch (name) {
-                        case 'whatsapp':
-                            this.log.debug(`[messageHandler - whatsapp] Path: <${dataMessenger.path}>, msg: <${msg}>`);
-                            await this.setForeignStateAsync(dataMessenger.path, msg)
-                            break;
-                        case 'alexa':
-                            this.log.debug(`[messageHandler - alexa] Path: <${JSON.stringify(dataMessenger)}>, msg: <${msg}>`);
-                            if (!values.dnd.val) await this.voiceMessenger(dataMessenger, '.speak-volume', msg);
-                            break;
-                        case 'sayit':
-                            this.log.debug(`[messageHandler - sayit] Path: <${JSON.stringify(dataMessenger)}>, msg: <${msg}>`);
-                            if (!values.dnd.val) await this.voiceMessenger(dataMessenger, '.volume', msg);
-                            break;
-                        case 'telegram':
-                            objMessenger = {
-                                /**@type {string}*/
-                                text: msg,
-                                /**@type {string}*/
-                                [dataMessenger.key]: dataMessenger.username,
-                            };
-                            this.log.debug(`[messageHandler - telegram] instance: <${dataMessenger.inst}>, objMessenger: <${JSON.stringify(objMessenger)}>`);
-                            this.sendTo(`telegram${dataMessenger.inst}`, 'send', objMessenger);
-                            break;
-                        case 'pushover':
-                            objMessenger = {
-                                /**@type {string}*/
-                                message: msg,
-                                /**@type {string}*/
-                                sound: dataMessenger.sound,
-                                /**@type {string}*/
-                                title: dataMessenger.title,
-                                /**@type {string}*/
-                                device: dataMessenger.deviceId,
-                                /**@type {number}*/
-                                priority: dataMessenger.prio,
-                                /**@type {number}*/
-                                ttl: dataMessenger.ttl, // Automatisches loeschen der Nachricht nach X Sekunden, wird geloescht, wenn Feld leer
-                                /**@type {number}*/
-                                retry: 60, // fuer Bestaetigung, wird geloescht, wenn andere Prio gewaehlt
-                                /**@type {number}*/
-                                expire: 3600, // fuer Bestaetigung, wird geloescht, wenn andere Prio gewaehlt
-                            };
+        this.log.debug(JSON.stringify(device))
 
-                            // Wenn andere Prioritaet als 2, loesche Bestaetigungsparameter
-                            if (objMessenger.priority != 2) {
-                                delete objMessenger.priority
-                                delete objMessenger.retry
-                                delete objMessenger.expire
-                            };
+        // try {
+        for (const name of Object.keys(device.messenger)) {
+            for (const i in device.messenger[name].ids) {
+                const dataMessenger = device.messenger[name].ids[i];
+                let objMessenger = {};
+                switch (name) {
+                    case 'whatsapp':
+                        this.log.debug(`[messageHandler - whatsapp] Path: <${dataMessenger.path}>, msg: <${msg}>`);
+                        await this.setForeignStateAsync(dataMessenger.path, msg)
+                        break;
+                    case 'alexa':
+                        this.log.debug(`[messageHandler - alexa] Path: <${JSON.stringify(dataMessenger)}>, msg: <${msg}>`);
+                        if (test || !values.dnd.val) await this.voiceMessenger(dataMessenger, '.speak-volume', msg);
+                        break;
+                    case 'sayit':
+                        this.log.debug(`[messageHandler - sayit] Path: <${JSON.stringify(dataMessenger)}>, msg: <${msg}>`);
+                        if (test || !values.dnd.val) await this.voiceMessenger(dataMessenger, '.volume', msg);
+                        break;
+                    case 'telegram':
+                        objMessenger = {
+                            /**@type {string}*/
+                            text: msg,
+                            /**@type {string}*/
+                            [dataMessenger.key]: dataMessenger.username,
+                        };
+                        this.log.debug(`[messageHandler - telegram] instance: <${dataMessenger.inst}>, objMessenger: <${JSON.stringify(objMessenger)}>`);
+                        this.sendTo(`telegram${dataMessenger.inst}`, 'send', objMessenger);
+                        break;
+                    case 'pushover':
+                        objMessenger = {
+                            /**@type {string}*/
+                            message: msg,
+                            /**@type {string}*/
+                            sound: dataMessenger.sound,
+                            /**@type {string}*/
+                            title: dataMessenger.title,
+                            /**@type {string}*/
+                            device: dataMessenger.deviceId,
+                            /**@type {number}*/
+                            priority: dataMessenger.prio,
+                            /**@type {number}*/
+                            ttl: dataMessenger.ttl, // Automatisches loeschen der Nachricht nach X Sekunden, wird geloescht, wenn Feld leer
+                            /**@type {number}*/
+                            retry: 60, // fuer Bestaetigung, wird geloescht, wenn andere Prio gewaehlt
+                            /**@type {number}*/
+                            expire: 3600, // fuer Bestaetigung, wird geloescht, wenn andere Prio gewaehlt
+                        };
 
-                            if (objMessenger.ttl == null) {
-                                delete objMessenger.ttl
-                            };
-                            this.log.debug(`[messageHandler - pushover] instance: <${dataMessenger.inst}>, objMessenger: <${JSON.stringify(objMessenger)}>`);
-                            this.sendTo(`pushover${dataMessenger.inst}`, "send", objMessenger);
-                            break;
-                        case 'signal':
-                            objMessenger = {
-                                /**@type {string}*/
-                                text: msg,
-                            };
+                        // Wenn andere Prioritaet als 2, loesche Bestaetigungsparameter
+                        if (objMessenger.priority != 2) {
+                            delete objMessenger.priority
+                            delete objMessenger.retry
+                            delete objMessenger.expire
+                        };
 
-                            this.log.debug(`[messageHandler - signal] instance: <${dataMessenger.inst}>, objMessenger: <${JSON.stringify(objMessenger)}>`);
-                            this.sendTo(`signal-cmb${dataMessenger.inst}`, "send", objMessenger);
-                            break;
-                        case 'email':
-                            objMessenger = {
-                                /**@type {string}*/
-                                text: msg,
-                                /**@type {string}*/
-                                to: dataMessenger.emailTo,
-                                /**@type {string}*/
-                                subject: msg,
-                                /**@type {string}*/
-                                from: dataMessenger.emailFrom
-                            };
-                            this.log.debug(`[messageHandler - email] objMessenger: <${JSON.stringify(objMessenger)}>`);
-                            this.sendTo("email", "send", objMessenger);
-                            break;
-                        case 'matrix':
-                            this.log.debug(`[messageHandler - telegram] instance: <${dataMessenger.inst}>, objMessenger: <${msg}>`);
-                            this.sendTo(`matrix${dataMessenger.inst}`, "send", msg);
-                            break;
-                        case 'discord':
-                            objMessenger = {
-                                /**@type {string}*/
-                                content: msg,
-                                /**@type {string}*/
-                                userId: dataMessenger.userId,
-                                /**@type {string}*/
-                                userTag: dataMessenger.userTag,
-                                /**@type {string}*/
-                                userName: dataMessenger.userName,
-                                /**@type {string}*/
-                                serverId: dataMessenger.serverId,
-                                /**@type {string}*/
-                                channelId: dataMessenger.channelId,
-                            };
+                        if (objMessenger.ttl == null) {
+                            delete objMessenger.ttl
+                        };
+                        this.log.debug(`[messageHandler - pushover] instance: <${dataMessenger.inst}>, objMessenger: <${JSON.stringify(objMessenger)}>`);
+                        this.sendTo(`pushover${dataMessenger.inst}`, "send", objMessenger);
+                        break;
+                    case 'signal':
+                        objMessenger = {
+                            /**@type {string}*/
+                            text: msg,
+                        };
 
-                            // Leere keys loeschen
-                            for (const j of Object.keys(objMessenger)) {
-                                if (objMessenger[j] == null) delete objMessenger[j]
-                            };
-                            this.log.debug(`[messageHandler - discord] instance: <${dataMessenger.inst}>, objMessenger: <${JSON.stringify(objMessenger)}>`);
-                            this.sendTo(`discord${dataMessenger.inst}`, "send", objMessenger);
-                            break;
-                        default:
+                        this.log.debug(`[messageHandler - signal] instance: <${dataMessenger.inst}>, objMessenger: <${JSON.stringify(objMessenger)}>`);
+                        this.sendTo(`signal-cmb${dataMessenger.inst}`, "send", objMessenger);
+                        break;
+                    case 'email':
+                        objMessenger = {
+                            /**@type {string}*/
+                            text: msg,
+                            /**@type {string}*/
+                            to: dataMessenger.emailTo,
+                            /**@type {string}*/
+                            subject: msg,
+                            /**@type {string}*/
+                            from: dataMessenger.emailFrom
+                        };
+                        this.log.debug(`[messageHandler - email] objMessenger: <${JSON.stringify(objMessenger)}>`);
+                        this.sendTo("email", "send", objMessenger);
+                        break;
+                    case 'matrix':
+                        this.log.debug(`[messageHandler - telegram] instance: <${dataMessenger.inst}>, objMessenger: <${msg}>`);
+                        this.sendTo(`matrix${dataMessenger.inst}`, "send", msg);
+                        break;
+                    case 'discord':
+                        objMessenger = {
+                            /**@type {string}*/
+                            content: msg,
+                            /**@type {string}*/
+                            userId: dataMessenger.userId,
+                            /**@type {string}*/
+                            userTag: dataMessenger.userTag,
+                            /**@type {string}*/
+                            userName: dataMessenger.userName,
+                            /**@type {string}*/
+                            serverId: dataMessenger.serverId,
+                            /**@type {string}*/
+                            channelId: dataMessenger.channelId,
+                        };
 
-                    };
+                        // Leere keys loeschen
+                        for (const j of Object.keys(objMessenger)) {
+                            if (objMessenger[j] == null) delete objMessenger[j]
+                        };
+                        this.log.debug(`[messageHandler - discord] instance: <${dataMessenger.inst}>, objMessenger: <${JSON.stringify(objMessenger)}>`);
+                        this.sendTo(`discord${dataMessenger.inst}`, "send", objMessenger);
+                        break;
+                    default:
+
                 };
             };
-
-        } catch (error) {
-            this.log.error(`[messageHandler - error] <${error}>`)
         };
+
+        return true;
+
+        // } catch (error) {
+        //     this.log.error(`[messageHandler - error] <${error}>`)
+        // };
     };
 
     // Volume der Sprachmessenger setzen und Nachricht absenden

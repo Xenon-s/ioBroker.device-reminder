@@ -98,10 +98,14 @@ Nachdem nun auf "**Speichern und schliessen**" geklickt wurde, wird unter *Objek
 angezeigt wird.
 
 ## Test-button
-
 ![testButton_ger.png](admin/pictures/testButton_ger.png)
 
 Es gibt in jedem Messenger einen Testknopf. Wird dieser angeklickt, wird eine Testnachricht an den jeweiligen Messenger gesendet. Kommt keine Nachricht an, bitte die Konfiguration prüfen. Der Adapter selber prüft nicht, ob die Nachricht angekommen ist!
+
+## Einblenden der Save Buttons, sollten diese nicht automatisch angezeigt werden
+![force_save_buttons_ger.png](admin/pictures/force_save_buttons_ger.png)
+
+Da gelegentlich die Speicher Buttons nicht angezeigt werden, wurde ein Button zum erzwingen eben dieser eingebaut. Drückt man auf ihn erscheinen die Speicherbuttons. Das Speichern erfolgt dann aber auf eigene Gefahr, da der Adapter den Input nicht prüft! Es kann zum Crashen des Adapters oder auch zu Datenverlust der Konfiguration kommen
 
 ## Alexa erstellen
 ![alexa_ger.png](admin/pictures/alexa_ger.png)

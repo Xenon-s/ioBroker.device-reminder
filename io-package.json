@@ -1,8 +1,25 @@
 {
     "common": {
         "name": "device-reminder",
-        "version": "3.1.1",
+        "version": "3.1.2",
+        "blockedVersions": [
+            "3.1.0",
+            "3.1.1"
+        ],
         "news": {
+            "3.1.2": {
+                "en": "bugfix: No language output \nbugfix: No end message if start message is empty",
+                "de": "bugfix: Keine Sprachausgabe\nbugfix: Keine Endnachricht, wenn Startnachricht leer ist",
+                "ru": "исправления: Языковой выход\nисправления: Нет конечного сообщения, если исходное сообщение пусто",
+                "pt": "correção de erro: Sem saída de linguagem\n- Sim. Nenhuma mensagem final se a mensagem de início estiver vazia",
+                "nl": "bugfix: Geen taaluitvoer\nbugfix: Geen eindbericht als startbericht leeg is",
+                "fr": "correction du bug & #160;: Pas de sortie linguistique\ncorrection du bug & #160;: Pas de message final si le message de démarrage est vide",
+                "it": "bugfix: Nessuna uscita di lingua\nbugfix: Nessun messaggio finale se il messaggio di avvio è vuoto",
+                "es": "bugfix: No hay salida de idioma\nbugfix: No hay mensaje final si el mensaje de inicio está vacío",
+                "pl": "bugfix: Brak wyjścia językowego\nbugfix: Brak wiadomości końcowej, jeśli wiadomość startowa jest pusta",
+                "uk": "виправлення помилок: Немає мовного виходу\nвиправлення помилок: Немає кінцевого повідомлення, якщо початок повідомлення порожній",
+                "zh-cn": "错误修正 : 无语言输出\n错误修正 : 如果启动消息是空的, 没有结束消息"
+            },
             "3.1.1": {
                 "en": "bugfix: devices loading failed after update",
                 "de": "bugfix: Tabelle >Devices< nach update leer",
@@ -170,7 +187,7 @@
                     "operand": "and",
                     "rules": [
                         "oldVersion<3.1.0",
-                        "newVersion>=3.1.0"
+                        "newVersion>=3.1.2"
                     ]
                 },
                 "title": {

@@ -218,6 +218,15 @@ async function createGUI(settingsGlobal, onChange) {
 
         return tableContent;
     };
+
+    // create click event "disable save button"
+    const forceSaveBtns = `#btn-save-buttons-linked-device`;;
+    $(forceSaveBtns).on('click', async () => {
+        console.warn(forceSaveBtns)
+        $('.btn-save, .btn-save-close').fadeIn();
+        onChange(true);
+    });
+
     // Save buttons ausblenden
     showBtns('.btn-save, .btn-save-close', false, onChange);
     return true;
@@ -486,6 +495,15 @@ async function createTableHeader(tableHead) {
     
     <!-- JS Loop -->
     <!-- collapsible table -->
+
+    <div class="col s12">
+    <!-- forceSaveBtns button-->
+        <button id="btn-save-buttons-linked-device" class="btn waves-effect waves-light" data-lang="show save buttons">${_("show save buttons")}
+            <i class="material-icons left">save</i>
+        </button>
+    </div>
+    <p></p>
+    
     <ul class="collapsible popout">
     `
 

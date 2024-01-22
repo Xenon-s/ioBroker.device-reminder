@@ -104,10 +104,14 @@ is displayed.
 <br>
 
 ## Testbutton
-
 ![testButton.png](admin/pictures/testButton.png)
 
 There is a test button in every messenger. If this is clicked, a test message is sent to the respective messenger. If no message is received, please check the configuration. The adapter itself does not check whether the message has arrived!
+
+## Show the save buttons if they are not displayed automatically
+![force_save_buttons.png](admin/pictures/force_save_buttons.png)
+
+As the save buttons are occasionally not displayed, a button has been added to force this. If you press it, the save buttons appear. However, you save at your own risk, as the adapter does not check the input! The adapter may crash or the configuration data may be lost
 
 ## Create Alexa
 
@@ -185,8 +189,6 @@ There is a test button in every messenger. If this is clicked, a test message is
 - **Server ID**: The Discord Server ID
 - **Channel ID**: The Discord Channel ID
 
-
-
 # Default devices
 
 ![default-devices.png](admin/pictures/default-devices.png)
@@ -222,6 +224,11 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
 	Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
+
+### 3.1.2 (2024-01-22)
+
+- (xenon-s) bugfix: [issue #381](https://github.com/Xenon-s/ioBroker.device-reminder/issues/381)
+- (xenon-s) bugfix: [issue #382](https://github.com/Xenon-s/ioBroker.device-reminder/issues/382)
 
 ### 3.1.1 (2024-01-20)
 

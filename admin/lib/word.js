@@ -857,8 +857,8 @@ systemDictionary = {
         "pl": "wpisz nazwę użytkownika, imię lub chatyd",
         "uk": "введіть ім'я користувача або ім'я користувача або чатID",
         "zh-cn": "输入用户名或名或聊天ID"
-      },
-      "select username/firstname/chatID" : {
+    },
+    "select username/firstname/chatID": {
         "en": "select username/firstname/chatID",
         "de": "username/firstname/ChatID auswählen",
         "ru": "имя пользователя/первое имя/chatID",
@@ -870,7 +870,7 @@ systemDictionary = {
         "pl": "wybierz nazwę użytkownika / imię / chatyd",
         "uk": "виберіть ім'я користувача / ім'я користувача / chatID",
         "zh-cn": "选择用户名/ 首名/ 聊天ID"
-      },
+    },
     "instance": {
         "en": "Instance",
         "de": "Instanz",
@@ -1155,5 +1155,18 @@ systemDictionary = {
         "pl": "Discord",
         "uk": "Discord",
         "zh-cn": "Discord"
+    },
+    "show save buttons": {
+        "en": "show save buttons",
+        "de": "Speicherbuttons anzeigen erzwingen",
+        "ru": "показать кнопки экономии",
+        "pt": "mostrar botões salvar",
+        "nl": "slaknoppen tonen",
+        "fr": "afficher les boutons de sauvegarde",
+        "it": "mostra i pulsanti di salvataggio",
+        "es": "mostrar botones guardar",
+        "pl": "pokaż przyciski zapisu",
+        "uk": "показати зберегти кнопки",
+        "zh-cn": "显示保存按钮"
     }
 };
