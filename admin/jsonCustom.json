@@ -1,0 +1,28 @@
+{
+    "i18n": true,
+    "type": "panel",
+    "items": {
+        "_headerTelegram": {
+            "type": "header",
+            "text": "Telegram",
+            "size": 2
+        },
+        "telegram": {
+            "type": "table",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "items": [
+                {
+                    "type": "selectSendTo",
+                    "label": "Telegram User",
+                    "attr": "user",
+                    "multiple": true,
+                    "command": "test",
+                    "jsonData": "{\"name\": \"telegram\"}",
+                    "newLine": true
+                }
+            ]
+        }
+    }
+}
