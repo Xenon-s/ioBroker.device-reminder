@@ -7,6 +7,7 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
+const { strict } = require("assert");
 
 // Load your modules here, e.g.:
 // const fs = require("fs");
@@ -130,6 +131,7 @@ class DeviceReminder extends utils.Adapter {
     onObjectChange(id, obj) {
         if (obj) {
             // The object was changed
+            this.log.info(JSON.stringify(obj))
         } else {
             // The object was deleted
         }
@@ -225,18 +227,36 @@ class DeviceReminder extends utils.Adapter {
             case "test":
 
                 this.log.info('test')
+                this.log.info(obj.message.name)
+
                 /**
                  * @typedef {Object} element
                  * @property {boolean} active - Gibt an, ob das Element aktiv ist oder nicht.
-                 * @property {string} user - Der Benutzername des Elements.
+                 * @property {string} name - Der Benutzername des Elements.
                  * @property {number} instance - Die Instanznummer des Elements.
                  * @property {number} id - Die eindeutige ID des Elements.
                  */
-                this.config.telegram.forEach((/** @type {element} */ element) => {
-                    if (element.active) arrResult.push({ label: `${element.user}[Inst.${element.instance}]`, value: element.id })
+                
+                // Funktion, um aus den Werten aus der native ein Array zu machen, welches per select an die CustomConfig gesendet wird
+                const resultTest = this.config[obj.message.name].map(async (/** @type {element} */ element) => {
+                    if (element.active) {
+                        if (element['instance'] != null) {
+                            return { label: `${element.name} [instance: ${element.instance}]`, value: element.id };
+                        } else {
+                            if (obj.message.name.includes('alexa2')) {  // Bei Alexa muss der Name aus dem Common des devices geholt werden, da sonst nicht der Name sondern die ID im select angezeigt wird
+                                let objData = await this.getForeignObjectAsync(element.name);
+                                return { label: objData.common.name, value: element.id };
+                            } else {
+                                return { label: element.name, value: element.id };
+                            }
+                        }
+                    }
                 });
-
-                this.respond(obj, arrResult, this);
+                
+                Promise.all(resultTest).then(result => {
+                    this.respond(obj, result, this);
+                    this.log.info(JSON.stringify(result))
+                });
 
                 break;
 

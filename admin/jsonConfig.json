@@ -105,7 +105,7 @@
                     "md": 12,
                     "lg": 12,
                     "uniqueColumns": [
-                        "device"
+                        "name"
                     ],
                     "hidden": "!data.showAlexa2",
                     "items": [
@@ -120,10 +120,10 @@
                         {
                             "type": "selectSendTo",
                             "label": "alexa2 Device",
-                            "attr": "device",
+                            "attr": "name",
                             "command": "getEchoDevives",
                             "jsonData": "{\"name\": \"alexa2\", \"data\": ${data.id}}",
-                            "validator": "const value = data.device; if ((value == '' || value == null)) return false; return true",
+                            "validator": "const value = data.name; if ((value == '' || value == null)) return false; return true",
                             "validatorNoSaveOnError": false,
                             "newLine": true
                         },
@@ -311,10 +311,10 @@
                         {
                             "type": "selectSendTo",
                             "label": "Telegram User",
-                            "attr": "user",
+                            "attr": "name",
                             "command": "getTelegramUsers",
                             "jsonData": "{\"name\": \"telegram\"}",
-                            "validator": "const value = data.user; if ((value == null)) return false; return true",
+                            "validator": "const value = data.name; if ((value == null)) return false; return true",
                             "validatorNoSaveOnError": false,
                             "newLine": true
                         },

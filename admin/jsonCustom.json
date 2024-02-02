@@ -2,27 +2,53 @@
     "i18n": true,
     "type": "panel",
     "items": {
+        "_headerAlexa": {
+            "type": "header",
+            "text": "alexa2",
+            "size": 2
+        },
+        "alexa2": {
+            "type": "selectSendTo",
+            "label": "Alexa2 devices",
+            "attr": "user",
+            "multiple": true,
+            "command": "test",
+            "jsonData": "{\"name\": \"alexa2\"}",
+            "newLine": true
+        },
+        "_headerSayit": {
+            "type": "header",
+            "text": "sayit",
+            "size": 2
+        },
+        "sayit": {
+            "type": "selectSendTo",
+            "label": "Sayit Devices",
+            "attr": "user",
+            "multiple": true,
+            "command": "test",
+            "jsonData": "{\"name\": \"sayit\"}",
+            "newLine": true
+        },
+        "sayitMsg": {
+            "type": "text",
+            "label": "Sayit Message",
+            "attr": "msg",
+            "newLine": true
+        },
         "_headerTelegram": {
             "type": "header",
             "text": "Telegram",
             "size": 2
         },
         "telegram": {
-            "type": "table",
-            "sm": 12,
-            "md": 12,
-            "lg": 12,
-            "items": [
-                {
-                    "type": "selectSendTo",
-                    "label": "Telegram User",
-                    "attr": "user",
-                    "multiple": true,
-                    "command": "test",
-                    "jsonData": "{\"name\": \"telegram\"}",
-                    "newLine": true
-                }
-            ]
+            "type": "selectSendTo",
+            "label": "Telegram User",
+            "attr": "user",
+            "multiple": true,
+            "command": "test",
+            "jsonData": "{\"name\": \"telegram\"}",
+            "newLine": true
         }
     }
 }
