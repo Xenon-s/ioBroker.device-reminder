@@ -1,0 +1,22 @@
+{
+    "device-reminder adapter settings": "Adaptereinstellungen für device-reminder",
+    "error [Alexa]: Device empty or forbidden characters": "[Alexa] Fehler: Gerät leer oder verbotene Zeichen",
+    "error [Alexa]: Name empty or forbidden characters": "[Alexa] Fehler: Name leer oder verbotene Zeichen",
+    "send test message": "Testnachricht senden",
+    "Messenger configuration": "Messenger Einstellungen",
+    "volume": "Lautstärke",
+    "active from": "aktiv ab",
+    "active until": "aktiv bis",
+    "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_": "Verwenden Sie einen eindeutigen Namen ohne Leerzeichen! Die folgenden Zeichen sind erlaubt: A-Za-z0-9_",
+    "Select Alexa device [Alexa2.*.Echo-Devices.*]": "Alexa-Gerät auswählen [Alexa2.*.Echo-Devices.*]",
+    "Select Sayit device [sayit.*.tts]": "Sayit-Gerät auswählen [sayit.*.tts]",
+    "Voice output volume (0-100)": "Lautstärke der Sprachausgabe (0-100)",
+    "Start time for activating Sayit device. Format hh:mm (00:00 - 23:59)": "Startzeit für die Aktivierung des Sayit-Geräts. Format hh:mm (00:00 - 23:59)",
+    "End time for the activation of Sayit device. Format hh:mm (00:00 - 23:59)": "Endzeit für die Aktivierung des Sayit-Geräts. Format hh:mm (00:00 - 23:59)",
+    "Start time for activating Alexa device. Format hh:mm (00:00 - 23:59)": "Startzeit für die Aktivierung des Alexa-Geräts. Format hh:mm (00:00 - 23:59)",
+    "End time for the activation of Alexa device. Format hh:mm (00:00 - 23:59)": "Endzeit für die Aktivierung des Alexa-Geräts. Format hh:mm (00:00 - 23:59)",
+    "No messenger was filtered!": "Kein Messenger ausgewählt",
+    "Attention! Just because the respective messenger is not displayed, it may still contain data!": "Achtung! Nur weil der jeweilige Messenger nicht angezeigt wird, kann er dennoch Daten enthalten!",
+    "Send a test message to check the configuration": "Eine Testnachricht absenden, um die Konfiguration zu prüfen",
+    "ChatID of the Telegram user. Negative ChatID sends to group chat": "ChatID des Telegram Nutzers. Negative ChatID sendet an Gruppenchat"
+}

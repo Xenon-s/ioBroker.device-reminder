@@ -1,0 +1,809 @@
+{
+    "i18n": true,
+    "type": "tabs",
+    "items": {
+        "tab_1": {
+            "type": "panel",
+            "label": "messenger",
+            "items": {
+                "_headerMessenger": {
+                    "type": "header",
+                    "text": "Messenger configuration",
+                    "size": 2
+                },
+                "_staticTextMessengerFound" : {
+                    "type": "staticText",
+                    "label": "Found adapters that can be used to send notifications",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "newLine": true
+                },
+                "showAlexa2": {
+                    "type": "checkbox",
+                    "label": "alexa2",
+                    "defaultSendTo": "getInstanceStart",
+                    "defaultFunc": "return data.alexa2",
+                    "disabled": "true"
+                },
+                "showSayit":{
+                    "type": "checkbox",
+                    "label": "sayit",
+                    "defaultSendTo": "getInstanceStart",
+                    "defaultFunc": "return data.sayit",
+                    "disabled": "true"
+                },
+                "showTelegram":{
+                    "type": "checkbox",
+                    "label": "telegram",
+                    "defaultSendTo": "getInstanceStart",
+                    "defaultFunc": "return data.telegram",
+                    "disabled": "true"
+                },
+                "showWhatsapp_cmb":{
+                    "type": "checkbox",
+                    "label": "whatsapp_cmb",
+                    "defaultSendTo": "getInstanceStart",
+                    "defaultFunc": "return data.whatsapp_cmb",
+                    "disabled": "true"
+                },
+                "showPushover":{
+                    "type": "checkbox",
+                    "label": "pushover",
+                    "defaultSendTo": "getInstanceStart",
+                    "defaultFunc": "return data.pushover",
+                    "disabled": "true"
+                },
+                "showSignal_cmb":{
+                    "type": "checkbox",
+                    "label": "signal_cmb",
+                    "defaultSendTo": "getInstanceStart",
+                    "defaultFunc": "return data.signal_cmb",
+                    "disabled": "true"
+                },
+                "showEmail":{
+                    "type": "checkbox",
+                    "label": "email",
+                    "defaultSendTo": "getInstanceStart",
+                    "defaultFunc": "return data.email",
+                    "disabled": "true"
+                },
+                "showMatrix_org":{
+                    "type": "checkbox",
+                    "label": "matrix_org",
+                    "defaultSendTo": "getInstanceStart",
+                    "defaultFunc": "return data.matrix_org",
+                    "disabled": "true"
+                },
+                "showDiscord":{
+                    "type": "checkbox",
+                    "label": "discord",
+                    "defaultSendTo": "getInstanceStart",
+                    "defaultFunc": "return data.discord",
+                    "disabled": "true"
+                },
+                "_headeralexa2": {
+                    "type": "header",
+                    "text": "alexa2",
+                    "size": 2,
+                    "hidden": "!data.showAlexa2 && !data.showAll"
+                },
+                "_testConfigalexa2": {
+                    "type": "sendTo",
+                    "label": "send test message",
+                    "variant": "contained",
+                    "icon": "send",
+                    "tooltip": "Send a test message to check the configuration",
+                    "showProcess": true,
+                    "command": "testMessage",
+                    "jsonData": "{ \"data\": ${JSON.stringify(globalData.alexa2)}, \"name\": \"alexa2\"}",
+                    "hidden": "!data.showAlexa2"
+                },
+                "alexa2": {
+                    "type": "table",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "uniqueColumns": [
+                        "device"
+                    ],
+                    "hidden": "!data.showAlexa2",
+                    "items": [
+                        {
+                            "type": "checkbox",
+                            "label": "active",
+                            "attr": "active",
+                            "width": "5%",
+                            "default": true,
+                            "newLine": true
+                        },
+                        {
+                            "type": "selectSendTo",
+                            "label": "alexa2 Device",
+                            "attr": "device",
+                            "command": "getEchoDevives",
+                            "jsonData": "{\"name\": \"alexa2\", \"data\": ${data.id}}",
+                            "validator": "const value = data.device; if ((value == '' || value == null)) return false; return true",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "selectSendTo",
+                            "label": "Target",
+                            "attr": "target",
+                            "command": "target",
+                            "jsonData": "{\"name\": \"alexa2\", \"data\": [\"speak\",\"announcement\"]}",
+                            "validator": "const value = data.target; if ((value == '' || value == null)) return false; return true",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "number",
+                            "label": "volume",
+                            "attr": "volume",
+                            "min": 0,
+                            "max": 100,
+                            "default": 25,
+                            "tooltip": "Voice output volume (0-100)",
+                            "validator": "const value = data.volume; if ((value == '' || value == null)) return false; return true",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "active from",
+                            "attr": "activeFrom",
+                            "tooltip": "Start time for activating alexa2 device. Format hh:mm (00:00 - 23:59)",
+                            "default": "00:00",
+                            "validator": "const timePattern = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/; const value = data.activeFrom; if(timePattern.test(value)) return true;return false;",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "active until",
+                            "attr": "activeUntil",
+                            "tooltip": "End time for the activation of alexa2 device. Format hh:mm (00:00 - 23:59)",
+                            "default": "23:59",
+                            "validator": "const timePattern = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/; const value = data.activeUntil; if(timePattern.test(value)) return true;return false;",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "number",
+                            "label": "id",
+                            "attr": "id",
+                            "width": "0%",
+                            "defaultFunc": "Date.now()",
+                            "disabled": "true",
+                            "hidden": "true"
+                        }
+                    ]
+                },
+                "_headerSayit": {
+                    "type": "header",
+                    "text": "Sayit",
+                    "size": 2,
+                    "hidden": "!data.showSayit && !data.showAll"
+                },
+                "_testConfigSayit": {
+                    "type": "sendTo",
+                    "label": "send test message",
+                    "variant": "contained",
+                    "icon": "send",
+                    "showProcess": true,
+                    "command": "testMessage",
+                    "jsonData": "{ \"data\": ${JSON.stringify(data.sayit)}, \"name\": \"sayit\"}",
+                    "hidden": "!data.showSayit && !data.showAll"
+                },
+                "sayit": {
+                    "type": "table",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "uniqueColumns": [
+                        "name"
+                    ],
+                    "hidden": "!data.showSayit && !data.showAll",
+                    "items": [
+                        {
+                            "type": "checkbox",
+                            "label": "active",
+                            "attr": "active",
+                            "width": "5%",
+                            "default": true,
+                            "newLine": true,
+                            "disabled": "data.showAll"
+                        },
+                        {
+                            "type": "text",
+                            "label": "name",
+                            "attr": "name",
+                            "width": "15%",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "selectSendTo",
+                            "label": "instance",
+                            "attr": "instance",
+                            "command": "getInstance",
+                            "jsonData": "{\"name\": \"sayit\"}",
+                            "validator": "const value = data.instance; if ((value == null)) return false; return true",
+                            "validatorNoSaveOnError": false
+                        },
+                        {
+                            "type": "number",
+                            "label": "volume",
+                            "attr": "volume",
+                            "min": 0,
+                            "max": 100,
+                            "default": 25,
+                            "tooltip": "Voice output volume (0-100)",
+                            "validator": "const value = data.volume; if ((value == '' || value == null)) return false; return true",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "active from",
+                            "attr": "activeFrom",
+                            "tooltip": "Start time for activating Sayit device. Format hh:mm (00:00 - 23:59)",
+                            "default": "00:00",
+                            "validator": "const timePattern = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/; const value = data.activeFrom; if(timePattern.test(value)) return true;return false;",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "active until",
+                            "attr": "activeUntil",
+                            "tooltip": "End time for the activation of Sayit device. Format hh:mm (00:00 - 23:59)",
+                            "default": "23:59",
+                            "validator": "const timePattern = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/; const value = data.activeUntil; if(timePattern.test(value)) return true;return false;",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "number",
+                            "label": "id",
+                            "attr": "id",
+                            "width": "0%",
+                            "defaultFunc": "Date.now()",
+                            "disabled": "true",
+                            "hidden": "true"
+                        }
+                    ]
+                },
+                "_headerTelegram": {
+                    "type": "header",
+                    "text": "Telegram",
+                    "size": 2,
+                    "hidden": "!data.showTelegram"
+                },
+                "_testConfigTelegram": {
+                    "type": "sendTo",
+                    "label": "send test message",
+                    "variant": "contained",
+                    "icon": "send",
+                    "showProcess": true,
+                    "command": "testMessage",
+                    "jsonData": "{ \"data\": ${JSON.stringify(data.telegram)}, \"name\": \"telegram\"}",
+                    "hidden": "!data.showTelegram"
+                },
+                "telegram": {
+                    "type": "table",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "hidden": "!data.showTelegram",
+                    "items": [
+                        {
+                            "type": "checkbox",
+                            "label": "active",
+                            "attr": "active",
+                            "width": "5%",
+                            "default": true,
+                            "newLine": true
+                        },
+                        {
+                            "type": "selectSendTo",
+                            "label": "Telegram User",
+                            "attr": "user",
+                            "command": "getTelegramUsers",
+                            "jsonData": "{\"name\": \"telegram\"}",
+                            "validator": "const value = data.user; if ((value == null)) return false; return true",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "selectSendTo",
+                            "label": "instance",
+                            "attr": "instance",
+                            "command": "getInstance",
+                            "jsonData": "{\"name\": \"telegram\"}",
+                            "validator": "const value = data.instance; if ((value == null)) return false; return true",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "number",
+                            "label": "id",
+                            "attr": "id",
+                            "width": "0%",
+                            "defaultFunc": "Date.now()",
+                            "disabled": "true",
+                            "hidden": "true"
+                        }
+                    ]
+                },
+                "_headerWhatsapp_cmb": {
+                    "type": "header",
+                    "text": "Whatsapp_cmb",
+                    "size": 2,
+                    "hidden": "!data.showWhatsapp_cmb"
+                },
+                "_testConfigWhatsapp_cmb": {
+                    "type": "sendTo",
+                    "label": "send test message",
+                    "variant": "contained",
+                    "icon": "send",
+                    "showProcess": true,
+                    "command": "testMessage",
+                    "jsonData": "{ \"data\": ${JSON.stringify(data.whatsapp_cmb)}, \"name\": \"whatsapp_cmb\"}",
+                    "hidden": "!data.showWhatsapp_cmb"
+                },
+                "whatsapp_cmb": {
+                    "type": "table",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "uniqueColumns": [
+                        "name"
+                    ],
+                    "hidden": "!data.showWhatsapp_cmb",
+                    "items": [
+                        {
+                            "type": "checkbox",
+                            "label": "active",
+                            "attr": "active",
+                            "width": "5%",
+                            "default": true,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "name",
+                            "attr": "name",
+                            "width": "15%",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "selectSendTo",
+                            "label": "instance",
+                            "attr": "instance",
+                            "command": "getInstance",
+                            "jsonData": "{\"name\": \"whatsapp_cmb\"}",
+                            "validator": "const value = data.instance; if ((value == null)) return false; return true",
+                            "validatorNoSaveOnError": false
+                        },
+                        {
+                            "type": "number",
+                            "label": "id",
+                            "attr": "id",
+                            "width": "0%",
+                            "defaultFunc": "Date.now()",
+                            "disabled": "true",
+                            "hidden": "true"
+                        }
+                    ]
+                },
+                "_headerPushover": {
+                    "type": "header",
+                    "text": "Pushover",
+                    "size": 2,
+                    "hidden": "!data.showPushover"
+                },
+                "_testConfigPushover": {
+                    "type": "sendTo",
+                    "label": "send test message",
+                    "variant": "contained",
+                    "icon": "send",
+                    "showProcess": true,
+                    "command": "testMessage",
+                    "jsonData": "{ \"data\": ${JSON.stringify(data.pushover)}, \"name\": \"pushover\"}",
+                    "hidden": "!data.showPushover"
+                },
+                "pushover": {
+                    "type": "table",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "uniqueColumns": [
+                        "name"
+                    ],
+                    "hidden": "!data.showPushover",
+                    "items": [
+                        {
+                            "type": "checkbox",
+                            "label": "active",
+                            "attr": "active",
+                            "width": "5%",
+                            "default": true,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "name",
+                            "attr": "name",
+                            "width": "15%",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "selectSendTo",
+                            "label": "instance",
+                            "attr": "instance",
+                            "command": "getInstance",
+                            "jsonData": "{\"name\": \"pushover\"}",
+                            "validator": "const value = data.instance; if ((value == null)) return false; return true",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "title",
+                            "attr": "title",
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "deviceID",
+                            "attr": "deviceID",
+                            "newLine": true
+                        },
+                        {
+                            "type": "selectSendTo",
+                            "label": "priority",
+                            "attr": "priority",
+                            "command": "target",
+                            "jsonData": "{\"name\": \"pushover\", \"data\": [\"normal\",\"high\",\"quiet\",\"confirmation\"]}",                    
+                            "validator": "const value = data.priority; if ((value == null)) return false; return true",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "selectSendTo",
+                            "label": "sound",
+                            "attr": "sound",
+                            "command": "target",
+                            "jsonData": "{\"name\": \"pushover\", \"data\": [\"pushover\",\"bike\", \"bugle\",\"cashregister\", \"classical\", \"cosmic\",\"falling\",\"gamelan\",\"incoming\",\"magic\",\"mechanical\", \"pianobar\",\"siren\",\"spacealarm\",\"tugboat\",\"alien\",\"climb\",\"persistent\",\"echo\",\"updown\",\"none\"]}",                    
+                            "validator": "const value = data.sound; if ((value == null)) return false; return true",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "number",
+                            "label": "Duration in seconds",
+                            "attr": "ttl",
+                            "min": 0,
+                            "newLine": true
+                        },
+                        {
+                            "type": "number",
+                            "label": "id",
+                            "attr": "id",
+                            "width": "0%",
+                            "defaultFunc": "Date.now()",
+                            "disabled": "true",
+                            "hidden": "true"
+                        }
+                    ]
+                },
+                "_headerSignal_cmb": {
+                    "type": "header",
+                    "text": "signal_cmb",
+                    "size": 2,
+                    "hidden": "!data.showSignal_cmb"
+                },
+                "_testConfigsignal_cmb": {
+                    "type": "sendTo",
+                    "label": "send test message",
+                    "variant": "contained",
+                    "icon": "send",
+                    "showProcess": true,
+                    "command": "testMessage",
+                    "jsonData": "{ \"data\": ${JSON.stringify(data.signal_cmb)}, \"name\": \"signal_cmb\"}",
+                    "hidden": "!data.showSignal_cmb"
+                },
+                "signal_cmb": {
+                    "type": "table",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "uniqueColumns": [
+                        "name"
+                    ],
+                    "hidden": "!data.showSignal_cmb",
+                    "items": [
+                        {
+                            "type": "checkbox",
+                            "label": "active",
+                            "attr": "active",
+                            "width": "5%",
+                            "default": true,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "name",
+                            "attr": "name",
+                            "width": "15%",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "selectSendTo",
+                            "label": "instance",
+                            "attr": "instance",
+                            "command": "getInstance",
+                            "jsonData": "{\"name\": \"signal_cmb\"}",
+                            "validator": "const value = data.instance; if ((value == null)) return false; return true",
+                            "validatorNoSaveOnError": false
+                        },
+                        {
+                            "type": "number",
+                            "label": "id",
+                            "attr": "id",
+                            "width": "0%",
+                            "defaultFunc": "Date.now()",
+                            "disabled": "true",
+                            "hidden": "true"
+                        }
+                    ]
+                },
+                "_headerEmail": {
+                    "type": "header",
+                    "text": "Email",
+                    "size": 2,
+                    "hidden": "!data.showEmail"
+                },
+                "_testConfigEmail": {
+                    "type": "sendTo",
+                    "label": "send test message",
+                    "variant": "contained",
+                    "icon": "send",
+                    "showProcess": true,
+                    "command": "testMessage",
+                    "jsonData": "{ \"data\": ${JSON.stringify(data.email)}, \"name\": \"email\"}",
+                    "hidden": "!data.showEmail"
+                },
+                "email": {
+                    "type": "table",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "uniqueColumns": [
+                        "name"
+                    ],
+                    "hidden": "!data.showEmail",
+                    "items": [
+                        {
+                            "type": "checkbox",
+                            "label": "active",
+                            "attr": "active",
+                            "width": "5%",
+                            "default": true,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "name",
+                            "attr": "name",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "sender address",
+                            "attr": "emailFrom",
+                            "tooltip": "Sender address, the following characters are permitted: A-Za-z0-9-@_.",
+                            "validator": "const value = data.emailFrom; if ((value == '' || value == null)) return false; return (value.match(/^[A-Za-z0-9-@_.]([A-Za-z0-9-@_.])*$/) && value.match(/^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$/));",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "receiver address",
+                            "attr": "emailTo",
+                            "tooltip": "Recipient address, the following characters are permitted: A-Za-z0-9-@_.",
+                            "validator": "const value = data.emailTo; if ((value == '' || value == null)) return false; return (value.match(/^[A-Za-z0-9-@_.]([A-Za-z0-9-@_.])*$/) && value.match(/^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$/));",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "number",
+                            "label": "id",
+                            "attr": "id",
+                            "width": "0%",
+                            "defaultFunc": "Date.now()",
+                            "disabled": "true",
+                            "hidden": "true"
+                        }
+                    ]
+                },
+                "_headerMatrix_org": {
+                    "type": "header",
+                    "text": "matrix_org",
+                    "size": 2,
+                    "hidden": "!data.showMatrix_org"
+                },
+                "_testConfigmatrix_org": {
+                    "type": "sendTo",
+                    "label": "send test message",
+                    "variant": "contained",
+                    "icon": "send",
+                    "showProcess": true,
+                    "command": "testMessage",
+                    "jsonData": "{ \"data\": ${JSON.stringify(data.matrix_org)}, \"name\": \"matrix_org\"}",
+                    "hidden": "!data.showMatrix_org"
+                },
+                "matrix_org": {
+                    "type": "table",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "uniqueColumns": [
+                        "name"
+                    ],
+                    "hidden": "!data.showMatrix_org",
+                    "items": [
+                        {
+                            "type": "checkbox",
+                            "label": "active",
+                            "attr": "active",
+                            "width": "5%",
+                            "default": true,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "name",
+                            "attr": "name",
+                            "width": "15%",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "selectSendTo",
+                            "label": "instance",
+                            "attr": "instance",
+                            "command": "getInstance",
+                            "jsonData": "{\"name\": \"matrix_org\"}",
+                            "validator": "const value = data.instance; if ((value == null)) return false; return true",
+                            "validatorNoSaveOnError": false
+                        },
+                        {
+                            "type": "number",
+                            "label": "id",
+                            "attr": "id",
+                            "width": "0%",
+                            "defaultFunc": "Date.now()",
+                            "disabled": "true",
+                            "hidden": "true"
+                        }
+                    ]
+                },
+                "_headerDiscord": {
+                    "type": "header",
+                    "text": "Discord",
+                    "size": 2,
+                    "hidden": "!data.showDiscord"
+                },
+                "_testConfigDiscord": {
+                    "type": "sendTo",
+                    "label": "send test message",
+                    "variant": "contained",
+                    "icon": "send",
+                    "showProcess": true,
+                    "command": "testMessage",
+                    "jsonData": "{ \"data\": ${JSON.stringify(data.discord)}, \"name\": \"discord\"}",
+                    "hidden": "!data.showDiscord"
+                },
+                "discord": {
+                    "type": "table",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "uniqueColumns": [
+                        "name"
+                    ],
+                    "hidden": "!data.showDiscord",
+                    "items": [
+                        {
+                            "type": "checkbox",
+                            "label": "active",
+                            "attr": "active",
+                            "width": "5%",
+                            "default": true,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "name",
+                            "attr": "name",
+                            "width": "15%",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "selectSendTo",
+                            "label": "instance",
+                            "attr": "instance",
+                            "command": "getInstance",
+                            "jsonData": "{\"name\": \"discord\"}",
+                            "validator": "const value = data.instance; if ((value == null)) return false; return true",
+                            "validatorNoSaveOnError": false
+                        },
+                        {
+                            "type": "text",
+                            "label": "User ID",
+                            "attr": "userID",
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "User Tag",
+                            "attr": "userTag",
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "Username",
+                            "attr": "username",
+                            "validator": "const value = data.username; if ((value == '' || value == null)) return false; return true",
+                            "validatorNoSaveOnError": false,
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "Server ID",
+                            "attr": "serverID",
+                            "newLine": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "Channel ID",
+                            "attr": "channelID",
+                            "newLine": true
+                        },
+                        {
+                            "type": "number",
+                            "label": "id",
+                            "attr": "id",
+                            "width": "0%",
+                            "defaultFunc": "Date.now()",
+                            "disabled": "true",
+                            "hidden": "true"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

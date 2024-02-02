@@ -1,0 +1,91 @@
+{
+  "common": {
+    "name": "device-reminder",
+    "version": "0.0.1",
+    "news": {
+      "0.0.1": {
+        "en": "initial release",
+        "de": "Erstveröffentlichung",
+        "ru": "Начальная версия",
+        "pt": "lançamento inicial",
+        "nl": "Eerste uitgave",
+        "fr": "Première version",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Pierwsze wydanie",
+        "uk": "Початкова версія",
+        "zh-cn": "首次出版"
+      }
+    },
+    "title": "device-reminder",
+    "titleLang": {
+      "en": "device-reminder",
+      "de": "Geräteerinnerung",
+      "ru": "устройство-напоминание",
+      "pt": "lembrete de dispositivo",
+      "nl": "apparaat-herinnering",
+      "fr": "rappel de l'appareil",
+      "it": "promemoria del dispositivo",
+      "es": "recordatorio de dispositivo",
+      "pl": "przypomnienie o urządzeniu",
+      "uk": "пристрій-нагадування",
+      "zh-cn": "设备提醒"
+    },
+    "desc": {
+      "en": "device-reminder",
+      "de": "Geräteerinnerung",
+      "ru": "устройство-напоминание",
+      "pt": "lembrete de dispositivo",
+      "nl": "apparaat-herinnering",
+      "fr": "rappel de l'appareil",
+      "it": "promemoria del dispositivo",
+      "es": "recordatorio de dispositivo",
+      "pl": "przypomnienie o urządzeniu",
+      "uk": "пристрій-нагадування",
+      "zh-cn": "设备提醒"
+    },
+    "authors": [
+      "xenon-s <ente_s@hotmail.de>"
+    ],
+    "keywords": [
+      "ioBroker",
+      "template",
+      "Smart Home",
+      "home automation"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "device-reminder.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/xenon-s/ioBroker.device-reminder/main/admin/device-reminder.png",
+    "readme": "https://github.com/xenon-s/ioBroker.device-reminder/blob/main/README.md",
+    "loglevel": "info",
+    "tier": 3,
+    "mode": "daemon",
+    "type": "logic",
+    "compact": true,
+    "connectionType": "local",
+    "dataSource": "push",
+    "adminUI": {
+      "config": "json",
+      "custom": "json"
+    },
+    "supportCustoms": true,
+    "messagebox": true,
+    "dependencies": [
+      {
+        "js-controller": ">=5.0.17"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=6.13.15"
+      }
+    ],
+    "installedFrom": "Xenon-s/ioBroker.device-reminder#new_Gui"
+  },
+  "native": {},
+  "objects": [],
+  "instanceObjects": []
+}
