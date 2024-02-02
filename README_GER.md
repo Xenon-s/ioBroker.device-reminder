@@ -1,4 +1,4 @@
-﻿![Logo](admin/icon.png)
+﻿![Logo](admin/device-reminder.png)
 # ioBroker.device-reminder
 
 ![Number of Installations (stable)](http://iobroker.live/badges/device-reminder-stable.svg)

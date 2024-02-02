@@ -1,4 +1,4 @@
-![Logo](admin/icon.png)
+![Logo](admin/device-reminder.png)
 
 # ioBroker.device-reminder
 
