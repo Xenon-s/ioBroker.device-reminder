@@ -225,6 +225,10 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
     ### __WORK IN PROGRESS__
 -->
 
+### 4.x
+
+- (xenon-s) new Admin UI in jsonConfig
+
 ### 3.1.2 (2024-01-22)
 
 - (xenon-s) bugfix: [issue #381](https://github.com/Xenon-s/ioBroker.device-reminder/issues/381)
