@@ -224,7 +224,7 @@ class DeviceReminder extends utils.Adapter {
 
             // Custom Config commands
 
-            case "test":
+            case "getDataCustom":
 
                 this.log.info('test')
                 this.log.info(obj.message.name)
@@ -236,27 +236,25 @@ class DeviceReminder extends utils.Adapter {
                  * @property {number} instance - Die Instanznummer des Elements.
                  * @property {number} id - Die eindeutige ID des Elements.
                  */
-                
+
                 // Funktion, um aus den Werten aus der native ein Array zu machen, welches per select an die CustomConfig gesendet wird
-                const resultTest = this.config[obj.message.name].map(async (/** @type {element} */ element) => {
-                    if (element.active) {
-                        if (element['instance'] != null) {
-                            return { label: `${element.name} [instance: ${element.instance}]`, value: element.id };
-                        } else {
-                            if (obj.message.name.includes('alexa2')) {  // Bei Alexa muss der Name aus dem Common des devices geholt werden, da sonst nicht der Name sondern die ID im select angezeigt wird
-                                let objData = await this.getForeignObjectAsync(element.name);
-                                return { label: objData.common.name, value: element.id };
-                            } else {
-                                return { label: element.name, value: element.id };
-                            }
-                        }
-                    }
+                const funcResult = this.config[obj.message.name].map(async (/** @type {element} */ element) => {
+                    if (element['instance'] != null) {
+                        return { label: `${element.name} [instance: ${element.instance}]`, value: element.id };
+                    } else {
+                        return { label: element.name, value: element.id };
+                    };
                 });
-                
-                Promise.all(resultTest).then(result => {
-                    this.respond(obj, result, this);
-                    this.log.info(JSON.stringify(result))
-                });
+
+                // funcResult ausführen, wenn this.config[obj.message.name] vorhanden ist und mindestens einen Eintrag hat
+                if (this.config[obj.message.name] && Object.keys(this.config[obj.message.name]).length > 0) {
+                    Promise.all(funcResult).then(result => {
+                        this.log.info(`Return to Custom: ${JSON.stringify(result)}`)
+                        this.respond(obj, result, this);
+                    });
+                } else {
+                    this.log.info(`Return to Custom fehlgeschlagen: ${JSON.stringify(obj.message.name)}`)
+                }
 
                 break;
 

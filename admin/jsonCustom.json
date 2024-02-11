@@ -2,53 +2,338 @@
     "i18n": true,
     "type": "panel",
     "items": {
+        "showAlexa2": {
+            "type": "checkbox",
+            "label": "alexa2",
+            "defaultSendTo": "getInstanceStart",
+            "defaultFunc": "return data.alexa2",
+            "disabled": "true",
+            "hidden": "true"
+        },
+        "showSayit": {
+            "type": "checkbox",
+            "label": "sayit",
+            "defaultSendTo": "getInstanceStart",
+            "defaultFunc": "return data.sayit",
+            "disabled": "true",
+            "hidden": "true"
+        },
+        "showTelegram": {
+            "type": "checkbox",
+            "label": "telegram",
+            "defaultSendTo": "getInstanceStart",
+            "defaultFunc": "return data.telegram",
+            "disabled": "true",
+            "hidden": "true"
+        },
+        "showWhatsapp_cmb": {
+            "type": "checkbox",
+            "label": "whatsapp_cmb",
+            "defaultSendTo": "getInstanceStart",
+            "defaultFunc": "return data.whatsapp_cmb",
+            "disabled": "true",
+            "hidden": "true"
+        },
+        "showPushover": {
+            "type": "checkbox",
+            "label": "pushover",
+            "defaultSendTo": "getInstanceStart",
+            "defaultFunc": "return data.pushover",
+            "disabled": "true",
+            "hidden": "true"
+        },
+        "showSignal_cmb": {
+            "type": "checkbox",
+            "label": "signal_cmb",
+            "defaultSendTo": "getInstanceStart",
+            "defaultFunc": "return data.signal_cmb",
+            "disabled": "true",
+            "hidden": "true"
+        },
+        "showEmail": {
+            "type": "checkbox",
+            "label": "email",
+            "defaultSendTo": "getInstanceStart",
+            "defaultFunc": "return data.email",
+            "disabled": "true",
+            "hidden": "true"
+        },
+        "showMatrix_org": {
+            "type": "checkbox",
+            "label": "matrix_org",
+            "defaultSendTo": "getInstanceStart",
+            "defaultFunc": "return data.matrix_org",
+            "disabled": "true",
+            "hidden": "true"
+        },
+        "showDiscord": {
+            "type": "checkbox",
+            "label": "discord",
+            "defaultSendTo": "getInstanceStart",
+            "defaultFunc": "return data.discord",
+            "disabled": "true",
+            "hidden": "true"
+        },
         "_headerAlexa": {
             "type": "header",
             "text": "alexa2",
-            "size": 2
+            "size": 2,
+            "hidden": "!data.showAlexa2"
         },
         "alexa2": {
             "type": "selectSendTo",
             "label": "Alexa2 devices",
             "attr": "user",
             "multiple": true,
-            "command": "test",
+            "command": "getDataCustom",
             "jsonData": "{\"name\": \"alexa2\"}",
-            "newLine": true
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showAlexa2"
+        },
+        "alexa2Msg": {
+            "type": "text",
+            "label": "Alexa2 Message",
+            "attr": "msg",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showAlexa2 || data.alexa2 == '' || data.alexa2 == null"
         },
         "_headerSayit": {
             "type": "header",
             "text": "sayit",
-            "size": 2
+            "size": 2,
+            "hidden": "!data.showSayit"
         },
         "sayit": {
             "type": "selectSendTo",
             "label": "Sayit Devices",
             "attr": "user",
             "multiple": true,
-            "command": "test",
+            "command": "getDataCustom",
             "jsonData": "{\"name\": \"sayit\"}",
-            "newLine": true
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showSayit"
         },
         "sayitMsg": {
             "type": "text",
             "label": "Sayit Message",
             "attr": "msg",
-            "newLine": true
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showSayit || data.sayit == '' || data.sayit == null"
         },
         "_headerTelegram": {
             "type": "header",
             "text": "Telegram",
-            "size": 2
+            "size": 2,
+            "hidden": "!data.showTelegram"
         },
         "telegram": {
             "type": "selectSendTo",
             "label": "Telegram User",
             "attr": "user",
             "multiple": true,
-            "command": "test",
+            "command": "getDataCustom",
             "jsonData": "{\"name\": \"telegram\"}",
-            "newLine": true
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showTelegram"
+        },
+        "telegramMsg": {
+            "type": "text",
+            "label": "Telegram Message",
+            "attr": "msg",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showTelegram || data.telegram == '' || data.telegram == null"
+        },
+        "_headerWhatsapp_cmb": {
+            "type": "header",
+            "text": "Whatsapp_cmb",
+            "size": 2,
+            "hidden": "!data.showWhatsapp_cmb"
+        },
+        "whatsapp_cmb": {
+            "type": "selectSendTo",
+            "label": "Whatsapp_cmb User",
+            "attr": "user",
+            "multiple": true,
+            "command": "getDataCustom",
+            "jsonData": "{\"name\": \"whatsapp_cmb\"}",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showWhatsapp_cmb"
+        },
+        "whatsapp_cmbMsg": {
+            "type": "text",
+            "label": "Whatsapp_cmb Message",
+            "attr": "msg",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showWhatsapp_cmb || data.whatsapp_cmb == '' || data.whatsapp_cmb == null"
+        },
+        "_headerPushover": {
+            "type": "header",
+            "text": "pushover",
+            "size": 2,
+            "hidden": "!data.showPushover"
+        },
+        "pushover": {
+            "type": "selectSendTo",
+            "label": "pushover User",
+            "attr": "user",
+            "multiple": true,
+            "command": "getDataCustom",
+            "jsonData": "{\"name\": \"pushover\"}",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showPushover"
+        },
+        "pushoverMsg": {
+            "type": "text",
+            "label": "Pushover Message",
+            "attr": "msg",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showPushover  || data.pushover == '' || data.pushover == null"
+        },
+        "_headerSignal_cmb": {
+            "type": "header",
+            "text": "signal_cmb",
+            "size": 2,
+            "hidden": "!data.showSignal_cmb"
+        },
+        "signal_cmb": {
+            "type": "selectSendTo",
+            "label": "signal_cmb User",
+            "attr": "user",
+            "multiple": true,
+            "command": "getDataCustom",
+            "jsonData": "{\"name\": \"signal_cmb\"}",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showSignal_cmb"
+        },
+        "signal_cmbmMsg": {
+            "type": "text",
+            "label": "signal_cmb Message",
+            "attr": "msg",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showSignal_cmb || data.signal_cmb == '' || data.signal_cmb == null"
+        },
+        "_headerEmail": {
+            "type": "header",
+            "text": "email",
+            "size": 2,
+            "hidden": "!data.showEmail"
+        },
+        "email": {
+            "type": "selectSendTo",
+            "label": "email User",
+            "attr": "user",
+            "multiple": true,
+            "command": "getDataCustom",
+            "jsonData": "{\"name\": \"email\"}",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showEmail"
+        },
+        "emailMsg": {
+            "type": "text",
+            "label": "email Message",
+            "attr": "msg",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showEmail || data.email == '' || data.email == null"
+        },
+        "_headerMatrix_org": {
+            "type": "header",
+            "text": "matrix_org",
+            "size": 2,
+            "hidden": "!data.showMatrix_org"
+        },
+        "matrix_org": {
+            "type": "selectSendTo",
+            "label": "matrix_org Server",
+            "attr": "user",
+            "multiple": true,
+            "command": "getDataCustom",
+            "jsonData": "{\"name\": \"matrix_org\"}",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showMatrix_org"
+        },
+        "matrix_orgMsg": {
+            "type": "text",
+            "label": "matrix_org Message",
+            "attr": "msg",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showMatrix_org || data.matrix_org == '' || data.matrix_org == null"
+        },
+        "_headerDiscord": {
+            "type": "header",
+            "text": "discord",
+            "size": 2,
+            "hidden": "!data.showDiscord"
+        },
+        "discord": {
+            "type": "selectSendTo",
+            "label": "discord User",
+            "attr": "user",
+            "multiple": true,
+            "command": "getDataCustom",
+            "jsonData": "{\"name\": \"discord\"}",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showDiscord"
+        },
+        "discordMsg": {
+            "type": "text",
+            "label": "discord Message",
+            "attr": "msg",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showDiscord || data.discord == '' || data.discord == null"
         }
     }
 }

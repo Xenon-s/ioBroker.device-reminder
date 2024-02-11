@@ -110,20 +110,24 @@
                     "hidden": "!data.showAlexa2",
                     "items": [
                         {
-                            "type": "checkbox",
-                            "label": "active",
-                            "attr": "active",
-                            "width": "5%",
-                            "default": true,
+                            "type": "text",
+                            "label": "name",
+                            "attr": "name",
+                            "width": "15%",
+                            "help": "Enter a unique name",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_ ",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_ ]([A-Za-z0-9_ ])*$/)) return false; return true;",
+                            "validatorNoSaveOnError": false,
                             "newLine": true
                         },
                         {
                             "type": "selectSendTo",
                             "label": "alexa2 Device",
-                            "attr": "name",
+                            "attr": "device",
+                            "help": "Select an Alexa device",
                             "command": "getEchoDevives",
                             "jsonData": "{\"name\": \"alexa2\", \"data\": ${data.id}}",
-                            "validator": "const value = data.name; if ((value == '' || value == null)) return false; return true",
+                            "validator": "const value = data.device; if ((value == '' || value == null)) return false; return true",
                             "validatorNoSaveOnError": false,
                             "newLine": true
                         },
@@ -131,6 +135,7 @@
                             "type": "selectSendTo",
                             "label": "Target",
                             "attr": "target",
+                            "help": "Select Speak or Announcemant",
                             "command": "target",
                             "jsonData": "{\"name\": \"alexa2\", \"data\": [\"speak\",\"announcement\"]}",
                             "validator": "const value = data.target; if ((value == '' || value == null)) return false; return true",
@@ -141,19 +146,19 @@
                             "type": "number",
                             "label": "volume",
                             "attr": "volume",
+                            "help": "Enter volume, if \"0\", the current volume is used",
                             "min": 0,
                             "max": 100,
                             "default": 25,
                             "tooltip": "Voice output volume (0-100)",
-                            "validator": "const value = data.volume; if ((value == '' || value == null)) return false; return true",
-                            "validatorNoSaveOnError": false,
                             "newLine": true
                         },
                         {
                             "type": "text",
                             "label": "active from",
                             "attr": "activeFrom",
-                            "tooltip": "Start time for activating alexa2 device. Format hh:mm (00:00 - 23:59)",
+                            "tooltip": "Format hh:mm (00:00 - 23:59)",
+                            "help": "Start time for activating alexa2 device",
                             "default": "00:00",
                             "validator": "const timePattern = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/; const value = data.activeFrom; if(timePattern.test(value)) return true;return false;",
                             "validatorNoSaveOnError": false,
@@ -163,7 +168,8 @@
                             "type": "text",
                             "label": "active until",
                             "attr": "activeUntil",
-                            "tooltip": "End time for the activation of alexa2 device. Format hh:mm (00:00 - 23:59)",
+                            "tooltip": "Format hh:mm (00:00 - 23:59)",
+                            "help": "End time for activating alexa2 device",
                             "default": "23:59",
                             "validator": "const timePattern = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/; const value = data.activeUntil; if(timePattern.test(value)) return true;return false;",
                             "validatorNoSaveOnError": false,
@@ -207,21 +213,13 @@
                     "hidden": "!data.showSayit && !data.showAll",
                     "items": [
                         {
-                            "type": "checkbox",
-                            "label": "active",
-                            "attr": "active",
-                            "width": "5%",
-                            "default": true,
-                            "newLine": true,
-                            "disabled": "data.showAll"
-                        },
-                        {
                             "type": "text",
                             "label": "name",
                             "attr": "name",
                             "width": "15%",
-                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
-                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "help": "Enter a unique name",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_ ",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_ ]([A-Za-z0-9_ ])*$/)) return false; return true;",
                             "validatorNoSaveOnError": false,
                             "newLine": true
                         },
@@ -301,20 +299,24 @@
                     "hidden": "!data.showTelegram",
                     "items": [
                         {
-                            "type": "checkbox",
-                            "label": "active",
-                            "attr": "active",
-                            "width": "5%",
-                            "default": true,
+                            "type": "text",
+                            "label": "name",
+                            "attr": "name",
+                            "width": "15%",
+                            "help": "Enter a unique name",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_ ",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_ ]([A-Za-z0-9_ ])*$/)) return false; return true;",
+                            "validatorNoSaveOnError": false,
                             "newLine": true
                         },
                         {
                             "type": "selectSendTo",
                             "label": "Telegram User",
-                            "attr": "name",
+                            "attr": "user",
+                            "help": "Select a telegram user",
                             "command": "getTelegramUsers",
                             "jsonData": "{\"name\": \"telegram\"}",
-                            "validator": "const value = data.name; if ((value == null)) return false; return true",
+                            "validator": "const value = data.user; if ((value == null)) return false; return true",
                             "validatorNoSaveOnError": false,
                             "newLine": true
                         },
@@ -366,20 +368,13 @@
                     "hidden": "!data.showWhatsapp_cmb",
                     "items": [
                         {
-                            "type": "checkbox",
-                            "label": "active",
-                            "attr": "active",
-                            "width": "5%",
-                            "default": true,
-                            "newLine": true
-                        },
-                        {
                             "type": "text",
                             "label": "name",
                             "attr": "name",
                             "width": "15%",
-                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
-                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "help": "Enter a unique name",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_ ",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_ ]([A-Za-z0-9_ ])*$/)) return false; return true;",
                             "validatorNoSaveOnError": false,
                             "newLine": true
                         },
@@ -430,20 +425,13 @@
                     "hidden": "!data.showPushover",
                     "items": [
                         {
-                            "type": "checkbox",
-                            "label": "active",
-                            "attr": "active",
-                            "width": "5%",
-                            "default": true,
-                            "newLine": true
-                        },
-                        {
                             "type": "text",
                             "label": "name",
                             "attr": "name",
                             "width": "15%",
-                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
-                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "help": "Enter a unique name",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_ ",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_ ]([A-Za-z0-9_ ])*$/)) return false; return true;",
                             "validatorNoSaveOnError": false,
                             "newLine": true
                         },
@@ -534,20 +522,13 @@
                     "hidden": "!data.showSignal_cmb",
                     "items": [
                         {
-                            "type": "checkbox",
-                            "label": "active",
-                            "attr": "active",
-                            "width": "5%",
-                            "default": true,
-                            "newLine": true
-                        },
-                        {
                             "type": "text",
                             "label": "name",
                             "attr": "name",
                             "width": "15%",
-                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
-                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "help": "Enter a unique name",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_ ",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_ ]([A-Za-z0-9_ ])*$/)) return false; return true;",
                             "validatorNoSaveOnError": false,
                             "newLine": true
                         },
@@ -598,19 +579,13 @@
                     "hidden": "!data.showEmail",
                     "items": [
                         {
-                            "type": "checkbox",
-                            "label": "active",
-                            "attr": "active",
-                            "width": "5%",
-                            "default": true,
-                            "newLine": true
-                        },
-                        {
                             "type": "text",
                             "label": "name",
                             "attr": "name",
-                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
-                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "width": "15%",
+                            "help": "Enter a unique name",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_ ",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_ ]([A-Za-z0-9_ ])*$/)) return false; return true;",
                             "validatorNoSaveOnError": false,
                             "newLine": true
                         },
@@ -670,20 +645,13 @@
                     "hidden": "!data.showMatrix_org",
                     "items": [
                         {
-                            "type": "checkbox",
-                            "label": "active",
-                            "attr": "active",
-                            "width": "5%",
-                            "default": true,
-                            "newLine": true
-                        },
-                        {
                             "type": "text",
                             "label": "name",
                             "attr": "name",
                             "width": "15%",
-                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
-                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "help": "Enter a unique name",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_ ",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_ ]([A-Za-z0-9_ ])*$/)) return false; return true;",
                             "validatorNoSaveOnError": false,
                             "newLine": true
                         },
@@ -734,20 +702,13 @@
                     "hidden": "!data.showDiscord",
                     "items": [
                         {
-                            "type": "checkbox",
-                            "label": "active",
-                            "attr": "active",
-                            "width": "5%",
-                            "default": true,
-                            "newLine": true
-                        },
-                        {
                             "type": "text",
                             "label": "name",
                             "attr": "name",
                             "width": "15%",
-                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_",
-                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_]([A-Za-z0-9_])*$/)) return false; return true;",
+                            "help": "Enter a unique name",
+                            "tooltip": "Use unique name without spaces! The following characters are permitted: A-Za-z0-9_ ",
+                            "validator": "const value = data.name; if (!value.match(/^[A-Za-z0-9_ ]([A-Za-z0-9_ ])*$/)) return false; return true;",
                             "validatorNoSaveOnError": false,
                             "newLine": true
                         },

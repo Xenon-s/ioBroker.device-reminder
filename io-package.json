@@ -84,7 +84,27 @@
       }
     ]
   },
-  "native": {},
+  "native": {
+    "showAlexa2": false,
+    "showSayit": false,
+    "showTelegram": false,
+    "showWhatsapp_cmb": false,
+    "showPushover": false,
+    "showSignal_cmb": false,
+    "showEmail": false,
+    "showMatrix_org": false,
+    "showDiscord": false,
+    "alexa2" : [],
+    "sayit" : [],
+    "telegram" : [],
+    "whatsapp_cmb" : [],
+    "pushover" : [],
+    "signal_cmb" : [],
+    "email" : [],
+    "matrix_org" : [],
+    "discord" : []
+
+  },
   "objects": [],
   "instanceObjects": []
 }
