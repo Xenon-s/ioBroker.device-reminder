@@ -163,7 +163,7 @@ class DeviceReminder extends utils.Adapter {
         const arrResult = [];
         let name = "";
 
-        this.log.warn(`OBJECT INCOMING123: ${JSON.stringify(obj)} <${JSON.stringify(this.config)}>`);
+        this.log.info(`OBJECT INCOMING123: ${JSON.stringify(obj)} <${JSON.stringify(this.config)}>`);
 
         switch (obj.command) {
 
@@ -219,7 +219,7 @@ class DeviceReminder extends utils.Adapter {
                 name = obj.message.name;
 
                 for (const i of Object.keys(this.config[name])) {
-                    const obj = JSON.parse("{" + this.config[name][i].user + "}");
+                    const obj = JSON.parse(`{${this.config[name][i].user}}`);
                     this[name][obj.id] = obj
                 };
 
@@ -256,7 +256,7 @@ class DeviceReminder extends utils.Adapter {
                         this.respond(obj, result, this);
                     });
                 } else {
-                    this.log.info(`Return to Custom fehlgeschlagen: ${JSON.stringify(obj.message.name)}`)
+                    this.log.info(`[${name}] Return to Custom fehlgeschlagen: ${JSON.stringify(obj.message.name)}`)
                 }
 
                 break;
