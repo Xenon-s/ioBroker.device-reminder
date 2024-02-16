@@ -23,63 +23,54 @@
                     "type": "checkbox",
                     "label": "alexa2",
                     "defaultSendTo": "getInstanceStart",
-                    "defaultFunc": "return data.alexa2",
                     "disabled": "true"
                 },
                 "showSayit":{
                     "type": "checkbox",
                     "label": "sayit",
                     "defaultSendTo": "getInstanceStart",
-                    "defaultFunc": "return data.sayit",
                     "disabled": "true"
                 },
                 "showTelegram":{
                     "type": "checkbox",
                     "label": "telegram",
                     "defaultSendTo": "getInstanceStart",
-                    "defaultFunc": "return data.telegram",
                     "disabled": "true"
                 },
                 "showWhatsapp_cmb":{
                     "type": "checkbox",
                     "label": "whatsapp_cmb",
                     "defaultSendTo": "getInstanceStart",
-                    "defaultFunc": "return data.whatsapp_cmb",
                     "disabled": "true"
                 },
                 "showPushover":{
                     "type": "checkbox",
                     "label": "pushover",
                     "defaultSendTo": "getInstanceStart",
-                    "defaultFunc": "return data.pushover",
                     "disabled": "true"
                 },
                 "showSignal_cmb":{
                     "type": "checkbox",
                     "label": "signal_cmb",
                     "defaultSendTo": "getInstanceStart",
-                    "defaultFunc": "return data.signal_cmb",
                     "disabled": "true"
                 },
                 "showEmail":{
                     "type": "checkbox",
                     "label": "email",
                     "defaultSendTo": "getInstanceStart",
-                    "defaultFunc": "return data.email",
                     "disabled": "true"
                 },
                 "showMatrix_org":{
                     "type": "checkbox",
                     "label": "matrix_org",
                     "defaultSendTo": "getInstanceStart",
-                    "defaultFunc": "return data.matrix_org",
                     "disabled": "true"
                 },
                 "showDiscord":{
                     "type": "checkbox",
                     "label": "discord",
                     "defaultSendTo": "getInstanceStart",
-                    "defaultFunc": "return data.discord",
                     "disabled": "true"
                 },
                 "_headeralexa2": {

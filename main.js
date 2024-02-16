@@ -41,6 +41,8 @@ class DeviceReminder extends utils.Adapter {
      */
     async onReady() {
 
+        this.log.warn('test')
+
         // Aus den Daten der Adapter Config ein Messenger Objekt bauen
         this.implementedMessenger.forEach((name) => {
             let objTemp = {};
@@ -161,7 +163,7 @@ class DeviceReminder extends utils.Adapter {
         const arrResult = [];
         let name = "";
 
-        // this.log.debug(`OBJECT INCOMING123: ${JSON.stringify(obj)} <${JSON.stringify(this.config)}>`);
+        this.log.warn(`OBJECT INCOMING123: ${JSON.stringify(obj)} <${JSON.stringify(this.config)}>`);
 
         switch (obj.command) {
 
@@ -178,10 +180,11 @@ class DeviceReminder extends utils.Adapter {
                 name = name.replace("_", "-").toLowerCase();
 
                 const result = await this.getInstance(name);
+                this.log.info(`[getInstanceStart] result <${name}>: ${JSON.stringify(result)}`);
                 if (result.length > 0) {
-                    this.log.info(`Es wurden Instanzen fuer ${name} gefunden. ${JSON.stringify(result)}`)
+                    this.log.info(`[getInstanceStart] Es wurden Instanzen fuer ${name} gefunden. ${JSON.stringify(result)}`)
                 } else {
-                    this.log.info(`Es wurde keine Instanz fuer ${name} gefunden. ${JSON.stringify(result)}`)
+                    this.log.info(`[getInstanceStart] Es wurde keine Instanz fuer ${name} gefunden. ${JSON.stringify(result)}`)
                 }
 
                 this.respond(obj, result.length > 0, this);
