@@ -85,6 +85,7 @@
     ]
   },
   "native": {
+    "implementedMessenger" : ["alexa2", "sayit", "telegram", "whatsapp-cmb", "pushover", "signal-cmb", "discord", "email", "matrix-org"],
     "showAlexa2": false,
     "showSayit": false,
     "showTelegram": false,
@@ -102,7 +103,9 @@
     "signal_cmb" : [],
     "email" : [],
     "matrix_org" : [],
-    "discord" : []
+    "discord" : [],
+    "custom" : {},
+    "default": {}
 
   },
   "objects": [],

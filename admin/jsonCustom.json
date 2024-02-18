@@ -74,6 +74,58 @@
             "disabled": "true",
             "hidden": "true"
         },
+        "selectTypeFromNative": {
+            "type": "selectSendTo",
+            "label": "selectType",
+            "attr": "target",
+            "showProcess": true,
+            "command": "getDataFromConfig",
+            "help": "Select Speak or Announcemant"
+        },
+        "sendToBtn": {
+            "type": "sendTo",
+            "label": "get Data",
+            "variant": "outlined",
+            "showProcess": true,
+            "command": "getValuesFromConfig",
+            "jsonData": "{ \"data1\": \"${data.selectTypeFromNative}\"}",
+            "useNative": true
+        },
+        "startVal": {
+            "type": "number",
+            "label": "Start Value",
+            "help": "Enter volume, if \"0\", the current volume is used",
+            "min": 0,
+            "newLine": true
+        },
+        "endVal": {
+            "type": "number",
+            "label": "End Value",
+            "help": "Enter volume, if \"0\", the current volume is used",
+            "min": 0,
+            "newLine": true
+        },
+        "standby": {
+            "type": "number",
+            "label": "Standby",
+            "help": "Enter volume, if \"0\", the current volume is used",
+            "min": 0,
+            "newLine": true
+        },
+        "startCount": {
+            "type": "number",
+            "label": "Counter startvalues",
+            "help": "Enter volume, if \"0\", the current volume is used",
+            "min": 0,
+            "newLine": true
+        },
+        "endCount": {
+            "type": "number",
+            "label": "Counter endvalues",
+            "help": "Enter volume, if \"0\", the current volume is used",
+            "min": 0,
+            "newLine": true
+        },
         "_headerAlexa": {
             "type": "header",
             "text": "alexa2",

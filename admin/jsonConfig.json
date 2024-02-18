@@ -6,72 +6,68 @@
             "type": "panel",
             "label": "messenger",
             "items": {
-                "_headerMessenger": {
-                    "type": "header",
-                    "text": "Messenger configuration",
-                    "size": 2
-                },
-                "_staticTextMessengerFound" : {
-                    "type": "staticText",
-                    "label": "Found adapters that can be used to send notifications",
-                    "sm": 12,
-                    "md": 12,
-                    "lg": 12,
-                    "newLine": true
-                },
                 "showAlexa2": {
                     "type": "checkbox",
                     "label": "alexa2",
                     "defaultSendTo": "getInstanceStart",
-                    "disabled": "true"
+                    "disabled": "true",
+                    "hidden": "true"
                 },
                 "showSayit":{
                     "type": "checkbox",
                     "label": "sayit",
                     "defaultSendTo": "getInstanceStart",
-                    "disabled": "true"
+                    "disabled": "true",
+                    "hidden": "true"
                 },
                 "showTelegram":{
                     "type": "checkbox",
                     "label": "telegram",
                     "defaultSendTo": "getInstanceStart",
-                    "disabled": "true"
+                    "disabled": "true",
+                    "hidden": "true"
                 },
                 "showWhatsapp_cmb":{
                     "type": "checkbox",
                     "label": "whatsapp_cmb",
                     "defaultSendTo": "getInstanceStart",
-                    "disabled": "true"
+                    "disabled": "true",
+                    "hidden": "true"
                 },
                 "showPushover":{
                     "type": "checkbox",
                     "label": "pushover",
                     "defaultSendTo": "getInstanceStart",
-                    "disabled": "true"
+                    "disabled": "true",
+                    "hidden": "true"
                 },
                 "showSignal_cmb":{
                     "type": "checkbox",
                     "label": "signal_cmb",
                     "defaultSendTo": "getInstanceStart",
-                    "disabled": "true"
+                    "disabled": "true",
+                    "hidden": "true"
                 },
                 "showEmail":{
                     "type": "checkbox",
                     "label": "email",
                     "defaultSendTo": "getInstanceStart",
-                    "disabled": "true"
+                    "disabled": "true",
+                    "hidden": "true"
                 },
                 "showMatrix_org":{
                     "type": "checkbox",
                     "label": "matrix_org",
                     "defaultSendTo": "getInstanceStart",
-                    "disabled": "true"
+                    "disabled": "true",
+                    "hidden": "true"
                 },
                 "showDiscord":{
                     "type": "checkbox",
                     "label": "discord",
                     "defaultSendTo": "getInstanceStart",
-                    "disabled": "true"
+                    "disabled": "true",
+                    "hidden": "true"
                 },
                 "_headeralexa2": {
                     "type": "header",

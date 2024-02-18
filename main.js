@@ -9,8 +9,8 @@
 const utils = require("@iobroker/adapter-core");
 const { strict } = require("assert");
 
-// Load your modules here, e.g.:
-// const fs = require("fs");
+// eslint-disable-next-line no-unused-vars
+const helper = require("./lib/helper");
 
 class DeviceReminder extends utils.Adapter {
 
@@ -33,7 +33,10 @@ class DeviceReminder extends utils.Adapter {
         this._lastId = '';
         this.foundAdapters = [];
         this.messenger = {};
-        this.implementedMessenger = ["alexa2", "sayit", "telegram", "whatsapp-cmb", "pushover", "signal-cmb", "discord", "email", "matrix-org"];
+        this.activeStates = []; // Array of activated states for device-reminder
+        this.states = {};
+        this.processing = false;
+        this.devices = {};
     }
 
     /**
@@ -43,18 +46,8 @@ class DeviceReminder extends utils.Adapter {
 
         this.log.warn('test')
 
-        // Aus den Daten der Adapter Config ein Messenger Objekt bauen
-        this.implementedMessenger.forEach((name) => {
-            let objTemp = {};
-            if (this.config.hasOwnProperty(name) && Array.isArray(this.config[name]) && this.config[name].length > 0) {
-                this.config[name].forEach((element) => {
-                    const { id, active, ...newObj } = element;  // Attribute "id" und "active" entfernen
-                    const filteredRest = Object.fromEntries(Object.entries(newObj).filter(([key, value]) => value !== null));
-                    objTemp[element.id] = filteredRest;
-                });
-                this.messenger[name] = objTemp;
-            }
-        });
+        this.getMessenger();
+        this.initCustomStates();
 
         // Initialize your adapter here
 
@@ -125,19 +118,90 @@ class DeviceReminder extends utils.Adapter {
 
     // If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
     // You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
-    // /**
-    //  * Is called if a subscribed object changes
-    //  * @param {string} id
-    //  * @param {ioBroker.Object | null | undefined} obj
-    //  */
-    onObjectChange(id, obj) {
-        if (obj) {
-            // The object was changed
-            this.log.info(JSON.stringify(obj))
-        } else {
-            // The object was deleted
-        }
-    }
+    /**
+     * Is called if a subscribed object changes
+     * @param {string} id
+     * @param {ioBroker.Object | null | undefined} obj
+     */
+    async onObjectChange(id, obj) {
+
+        try {
+            if (!this.processing) {
+                this.processing = true;
+                const stateID = id;
+
+                // Check if object is activated for device-reminder
+                if (obj && obj.common) {
+                    // Verify if custom information is available regarding device-reminder
+                    if (obj.common.custom && obj.common.custom[this.namespace] && obj.common.custom[this.namespace].enabled) {
+                        //Check if its an own device-reminder State
+                        if (stateID.includes(this.namespace)) {
+                            this.writeLog(
+                                `[onObjectChange] This Object-ID: "${stateID}" is not allowed, because it's an device-reminder State! The settings will be deaktivated automatically!`,
+                                "warn",
+                            );
+                            const stateInfo = await this.getForeignObjectAsync(stateID);
+                            if (stateInfo?.common?.custom) {
+                                stateInfo.common.custom[this.namespace].enabled = false;
+                                await this.setForeignObjectAsync(stateID, stateInfo);
+                            }
+                        } else {
+                            this.writeLog(
+                                `[onObjectChange] Object array of device-reminder activated state changed : ${JSON.stringify(
+                                    obj,
+                                )} stored Objects : ${JSON.stringify(this.activeStates)}`,
+                            );
+
+                            // Verify if the object was already activated, if not initialize new parameter
+                            if (!this.activeStates.includes(stateID)) {
+                                this.writeLog(`[onObjectChange] Enable device-reminder for : ${stateID}`, "info");
+
+
+                                await this.buildDeviceFromStateId(stateID);
+                                this.writeLog(
+                                    `[onObjectChange] ${stateID}: this.activeStates : ${JSON.stringify(this.activeStates)}`, "info"
+                                );
+
+                                if (!this.activeStates.includes(stateID)) {
+                                    this.writeLog(
+                                        `[onObjectChange] Cannot enable device-reminder for ${stateID}, check settings and error messages`,
+                                        "warn",
+                                    );
+                                }
+                            } else {
+                                this.writeLog(
+                                    `[onObjectChange] Updating device-reminder configuration for : ${stateID}`,
+                                );
+
+                                // await this.buildDeviceFromStateId(stateID);
+
+                                if (!this.activeStates.includes(stateID)) {
+                                    this.writeLog(
+                                        `[onObjectChange] Cannot update device-reminder configuration for ${stateID}, check settings and error messages`,
+                                        "warn",
+                                    );
+                                }
+                            }
+                        }
+                    } else if (this.activeStates.includes(stateID)) {
+                        this.activeStates = await helper.removeValue(this.activeStates, stateID);
+                        this.writeLog(`[onObjectChange] Disabled device-reminder for : ${stateID}`, "info");
+
+                        this.writeLog(
+                            `[onObjectChange] Active state array after deactivation of ${stateID} : ${this.activeStates.length === 0 ? "empty" : JSON.stringify(this.activeStates)
+                            }`, "info",
+                        );
+                        this.unsubscribeForeignStates(stateID);
+                    }
+                    this.processing = false;
+                } else {
+                    // Object change not related to this adapter, ignoring
+                }
+            }
+        } catch (error) {
+            this.errorHandling(error, "onObjectChange");
+        };
+    };
 
     /**
      * Is called if a subscribed state changes
@@ -163,7 +227,7 @@ class DeviceReminder extends utils.Adapter {
         const arrResult = [];
         let name = "";
 
-        this.log.info(`OBJECT INCOMING123: ${JSON.stringify(obj)} <${JSON.stringify(this.config)}>`);
+        // this.log.debug(`OBJECT INCOMING123: ${JSON.stringify(obj)} <${JSON.stringify(this.config)}>`);
 
         switch (obj.command) {
 
@@ -180,11 +244,11 @@ class DeviceReminder extends utils.Adapter {
                 name = name.replace("_", "-").toLowerCase();
 
                 const result = await this.getInstance(name);
-                this.log.info(`[getInstanceStart] result <${name}>: ${JSON.stringify(result)}`);
+                this.log.debug(`[getInstanceStart] result <${name}>: ${JSON.stringify(result)}`);
                 if (result.length > 0) {
-                    this.log.info(`[getInstanceStart] Es wurden Instanzen fuer ${name} gefunden. ${JSON.stringify(result)}`)
+                    this.log.debug(`[getInstanceStart] Es wurden Instanzen fuer ${name} gefunden. ${JSON.stringify(result)}`)
                 } else {
-                    this.log.info(`[getInstanceStart] Es wurde keine Instanz fuer ${name} gefunden. ${JSON.stringify(result)}`)
+                    this.log.debug(`[getInstanceStart] Es wurde keine Instanz fuer ${name} gefunden. ${JSON.stringify(result)}`)
                 }
 
                 this.respond(obj, result.length > 0, this);
@@ -214,7 +278,7 @@ class DeviceReminder extends utils.Adapter {
                 break;
 
             case "customConfig":
-                this.log.info('custom config')
+                this.log.debug('custom config')
 
                 name = obj.message.name;
 
@@ -225,12 +289,7 @@ class DeviceReminder extends utils.Adapter {
 
                 break;
 
-            // Custom Config commands
-
             case "getDataCustom":
-
-                this.log.info('test')
-                this.log.info(obj.message.name)
 
                 /**
                  * @typedef {Object} element
@@ -241,7 +300,7 @@ class DeviceReminder extends utils.Adapter {
                  */
 
                 // Funktion, um aus den Werten aus der native ein Array zu machen, welches per select an die CustomConfig gesendet wird
-                const funcResult = this.config[obj.message.name].map(async (/** @type {element} */ element) => {
+                const funcResult = this.config[obj.message.name].map(async /** @type {element} */ element => {
                     if (element['instance'] != null) {
                         return { label: `${element.name} [instance: ${element.instance}]`, value: element.id };
                     } else {
@@ -252,28 +311,239 @@ class DeviceReminder extends utils.Adapter {
                 // funcResult ausführen, wenn this.config[obj.message.name] vorhanden ist und mindestens einen Eintrag hat
                 if (this.config[obj.message.name] && Object.keys(this.config[obj.message.name]).length > 0) {
                     Promise.all(funcResult).then(result => {
-                        this.log.info(`Return to Custom: ${JSON.stringify(result)}`)
+                        this.log.debug(`[${JSON.stringify(obj.message.name)}] Return to Custom: ${JSON.stringify(result)}`)
                         this.respond(obj, result, this);
                     });
                 } else {
-                    this.log.info(`[${name}] Return to Custom fehlgeschlagen: ${JSON.stringify(obj.message.name)}`)
+                    this.log.debug(`[${JSON.stringify(obj.message.name)}] Return to Custom fehlgeschlagen, keine Daten`)
                 }
 
                 break;
 
+            case "getDataFromConfig":
+                this.log.warn('data config angefordert')
 
+                const dataDefault = this.config.default.ids.map(element => {
+                    return { label: element.name, value: element.name }
+                });
+
+                const dataCustom = this.config.custom.ids.map(element => {
+                    return { label: element.name, value: element.name }
+                });
+
+                this.respond(obj, dataDefault.concat(dataCustom), this);
+
+                break;
+
+            case "getValuesFromConfig":
+
+                this.respond(obj, { native: { startVal: 5, endVal: 5, standby: 5, startCount: 5, endCount: 5 } }, this);
+
+                this.log.warn(JSON.stringify(obj))
+                break;
         };
     };
 
-    async respond(obj, response, that) {
+    /**
+    * Init all Custom states
+    * @description Init all Custom states
+    */
+    async initCustomStates() {
+
         try {
-            if (obj.callback) that.sendTo(obj.from, obj.command, response, obj.callback);
-            return true
+            const customStateArray = await this.getObjectViewAsync("system", "custom", {});
+            this.writeLog(`[initCustomStates] All states with custom items : ${JSON.stringify(customStateArray)}`);
+
+            // List all states with custom configuration
+            if (customStateArray && customStateArray.rows) {
+                // Verify first if result is not empty
+
+                // Loop truth all states and check if state is activated for device-reminder
+                for (const index in customStateArray.rows) {
+                    if (customStateArray.rows[index].value) {
+                        // Avoid crash if object is null or empty
+                        // Check if custom object contains data for device-reminder
+                        // @ts-ignore
+                        if (customStateArray.rows[index].value[this.namespace]) {
+                            this.writeLog(`[initCustomStates] device-reminder configuration found`);
+
+                            // Simplify stateID
+                            const stateID = customStateArray.rows[index].id;
+
+                            // Check if custom object is enabled for device-reminder
+                            // @ts-ignore
+                            if (customStateArray.rows[index].value[this.namespace].enabled) {
+                                if (!this.activeStates.includes(stateID)) this.activeStates.push(stateID);
+                                this.writeLog(`[initCustomStates] device-reminder enabled state found ${stateID}`);
+                            } else {
+                                this.writeLog(
+                                    `[initCustomStates] device-reminder configuration found but not Enabled, skipping ${stateID}`,
+                                );
+                            };
+                        };
+                    };
+                };
+            };
+
+            const totalEnabledStates = this.activeStates.length;
+            let totalInitiatedStates = 0;
+            let totalFailedStates = 0;
+            this.writeLog(`[initCustomStates] Found ${totalEnabledStates} device-reminder enabled states`, "info");
+
+            // Initialize all discovered states
+            let count = 1;
+            for (const stateID of this.activeStates) {
+                this.writeLog(`[initCustomStates] Initialising (${count} of ${totalEnabledStates}) "${stateID}"`);
+                await this.buildDeviceFromStateId(stateID);
+
+                if (this.activeStates.includes(stateID)) {
+                    totalInitiatedStates = totalInitiatedStates + 1;
+                    this.writeLog(`Initialization of ${stateID} successfully`, "info");
+                } else {
+                    this.writeLog(
+                        `[initCustomStates] Initialization of ${stateID} failed, check warn messages !`,
+                        "warn",
+                    );
+                    totalFailedStates = totalFailedStates + 1;
+                };
+                count++;
+            };
+
+            // Subscribe on all foreign objects to detect (de)activation of device-reminder enabled states
+            await this.subscribeForeignObjectsAsync("*");
+            this.writeLog(
+                `[initCustomStates] subscribed all foreign objects to detect (de)activation of device-reminder enabled states`,
+            );
+
+            if (totalFailedStates > 0) {
+                this.writeLog(
+                    `[initCustomStates] Cannot handle calculations for ${totalFailedStates} of ${totalEnabledStates} enabled states, check error messages`,
+                    "warn",
+                );
+            };
+
+            this.writeLog(
+                `Successfully activated device-reminder for ${totalInitiatedStates} of ${totalEnabledStates} states, will do my Job until you stop me!`,
+                "info",
+            );
+
         } catch (error) {
-            this.log.error(`[Error - Respond] ${error}`)
-            return false
+            this.errorHandling(error, "InitCustomStates");
+        };
+    };
+
+    /**
+     * Load state definitions to memory this.activeStates[stateID]
+     * @param {string} stateID ID  of state to refresh memory values
+     */
+    async buildDeviceFromStateId(stateID) {
+        this.writeLog(`[buildDeviceFromStateId] started for ${stateID}`);
+        try {
+            // Load configuration as provided in object
+            /** @type {ioBroker.StateObject} */
+            const stateInfo = await this.getForeignObjectAsync(stateID);
+            try {
+                if (!stateInfo) {
+                    this.writeLog(
+                        `[buildDeviceFromStateId] Can't get information for ${stateID}, state will be ignored`,
+                        "warn",
+                    );
+                    this.activeStates = await helper.removeValue(this.activeStates, stateID);
+                    this.unsubscribeForeignStates(stateID);
+                    return;
+                }
+            } catch (error) {
+                this.writeLog(
+                    `[buildDeviceFromStateId] ${stateID} is incorrectly correctly formatted, ${JSON.stringify(
+                        error,
+                    )}`,
+                    "error",
+                );
+                this.activeStates = await helper.removeValue(this.activeStates, stateID);
+                this.unsubscribeForeignStates(stateID);
+                return;
+            };
+
+            // Check if configuration for device-reminder is present, throw error in case of issue in configuration
+            if (stateInfo && stateInfo.common && stateInfo.common.custom && stateInfo.common.custom[this.namespace]) {
+                const customData = stateInfo.common.custom[this.namespace];
+                this.writeLog(
+                    `[buildDeviceFromStateId] ${stateID} object data : ${JSON.stringify(stateInfo)}`
+                );
+
+                // neuen active State ins array this.activeStates hinzufuegen, wenn die Objektparameter plausibel sind
+                if (!this.activeStates.includes(stateID)) this.activeStates.push(stateID);
+                // Objekt Class mit allen Parametern zusammenbauen
+                this.devices[stateID] = await this.createDeviceFromObject(stateInfo, stateID);
+
+                this.writeLog(
+                    `[buildDeviceFromStateId] ${stateID} object from constructor : ${JSON.stringify(this.devices[stateID])}, "warn`
+                );
+
+            };
+        } catch (error) {
+
+        }
+    };
+
+    getMessenger() {
+        // Aus den Daten der Adapter Config ein Messenger Objekt bauen
+        this.config.implementedMessenger.forEach((name) => {
+            let objTemp = {};
+            if (this.config.hasOwnProperty(name) && Array.isArray(this.config[name]) && this.config[name].length > 0) {
+                this.config[name].forEach((element) => {
+                    const { id, active, ...newObj } = element;  // Attribute "id" und "active" entfernen
+                    const filteredRest = Object.fromEntries(Object.entries(newObj).filter(([key, value]) => value !== null));
+                    objTemp[element.id] = filteredRest;
+                });
+                this.messenger[name] = objTemp;
+            }
+        });
+
+        return;
+    };
+
+    async createDeviceFromObject(obj, /**@type{string}*/ stateID) {
+
+        this.writeLog(
+            `[createDeviceFromObject] Input: ${JSON.stringify(obj)}`
+        );
+
+        class device {
+            constructor(obj) {
+                /** @type {string} */ this.name = obj.common.name;
+                /** @type {string} */ this.pathLiveConsumption = stateID;
+                /** @type {string} */ this.unit = obj.common.unit != undefined ? obj.common.unit || null : null;
+                this.messenger = {};
+            };
         };
 
+        const newDevice = new device(obj);
+
+        // Alle messenger IDs und Messenger anlegen und als attribut an newDevice schreiben
+        this.config.implementedMessenger.forEach(element => {
+            if (obj.common.custom[this.namespace][element] != undefined && obj.common.custom[this.namespace][element].length > 0) {
+                newDevice.messenger[`${element}`] = obj.common.custom[this.namespace][element]
+            };
+        });
+
+        this.writeLog(
+            `[createDeviceFromObject] Return: ${JSON.stringify(newDevice)}`, "info"
+        );
+
+        // return newDevice;
+    };
+
+    // Antwort an Absender von sendTo senden
+    async respond(obj, response, that) {
+        this.log.warn(JSON.stringify(response))
+        try {
+            if (obj.callback) that.sendTo(obj.from, obj.command, response, obj.callback);
+            return true;
+        } catch (error) {
+            this.errorHandling(error, "Respond");
+            return false;
+        };
     };
 
     // In dieser Funktionen werden alle Installierten Instanzen gesucht und in einem Array zurueck gegeben
@@ -402,7 +672,37 @@ class DeviceReminder extends utils.Adapter {
         } catch (error) {
             this.log.error(`[writeLog] error: ${error} `);
         }
-    }
+    };
+
+    /**
+     * Error Handling
+     * @param {object} error error message from catch block
+     * @param {string} codePart described the code part or function
+     * @param {string} extended extended info about the error
+     */
+    async errorHandling(error, codePart, extended = "") {
+        try {
+            this.writeLog(
+                `error: ${error.message} // stack: ${error.stack} ${extended ? " // extended info: " + extended : ""}`,
+                "error",
+                codePart,
+            );
+            // if (!disableSentry) {
+            //     if (this.supportsFeature && this.supportsFeature("PLUGINS")) {
+            //         const sentryInstance = this.getPluginInstance("sentry");
+            //         if (sentryInstance) {
+            //             const Sentry = sentryInstance.getSentryObject();
+            //             if (Sentry)
+            //                 Sentry.captureException(
+            //                     `[ v${this.version} ${codePart} ] ${error} // extended info: ${extended} )}`,
+            //                 );
+            //         }
+            //     }
+            // }
+        } catch (error) {
+            this.writeLog(`[ errorHandling ] error: ${error}`, "error");
+        };
+    };
 };
 
 
