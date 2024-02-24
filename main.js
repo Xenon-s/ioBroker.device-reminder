@@ -11,6 +11,7 @@ const { strict } = require("assert");
 
 // eslint-disable-next-line no-unused-vars
 const helper = require("./lib/helper");
+const device = require("./lib/device");
 
 class DeviceReminder extends utils.Adapter {
 
@@ -37,6 +38,8 @@ class DeviceReminder extends utils.Adapter {
         this.states = {};
         this.processing = false;
         this.devices = {};
+        this.dataInstance = {};
+        this.implementedMessenger = ["alexa2", "sayit", "telegram", "whatsapp-cmb", "pushover", "signal-cmb", "discord", "email", "matrix-org"]
     }
 
     /**
@@ -46,6 +49,7 @@ class DeviceReminder extends utils.Adapter {
 
         this.log.warn('test')
 
+        this.getInstance()
         this.getMessenger();
         this.initCustomStates();
 
@@ -233,37 +237,52 @@ class DeviceReminder extends utils.Adapter {
 
             case "getInstance": // hier werden alle installierten Instanzen eines Adapters geholt und per selectSendTo in der Admin UI angezeigt
 
-                name = obj.message.name.replace("show", "").toLowerCase();  // Adapter mit einem "-" im Namen muessen in der Config mit "_" abgespeichert werden. Hier wird wieder aus "_" ein "-", damit der Adapter gefunden wird
-                name = name.replace("_", "-").toLowerCase();
-                this.respond(obj, await this.getInstance(name), this);
+            this.log.info('getInstance');
+
+                this.log.info(obj.message.name)
+                name = await helper.changeName(JSON.stringify(obj));
+
+                this.log.warn(JSON.stringify(this.dataInstance))
+                this.respond(obj, this.dataInstance[name], this);
 
                 break;
 
             case "getInstanceStart":    // hier werden beim Adapterstart alle Adapter geholt und per selectSendTo in der Admin UI angezeigt. Dieser Feld dient dem User dann als Filter
-                name = obj.message.attr.replace("show", "").toLowerCase(); // Adapter mit einem "-" im Namen muessen in der Config mit "_" abgespeichert werden. Hier wird wieder aus "_" ein "-", damit der Adapter gefunden wird
-                name = name.replace("_", "-").toLowerCase();
+            this.log.info('getInstanceStart');
 
-                const result = await this.getInstance(name);
-                this.log.debug(`[getInstanceStart] result <${name}>: ${JSON.stringify(result)}`);
-                if (result.length > 0) {
-                    this.log.debug(`[getInstanceStart] Es wurden Instanzen fuer ${name} gefunden. ${JSON.stringify(result)}`)
-                } else {
-                    this.log.debug(`[getInstanceStart] Es wurde keine Instanz fuer ${name} gefunden. ${JSON.stringify(result)}`)
+                try {
+                    this.log.warn(JSON.stringify(obj))
+                    this.log.warn(JSON.stringify(this.dataInstance))
+
+                    name = await helper.changeName(obj.message.attr);
+
+                    this.log.warn(`name vorher : ${obj.message.attr}, name neu ${name}, this ${JSON.stringify(this.dataInstance)}`)
+
+                    this.log.debug(`[getInstanceStart] result <${name}>: ${JSON.stringify(this.dataInstance[name])}`);
+                    if (this.dataInstance[name].length > 0) {
+                        this.log.debug(`[getInstanceStart] Es wurden Instanzen fuer ${name} gefunden. ${JSON.stringify(this.dataInstance[name])}`)
+                    } else {
+                        this.log.debug(`[getInstanceStart] Es wurde keine Instanz fuer ${name} gefunden. ${JSON.stringify(this.dataInstance[name])}`)
+                    }
+
+                    this.respond(obj, this.dataInstance[name].length > 0, this);
+                } catch (error) {
+                    this.log.error(error)
                 }
 
-                this.respond(obj, result.length > 0, this);
+
 
                 break;
 
             case "getEchoDevives":
 
-                this.respond(obj, await this.getEchoDevices(await this.getInstance(obj.message.name)), this);
+                this.respond(obj, await this.getEchoDevices(this.dataInstance[obj.message.name]), this);
 
                 break;
 
             case "getTelegramUsers":
 
-                this.respond(obj, await this.getTelegramUsers(await this.getInstance(obj.message.name)), this);
+                this.respond(obj, await this.getTelegramUsers(this.dataInstance[obj.message.name]), this);
 
                 break;
 
@@ -321,7 +340,6 @@ class DeviceReminder extends utils.Adapter {
                 break;
 
             case "getDataFromConfig":
-                this.log.warn('data config angefordert')
 
                 const dataDefault = this.config.default.ids.map(element => {
                     return { label: element.name, value: element.name }
@@ -339,7 +357,6 @@ class DeviceReminder extends utils.Adapter {
 
                 this.respond(obj, { native: { startVal: 5, endVal: 5, standby: 5, startCount: 5, endCount: 5 } }, this);
 
-                this.log.warn(JSON.stringify(obj))
                 break;
         };
     };
@@ -437,7 +454,7 @@ class DeviceReminder extends utils.Adapter {
      * @param {string} stateID ID  of state to refresh memory values
      */
     async buildDeviceFromStateId(stateID) {
-        this.writeLog(`[buildDeviceFromStateId] started for ${stateID}`);
+        this.writeLog(`[buildDeviceFromStateId] started for ${stateID}`, "debug");
         try {
             // Load configuration as provided in object
             /** @type {ioBroker.StateObject} */
@@ -466,6 +483,7 @@ class DeviceReminder extends utils.Adapter {
 
             // Check if configuration for device-reminder is present, throw error in case of issue in configuration
             if (stateInfo && stateInfo.common && stateInfo.common.custom && stateInfo.common.custom[this.namespace]) {
+                this.log.error('true')
                 const customData = stateInfo.common.custom[this.namespace];
                 this.writeLog(
                     `[buildDeviceFromStateId] ${stateID} object data : ${JSON.stringify(stateInfo)}`
@@ -474,10 +492,10 @@ class DeviceReminder extends utils.Adapter {
                 // neuen active State ins array this.activeStates hinzufuegen, wenn die Objektparameter plausibel sind
                 if (!this.activeStates.includes(stateID)) this.activeStates.push(stateID);
                 // Objekt Class mit allen Parametern zusammenbauen
-                this.devices[stateID] = await this.createDeviceFromObject(stateInfo, stateID);
+                this.devices[stateID] = await device.create(stateInfo, stateID, this.namespace, this.implementedMessenger);
 
                 this.writeLog(
-                    `[buildDeviceFromStateId] ${stateID} object from constructor : ${JSON.stringify(this.devices[stateID])}, "warn`
+                    `[buildDeviceFromStateId] ${stateID} object from constructor : ${JSON.stringify(this.devices[stateID])}`, "debug"
                 );
 
             };
@@ -488,7 +506,7 @@ class DeviceReminder extends utils.Adapter {
 
     getMessenger() {
         // Aus den Daten der Adapter Config ein Messenger Objekt bauen
-        this.config.implementedMessenger.forEach((name) => {
+        this.implementedMessenger.forEach((name) => {
             let objTemp = {};
             if (this.config.hasOwnProperty(name) && Array.isArray(this.config[name]) && this.config[name].length > 0) {
                 this.config[name].forEach((element) => {
@@ -497,46 +515,16 @@ class DeviceReminder extends utils.Adapter {
                     objTemp[element.id] = filteredRest;
                 });
                 this.messenger[name] = objTemp;
-            }
+            };
         });
 
         return;
     };
 
-    async createDeviceFromObject(obj, /**@type{string}*/ stateID) {
 
-        this.writeLog(
-            `[createDeviceFromObject] Input: ${JSON.stringify(obj)}`
-        );
-
-        class device {
-            constructor(obj) {
-                /** @type {string} */ this.name = obj.common.name;
-                /** @type {string} */ this.pathLiveConsumption = stateID;
-                /** @type {string} */ this.unit = obj.common.unit != undefined ? obj.common.unit || null : null;
-                this.messenger = {};
-            };
-        };
-
-        const newDevice = new device(obj);
-
-        // Alle messenger IDs und Messenger anlegen und als attribut an newDevice schreiben
-        this.config.implementedMessenger.forEach(element => {
-            if (obj.common.custom[this.namespace][element] != undefined && obj.common.custom[this.namespace][element].length > 0) {
-                newDevice.messenger[`${element}`] = obj.common.custom[this.namespace][element]
-            };
-        });
-
-        this.writeLog(
-            `[createDeviceFromObject] Return: ${JSON.stringify(newDevice)}`, "info"
-        );
-
-        // return newDevice;
-    };
 
     // Antwort an Absender von sendTo senden
     async respond(obj, response, that) {
-        this.log.warn(JSON.stringify(response))
         try {
             if (obj.callback) that.sendTo(obj.from, obj.command, response, obj.callback);
             return true;
@@ -547,24 +535,42 @@ class DeviceReminder extends utils.Adapter {
     };
 
     // In dieser Funktionen werden alle Installierten Instanzen gesucht und in einem Array zurueck gegeben
-    async getInstance(/**@type{string}*/ name) {
 
-        const arrResult = [];
-        const instances = await this.getObjectViewAsync('system', 'instance', { startkey: `system.adapter.${name}.`, endkey: `system.adapter.${name}.\u9999` });
+    async getInstance() {
+        const objTemp = {}; // Temporäres Objekt zur Zwischenspeicherung
 
-        // Jedes ROW in den gefundenen Instanzen durchlaufen und die Instanz ID raussuchen und in ein Array schreiben
-        for (const row of Object.keys(instances)) {
-            for (const i of Object.keys(instances[row])) {
-                const element = instances[row][i]
-                if (element.id.includes(name)) {
-                    const res = await this.extractNumberFromString(element.id)
-                    arrResult.push({ label: res[0], value: res[0] });    // Gefundene Instanzen als Objekt ins Array pushen
+        // Daten aller vorhandenen Objekte aus "system.adapter" holen
+        const instances = await this.getObjectViewAsync('system', 'instance', { startkey: `system.adapter.`, endkey: `system.adapter.\u9999` });
+
+        // Parallelisierte Verarbeitung der Instanzen
+        await Promise.all(Object.values(instances).map(async row => {
+            for (const element of row) {
+                const adapterName = await helper.extractAdapterName(element.id);
+                const res = await helper.extractNumberFromString(element.id);
+
+                // Überprüfe, ob objTemp[adapterName] bereits definiert ist
+                if (!objTemp.hasOwnProperty(adapterName)) {
+                    // Wenn nicht, initialisiere es als leeres Array
+                    objTemp[adapterName] = [];
+                };
+
+                // Überprüfe, ob res nicht null ist
+                if (res !== null) {
+                    // Überprüfe, ob obj bereits im Array vorhanden ist
+                    const obj = await helper.createObjectFromNumber(res);
+                    const existingObj = objTemp[adapterName].find(item => item.label === obj.label && item.value === obj.value);
+
+                    if (!existingObj) {
+                        // Füge das Objekt zu objTemp[adapterName] hinzu, falls es nicht bereits vorhanden ist
+                        objTemp[adapterName].push(obj);
+                    };
                 };
             };
-        };
+        }));
 
-        return arrResult;
-    };
+        this.log.info(`Gefundene Adapter-Instanzen: ${JSON.stringify(objTemp)}`);
+        return objTemp;
+    }; 
 
     // In dieser Funktion werden alle Echo Devices aus dem Alexa2 Adapter geholt und in einem Array zurueck gegeben
     async getEchoDevices(/**@type{array}*/ arr) {
@@ -633,19 +639,7 @@ class DeviceReminder extends utils.Adapter {
         return arrResult;
     }
 
-    // In dieser Funktion wird die Instanz ID aus dem String extrahiert und zurueck gegeben
-    async extractNumberFromString(/**@type{string}*/ str) {
-        const regex = /\d+$/; // Regulärer Ausdruck, um die Zahl am Ende des Strings zu finden
-        const match = str.match(regex); // Die Zahl am Ende des Strings extrahieren
 
-        if (match) {
-            const number = parseInt(match[0]); // Die extrahierte Zahl in eine Ganzzahl umwandeln
-            const result = [number]; // Die Zahl in ein Array pushen
-            return result;
-        } else {
-            return []; // Wenn keine Zahl gefunden wurde, ein leeres Array zurückgeben
-        };
-    };
 
     /**
  * a function for log output
