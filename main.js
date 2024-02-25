@@ -59,8 +59,8 @@ class DeviceReminder extends utils.Adapter {
         ]);
 
         // Füge die geladenen Daten zu this.dataInstance hinzu
-        this.dataInstance.alexa2['echoDevices'] = echoDevices;
-        this.dataInstance.telegram['user'] = telegramUsers;
+        if (this.dataInstance.alexa2) this.dataInstance.alexa2['echoDevices'] = echoDevices;
+        if (this.dataInstance.telegram) this.dataInstance.telegram['user'] = telegramUsers;
         this.messenger = dataMessenger;
 
         this.log.warn(JSON.stringify(this.dataInstance))
