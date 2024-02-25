@@ -546,10 +546,15 @@ class DeviceReminder extends utils.Adapter {
             return false;
         };
     };
-    
+
     // In dieser Funktionen werden alle Installierten Instanzen gesucht und in einem Array zurueck gegeben
     async getInstance() {
         const objTemp = {}; // Temporäres Objekt zur Zwischenspeicherung
+
+        // Alle Messenger aus this.implementedMessenger sichern
+        for (const messenger of this.implementedMessenger) {
+            objTemp[await helper.changeName(messenger, "-", "_")] = [];
+        }
 
         // Daten aller vorhandenen Objekte aus "system.adapter" holen
         const instances = await this.getObjectViewAsync('system', 'instance', { startkey: `system.adapter.`, endkey: `system.adapter.\u9999` });
@@ -560,21 +565,22 @@ class DeviceReminder extends utils.Adapter {
                 const adapterName = await helper.extractAdapterName(element.id);
                 const res = await helper.extractNumberFromString(element.id);
 
-                // Überprüfe, ob objTemp[adapterName] bereits definiert ist
-                if (!objTemp.hasOwnProperty(adapterName.toString())) {
-                    // Wenn nicht, initialisiere es als leeres Array
-                    objTemp[adapterName.toString()] = [];
-                };
-
                 // Überprüfe, ob res nicht null ist
                 if (res !== null) {
                     // Überprüfe, ob obj bereits im Array vorhanden ist
                     const obj = await helper.createObjectFromNumber(res);
-                    const existingObj = objTemp[adapterName.toString()].find(item => item.label === obj.label && item.value === obj.value);
+                    const formattedAdapterName = await helper.changeName(adapterName, "-", "_");
+
+                    if (!objTemp.hasOwnProperty(formattedAdapterName)) {
+                        // Wenn der Adaptername nicht in objTemp vorhanden ist, füge ihn hinzu
+                        objTemp[formattedAdapterName] = [];
+                    }
+
+                    const existingObj = objTemp[formattedAdapterName].find(item => item.label === obj.label && item.value === obj.value);
 
                     if (!existingObj) {
                         // Füge das Objekt zu objTemp[adapterName] hinzu, falls es nicht bereits vorhanden ist
-                        objTemp[adapterName.toString()].push(obj);
+                        objTemp[formattedAdapterName].push(obj);
                     };
                 };
             };
@@ -583,6 +589,7 @@ class DeviceReminder extends utils.Adapter {
         this.log.info(`Gefundene Adapter-Instanzen: ${JSON.stringify(objTemp)}`);
         return objTemp;
     };
+
 
 
     /**
