@@ -12,6 +12,7 @@ const { strict } = require("assert");
 // eslint-disable-next-line no-unused-vars
 const helper = require("./lib/helper");
 const device = require("./lib/device");
+const dataMessenger = require("./lib/dataMessenger");
 
 class DeviceReminder extends utils.Adapter {
 
@@ -47,10 +48,24 @@ class DeviceReminder extends utils.Adapter {
      */
     async onReady() {
 
-        this.log.warn('test')
+        // Lade alle installierten Adapterinstanzen
+        this.dataInstance = await this.getInstance();
 
-        this.getInstance()
-        this.getMessenger();
+        // Lade gleichzeitig Echo-Geräte aus dem Alexa2-Adapter, Telegram-Benutzer und die Messenger Config aus der Native
+        const [echoDevices, telegramUsers, dataMessenger] = await Promise.all([
+            this.getEchoDevices(),
+            this.getTelegramUsers(),
+            this.getMessenger()
+        ]);
+
+        // Füge die geladenen Daten zu this.dataInstance hinzu
+        this.dataInstance.alexa2['echoDevices'] = echoDevices;
+        this.dataInstance.telegram['user'] = telegramUsers;
+        this.messenger = dataMessenger;
+
+        this.log.warn(JSON.stringify(this.dataInstance))
+        this.log.warn(JSON.stringify(this.messenger))
+
         this.initCustomStates();
 
         // Initialize your adapter here
@@ -227,139 +242,119 @@ class DeviceReminder extends utils.Adapter {
      * @param {ioBroker.Message} obj
      */
     async onMessage(obj) {
+        let name = ""; // Deklariere eine Variable zur Zwischenspeicherung des Namens
 
-        const arrResult = [];
-        let name = "";
-
-        // this.log.debug(`OBJECT INCOMING123: ${JSON.stringify(obj)} <${JSON.stringify(this.config)}>`);
-
+        // Switch-Anweisung, um je nach Befehl unterschiedliche Aktionen auszuführen
         switch (obj.command) {
+            case "getInstance":
 
-            case "getInstance": // hier werden alle installierten Instanzen eines Adapters geholt und per selectSendTo in der Admin UI angezeigt
-
-            this.log.info('getInstance');
-
-                this.log.info(obj.message.name)
-                name = await helper.changeName(JSON.stringify(obj));
-
-                this.log.warn(JSON.stringify(this.dataInstance))
-                this.respond(obj, this.dataInstance[name], this);
+                // Prüfe, ob this.dataInstance und this.dataInstance[obj.message.name] vorhanden sind, andernfalls gib ein leeres Array zurück
+                const adapterInstances = this.dataInstance && this.dataInstance[obj.message.name] ? this.dataInstance[obj.message.name] : [];
+                // Antworte mit den Instanzen für den angegebenen Adapter oder einem leeren Array, falls nicht vorhanden
+                this.respond(obj, adapterInstances, this);
 
                 break;
 
-            case "getInstanceStart":    // hier werden beim Adapterstart alle Adapter geholt und per selectSendTo in der Admin UI angezeigt. Dieser Feld dient dem User dann als Filter
-            this.log.info('getInstanceStart');
+            case "getInstanceStart":
 
-                try {
-                    this.log.warn(JSON.stringify(obj))
-                    this.log.warn(JSON.stringify(this.dataInstance))
+                // Versuche, den Namen zu ändern, basierend auf den Attributen der Nachricht
+                name = await helper.changeName(obj.message.attr, "_", "-");
 
-                    name = await helper.changeName(obj.message.attr);
+                // Prüfe, ob Instanzen für den geänderten Namen vorhanden sind
+                const instances = this.dataInstance[name];
+                const hasInstances = !!(instances && instances.length > 0); // Überprüfen, ob Instanzen vorhanden sind
 
-                    this.log.warn(`name vorher : ${obj.message.attr}, name neu ${name}, this ${JSON.stringify(this.dataInstance)}`)
-
-                    this.log.debug(`[getInstanceStart] result <${name}>: ${JSON.stringify(this.dataInstance[name])}`);
-                    if (this.dataInstance[name].length > 0) {
-                        this.log.debug(`[getInstanceStart] Es wurden Instanzen fuer ${name} gefunden. ${JSON.stringify(this.dataInstance[name])}`)
-                    } else {
-                        this.log.debug(`[getInstanceStart] Es wurde keine Instanz fuer ${name} gefunden. ${JSON.stringify(this.dataInstance[name])}`)
-                    }
-
-                    this.respond(obj, this.dataInstance[name].length > 0, this);
-                } catch (error) {
-                    this.log.error(error)
-                }
-
-
+                // Antworte mit true/false, je nachdem ob Instanzen vorhanden sind
+                this.respond(obj, hasInstances, this);
 
                 break;
 
             case "getEchoDevives":
-
-                this.respond(obj, await this.getEchoDevices(this.dataInstance[obj.message.name]), this);
+                // Prüfe, ob this.dataInstance.alexa2.echoDevices vorhanden ist, andernfalls gib ein leeres Array zurück
+                const echoDevices = this.dataInstance.alexa2 && this.dataInstance.alexa2.echoDevices ? this.dataInstance.alexa2.echoDevices : [];
+                // Antworte mit den Echo-Geräten aus dem Alexa2-Adapter oder einem leeren Array, falls nicht vorhanden
+                this.respond(obj, echoDevices, this);
 
                 break;
 
             case "getTelegramUsers":
-
-                this.respond(obj, await this.getTelegramUsers(this.dataInstance[obj.message.name]), this);
+                // Prüfe, ob this.dataInstance.telegram und this.dataInstance.telegram.user vorhanden sind, andernfalls gib ein leeres Array zurück
+                const telegramUsers = this.dataInstance.telegram && this.dataInstance.telegram.user ? this.dataInstance.telegram.user : [];
+                // Antworte mit den Telegram-Benutzern aus den Instanzen oder einem leeren Array, falls nicht vorhanden
+                this.respond(obj, telegramUsers, this);
 
                 break;
 
-            case "target":
-
-                obj.message.data.forEach((/**@type{string}*/ element) => {
-                    arrResult.push({ label: element, value: element });
-                });
-
+            case "dataMessenger":
+                // Mappe die Elemente aus dataMessenger und antworte mit dem Ergebnis
+                const arrResult = dataMessenger[obj.message.name][obj.message.data].map(element => ({
+                    label: element,
+                    value: element
+                }));
                 this.respond(obj, arrResult, this);
-
                 break;
 
             case "customConfig":
-                this.log.debug('custom config')
 
+                this.log.debug('custom config');
+                // Extrahiere den Namen aus der Nachricht
                 name = obj.message.name;
-
+                // Iteriere über die Elemente der Konfiguration und speichere sie
                 for (const i of Object.keys(this.config[name])) {
                     const obj = JSON.parse(`{${this.config[name][i].user}}`);
-                    this[name][obj.id] = obj
-                };
-
+                    this[name][obj.id] = obj;
+                }
                 break;
 
             case "getDataCustom":
 
-                /**
-                 * @typedef {Object} element
-                 * @property {boolean} active - Gibt an, ob das Element aktiv ist oder nicht.
-                 * @property {string} name - Der Benutzername des Elements.
-                 * @property {number} instance - Die Instanznummer des Elements.
-                 * @property {number} id - Die eindeutige ID des Elements.
-                 */
-
-                // Funktion, um aus den Werten aus der native ein Array zu machen, welches per select an die CustomConfig gesendet wird
-                const funcResult = this.config[obj.message.name].map(async /** @type {element} */ element => {
-                    if (element['instance'] != null) {
+                // Funktion, um ein Element zu mappen
+                async function mapElement(element) {
+                    if (element.instance != null) {
                         return { label: `${element.name} [instance: ${element.instance}]`, value: element.id };
                     } else {
                         return { label: element.name, value: element.id };
-                    };
-                });
-
-                // funcResult ausführen, wenn this.config[obj.message.name] vorhanden ist und mindestens einen Eintrag hat
-                if (this.config[obj.message.name] && Object.keys(this.config[obj.message.name]).length > 0) {
-                    Promise.all(funcResult).then(result => {
-                        this.log.debug(`[${JSON.stringify(obj.message.name)}] Return to Custom: ${JSON.stringify(result)}`)
-                        this.respond(obj, result, this);
-                    });
+                    }
+                };
+                // Prüfe, ob die Konfiguration Daten enthält
+                if (this.config[obj.message.name] && this.config[obj.message.name].length > 0) {
+                    const result = [];
+                    // Mape jedes Element und füge es dem Ergebnis hinzu
+                    for (const element of this.config[obj.message.name]) {
+                        const mappedElement = await mapElement(element);
+                        result.push(mappedElement);
+                    }
+                    this.log.debug(`[${JSON.stringify(obj.message.name)}] Rückgabe an Custom: ${JSON.stringify(result)}`);
+                    // Antworte mit dem Ergebnis
+                    this.respond(obj, result, this);
                 } else {
-                    this.log.debug(`[${JSON.stringify(obj.message.name)}] Return to Custom fehlgeschlagen, keine Daten`)
+                    this.log.debug(`[${JSON.stringify(obj.message.name)}] Rückgabe an Custom fehlgeschlagen, keine Daten`);
                 }
-
                 break;
 
             case "getDataFromConfig":
-
-                const dataDefault = this.config.default.ids.map(element => {
-                    return { label: element.name, value: element.name }
-                });
-
-                const dataCustom = this.config.custom.ids.map(element => {
-                    return { label: element.name, value: element.name }
-                });
-
-                this.respond(obj, dataDefault.concat(dataCustom), this);
-
+                // Funktion, um Elemente zu mappen
+                function mapElements(elements) {
+                    return elements.map(element => ({
+                        label: element.name,
+                        value: element.name
+                    }));
+                };
+                // Mape die Standard- und benutzerdefinierten IDs und antworte mit dem Ergebnis
+                const dataDefault = mapElements(this.config.default.ids);
+                const dataCustom = mapElements(this.config.custom.ids);
+                this.respond(obj, [...dataDefault, ...dataCustom], this);
                 break;
 
             case "getValuesFromConfig":
-
+                // Antworte mit Standardwerten aus der Konfiguration
                 this.respond(obj, { native: { startVal: 5, endVal: 5, standby: 5, startCount: 5, endCount: 5 } }, this);
-
                 break;
         };
     };
+
+
+
 
     /**
     * Init all Custom states
@@ -504,38 +499,55 @@ class DeviceReminder extends utils.Adapter {
         }
     };
 
-    getMessenger() {
-        // Aus den Daten der Adapter Config ein Messenger Objekt bauen
-        this.implementedMessenger.forEach((name) => {
-            let objTemp = {};
+    /**
+     * Diese Funktion erstellt ein Messenger-Objekt aus den Konfigurationsdaten.
+     * @returns {Promise<Object>} Ein Promise, das ein Messenger-Objekt enthält.
+     */
+    async getMessenger() {
+        // Erstelle ein leeres Objekt für den Messenger
+        const messengerObject = {};
+
+        // Durchlaufe alle implementierten Messenger
+        await Promise.all(this.implementedMessenger.map(async (name) => {
+            // Überprüfe, ob Konfigurationsdaten für den aktuellen Messenger vorhanden sind und ob es sich um ein Array handelt
             if (this.config.hasOwnProperty(name) && Array.isArray(this.config[name]) && this.config[name].length > 0) {
+                // Erstelle ein temporäres Objekt für die Messenger-Konfiguration
+                const tempObj = {};
+
+                // Durchlaufe alle Elemente der Konfiguration des aktuellen Messengers
                 this.config[name].forEach((element) => {
-                    const { id, active, ...newObj } = element;  // Attribute "id" und "active" entfernen
+                    // Entferne die Attribute "id" und "active" und erstelle ein neues Objekt
+                    const { id, active, ...newObj } = element;
+
+                    // Filtere die Werte des neuen Objekts, um null-Werte zu entfernen
                     const filteredRest = Object.fromEntries(Object.entries(newObj).filter(([key, value]) => value !== null));
-                    objTemp[element.id] = filteredRest;
+
+                    // Füge das gefilterte Objekt zum temporären Objekt hinzu
+                    tempObj[element.id] = filteredRest;
                 });
-                this.messenger[name] = objTemp;
-            };
-        });
 
-        return;
+                // Füge das temporäre Objekt zum Messenger-Objekt hinzu
+                messengerObject[name] = tempObj;
+            }
+        }));
+
+        // Gib das Messenger-Objekt zurück
+        return messengerObject;
     };
-
 
 
     // Antwort an Absender von sendTo senden
     async respond(obj, response, that) {
         try {
-            if (obj.callback) that.sendTo(obj.from, obj.command, response, obj.callback);
+            that.sendTo(obj.from, obj.command, response, obj.callback);
             return true;
         } catch (error) {
             this.errorHandling(error, "Respond");
             return false;
         };
     };
-
+    
     // In dieser Funktionen werden alle Installierten Instanzen gesucht und in einem Array zurueck gegeben
-
     async getInstance() {
         const objTemp = {}; // Temporäres Objekt zur Zwischenspeicherung
 
@@ -549,20 +561,20 @@ class DeviceReminder extends utils.Adapter {
                 const res = await helper.extractNumberFromString(element.id);
 
                 // Überprüfe, ob objTemp[adapterName] bereits definiert ist
-                if (!objTemp.hasOwnProperty(adapterName)) {
+                if (!objTemp.hasOwnProperty(adapterName.toString())) {
                     // Wenn nicht, initialisiere es als leeres Array
-                    objTemp[adapterName] = [];
+                    objTemp[adapterName.toString()] = [];
                 };
 
                 // Überprüfe, ob res nicht null ist
                 if (res !== null) {
                     // Überprüfe, ob obj bereits im Array vorhanden ist
                     const obj = await helper.createObjectFromNumber(res);
-                    const existingObj = objTemp[adapterName].find(item => item.label === obj.label && item.value === obj.value);
+                    const existingObj = objTemp[adapterName.toString()].find(item => item.label === obj.label && item.value === obj.value);
 
                     if (!existingObj) {
                         // Füge das Objekt zu objTemp[adapterName] hinzu, falls es nicht bereits vorhanden ist
-                        objTemp[adapterName].push(obj);
+                        objTemp[adapterName.toString()].push(obj);
                     };
                 };
             };
@@ -570,76 +582,90 @@ class DeviceReminder extends utils.Adapter {
 
         this.log.info(`Gefundene Adapter-Instanzen: ${JSON.stringify(objTemp)}`);
         return objTemp;
-    }; 
-
-    // In dieser Funktion werden alle Echo Devices aus dem Alexa2 Adapter geholt und in einem Array zurueck gegeben
-    async getEchoDevices(/**@type{array}*/ arr) {
-
-        const arrTemp = [];
-        const arrNames = [];
-
-        for (const i of Object.keys(arr)) {
-
-            const instance = arr[i].label;
-            const instances = await this.getObjectViewAsync('system', 'device', { startkey: `alexa2.${instance}.Echo-Devices.`, endkey: `alexa2.${instance}.Echo-Devices${String.fromCharCode(0xfffd)}` });
-            // Device Namen aus dem Alexa2 Adapter holen und in ein Array schreiben
-            for (const row of Object.keys(instances)) {
-                for (const i of Object.keys(instances[row])) {
-                    const deviceTemp = instances[row][i].id;
-                    const deviceTempSplit = deviceTemp.split(".");
-                    if (deviceTempSplit.length == 4 && !arrNames.includes(deviceTemp)) arrNames.push(deviceTemp);
-                };
-            };
-        };
-
-        // Den Namen aus den zuvor gesuchten Devices holen und als Objekt in ein Array pushen
-        for (const device of Object.keys(arrNames)) {
-            const res = await this.getForeignObjectAsync(arrNames[device]);
-            arrTemp.push({ label: res.common.name, value: arrNames[device] });    // Gefundene Instanzen als Objekt ins Array pushen
-        };
-
-        // @ts-ignore
-        const arrResult = Array.from(new Set(arrTemp.map(JSON.stringify))).map(JSON.parse); // Array auf doppelte Eintraege pruefen und ggf entfernen
-        return arrResult;
     };
 
-    async getTelegramUsers(/**@type{array}*/arr) {
 
+    /**
+     * Diese Funktion holt alle Echo-Geräte aus dem Alexa2-Adapter und gibt sie als Array von Objekten zurück.
+     * Jedes Objekt enthält den Namen des Geräts und seine ID.
+     * @returns {Promise<Array>} - Ein Promise, das ein Array von Objekten mit den Namen und IDs der Echo-Geräte enthält.
+     */
+    async getEchoDevices() {
+        // Verwendung eines Sets, um Duplikate zu vermeiden
+        const uniqueDevices = new Set();
+        const echoDevices = [];
+
+        // Parallele Verarbeitung der Instanzen
+        await Promise.all(this.dataInstance.alexa2.map(async (item) => {
+            const instance = item.label;
+
+            // Abfrage aller Geräte für eine bestimmte Instanz des Alexa2-Adapters
+            const instances = await this.getObjectViewAsync('system', 'device', {
+                startkey: `alexa2.${instance}.Echo-Devices.`,
+                endkey: `alexa2.${instance}.Echo-Devices${String.fromCharCode(0xfffd)}`
+            });
+
+            // Gerätenamen aus dem Alexa2-Adapter holen und zu uniqueDevices hinzufügen
+            for (const row of Object.values(instances)) {
+                await Promise.all(row.map(async (device) => {
+                    const deviceID = device.id;
+                    const deviceIDSplit = deviceID.split(".");
+                    if (deviceIDSplit.length === 4 && !uniqueDevices.has(deviceID)) {
+                        uniqueDevices.add(deviceID);
+                    }
+                }));
+            }
+        }));
+
+        // Gerätenamen aus den gefundenen Geräten abrufen und in das Ergebnisarray einfügen
+        await Promise.all(Array.from(uniqueDevices).map(async (deviceID) => {
+            const deviceObject = await this.getForeignObjectAsync(deviceID);
+            if (deviceObject) {
+                echoDevices.push({ label: deviceObject.common.name, value: deviceID });
+            }
+        }));
+
+        return echoDevices;
+    };
+
+    /**
+  * Diese Funktion holt alle Telegram-Benutzer aus den Instanzen des Telegram-Adapters.
+  * Die Benutzer werden als Array von Objekten zurückgegeben, wobei jedes Objekt den Benutzernamen und die Chat-ID enthält.
+  * @returns {Promise<Array>} - Ein Promise, das ein Array von Objekten mit den Benutzernamen und Chat-IDs enthält.
+  */
+    async getTelegramUsers() {
         const arrTemp = [];
 
-        for (const i of Object.keys(arr)) { // Fuer jede gefundene instanz die User ermitteln
+        // Parallele Verarbeitung der Instanzen in this.dataInstance.telegram
+        await Promise.all(Object.keys(this.dataInstance.telegram).map(async (instanceKey) => {
+            const instance = this.dataInstance.telegram[instanceKey].label;
+            const path = `telegram.${instance}.communicate.users`;
 
-            const instance = arr[i].label
-            const path = `telegram.${instance}.communicate.users`
-
-            // Pruefen ob username oder firstname genutzt wird
+            // Prüfen, ob username oder firstname genutzt wird
             const result = await this.getForeignObjectAsync(`system.adapter.telegram.${instance}`);
-            const useUsername = result != null ? result.native.useUsername || false : false;
+            const useUsername = result && result.native && result.native.useUsername;
 
-            const resultUsers = await this.getForeignStateAsync(path) || {};    // User aus dem Datenpunkt holen
-            const user = JSON.parse(resultUsers.val);
+            // Benutzer aus dem Datenpunkt holen
+            const resultUsers = await this.getForeignStateAsync(path);
+            const users = resultUsers ? JSON.parse(resultUsers.val) : {};
 
-            /* Jeden vorhandenen User in ein Array pushen (Entweder firstName oder userName, je nachdem was in der Telegram Instanz ausgewählt wurde)
-                Der Name dient nur als Anzeige im selectDropdown Menu, es wird immer an die ChatID gesendet
-            */
-
-            for (const id of Object.keys(user)) {
-
+            // Jeden vorhandenen Benutzer in ein Array pushen (Entweder firstName oder userName, je nachdem was in der Telegram Instanz ausgewählt wurde)
+            Object.values(users).forEach(user => {
                 const objTemp = {
-                    label: useUsername ? user[id].userName || user[id].firstName : user[id].firstName,
-                    value: useUsername ? user[id].userName || user[id].firstName : user[id].firstName
+                    label: useUsername ? user.userName || user.firstName : user.firstName,
+                    value: useUsername ? user.userName || user.firstName : user.firstName
                 };
+                arrTemp.push(objTemp);
+            });
+        }));
 
-                arrTemp.push(objTemp)
-            };
-        };
+        // Array auf doppelte Einträge prüfen und ggf. entfernen
+        const uniqueUsers = new Map();
+        arrTemp.forEach(user => uniqueUsers.set(user.label, user));
+        const arrResult = Array.from(uniqueUsers.values());
 
-        // @ts-ignore
-        const arrResult = Array.from(new Set(arrTemp.map(JSON.stringify))).map(JSON.parse); // Array auf doppelte Eintraege pruefen und ggf entfernen
         return arrResult;
-    }
-
-
+    };
 
     /**
  * a function for log output

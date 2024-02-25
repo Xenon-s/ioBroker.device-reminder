@@ -123,8 +123,8 @@
                             "label": "Target",
                             "attr": "target",
                             "help": "Select Speak or Announcemant",
-                            "command": "target",
-                            "jsonData": "{\"name\": \"alexa2\", \"data\": [\"speak\",\"announcement\"]}",
+                            "command": "dataMessenger",
+                            "jsonData": "{\"name\": \"alexa2\", \"data\": \"target\"}",
                             "validator": "const value = data.target; if ((value == '' || value == null)) return false; return true",
                             "validatorNoSaveOnError": false,
                             "newLine": true
@@ -448,8 +448,8 @@
                             "type": "selectSendTo",
                             "label": "priority",
                             "attr": "priority",
-                            "command": "target",
-                            "jsonData": "{\"name\": \"pushover\", \"data\": [\"normal\",\"high\",\"quiet\",\"confirmation\"]}",                    
+                            "command": "dataMessenger",
+                            "jsonData": "{\"name\": \"pushover\", \"data\": \"priority\"}",                     
                             "validator": "const value = data.priority; if ((value == null)) return false; return true",
                             "validatorNoSaveOnError": false,
                             "newLine": true
@@ -458,8 +458,8 @@
                             "type": "selectSendTo",
                             "label": "sound",
                             "attr": "sound",
-                            "command": "target",
-                            "jsonData": "{\"name\": \"pushover\", \"data\": [\"pushover\",\"bike\", \"bugle\",\"cashregister\", \"classical\", \"cosmic\",\"falling\",\"gamelan\",\"incoming\",\"magic\",\"mechanical\", \"pianobar\",\"siren\",\"spacealarm\",\"tugboat\",\"alien\",\"climb\",\"persistent\",\"echo\",\"updown\",\"none\"]}",                    
+                            "command": "dataMessenger",
+                            "jsonData": "{\"name\": \"pushover\", \"data\": \"sound\"}",                    
                             "validator": "const value = data.sound; if ((value == null)) return false; return true",
                             "validatorNoSaveOnError": false,
                             "newLine": true
