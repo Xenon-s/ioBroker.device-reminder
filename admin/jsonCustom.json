@@ -6,7 +6,6 @@
             "type": "checkbox",
             "label": "alexa2",
             "defaultSendTo": "getInstanceStart",
-            "defaultFunc": "return data.alexa2",
             "disabled": "true",
             "hidden": "true"
         },
@@ -14,7 +13,6 @@
             "type": "checkbox",
             "label": "sayit",
             "defaultSendTo": "getInstanceStart",
-            "defaultFunc": "return data.sayit",
             "disabled": "true",
             "hidden": "true"
         },
@@ -22,7 +20,6 @@
             "type": "checkbox",
             "label": "telegram",
             "defaultSendTo": "getInstanceStart",
-            "defaultFunc": "return data.telegram",
             "disabled": "true",
             "hidden": "true"
         },
@@ -30,7 +27,6 @@
             "type": "checkbox",
             "label": "whatsapp_cmb",
             "defaultSendTo": "getInstanceStart",
-            "defaultFunc": "return data.whatsapp_cmb",
             "disabled": "true",
             "hidden": "true"
         },
@@ -38,7 +34,6 @@
             "type": "checkbox",
             "label": "pushover",
             "defaultSendTo": "getInstanceStart",
-            "defaultFunc": "return data.pushover",
             "disabled": "true",
             "hidden": "true"
         },
@@ -46,7 +41,6 @@
             "type": "checkbox",
             "label": "signal_cmb",
             "defaultSendTo": "getInstanceStart",
-            "defaultFunc": "return data.signal_cmb",
             "disabled": "true",
             "hidden": "true"
         },
@@ -54,7 +48,6 @@
             "type": "checkbox",
             "label": "email",
             "defaultSendTo": "getInstanceStart",
-            "defaultFunc": "return data.email",
             "disabled": "true",
             "hidden": "true"
         },
@@ -62,7 +55,6 @@
             "type": "checkbox",
             "label": "matrix_org",
             "defaultSendTo": "getInstanceStart",
-            "defaultFunc": "return data.matrix_org",
             "disabled": "true",
             "hidden": "true"
         },
@@ -70,7 +62,6 @@
             "type": "checkbox",
             "label": "discord",
             "defaultSendTo": "getInstanceStart",
-            "defaultFunc": "return data.discord",
             "disabled": "true",
             "hidden": "true"
         },
@@ -129,21 +120,20 @@
         "_headerAlexa": {
             "type": "header",
             "text": "alexa2",
-            "size": 2,
-            "hidden": "!data.showAlexa2"
+            "size": 2
         },
         "alexa2": {
             "type": "selectSendTo",
             "label": "Alexa2 devices",
             "attr": "user",
-            "multiple": true,
             "command": "getDataCustom",
+            "noTranslation": true,
+            "multiple": true,
             "jsonData": "{\"name\": \"alexa2\"}",
             "sm": 12,
             "md": 12,
             "lg": 12,
-            "newLine": true,
-            "hidden": "!data.showAlexa2"
+            "newLine": true
         },
         "alexa2Msg": {
             "type": "text",

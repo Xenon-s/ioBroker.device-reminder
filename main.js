@@ -48,6 +48,7 @@ class DeviceReminder extends utils.Adapter {
      */
     async onReady() {
 
+        this.initCustomStates();
         // Lade alle installierten Adapterinstanzen
         this.dataInstance = await this.getInstance();
 
@@ -63,7 +64,7 @@ class DeviceReminder extends utils.Adapter {
         if (this.dataInstance.telegram) this.dataInstance.telegram['user'] = telegramUsers;
         this.messenger = dataMessenger;
 
-        this.initCustomStates();
+
 
         // Initialize your adapter here
 
@@ -141,10 +142,13 @@ class DeviceReminder extends utils.Adapter {
      */
     async onObjectChange(id, obj) {
 
+        this.log.warn('onObjectChange')
+
         try {
             if (!this.processing) {
                 this.processing = true;
                 const stateID = id;
+
 
                 // Check if object is activated for device-reminder
                 if (obj && obj.common) {
@@ -157,6 +161,8 @@ class DeviceReminder extends utils.Adapter {
                                 "warn",
                             );
                             const stateInfo = await this.getForeignObjectAsync(stateID);
+                            this.log.warn(JSON.stringify(stateInfo))
+
                             if (stateInfo?.common?.custom) {
                                 stateInfo.common.custom[this.namespace].enabled = false;
                                 await this.setForeignObjectAsync(stateID, stateInfo);
@@ -305,29 +311,22 @@ class DeviceReminder extends utils.Adapter {
 
             case "getDataCustom":
 
-                // Funktion, um ein Element zu mappen
-                async function mapElement(element) {
-                    if (element.instance != null) {
-                        return { label: `${element.name} [instance: ${element.instance}]`, value: element.id };
-                    } else {
-                        return { label: element.name, value: element.id };
-                    }
-                };
-                // Prüfe, ob die Konfiguration Daten enthält
+                const result = [];
+
                 if (this.config[obj.message.name] && this.config[obj.message.name].length > 0) {
-                    const result = [];
-                    // Mape jedes Element und füge es dem Ergebnis hinzu
-                    for (const element of this.config[obj.message.name]) {
-                        const mappedElement = await mapElement(element);
-                        result.push(mappedElement);
-                        this.log.warn(JSON.stringify(result))
-                    }
-                    this.log.debug(`[${JSON.stringify(obj.message.name)}] Rückgabe an Custom: ${JSON.stringify(result)}`);
+                    this.config[obj.message.name].forEach(element => {
+                        result.push({label: element.name, value: element.id})
+                    })
+                    this.log.warn(`[${JSON.stringify(obj.message.name)}] Rückgabe an Custom: ${JSON.stringify(result)}`);
                     // Antworte mit dem Ergebnis
+                    this.log.warn(typeof result)
                     this.respond(obj, result, this);
                 } else {
-                    this.log.debug(`[${JSON.stringify(obj.message.name)}] Rückgabe an Custom fehlgeschlagen, keine Daten`);
+                    this.respond(obj, [{ label: 'Not available', value: '' }], this);
+                    this.log.debug(`[${JSON.stringify(obj.message.name)}] Leeres Array zurückgeben, da keine Daten aus der Config vorliegen`);
                 }
+
+
                 break;
 
             case "getDataFromConfig":
@@ -359,6 +358,8 @@ class DeviceReminder extends utils.Adapter {
     * @description Init all Custom states
     */
     async initCustomStates() {
+
+        this.log.warn('initCustomStates')
 
         try {
             const customStateArray = await this.getObjectViewAsync("system", "custom", {});
@@ -496,7 +497,7 @@ class DeviceReminder extends utils.Adapter {
 
                 const matchingIds = {};
                 const mismatchedIds = {};
-                
+
                 // Überprüfung der Messenger und ihrer IDs
                 for (const messenger of this.implementedMessenger) {
                     // Überprüfen, ob der Messenger im 'stateInfo' Objekt vorhanden ist
@@ -506,11 +507,11 @@ class DeviceReminder extends utils.Adapter {
                             // Abrufen der IDs aus dem 'stateInfo' Objekt und dem temporären Objekt
                             const stateInfoIds = stateInfo.common.custom[this.namespace][messenger];
                             const tempIds = objMessengerTemp[messenger];
-                
+
                             // Logging für Debugging-Zwecke
-                            this.log.info(`[${messenger}] stateInfoIds ${JSON.stringify(stateInfoIds)}`);
-                            this.log.info(`[${messenger}] tempIds ${JSON.stringify(tempIds)}`);
-                
+                            this.log.debug(`[${messenger}] stateInfoIds ${JSON.stringify(stateInfoIds)}`);
+                            this.log.debug(`[${messenger}] tempIds ${JSON.stringify(tempIds)}`);
+
                             // Überprüfen, ob die Längen der Arrays gleich sind und ob alle IDs übereinstimmen
                             if (stateInfoIds.length === tempIds.length && stateInfoIds.every(id => tempIds.includes(id))) {
                                 // Speichern der übereinstimmenden IDs in matchingIds
@@ -525,13 +526,13 @@ class DeviceReminder extends utils.Adapter {
                         }
                     } else {
                         // Ausgabe einer Information, wenn der Messenger nicht im 'stateInfo' Objekt vorhanden ist
-                        this.log.info(`Messenger '${messenger}' ist nicht im 'stateInfo' Objekt vorhanden.`);
+                        this.log.debug(`Messenger '${messenger}' ist nicht im 'stateInfo' Objekt vorhanden.`);
                     }
                 }
-                
 
-                this.log.info(JSON.stringify(`matching ids ${JSON.stringify(matchingIds)}`))
-                this.log.info(JSON.stringify(`mismatching ids ${JSON.stringify(mismatchedIds)}`))
+
+                this.log.debug(JSON.stringify(`matching ids ${JSON.stringify(matchingIds)}`))
+                this.log.debug(JSON.stringify(`mismatching ids ${JSON.stringify(mismatchedIds)}`))
 
 
                 // neuen active State ins array this.activeStates hinzufuegen, wenn die Objektparameter plausibel sind
@@ -588,6 +589,7 @@ class DeviceReminder extends utils.Adapter {
 
     // Antwort an Absender von sendTo senden
     async respond(obj, response, that) {
+        this.log.info(`[respond] obj: ${JSON.stringify(obj)}, response: ${JSON.stringify(response)}`)
         try {
             that.sendTo(obj.from, obj.command, response, obj.callback);
             return true;
