@@ -63,9 +63,6 @@ class DeviceReminder extends utils.Adapter {
         if (this.dataInstance.telegram) this.dataInstance.telegram['user'] = telegramUsers;
         this.messenger = dataMessenger;
 
-        this.log.warn(JSON.stringify(this.dataInstance))
-        this.log.warn(JSON.stringify(this.messenger))
-
         this.initCustomStates();
 
         // Initialize your adapter here
@@ -323,6 +320,7 @@ class DeviceReminder extends utils.Adapter {
                     for (const element of this.config[obj.message.name]) {
                         const mappedElement = await mapElement(element);
                         result.push(mappedElement);
+                        this.log.warn(JSON.stringify(result))
                     }
                     this.log.debug(`[${JSON.stringify(obj.message.name)}] Rückgabe an Custom: ${JSON.stringify(result)}`);
                     // Antworte mit dem Ergebnis
@@ -463,7 +461,7 @@ class DeviceReminder extends utils.Adapter {
                     this.activeStates = await helper.removeValue(this.activeStates, stateID);
                     this.unsubscribeForeignStates(stateID);
                     return;
-                }
+                };
             } catch (error) {
                 this.writeLog(
                     `[buildDeviceFromStateId] ${stateID} is incorrectly correctly formatted, ${JSON.stringify(
@@ -478,11 +476,63 @@ class DeviceReminder extends utils.Adapter {
 
             // Check if configuration for device-reminder is present, throw error in case of issue in configuration
             if (stateInfo && stateInfo.common && stateInfo.common.custom && stateInfo.common.custom[this.namespace]) {
-                this.log.error('true')
                 const customData = stateInfo.common.custom[this.namespace];
                 this.writeLog(
-                    `[buildDeviceFromStateId] ${stateID} object data : ${JSON.stringify(stateInfo)}`
+                    `[buildDeviceFromStateId] ${stateID} object data : ${JSON.stringify(stateInfo.common.custom)}`, "debug"
                 );
+
+
+                // Hier pruefen, ob ids noch aktuell sind
+
+                let objMessengerTemp = {};
+                for (const messenger of this.implementedMessenger) {
+                    if (this.config.hasOwnProperty(messenger) && Array.isArray(this.config[messenger]) && this.config[messenger].length > 0) {
+                        objMessengerTemp[messenger] = await helper.getIdFromObject(this.config[messenger]);
+                    } else {
+                        this.log.debug(`Messenger '${messenger}' ist entweder nicht im 'this.config'-Objekt vorhanden oder das Array ist leer.`);
+                    };
+                };
+
+
+                const matchingIds = {};
+                const mismatchedIds = {};
+                
+                // Überprüfung der Messenger und ihrer IDs
+                for (const messenger of this.implementedMessenger) {
+                    // Überprüfen, ob der Messenger im 'stateInfo' Objekt vorhanden ist
+                    if (stateInfo.common.custom[this.namespace]?.hasOwnProperty(messenger)) {
+                        // Überprüfen, ob Daten in den Arrays vorhanden sind, bevor sie zugewiesen werden
+                        if (stateInfo.common.custom[this.namespace][messenger]?.length && objMessengerTemp[messenger]?.length) {
+                            // Abrufen der IDs aus dem 'stateInfo' Objekt und dem temporären Objekt
+                            const stateInfoIds = stateInfo.common.custom[this.namespace][messenger];
+                            const tempIds = objMessengerTemp[messenger];
+                
+                            // Logging für Debugging-Zwecke
+                            this.log.info(`[${messenger}] stateInfoIds ${JSON.stringify(stateInfoIds)}`);
+                            this.log.info(`[${messenger}] tempIds ${JSON.stringify(tempIds)}`);
+                
+                            // Überprüfen, ob die Längen der Arrays gleich sind und ob alle IDs übereinstimmen
+                            if (stateInfoIds.length === tempIds.length && stateInfoIds.every(id => tempIds.includes(id))) {
+                                // Speichern der übereinstimmenden IDs in matchingIds
+                                matchingIds[messenger] = stateInfoIds;
+                            } else {
+                                // Speichern der nicht übereinstimmenden IDs in mismatchedIds
+                                mismatchedIds[messenger] = stateInfoIds.filter(id => !tempIds.includes(id));
+                            }
+                        } else {
+                            // Ausgabe einer Warnung, wenn eines der Arrays nicht vorhanden oder leer ist
+                            this.log.warn(`Das Array für den Messenger '${messenger}' ist entweder nicht vorhanden oder leer.`);
+                        }
+                    } else {
+                        // Ausgabe einer Information, wenn der Messenger nicht im 'stateInfo' Objekt vorhanden ist
+                        this.log.info(`Messenger '${messenger}' ist nicht im 'stateInfo' Objekt vorhanden.`);
+                    }
+                }
+                
+
+                this.log.info(JSON.stringify(`matching ids ${JSON.stringify(matchingIds)}`))
+                this.log.info(JSON.stringify(`mismatching ids ${JSON.stringify(mismatchedIds)}`))
+
 
                 // neuen active State ins array this.activeStates hinzufuegen, wenn die Objektparameter plausibel sind
                 if (!this.activeStates.includes(stateID)) this.activeStates.push(stateID);
@@ -574,7 +624,7 @@ class DeviceReminder extends utils.Adapter {
                     if (!objTemp.hasOwnProperty(formattedAdapterName)) {
                         // Wenn der Adaptername nicht in objTemp vorhanden ist, füge ihn hinzu
                         objTemp[formattedAdapterName] = [];
-                    }
+                    };
 
                     const existingObj = objTemp[formattedAdapterName].find(item => item.label === obj.label && item.value === obj.value);
 
@@ -586,7 +636,7 @@ class DeviceReminder extends utils.Adapter {
             };
         }));
 
-        this.log.info(`Gefundene Adapter-Instanzen: ${JSON.stringify(objTemp)}`);
+        this.log.debug(`Gefundene Adapter-Instanzen: ${JSON.stringify(objTemp)}`);
         return objTemp;
     };
 
