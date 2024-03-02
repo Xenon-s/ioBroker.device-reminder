@@ -249,6 +249,16 @@ class DeviceReminder extends utils.Adapter {
 
         // Switch-Anweisung, um je nach Befehl unterschiedliche Aktionen auszuführen
         switch (obj.command) {
+
+            case "getDataCustomAlexa":
+
+            const res = [{label: "12", value : 1}, {label: "22", value : 2}, {label: "32", value : 3}, ];
+            this.respond(obj, res, this);
+
+
+            break;
+
+
             case "getInstance":
 
                 // Prüfe, ob this.dataInstance und this.dataInstance[obj.message.name] vorhanden sind, andernfalls gib ein leeres Array zurück

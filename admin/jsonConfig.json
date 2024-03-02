@@ -111,6 +111,7 @@
                             "type": "selectSendTo",
                             "label": "alexa2 Device",
                             "attr": "device",
+                            "multiple": true,
                             "help": "Select an Alexa device",
                             "command": "getEchoDevives",
                             "jsonData": "{\"name\": \"alexa2\", \"data\": ${data.id}}",

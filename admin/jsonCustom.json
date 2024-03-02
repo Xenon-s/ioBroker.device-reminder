@@ -126,7 +126,7 @@
             "type": "selectSendTo",
             "label": "Alexa2 devices",
             "attr": "user",
-            "command": "getDataCustom",
+            "command": "getDataCustomAlexa",
             "noTranslation": true,
             "multiple": true,
             "jsonData": "{\"name\": \"alexa2\"}",
