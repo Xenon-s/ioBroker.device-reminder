@@ -65,13 +65,35 @@
             "disabled": "true",
             "hidden": "true"
         },
+        "aliasName": {
+            "type": "text",
+            "label": "Alias Device",
+            "help": "Alias name for the device",
+            "attr": "msg",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true
+        },
+        "_headerValues": {
+            "type": "header",
+            "text": "Values",
+            "size": 2
+        },
+        "editBtn": {
+            "type": "checkbox",
+            "label": "edit Values",
+            "default": false
+        },
         "selectTypeFromNative": {
             "type": "selectSendTo",
             "label": "selectType",
             "attr": "target",
             "showProcess": true,
             "command": "getDataFromConfig",
-            "help": "Select Speak or Announcemant"
+            "help": "Select Speak or Announcemant",
+            "disabled": "!data.editBtn",
+            "newLine": true
         },
         "sendToBtn": {
             "type": "sendTo",
@@ -79,14 +101,16 @@
             "variant": "outlined",
             "showProcess": true,
             "command": "getValuesFromConfig",
-            "jsonData": "{ \"data1\": \"${data.selectTypeFromNative}\"}",
-            "useNative": true
+            "jsonData": "{ \"key\": \"${data.selectTypeFromNative}\"}",
+            "useNative": true,
+            "disabled": "!data.editBtn"
         },
         "startVal": {
             "type": "number",
             "label": "Start Value",
             "help": "Enter volume, if \"0\", the current volume is used",
             "min": 0,
+            "disabled": "!data.editBtn",
             "newLine": true
         },
         "endVal": {
@@ -94,46 +118,48 @@
             "label": "End Value",
             "help": "Enter volume, if \"0\", the current volume is used",
             "min": 0,
-            "newLine": true
+            "disabled": "!data.editBtn"
         },
         "standby": {
             "type": "number",
             "label": "Standby",
             "help": "Enter volume, if \"0\", the current volume is used",
             "min": 0,
-            "newLine": true
+            "disabled": "!data.editBtn"
         },
         "startCount": {
             "type": "number",
             "label": "Counter startvalues",
             "help": "Enter volume, if \"0\", the current volume is used",
             "min": 0,
-            "newLine": true
+            "disabled": "!data.editBtn"
         },
         "endCount": {
             "type": "number",
             "label": "Counter endvalues",
             "help": "Enter volume, if \"0\", the current volume is used",
             "min": 0,
-            "newLine": true
+            "disabled": "!data.editBtn"
         },
         "_headerAlexa": {
             "type": "header",
             "text": "alexa2",
-            "size": 2
+            "size": 2,
+            "hidden": "!data.showAlexa2"
         },
         "alexa2": {
             "type": "selectSendTo",
             "label": "Alexa2 devices",
             "attr": "user",
-            "command": "getDataCustomAlexa",
+            "command": "getDataCustom",
             "noTranslation": true,
             "multiple": true,
             "jsonData": "{\"name\": \"alexa2\"}",
             "sm": 12,
             "md": 12,
             "lg": 12,
-            "newLine": true
+            "newLine": true,
+            "hidden": "!data.showAlexa2"
         },
         "alexa2Msg": {
             "type": "text",
@@ -164,9 +190,19 @@
             "newLine": true,
             "hidden": "!data.showSayit"
         },
-        "sayitMsg": {
+        "sayitMsgStart": {
             "type": "text",
-            "label": "Sayit Message",
+            "label": "Sayit Message Start",
+            "attr": "msg",
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "newLine": true,
+            "hidden": "!data.showSayit || data.sayit == '' || data.sayit == null"
+        },
+        "sayitMsgEnd": {
+            "type": "text",
+            "label": "Sayit Message End",
             "attr": "msg",
             "sm": 12,
             "md": 12,

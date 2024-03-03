@@ -41,6 +41,7 @@ class DeviceReminder extends utils.Adapter {
         this.devices = {};
         this.dataInstance = {};
         this.implementedMessenger = ["alexa2", "sayit", "telegram", "whatsapp-cmb", "pushover", "signal-cmb", "discord", "email", "matrix-org"]
+        this.dataFromConfig = []
     }
 
     /**
@@ -53,23 +54,18 @@ class DeviceReminder extends utils.Adapter {
         this.dataInstance = await this.getInstance();
 
         // Lade gleichzeitig Echo-Geräte aus dem Alexa2-Adapter, Telegram-Benutzer und die Messenger Config aus der Native
-        const [echoDevices, telegramUsers, dataMessenger] = await Promise.all([
+        const [echoDevices, telegramUsers, dataMessenger, dataFromConfig] = await Promise.all([
             this.getEchoDevices(),
             this.getTelegramUsers(),
-            this.getMessenger()
+            this.getMessenger(),
+            this.getDataFromConfig()
         ]);
 
         // Füge die geladenen Daten zu this.dataInstance hinzu
         if (this.dataInstance.alexa2) this.dataInstance.alexa2['echoDevices'] = echoDevices;
         if (this.dataInstance.telegram) this.dataInstance.telegram['user'] = telegramUsers;
         this.messenger = dataMessenger;
-
-
-
-        // Initialize your adapter here
-
-        // The adapters config (in the instance object everything under the attribute "native") is accessible via
-        // this.config:
+        this.dataFromConfig = dataFromConfig;
 
         /*
         For every state in the system there has to be also an object of type state
@@ -108,11 +104,6 @@ class DeviceReminder extends utils.Adapter {
 
         // same thing, but the state is deleted after 30s (getState will return null afterwards)
         await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
-
-        // examples for the checkPassword/checkGroup functions
-        let result = await this.checkPasswordAsync("admin", "iobroker");
-
-        result = await this.checkGroupAsync("admin", "admin");
     }
 
     /**
@@ -161,7 +152,6 @@ class DeviceReminder extends utils.Adapter {
                                 "warn",
                             );
                             const stateInfo = await this.getForeignObjectAsync(stateID);
-                            this.log.warn(JSON.stringify(stateInfo))
 
                             if (stateInfo?.common?.custom) {
                                 stateInfo.common.custom[this.namespace].enabled = false;
@@ -250,33 +240,25 @@ class DeviceReminder extends utils.Adapter {
         // Switch-Anweisung, um je nach Befehl unterschiedliche Aktionen auszuführen
         switch (obj.command) {
 
-            case "getDataCustomAlexa":
-
-            const res = [{label: "12", value : 1}, {label: "22", value : 2}, {label: "32", value : 3}, ];
-            this.respond(obj, res, this);
-
-
-            break;
-
-
             case "getInstance":
-
                 // Prüfe, ob this.dataInstance und this.dataInstance[obj.message.name] vorhanden sind, andernfalls gib ein leeres Array zurück
                 const adapterInstances = this.dataInstance && this.dataInstance[obj.message.name] ? this.dataInstance[obj.message.name] : [];
+
+                this.log.debug(`[getInstance] [${obj.message.name}] ${JSON.stringify(adapterInstances)}`);
                 // Antworte mit den Instanzen für den angegebenen Adapter oder einem leeren Array, falls nicht vorhanden
                 this.respond(obj, adapterInstances, this);
 
                 break;
 
             case "getInstanceStart":
-
-                // Versuche, den Namen zu ändern, basierend auf den Attributen der Nachricht
-                name = await helper.changeName(obj.message.attr, "_", "-");
+                // Namen aendern, basierend auf den Attributen der Nachricht
+                name = await helper.changeName(obj.message.attr, "-", "_");
 
                 // Prüfe, ob Instanzen für den geänderten Namen vorhanden sind
                 const instances = this.dataInstance[name];
                 const hasInstances = !!(instances && instances.length > 0); // Überprüfen, ob Instanzen vorhanden sind
 
+                this.log.debug(`[getInstanceStart] [${name}] ${JSON.stringify(hasInstances)}`);
                 // Antworte mit true/false, je nachdem ob Instanzen vorhanden sind
                 this.respond(obj, hasInstances, this);
 
@@ -325,43 +307,38 @@ class DeviceReminder extends utils.Adapter {
 
                 if (this.config[obj.message.name] && this.config[obj.message.name].length > 0) {
                     this.config[obj.message.name].forEach(element => {
-                        result.push({label: element.name, value: element.id})
+                        result.push({ label: element.name, value: element.id })
                     })
-                    this.log.warn(`[${JSON.stringify(obj.message.name)}] Rückgabe an Custom: ${JSON.stringify(result)}`);
                     // Antworte mit dem Ergebnis
-                    this.log.warn(typeof result)
                     this.respond(obj, result, this);
                 } else {
-                    this.respond(obj, [{ label: 'Not available', value: '' }], this);
+                    this.respond(obj, [{ label: 'nothing found', value: 'error' }], this);
                     this.log.debug(`[${JSON.stringify(obj.message.name)}] Leeres Array zurückgeben, da keine Daten aus der Config vorliegen`);
-                }
-
+                };
 
                 break;
 
             case "getDataFromConfig":
-                // Funktion, um Elemente zu mappen
-                function mapElements(elements) {
-                    return elements.map(element => ({
-                        label: element.name,
-                        value: element.name
-                    }));
-                };
-                // Mape die Standard- und benutzerdefinierten IDs und antworte mit dem Ergebnis
-                const dataDefault = mapElements(this.config.default.ids);
-                const dataCustom = mapElements(this.config.custom.ids);
-                this.respond(obj, [...dataDefault, ...dataCustom], this);
+                // Alle vorhandenen Values [default, custom] in einem DropDown anzeigen lassen
+                this.respond(obj, this.dataFromConfig.arrNames, this);
                 break;
 
             case "getValuesFromConfig":
+                const key = obj.message.key
                 // Antworte mit Standardwerten aus der Konfiguration
-                this.respond(obj, { native: { startVal: 5, endVal: 5, standby: 5, startCount: 5, endCount: 5 } }, this);
+                this.respond(obj, {
+                    native: {
+                        startVal: this.dataFromConfig[key].startVal,
+                        endVal: this.dataFromConfig[key].endVal,
+                        standby: this.dataFromConfig[key].standby,
+                        startCount: this.dataFromConfig[key].startCount,
+                        endCount: this.dataFromConfig[key].endCount,
+                        editBtn: false
+                    }
+                }, this);
                 break;
         };
     };
-
-
-
 
     /**
     * Init all Custom states
@@ -369,7 +346,7 @@ class DeviceReminder extends utils.Adapter {
     */
     async initCustomStates() {
 
-        this.log.warn('initCustomStates')
+        this.log.debug('initCustomStates')
 
         try {
             const customStateArray = await this.getObjectViewAsync("system", "custom", {});
@@ -504,7 +481,6 @@ class DeviceReminder extends utils.Adapter {
                     };
                 };
 
-
                 const matchingIds = {};
                 const mismatchedIds = {};
 
@@ -518,18 +494,24 @@ class DeviceReminder extends utils.Adapter {
                             const stateInfoIds = stateInfo.common.custom[this.namespace][messenger];
                             const tempIds = objMessengerTemp[messenger];
 
-                            // Logging für Debugging-Zwecke
-                            this.log.debug(`[${messenger}] stateInfoIds ${JSON.stringify(stateInfoIds)}`);
-                            this.log.debug(`[${messenger}] tempIds ${JSON.stringify(tempIds)}`);
-
                             // Überprüfen, ob die Längen der Arrays gleich sind und ob alle IDs übereinstimmen
                             if (stateInfoIds.length === tempIds.length && stateInfoIds.every(id => tempIds.includes(id))) {
                                 // Speichern der übereinstimmenden IDs in matchingIds
                                 matchingIds[messenger] = stateInfoIds;
                             } else {
-                                // Speichern der nicht übereinstimmenden IDs in mismatchedIds
-                                mismatchedIds[messenger] = stateInfoIds.filter(id => !tempIds.includes(id));
-                            }
+                                // Überprüfen und speichern der passenden und nicht passenden IDs
+                                const matchedIds = [];
+                                const mismatchedIdsForMessenger = [];
+                                for (const id of stateInfoIds) {
+                                    if (tempIds.includes(id)) {
+                                        matchedIds.push(id);
+                                    } else {
+                                        mismatchedIdsForMessenger.push(id);
+                                    };
+                                };
+                                matchingIds[messenger] = matchedIds;
+                                mismatchedIds[messenger] = mismatchedIdsForMessenger;
+                            };
                         } else {
                             // Ausgabe einer Warnung, wenn eines der Arrays nicht vorhanden oder leer ist
                             this.log.warn(`Das Array für den Messenger '${messenger}' ist entweder nicht vorhanden oder leer.`);
@@ -537,13 +519,12 @@ class DeviceReminder extends utils.Adapter {
                     } else {
                         // Ausgabe einer Information, wenn der Messenger nicht im 'stateInfo' Objekt vorhanden ist
                         this.log.debug(`Messenger '${messenger}' ist nicht im 'stateInfo' Objekt vorhanden.`);
-                    }
-                }
-
-
-                this.log.debug(JSON.stringify(`matching ids ${JSON.stringify(matchingIds)}`))
-                this.log.debug(JSON.stringify(`mismatching ids ${JSON.stringify(mismatchedIds)}`))
-
+                    };
+                };
+                // this.setObjectAsync()
+                this.log.warn(JSON.stringify(stateInfo))
+                this.log.warn(`matching ids ${JSON.stringify(matchingIds)}`);
+                this.log.warn(`mismatching ids ${JSON.stringify(mismatchedIds)}`);
 
                 // neuen active State ins array this.activeStates hinzufuegen, wenn die Objektparameter plausibel sind
                 if (!this.activeStates.includes(stateID)) this.activeStates.push(stateID);
@@ -599,7 +580,7 @@ class DeviceReminder extends utils.Adapter {
 
     // Antwort an Absender von sendTo senden
     async respond(obj, response, that) {
-        this.log.info(`[respond] obj: ${JSON.stringify(obj)}, response: ${JSON.stringify(response)}`)
+        // this.log.debug(`[respond] obj: ${JSON.stringify(obj)}, response: ${JSON.stringify(response)}`)
         try {
             that.sendTo(obj.from, obj.command, response, obj.callback);
             return true;
@@ -648,11 +629,9 @@ class DeviceReminder extends utils.Adapter {
             };
         }));
 
-        this.log.debug(`Gefundene Adapter-Instanzen: ${JSON.stringify(objTemp)}`);
+        this.log.info(`Gefundene Adapter-Instanzen: ${JSON.stringify(objTemp)}`);
         return objTemp;
     };
-
-
 
     /**
      * Diese Funktion holt alle Echo-Geräte aus dem Alexa2-Adapter und gibt sie als Array von Objekten zurück.
@@ -734,6 +713,77 @@ class DeviceReminder extends utils.Adapter {
         const arrResult = Array.from(uniqueUsers.values());
 
         return arrResult;
+    };
+
+    /**
+     * Diese Funktion liest Standard- und benutzerdefinierte IDs aus der Konfiguration und
+     * konvertiert sie in ein bestimmtes Format, um sie für weitere Verarbeitungsschritte vorzubereiten.
+     * 
+     * @returns {Array} Ein Array von Objekten, das die gemappten Standard- und benutzerdefinierten IDs enthält.
+     */
+    async getDataFromConfig() {
+        // Eine Funktion, um Elemente zu mappen
+        const mapElements = elements => {
+            // Überprüfen, ob Elemente vorhanden sind
+            if (!elements || elements.length === 0) {
+                return []; // Wenn keine Elemente vorhanden sind, leeres Array zurückgeben
+            };
+
+            // Elemente mappen und in das gewünschte Format konvertieren
+            return elements.map(element => ({
+                label: element.name, // Verwende den Namen als Label
+                value: element.name // Verwende den Namen als Wert
+            }));
+        };
+
+        // Standard-IDs mappen
+        const dataDefault = mapElements(this.config.default.ids);
+        // Benutzerdefinierte IDs mappen
+        const dataCustom = mapElements(this.config.custom.ids);
+
+        let objTemp = {};
+        objTemp = await this.generateObject();
+        objTemp['arrNames'] = [...dataDefault, ...dataCustom]
+        // Ergebnis der gemappten Daten zurückgeben
+        return objTemp;
+    };
+
+    /**
+     * Diese Funktion generiert ein Objekt basierend auf den Informationen in der Konfiguration.
+     * Sie erstellt ein neues Objekt, das die Start- und Endwerte sowie weitere Eigenschaften
+     * für jedes Element im "custom" und "default" Array der Konfiguration enthält.
+     * Wenn die Konfiguration nicht vollständig ist, wird ein leeres Objekt zurückgegeben.
+     * 
+     * @returns {Object} Ein Objekt, das die generierten Daten enthält.
+     */
+    async generateObject() {
+        const result = {}; // Das resultierende Objekt, das die generierten Daten enthält
+
+        // Überprüfe, ob die Konfiguration überhaupt existiert
+        if (!this.config || !this.config.custom || !this.config.default) {
+            console.error("Konfigurationsobjekt nicht vollständig definiert.");
+            return result; // Leeres Objekt zurückgeben, wenn die Konfiguration nicht vollständig ist
+        }
+
+        // Schleife durch beide Arrays (custom und default)
+        ['custom', 'default'].forEach(type => {
+            if (this.config[type].ids) {
+                this.config[type].ids.forEach(item => {
+                    // Verwende den "comment"-Wert als Schlüssel, wenn nicht leer, sonst den "name"-Wert
+                    const key = item.name;
+                    // Füge die Daten für das aktuelle Element zum resultierenden Objekt hinzu
+                    result[key] = {
+                        startVal: item.startVal,
+                        endVal: item.endVal,
+                        standby: item.standby,
+                        startCount: item.startCount,
+                        endCount: item.endCount
+                    };
+                });
+            }
+        });
+
+        return result; // Gib das resultierende Objekt zurück, das die generierten Daten enthält
     };
 
     /**
