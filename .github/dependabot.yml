@@ -8,5 +8,5 @@ updates:
     timezone: Europe/Berlin
   open-pull-requests-limit: 20
   assignees:
-  - xenon-s
+  - Xenon-s
   versioning-strategy: increase
