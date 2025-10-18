@@ -52,6 +52,9 @@ jobs:
 
     # Deploys the final package to NPM
     deploy:
+        permissions:
+            contents: write
+            id-token: write
         needs: [check-and-lint, adapter-tests]
 
         # Trigger this step only when a commit on any branch is tagged with a version number
@@ -68,7 +71,7 @@ jobs:
                   node-version: '18.x'
                   # Uncomment the following line if your adapter cannot be installed using 'npm ci'
                   # install-command: 'npm install'
-                  npm-token: ${{ secrets.NPM_TOKEN }}
+                  # npm-token: ${{ secrets.NPM_TOKEN }}  # Commented out for migration to Trusted Publishing
                   github-token: ${{ secrets.GITHUB_TOKEN }}
 #          # When using Sentry for error reporting, Sentry can be informed about new releases
 #          # To enable create a API-Token in Sentry (User settings, API keys)
