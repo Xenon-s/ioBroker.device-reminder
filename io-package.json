@@ -55,7 +55,6 @@
     ],
     "license": "MIT",
     "platform": "Javascript/Node.js",
-    "main": "main.js",
     "icon": "device-reminder.png",
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/xenon-s/ioBroker.device-reminder/main/admin/device-reminder.png",
