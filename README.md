@@ -314,7 +314,7 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
 
 MIT License
 
-Copyright (c) 2024 xenon-s <ente_s@hotmail.de>
+Copyright (c) 2024-2026 xenon-s <ente_s@hotmail.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
