@@ -7,7 +7,7 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
-const { strict } = require("assert");
+const { strict } = require("node:assert");
 
 // eslint-disable-next-line no-unused-vars
 const helper = require("./lib/helper");
