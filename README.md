@@ -310,6 +310,8 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
 
 - (xenon-s) initial commit version 1.0
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 
 MIT License
