@@ -75,7 +75,7 @@
     "messagebox": true,
     "dependencies": [
       {
-        "js-controller": ">=5.0.19"
+        "js-controller": ">=6.0.11"
       }
     ],
     "globalDependencies": [
@@ -94,18 +94,17 @@
     "showEmail": false,
     "showMatrix_org": false,
     "showDiscord": false,
-    "alexa2" : [],
-    "sayit" : [],
-    "telegram" : [],
-    "whatsapp_cmb" : [],
-    "pushover" : [],
-    "signal_cmb" : [],
-    "email" : [],
-    "matrix_org" : [],
-    "discord" : [],
-    "custom" : {},
+    "alexa2": [],
+    "sayit": [],
+    "telegram": [],
+    "whatsapp_cmb": [],
+    "pushover": [],
+    "signal_cmb": [],
+    "email": [],
+    "matrix_org": [],
+    "discord": [],
+    "custom": {},
     "default": {}
-
   },
   "objects": [],
   "instanceObjects": []

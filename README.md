@@ -225,6 +225,10 @@ Consumption values come in every 10 seconds. **Threshold 'end' (Watt)** is set t
     ### __WORK IN PROGRESS__
 -->
 
+
+### **WORK IN PROGRESS**
+- (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
+
 ### 4.x
 
 - (xenon-s) new Admin UI in jsonConfig
