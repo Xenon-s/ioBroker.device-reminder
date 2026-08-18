@@ -19,7 +19,7 @@
     "url": "https://github.com/xenon-s/ioBroker.device-reminder.git"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 22"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.0.4"
